@@ -1,3 +1,9 @@
+/* Vos styles personnalisés ici */
 body {
-    background-color: skyblue;
+    background-color: #c4f5c4; /* Vert écologique */
+}
+
+.btn-eco {
+    background-color: #28a745;
+    color: white;
 }

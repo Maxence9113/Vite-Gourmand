@@ -1,10 +1,20 @@
 import './bootstrap.js';
+
 /*
- * Welcome to your app's main JavaScript file!
- *
- * This file will be included onto the page via the importmap() Twig function,
- * which should already be in your base.html.twig.
+ * EcoRide - Application de covoiturage écologique 🌿
  */
+
+// 🎨 IMPORTER BOOTSTRAP CSS (IMPORTANT!)
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+// 🎨 Votre CSS personnalisé (APRÈS Bootstrap pour pouvoir l'override)
 import './styles/app.css';
 
-console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
+// 📦 IMPORTER BOOTSTRAP JS
+import * as bootstrap from 'bootstrap';
+
+// ✅ Vérification du chargement
+console.log('✅ EcoRide chargé avec Bootstrap ! 🌿');
+
+// Rendre Bootstrap disponible globalement (optionnel mais utile)
+window.bootstrap = bootstrap;
