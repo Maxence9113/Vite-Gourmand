@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\PasswordStrength;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class RegisterUserType extends AbstractType
 {
@@ -40,13 +41,15 @@ class RegisterUserType extends AbstractType
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'constraints' => [
-                    // new Length([
-                    //     'min' => 10,
-                    //     'max' => 12
-                    // ])
-                    // new PasswordStrength([
-                    //     'minScore' => 2,
-                    // ])
+                    new Assert\NotBlank(message: 'Le mot de passe est obligatoire.'),
+                    new Assert\Length(
+                        min: 10,
+                        minMessage: 'Le mot de passe doit contenir au moins {{ limit }} caractères.'
+                    ),
+                    new PasswordStrength(
+                        minScore: PasswordStrength::STRENGTH_STRONG,
+                        message: 'Le mot de passe doit contenir au moins 1 majuscule, 1 minuscule, 1 chiffre et 1 caractère spécial.'
+                    )
                 ],
                 'first_options' => [
                     'label' => 'Votre mot de passe', 
@@ -62,12 +65,6 @@ class RegisterUserType extends AbstractType
                     ]
                 ],
                 'mapped' => false,
-            ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'Envoyer',
-                'attr' => [
-                    'class'=> 'btn btn-primary'
-                ]
             ])
         ;
     }

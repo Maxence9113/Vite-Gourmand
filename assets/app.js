@@ -24,3 +24,5 @@ document.addEventListener('DOMContentLoaded', () => {
     feather.replace();
 });
 
+import * as Turbo from '@hotwired/turbo';
+Turbo.setFormMode("off"); // Désactive Turbo pour TOUS les formulaires

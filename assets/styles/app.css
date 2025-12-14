@@ -322,12 +322,23 @@ main {
 
 /* Messages d'erreur personnalisés */
 .register-form .invalid-feedback,
-.register-form .form-error-message {
-    display: block;
+.register-form .form-error-message,
+.invalid-feedback {
+    display: block !important;
     color: var(--danger);
     font-size: 0.875rem;
     margin-top: 0.25rem;
     margin-bottom: 0.5rem;
+}
+
+/* Affichage des erreurs pour tous les formulaires */
+.form-error-icon {
+    margin-right: 0.25rem;
+}
+
+/* Style des champs en erreur */
+.is-invalid {
+    border-color: var(--danger) !important;
 }
 
 /* ========================================
