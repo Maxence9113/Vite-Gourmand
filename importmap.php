@@ -35,4 +35,7 @@ return [
         'version' => '5.3.8',
         'type' => 'css',
     ],
+    'feather-icons' => [
+        'version' => '4.29.2',
+    ],
 ];

@@ -1,12 +1,147 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Inscription{% endblock %}
+{% block title %}Inscription - Vite & Gourmand{% endblock %}
 
 {% block body %}
-    <div class="container my-4">
-        <h1>Formulaire d'inscription</h1>
 
-        {{ form(registerForm)}}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
 
+            {# Card d'inscription #}
+            <div class="register-card">
+
+                {# En-tête avec logo #}
+                <div class="text-center mb-4">
+                    <div class="register-icon mb-3">
+                        <i data-feather="user-plus" width="48" height="48"></i>
+                    </div>
+                    <h1 class="h3 fw-bold mb-2" style="color: var(--primary);">Créer un compte</h1>
+                    <p class="text-muted">Rejoignez Vite & Gourmand</p>
+                </div>
+
+                {# Formulaire d'inscription #}
+                {{ form_start(registerForm, {'attr': {'class': 'register-form'}}) }}
+
+                    <div class="row">
+                        {# Prénom #}
+                        <div class="col-md-6 mb-3">
+                            <div class="form-floating">
+                                {{ form_widget(registerForm.firstname, {
+                                    'attr': {
+                                        'class': 'form-control',
+                                        'placeholder': 'Prénom'
+                                    }
+                                }) }}
+                                <label for="{{ registerForm.firstname.vars.id }}">
+                                    <i data-feather="user" width="16" class="me-1"></i>
+                                    Prénom
+                                </label>
+                            </div>
+                            {{ form_errors(registerForm.firstname) }}
+                        </div>
+
+                        {# Nom #}
+                        <div class="col-md-6 mb-3">
+                            <div class="form-floating">
+                                {{ form_widget(registerForm.lastname, {
+                                    'attr': {
+                                        'class': 'form-control',
+                                        'placeholder': 'Nom'
+                                    }
+                                }) }}
+                                <label for="{{ registerForm.lastname.vars.id }}">
+                                    <i data-feather="user" width="16" class="me-1"></i>
+                                    Nom
+                                </label>
+                            </div>
+                            {{ form_errors(registerForm.lastname) }}
+                        </div>
+                    </div>
+
+                    {# Email #}
+                    <div class="form-floating mb-3">
+                        {{ form_widget(registerForm.email, {
+                            'attr': {
+                                'class': 'form-control',
+                                'placeholder': 'nom@exemple.com'
+                            }
+                        }) }}
+                        <label for="{{ registerForm.email.vars.id }}">
+                            <i data-feather="mail" width="16" class="me-1"></i>
+                            Adresse email
+                        </label>
+                    </div>
+                    {{ form_errors(registerForm.email) }}
+
+                    {# Mot de passe #}
+                    <div class="form-floating mb-3">
+                        {{ form_widget(registerForm.plainPassword.first, {
+                            'attr': {
+                                'class': 'form-control',
+                                'placeholder': 'Mot de passe'
+                            }
+                        }) }}
+                        <label for="{{ registerForm.plainPassword.first.vars.id }}">
+                            <i data-feather="lock" width="16" class="me-1"></i>
+                            Mot de passe
+                        </label>
+                    </div>
+                    {{ form_errors(registerForm.plainPassword.first) }}
+
+                    {# Confirmation mot de passe #}
+                    <div class="form-floating mb-3">
+                        {{ form_widget(registerForm.plainPassword.second, {
+                            'attr': {
+                                'class': 'form-control',
+                                'placeholder': 'Confirmer le mot de passe'
+                            }
+                        }) }}
+                        <label for="{{ registerForm.plainPassword.second.vars.id }}">
+                            <i data-feather="check-circle" width="16" class="me-1"></i>
+                            Confirmer le mot de passe
+                        </label>
+                    </div>
+                    {{ form_errors(registerForm.plainPassword.second) }}
+
+                    {# Exigences mot de passe #}
+                    <div class="alert alert-info d-flex align-items-start mb-4" role="alert">
+                        <i data-feather="info" width="20" class="me-2 mt-1"></i>
+                        <div>
+                            <small>
+                                <strong>Exigences du mot de passe :</strong><br>
+                                Minimum 10 caractères avec au moins 1 majuscule, 1 minuscule, 1 chiffre et 1 caractère spécial.
+                            </small>
+                        </div>
+                    </div>
+
+                    {# Bouton de soumission personnalisé #}
+                    <button type="submit" class="btn btn-primary w-100 py-3 mb-3">
+                        <i data-feather="user-plus" width="18" class="me-2"></i>
+                        Créer mon compte
+                    </button>
+
+                {{ form_end(registerForm, {'render_rest': false}) }}
+
+                {# Divider #}
+                <div class="divider my-4">
+                    <span class="divider-text">ou</span>
+                </div>
+
+                {# Lien connexion #}
+                <div class="text-center">
+                    <p class="mb-0 text-muted">
+                        Vous avez déjà un compte ?
+                        <a href="{{ path('app_login') }}" class="fw-bold text-decoration-none" style="color: var(--secondary);">
+                            Se connecter
+                        </a>
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
     </div>
+</div>
+
 {% endblock %}

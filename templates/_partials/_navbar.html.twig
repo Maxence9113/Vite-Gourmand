@@ -1,0 +1,93 @@
+<nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+        {# Logo / Nom de l'entreprise #}
+        <a class="navbar-brand d-flex align-items-center" href="{{ path('app_home') }}">
+            <i data-feather="chef-hat" class="me-2" style="color: var(--primary);"></i>
+            <span>Vite & Gourmand</span>
+        </a>
+
+        {# Bouton toggle pour mobile #}
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        {# Menu principal #}
+        <div class="collapse navbar-collapse" id="navbarMain">
+            <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link {% if app.request.attributes.get('_route') == 'app_home' %}active{% endif %}"
+                       aria-current="page"
+                       href="{{ path('app_home') }}">
+                        Accueil
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        Nos Menus
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        Contact
+                    </a>
+                </li>
+            </ul>
+
+            {# Partie droite : Compte utilisateur & Panier #}
+            <div class="d-flex align-items-center gap-3">
+                {% if app.user %}
+                    {# Utilisateur connecté #}
+                    <div class="dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center"
+                           href="#"
+                           role="button"
+                           data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            <i data-feather="user" class="me-1"></i>
+                            <span class="d-none d-md-inline">{{ app.user.firstname }}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item" href="{{ path('app_account') }}">
+                                    <i data-feather="user" class="me-2" width="16"></i>
+                                    Mon compte
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <i data-feather="shopping-bag" class="me-2" width="16"></i>
+                                    Mes commandes
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item text-danger" href="{{ path('app_logout') }}">
+                                    <i data-feather="log-out" class="me-2" width="16"></i>
+                                    Se déconnecter
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                {% else %}
+                    {# Utilisateur non connecté #}
+                    <a href="{{ path('app_register') }}" class="btn btn-outline-primary btn-sm">
+                        S'inscrire
+                    </a>
+                    <a href="{{ path('app_login') }}" class="btn btn-primary btn-sm">
+                        <i data-feather="log-in" width="16" class="me-1"></i>
+                        Connexion
+                    </a>
+                {% endif %}
+
+                {# Panier #}
+                <a href="#" class="position-relative" style="color: var(--primary);" title="Panier">
+                    <i data-feather="shopping-cart" width="24"></i>
+                    {# Badge nombre d'articles (à activer plus tard) #}
+                    {# <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        3
+                    </span> #}
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>

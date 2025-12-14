@@ -15,3 +15,12 @@ console.log('✅ Bootstrap chargé');
 
 // Rendre Bootstrap disponible globalement (optionnel mais utile)
 window.bootstrap = bootstrap;
+
+// Importer les icons Data-feather
+import feather from 'feather-icons';
+
+// Remplacer les icônes au chargement de la page
+document.addEventListener('DOMContentLoaded', () => {
+    feather.replace();
+});
+

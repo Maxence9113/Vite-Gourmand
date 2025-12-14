@@ -1,0 +1,133 @@
+<footer class="footer">
+    <div class="container py-5">
+        <div class="row g-4">
+
+            {# Colonne 1 : À propos #}
+            <div class="col-lg-4 col-md-6">
+                <h5 class="footer-title mb-3">
+                    <i data-feather="award" width="20" class="me-2"></i>
+                    Vite & Gourmand
+                </h5>
+                <p class="footer-text">
+                    Traiteur événementiel à Bordeaux depuis 25 ans.
+                    Julie et José vous proposent des menus gastronomiques
+                    pour tous vos événements.
+                </p>
+                <div class="social-links mt-3">
+                    <a href="#" aria-label="Facebook" class="social-icon">
+                        <i data-feather="facebook" width="20"></i>
+                    </a>
+                    <a href="#" aria-label="Instagram" class="social-icon">
+                        <i data-feather="instagram" width="20"></i>
+                    </a>
+                    <a href="#" aria-label="Twitter" class="social-icon">
+                        <i data-feather="twitter" width="20"></i>
+                    </a>
+                    <a href="#" aria-label="Mail" class="social-icon">
+                        <i data-feather="mail" width="20"></i>
+                    </a>
+                </div>
+            </div>
+
+            {# Colonne 2 : Horaires d'ouverture #}
+            <div class="col-lg-4 col-md-6">
+                <h5 class="footer-title mb-3">
+                    <i data-feather="clock" width="20" class="me-2"></i>
+                    Horaires d'ouverture
+                </h5>
+                <ul class="list-unstyled footer-schedule">
+                    <li class="d-flex justify-content-between mb-2">
+                        <span>Lundi</span>
+                        <span class="text-secondary">9h00 - 18h00</span>
+                    </li>
+                    <li class="d-flex justify-content-between mb-2">
+                        <span>Mardi</span>
+                        <span class="text-secondary">9h00 - 18h00</span>
+                    </li>
+                    <li class="d-flex justify-content-between mb-2">
+                        <span>Mercredi</span>
+                        <span class="text-secondary">9h00 - 18h00</span>
+                    </li>
+                    <li class="d-flex justify-content-between mb-2">
+                        <span>Jeudi</span>
+                        <span class="text-secondary">9h00 - 18h00</span>
+                    </li>
+                    <li class="d-flex justify-content-between mb-2">
+                        <span>Vendredi</span>
+                        <span class="text-secondary">9h00 - 18h00</span>
+                    </li>
+                    <li class="d-flex justify-content-between mb-2">
+                        <span>Samedi</span>
+                        <span class="text-secondary">10h00 - 16h00</span>
+                    </li>
+                    <li class="d-flex justify-content-between mb-2">
+                        <span>Dimanche</span>
+                        <span class="text-danger fw-bold">Fermé</span>
+                    </li>
+                </ul>
+            </div>
+
+            {# Colonne 3 : Liens utiles #}
+            <div class="col-lg-4 col-md-6">
+                <h5 class="footer-title mb-3">
+                    <i data-feather="link" width="20" class="me-2"></i>
+                    Liens utiles
+                </h5>
+                <ul class="list-unstyled footer-links">
+                    <li class="mb-2">
+                        <a href="{{ path('app_home') }}">
+                            <i data-feather="chevron-right" width="16" class="me-1"></i>
+                            Accueil
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="#">
+                            <i data-feather="chevron-right" width="16" class="me-1"></i>
+                            Nos Menus
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="#">
+                            <i data-feather="chevron-right" width="16" class="me-1"></i>
+                            Contact
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="#">
+                            <i data-feather="chevron-right" width="16" class="me-1"></i>
+                            Mentions légales
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="#">
+                            <i data-feather="chevron-right" width="16" class="me-1"></i>
+                            Conditions générales de vente
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="#">
+                            <i data-feather="chevron-right" width="16" class="me-1"></i>
+                            Politique de confidentialité (RGPD)
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+        {# Barre de copyright #}
+        <div class="row mt-4 pt-4 border-top border-secondary">
+            <div class="col-md-6 text-center text-md-start">
+                <p class="mb-0 small">
+                    &copy; {{ "now"|date("Y") }} Vite & Gourmand - Tous droits réservés
+                </p>
+            </div>
+            <div class="col-md-6 text-center text-md-end">
+                <p class="mb-0 small">
+                    <i data-feather="map-pin" width="14" class="me-1"></i>
+                    Bordeaux, France
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>

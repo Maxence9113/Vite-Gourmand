@@ -4,18 +4,34 @@
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        
+
         {% block stylesheets %}
         {% endblock %}
-        
+
     </head>
     <body>
+        {% include "_partials/_navbar.html.twig" %}
 
+        <div class="container">
+            {# read and display all flash messages #}
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert mt-2 alert-{{ label }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+
+        <main>
             {% block body %}{% endblock %}
+        </main>
 
-    {% block javascripts %}
-        {{ importmap('app') }}
-    {% endblock %}
+        {% include "_partials/_footer.html.twig" %}
+
+        {% block javascripts %}
+            {{ importmap('app') }}
+        {% endblock %}
 
     </body>
 </html>

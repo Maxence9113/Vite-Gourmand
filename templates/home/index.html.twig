@@ -1,14 +1,257 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
-
+{% block title %}Accueil - Vite & Gourmand - Traiteur à Bordeaux{% endblock %}
 
 {% block body %}
-<div class="container mt-5">
-    <h1 class="text-success">🌿 Bootstrap fonctionne avec AssetMapper !</h1>
-    <button class="btn btn-primary">Bouton Bootstrap</button>
-    <button class="btn btn-eco">Bouton Écologique</button>
-</div>
 
+{# Hero Section #}
+<section class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="container">
+        <div class="row align-items-center min-vh-75">
+            <div class="col-lg-7 text-white hero-content">
+                <h1 class="display-3 fw-bold mb-4 animate-fade-in">
+                    Vite & Gourmand
+                </h1>
+                <p class="lead mb-4 animate-fade-in-delay">
+                    <i data-feather="award" width="24" class="me-2"></i>
+                    Traiteur événementiel à Bordeaux depuis 25 ans
+                </p>
+                <p class="fs-5 mb-5 animate-fade-in-delay-2">
+                    Julie et José vous proposent des menus gastronomiques d'exception
+                    pour tous vos événements : mariages, anniversaires, événements d'entreprise...
+                </p>
+                <div class="d-flex gap-3 flex-wrap animate-fade-in-delay-3">
+                    <a href="#" class="btn btn-primary btn-lg px-4 py-3">
+                        <i data-feather="book-open" width="20" class="me-2"></i>
+                        Découvrir nos menus
+                    </a>
+                    <a href="#about" class="btn btn-outline-light btn-lg px-4 py-3">
+                        <i data-feather="info" width="20" class="me-2"></i>
+                        En savoir plus
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# Section Présentation #}
+<section id="about" class="py-5 bg-white">
+    <div class="container py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="about-image-wrapper">
+                    <div class="about-badge">
+                        <i data-feather="star" width="32"></i>
+                        <span>25 ans d'expérience</span>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&h=600&fit=crop"
+                         alt="Plats gastronomiques"
+                         class="img-fluid rounded shadow-lg">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <span class="badge bg-primary mb-3">À propos de nous</span>
+                <h2 class="display-5 fw-bold mb-4" style="color: var(--primary);">
+                    Une passion pour la gastronomie
+                </h2>
+                <p class="lead text-muted mb-4">
+                    Depuis 1999, Julie et José mettent leur savoir-faire au service de vos événements
+                    les plus précieux à Bordeaux et ses environs.
+                </p>
+                <div class="mb-4">
+                    <div class="d-flex align-items-start mb-3">
+                        <div class="feature-icon me-3">
+                            <i data-feather="check-circle" width="24"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold mb-2">Produits frais et locaux</h5>
+                            <p class="text-muted mb-0">
+                                Nous privilégions les circuits courts et les producteurs locaux
+                                pour garantir la fraîcheur et la qualité de nos plats.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-start mb-3">
+                        <div class="feature-icon me-3">
+                            <i data-feather="users" width="24"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold mb-2">Service personnalisé</h5>
+                            <p class="text-muted mb-0">
+                                Chaque événement est unique. Nous adaptons nos menus à vos envies
+                                et contraintes (allergies, régimes spéciaux...).
+                            </p>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-start">
+                        <div class="feature-icon me-3">
+                            <i data-feather="award" width="24"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold mb-2">Excellence garantie</h5>
+                            <p class="text-muted mb-0">
+                                Notre équipe passionnée met tout en œuvre pour faire de votre
+                                événement un moment inoubliable.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# Section Chiffres clés #}
+<section class="py-5" style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);">
+    <div class="container py-4">
+        <div class="row text-center text-white">
+            <div class="col-md-3 col-6 mb-4 mb-md-0">
+                <div class="stat-item">
+                    <i data-feather="calendar" width="48" class="mb-3"></i>
+                    <h3 class="display-4 fw-bold mb-2">25</h3>
+                    <p class="mb-0">Années d'expérience</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-4 mb-md-0">
+                <div class="stat-item">
+                    <i data-feather="smile" width="48" class="mb-3"></i>
+                    <h3 class="display-4 fw-bold mb-2">500+</h3>
+                    <p class="mb-0">Clients satisfaits</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-item">
+                    <i data-feather="coffee" width="48" class="mb-3"></i>
+                    <h3 class="display-4 fw-bold mb-2">50+</h3>
+                    <p class="mb-0">Menus disponibles</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-item">
+                    <i data-feather="star" width="48" class="mb-3"></i>
+                    <h3 class="display-4 fw-bold mb-2">4.9/5</h3>
+                    <p class="mb-0">Note moyenne</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# Section Avis Clients #}
+<section class="py-5 bg-light">
+    <div class="container py-5">
+        <div class="text-center mb-5">
+            <span class="badge bg-secondary mb-3">Témoignages</span>
+            <h2 class="display-5 fw-bold mb-3" style="color: var(--primary);">
+                Ce que disent nos clients
+            </h2>
+            <p class="lead text-muted">
+                Découvrez les avis de ceux qui nous ont fait confiance
+            </p>
+        </div>
+
+        <div class="row">
+            {# Avis 1 #}
+            <div class="col-md-4 mb-4">
+                <div class="review-card h-100">
+                    <div class="review-stars mb-3">
+                        <i data-feather="star" width="20" class="star-filled"></i>
+                        <i data-feather="star" width="20" class="star-filled"></i>
+                        <i data-feather="star" width="20" class="star-filled"></i>
+                        <i data-feather="star" width="20" class="star-filled"></i>
+                        <i data-feather="star" width="20" class="star-filled"></i>
+                    </div>
+                    <p class="review-text mb-4">
+                        "Un service impeccable pour notre mariage ! Les plats étaient délicieux
+                        et nos invités nous en parlent encore. Merci à Julie et José pour leur professionnalisme."
+                    </p>
+                    <div class="d-flex align-items-center">
+                        <div class="review-avatar me-3">
+                            <i data-feather="user" width="24"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0 fw-bold">Sophie Martin</h6>
+                            <small class="text-muted">Mariage - Juin 2024</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# Avis 2 #}
+            <div class="col-md-4 mb-4">
+                <div class="review-card h-100">
+                    <div class="review-stars mb-3">
+                        <i data-feather="star" width="20" class="star-filled"></i>
+                        <i data-feather="star" width="20" class="star-filled"></i>
+                        <i data-feather="star" width="20" class="star-filled"></i>
+                        <i data-feather="star" width="20" class="star-filled"></i>
+                        <i data-feather="star" width="20" class="star-filled"></i>
+                    </div>
+                    <p class="review-text mb-4">
+                        "Excellent traiteur ! Menu de Noël parfait, respecte les allergies et
+                        propose des options végétariennes délicieuses. Je recommande vivement !"
+                    </p>
+                    <div class="d-flex align-items-center">
+                        <div class="review-avatar me-3">
+                            <i data-feather="user" width="24"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0 fw-bold">Thomas Dubois</h6>
+                            <small class="text-muted">Repas de Noël - Décembre 2024</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# Avis 3 #}
+            <div class="col-md-4 mb-4">
+                <div class="review-card h-100">
+                    <div class="review-stars mb-3">
+                        <i data-feather="star" width="20" class="star-filled"></i>
+                        <i data-feather="star" width="20" class="star-filled"></i>
+                        <i data-feather="star" width="20" class="star-filled"></i>
+                        <i data-feather="star" width="20" class="star-filled"></i>
+                        <i data-feather="star" width="20" class="star-filled"></i>
+                    </div>
+                    <p class="review-text mb-4">
+                        "Parfait pour notre événement d'entreprise ! Ponctualité, qualité,
+                        présentation soignée. Une équipe au top, nous referons appel à eux !"
+                    </p>
+                    <div class="d-flex align-items-center">
+                        <div class="review-avatar me-3">
+                            <i data-feather="user" width="24"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0 fw-bold">Marie Leclerc</h6>
+                            <small class="text-muted">Événement entreprise - Octobre 2024</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# Call to Action #}
+<section class="cta-section py-5">
+    <div class="container py-5 text-center text-white">
+        <h2 class="display-4 fw-bold mb-4">Prêt à organiser votre événement ?</h2>
+        <p class="lead mb-5">
+            Découvrez nos menus et commandez en quelques clics
+        </p>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+            <a href="#" class="btn btn-light btn-lg px-5 py-3">
+                <i data-feather="book-open" width="20" class="me-2"></i>
+                Voir nos menus
+            </a>
+            <a href="#" class="btn btn-outline-light btn-lg px-5 py-3">
+                <i data-feather="phone" width="20" class="me-2"></i>
+                Nous contacter
+            </a>
+        </div>
+    </div>
+</section>
 
 {% endblock %}

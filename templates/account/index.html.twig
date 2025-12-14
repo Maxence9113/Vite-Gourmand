@@ -1,12 +1,148 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mon Compte{% endblock %}
+{% block title %}Mon Compte - Vite & Gourmand{% endblock %}
 
 {% block body %}
-    <div class="container my-4">
-        <h1>Espace membre privé!</h1>
-        <a href="{{ path('app_logout') }}">Se déconnecter</a>
-        <a href="{{ path('app_account_pwd_modify') }}">Modifier mon mot de passe</a>
 
+<div class="container py-5">
+    {# En-tête de la page #}
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="account-header">
+                <div class="d-flex align-items-center">
+                    <div class="account-avatar me-4">
+                        <i data-feather="user" width="40"></i>
+                    </div>
+                    <div>
+                        <h1 class="h2 fw-bold mb-1" style="color: var(--primary);">
+                            Bonjour {{ app.user.firstname }} !
+                        </h1>
+                        <p class="text-muted mb-0">
+                            <i data-feather="mail" width="16" class="me-1"></i>
+                            {{ app.user.email }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <div class="row g-4">
+        {# Colonne gauche : Informations du compte #}
+        <div class="col-lg-8">
+
+            {# Card Informations personnelles #}
+            <div class="account-card mb-4">
+                <div class="card-header-custom">
+                    <h5 class="mb-0">
+                        <i data-feather="user-check" width="20" class="me-2"></i>
+                        Informations personnelles
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small fw-bold">Prénom</label>
+                            <div class="info-field">
+                                <i data-feather="user" width="18" class="me-2"></i>
+                                {{ app.user.firstname }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small fw-bold">Nom</label>
+                            <div class="info-field">
+                                <i data-feather="user" width="18" class="me-2"></i>
+                                {{ app.user.lastname }}
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label text-muted small fw-bold">Adresse email</label>
+                            <div class="info-field">
+                                <i data-feather="mail" width="18" class="me-2"></i>
+                                {{ app.user.email }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# Card Historique des commandes #}
+            <div class="account-card">
+                <div class="card-header-custom">
+                    <h5 class="mb-0">
+                        <i data-feather="shopping-bag" width="20" class="me-2"></i>
+                        Mes commandes
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="text-center py-5">
+                        <i data-feather="package" width="64" class="mb-3" style="color: var(--primary); opacity: 0.3;"></i>
+                        <p class="text-muted mb-3">Vous n'avez pas encore passé de commande</p>
+                        <a href="#" class="btn btn-primary">
+                            <i data-feather="book-open" width="18" class="me-2"></i>
+                            Découvrir nos menus
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        {# Colonne droite : Actions rapides #}
+        <div class="col-lg-4">
+
+            {# Card Sécurité #}
+            <div class="account-card mb-4">
+                <div class="card-header-custom">
+                    <h5 class="mb-0">
+                        <i data-feather="shield" width="20" class="me-2"></i>
+                        Sécurité
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <a href="{{ path('app_account_pwd_modify') }}" class="action-link">
+                        <div class="d-flex align-items-center">
+                            <div class="action-icon me-3">
+                                <i data-feather="lock" width="20"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h6 class="mb-0">Modifier mon mot de passe</h6>
+                                <small class="text-muted">Sécurisez votre compte</small>
+                            </div>
+                            <i data-feather="chevron-right" width="20" class="text-muted"></i>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            {# Card Actions rapides #}
+            <div class="account-card">
+                <div class="card-header-custom">
+                    <h5 class="mb-0">
+                        <i data-feather="zap" width="20" class="me-2"></i>
+                        Actions rapides
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="#" class="btn btn-outline-primary">
+                            <i data-feather="book-open" width="18" class="me-2"></i>
+                            Voir nos menus
+                        </a>
+                        <a href="#" class="btn btn-outline-primary">
+                            <i data-feather="phone" width="18" class="me-2"></i>
+                            Nous contacter
+                        </a>
+                        <a href="{{ path('app_logout') }}" class="btn btn-outline-danger">
+                            <i data-feather="log-out" width="18" class="me-2"></i>
+                            Se déconnecter
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 {% endblock %}
