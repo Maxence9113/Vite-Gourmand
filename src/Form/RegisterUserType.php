@@ -8,7 +8,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -34,6 +33,10 @@ class RegisterUserType extends AbstractType
             ])
             ->add('email', EmailType::class, [
                 'label' => 'Votre email',
+                'constraints' => [
+                    new Assert\NotBlank(message: 'L\'email est obligatoire.'),
+                    new Assert\Email(message: 'Veuillez saisir un email valide.')
+                ],
                 'attr' => [
                     'placeholder' => 'Indiquez votre email'
                 ]
@@ -46,17 +49,16 @@ class RegisterUserType extends AbstractType
                         min: 10,
                         minMessage: 'Le mot de passe doit contenir au moins {{ limit }} caractères.'
                     ),
-                    new PasswordStrength(
-                        minScore: PasswordStrength::STRENGTH_STRONG,
+                    new Assert\Regex(
+                        pattern: '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/',
                         message: 'Le mot de passe doit contenir au moins 1 majuscule, 1 minuscule, 1 chiffre et 1 caractère spécial.'
                     )
                 ],
                 'first_options' => [
-                    'label' => 'Votre mot de passe', 
+                    'label' => 'Votre mot de passe',
                     'attr' => [
                         'placeholder' => 'Indiquez votre mot de passe',
-                    ],
-                    'hash_property_path' => 'password'
+                    ]
                 ],
                 'second_options' => [
                     'label' => 'Confirmation',
