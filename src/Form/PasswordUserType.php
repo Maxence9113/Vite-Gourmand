@@ -36,8 +36,8 @@ class PasswordUserType extends AbstractType
                         min: 10,
                         minMessage: 'Le mot de passe doit contenir au moins {{ limit }} caractères.'
                     ),
-                    new PasswordStrength(
-                        minScore: PasswordStrength::STRENGTH_STRONG,
+                    new Assert\Regex(
+                        pattern: '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/',
                         message: 'Le mot de passe doit contenir au moins 1 majuscule, 1 minuscule, 1 chiffre et 1 caractère spécial.'
                     )
                 ],
@@ -82,12 +82,19 @@ class PasswordUserType extends AbstractType
 
                 //1. Récupérer le mot de passe saisi
                 // dump($form->get('actualPassword')->getData());
+                $actualPassword = $form->get('actualPassword')->getData();
 
-                //2. Comparer avec le mot de passe en BDD
+                //2. Vérifier que le champ n'est pas vide avant de valider
+                if (empty($actualPassword)) {
+                    $form->get('actualPassword')->addError(new FormError("Le mot de passe actuel est obligatoire."));
+                    return;
+                }
+
+                //3. Comparer avec le mot de passe en BDD
                 $isValid = $passwordHasher->isPasswordValid(
                     $user,
                     // mot de passe en clair
-                    $form->get('actualPassword')->getData()
+                    $actualPassword
                 );
 
                 //Si passwd different, envoyer l'erreur. $isValid = false ou true
