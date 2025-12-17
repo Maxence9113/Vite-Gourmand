@@ -5,28 +5,19 @@ namespace App\DataFixtures;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Faker\Factory;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserFixtures extends Fixture
 {
-    public function __construct(
-        private UserPasswordHasherInterface $passwordHasher
-    ) {
+    public function __construct(private UserPasswordHasherInterface $passwordHasher)
+    {
+    
     }
 
     public function load(ObjectManager $manager): void
     {
-        // Utilisateur de test classique
-        $user = new User();
-        $user->setEmail('test@test.fr');
-        $user->setFirstname('John');
-        $user->setLastname('Doe');
-        $user->setRoles(['ROLE_USER']);
-        // Mot de passe: Test1234!@
-        $hashedPassword = $this->passwordHasher->hashPassword($user, 'Test1234!@');
-        $user->setPassword($hashedPassword);
-
-        $manager->persist($user);
+        $faker = Factory::create('fr_FR');
 
         // Utilisateur admin de test
         $admin = new User();
@@ -39,6 +30,20 @@ class UserFixtures extends Fixture
         $admin->setPassword($hashedPassword);
 
         $manager->persist($admin);
+
+        for ($i = 1; $i <= 10; $i++) {
+            $fakeUser = new User();
+            $fakeUser->setEmail($faker->unique()->email());
+            $fakeUser->setFirstname($faker->firstName());
+            $fakeUser->setLastname($faker->lastName());
+
+            $role = $faker->randomElement(['ROLE_USER', 'ROLE_EMPLOYEE']);
+            $fakeUser->setRoles([$role]);
+            // Tous les faux users ont le même mot de passe : "password"
+            $fakeUser->setPassword($this->passwordHasher->hashPassword($fakeUser, 'password'));
+            
+            $manager->persist($fakeUser);
+        }
 
         $manager->flush();
     }
