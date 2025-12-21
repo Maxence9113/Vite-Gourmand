@@ -8,6 +8,7 @@ use App\Repository\RecipeRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\AllergenRepository;
 use App\Repository\UserRepository;
+use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -66,7 +67,7 @@ final class AdminController extends AbstractController
     }
 
     #[Route('/recipes/new', name: 'app_admin_recipes_new')]
-    public function new(Request $request, EntityManagerInterface $em): Response
+    public function new(Request $request, EntityManagerInterface $em, FileUploader $fileUploader): Response
     {
         // Créer une nouvelle recette vide
         $recipe = new Recipe();
@@ -78,7 +79,34 @@ final class AdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Sauvegarder en base de données
+            // Parcourir chaque illustration et traiter les uploads
+            // On utilise toArray() pour créer une copie et pouvoir supprimer pendant l'itération
+            foreach ($recipe->getRecipeIllustrations()->toArray() as $illustration) {
+                // Récupérer le fichier uploadé depuis l'objet RecipeIllustration
+                $imageFile = $illustration->getImageFile();
+
+                // Si un fichier a été uploadé
+                if ($imageFile) {
+                    // 1. Uploader le fichier et récupérer le nom généré
+                    $fileName = $fileUploader->upload($imageFile);
+
+                    // 2. Stocker le nom du fichier dans la base de données
+                    $illustration->setName($fileName);
+
+                    // 3. Créer l'URL relative pour afficher l'image dans les templates
+                    // Ex: "/uploads/recipe_illustrations/mon-plat-507f1f77bcf86cd799439011.jpg"
+                    $illustration->setUrl('/uploads/recipe_illustrations/' . $fileName);
+
+                    // 4. Associer l'illustration à la recette (si ce n'est pas déjà fait)
+                    $illustration->setRecipe($recipe);
+                } else {
+                    // Si aucun fichier n'a été uploadé, on retire cette illustration de la collection
+                    // Cela évite d'avoir des enregistrements vides en base de données
+                    $recipe->removeRecipeIllustration($illustration);
+                }
+            }
+
+            // Sauvegarder la recette et ses illustrations en base de données
             $em->persist($recipe);
             $em->flush();
 
@@ -97,7 +125,7 @@ final class AdminController extends AbstractController
     }
 
     #[Route('/recipes/{id}/edit', name: 'app_admin_recipes_edit')]
-    public function edit(Recipe $recipe, Request $request, EntityManagerInterface $em): Response
+    public function edit(Recipe $recipe, Request $request, EntityManagerInterface $em, FileUploader $fileUploader): Response
     {
         // Créer le formulaire lié à la recette existante
         $form = $this->createForm(RecipeType::class, $recipe);
@@ -106,6 +134,30 @@ final class AdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Parcourir chaque illustration (nouvelles et existantes)
+            foreach ($recipe->getRecipeIllustrations() as $illustration) {
+                // Récupérer le fichier uploadé (sera null si aucun nouveau fichier)
+                $imageFile = $illustration->getImageFile();
+
+                // Si un nouveau fichier a été uploadé
+                if ($imageFile) {
+                    // 1. Supprimer l'ancien fichier s'il existe
+                    if ($illustration->getName()) {
+                        $fileUploader->remove($illustration->getName());
+                    }
+
+                    // 2. Uploader le nouveau fichier
+                    $fileName = $fileUploader->upload($imageFile);
+
+                    // 3. Mettre à jour le nom et l'URL
+                    $illustration->setName($fileName);
+                    $illustration->setUrl('/uploads/recipe_illustrations/' . $fileName);
+
+                    // 4. S'assurer que l'illustration est bien liée à la recette
+                    $illustration->setRecipe($recipe);
+                }
+            }
+
             // Sauvegarder les modifications
             $em->flush();
 

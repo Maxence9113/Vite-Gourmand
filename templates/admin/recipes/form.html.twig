@@ -52,6 +52,53 @@
                         {{ form_errors(form.allergen) }}
                     </div>
 
+                    {# Section pour gérer les illustrations #}
+                    <div class="mb-3">
+                        <label class="form-label">Illustrations du plat</label>
+
+                        {# Conteneur pour la liste des illustrations #}
+                        <div id="illustrations-list"
+                             data-prototype="{{ form_widget(form.recipeIllustrations.vars.prototype)|e('html_attr') }}"
+                             data-index="{{ form.recipeIllustrations|length }}">
+
+                            {# Si la recette a déjà des illustrations, on les affiche #}
+                            {% for illustration in form.recipeIllustrations %}
+                                <div class="card mb-3 illustration-item">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                {{ form_row(illustration.imageFile) }}
+                                            </div>
+                                            <div class="col-md-6">
+                                                {{ form_row(illustration.alt_text) }}
+                                            </div>
+                                        </div>
+
+                                        {# Si on est en édition et qu'il y a déjà une image, l'afficher #}
+                                        {% if isEdit and illustration.vars.data.url %}
+                                            <div class="mt-2">
+                                                <img src="{{ illustration.vars.data.url }}"
+                                                     alt="{{ illustration.vars.data.altText }}"
+                                                     class="img-thumbnail"
+                                                     style="max-width: 200px;">
+                                            </div>
+                                        {% endif %}
+
+                                        {# Bouton pour supprimer une illustration #}
+                                        <button type="button" class="btn btn-danger btn-sm mt-2 remove-illustration">
+                                            Supprimer cette illustration
+                                        </button>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        {# Bouton pour ajouter une nouvelle illustration #}
+                        <button type="button" class="btn btn-success btn-sm mt-2" id="add-illustration">
+                            + Ajouter une illustration
+                        </button>
+                    </div>
+
                     <div class="d-flex justify-content-between mt-4">
                         <a href="{{ path('app_admin_recipes') }}" class="btn btn-secondary">
                             Annuler
@@ -75,4 +122,10 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {# Inclure le fichier JavaScript pour la gestion des illustrations #}
+    {{ importmap('admin-recipe-illustrations') }}
 {% endblock %}

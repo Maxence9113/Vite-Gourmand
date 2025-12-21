@@ -9,6 +9,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -46,6 +47,17 @@ class RecipeType extends AbstractType
                 'multiple' => true,
                 'expanded' => true,
                 'required' => false,
+            ])
+            // Ajout du champ pour gérer les illustrations
+            // CollectionType permet de gérer plusieurs illustrations (une collection)
+            ->add('recipeIllustrations', CollectionType::class, [
+                'entry_type' => RecipeIllustrationType::class, // Chaque entrée utilise le formulaire RecipeIllustrationType
+                'label' => 'Illustrations du plat',
+                'entry_options' => ['label' => false], // On n'affiche pas de label pour chaque illustration
+                'allow_add' => true,    // Permet d'ajouter de nouvelles illustrations dynamiquement
+                'allow_delete' => true, // Permet de supprimer des illustrations
+                'by_reference' => false, // IMPORTANT : Force Symfony à appeler les méthodes add/remove de l'entité Recipe
+                'prototype' => true,    // Génère un template HTML pour ajouter dynamiquement des illustrations avec JavaScript
             ])
         ;
     }

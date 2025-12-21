@@ -9,6 +9,16 @@
 /vendor/
 ###< symfony/framework-bundle ###
 
+###> uploads ###
+# Ignorer tous les fichiers uploadés
+/public/uploads/*
+# Mais garder les fichiers .gitkeep pour préserver la structure des dossiers
+!public/uploads/.gitkeep
+!public/uploads/recipe_illustrations/
+/public/uploads/recipe_illustrations/*
+!public/uploads/recipe_illustrations/.gitkeep
+###< uploads ###
+
 ###> phpunit/phpunit ###
 /phpunit.xml
 /.phpunit.cache/

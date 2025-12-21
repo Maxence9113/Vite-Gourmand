@@ -34,7 +34,7 @@ class Recipe
     /**
      * @var Collection<int, RecipeIllustration>
      */
-    #[ORM\OneToMany(targetEntity: RecipeIllustration::class, mappedBy: 'recipe')]
+    #[ORM\OneToMany(targetEntity: RecipeIllustration::class, mappedBy: 'recipe', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $recipeIllustrations;
 
     public function __construct()
