@@ -29,4 +29,9 @@
 /assets/vendor/
 ###< symfony/asset-mapper ###
 
+###> fixtures images ###
+# Ignorer les images de fixtures (images de démo)
+/fixtures/images/
+###< fixtures images ###
+
 /Cahier des Charges - Enoncé TP Développeur Web et Web Mobile.pdf

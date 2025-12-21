@@ -31,3 +31,8 @@ services:
     App\Service\FileUploader:
         arguments:
             $targetDirectory: '%recipe_illustrations_directory%'
+
+    # Configuration de RecipeFixtures pour injecter le chemin du projet
+    App\DataFixtures\RecipeFixtures:
+        arguments:
+            $projectDir: '%kernel.project_dir%'
