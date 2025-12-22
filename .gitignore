@@ -17,6 +17,9 @@
 !public/uploads/recipe_illustrations/
 /public/uploads/recipe_illustrations/*
 !public/uploads/recipe_illustrations/.gitkeep
+!public/uploads/theme_illustrations/
+/public/uploads/theme_illustrations/*
+!public/uploads/theme_illustrations/.gitkeep
 ###< uploads ###
 
 ###> phpunit/phpunit ###

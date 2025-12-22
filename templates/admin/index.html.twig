@@ -9,7 +9,7 @@
     {# Cartes de statistiques #}
     <div class="row mb-4">
 
-        <div class="col-md-3">
+        <div class="col-md-3 mb-3">
             <div class="card text-center">
                 <div class="card-body">
                     <h5 class="card-title">Utilisateurs</h5>
@@ -19,7 +19,7 @@
             </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-3 mb-3">
             <div class="card text-center">
                 <div class="card-body">
                     <h5 class="card-title">Recettes</h5>
@@ -29,21 +29,51 @@
             </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-3 mb-3">
             <div class="card text-center">
                 <div class="card-body">
                     <h5 class="card-title">Catégories</h5>
                     <p class="card-text display-4">{{ stats.totalCategories }}</p>
-                    <a href="#" class="btn btn-primary btn-sm">Gérer</a>
+                    <a href="{{ path('app_admin_categories') }}" class="btn btn-primary btn-sm">Gérer</a>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-3 mb-3">
             <div class="card text-center">
                 <div class="card-body">
                     <h5 class="card-title">Allergènes</h5>
                     <p class="card-text display-4">{{ stats.totalAllergens }}</p>
+                    <a href="{{ path('app_admin_allergens') }}" class="btn btn-primary btn-sm">Gérer</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Thèmes</h5>
+                    <p class="card-text display-4">{{ stats.totalThemes }}</p>
+                    <a href="{{ path('app_admin_themes') }}" class="btn btn-primary btn-sm">Gérer</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Régimes alimentaires</h5>
+                    <p class="card-text display-4">{{ stats.totalDietary }}</p>
+                    <a href="{{ path('app_admin_dietetaries') }}" class="btn btn-primary btn-sm">Gérer</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Menus</h5>
+                    <p class="card-text display-4">{{ stats.totalMenus }}</p>
                     <a href="#" class="btn btn-primary btn-sm">Gérer</a>
                 </div>
             </div>

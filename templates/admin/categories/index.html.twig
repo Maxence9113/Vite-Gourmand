@@ -1,0 +1,108 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des Catégories{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Gestion des Catégories</h1>
+        <div>
+            <a href="{{ path('app_admin_dashboard') }}" class="btn btn-secondary">Retour au Dashboard</a>
+            <a href="{{ path('app_admin_categories_new') }}" class="btn btn-success">Ajouter une catégorie</a>
+        </div>
+    </div>
+
+    {# Afficher les messages flash #}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {% endfor %}
+
+    {# Barre de recherche #}
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <input type="text" class="form-control" placeholder="Rechercher une catégorie..." id="searchInput">
+        </div>
+    </div>
+
+    {# Table des catégories #}
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nom</th>
+                        <th>Nombre de recettes</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="categoriesTable">
+                    {% for category in categories %}
+                    <tr class="category-row">
+                        <td>{{ category.id }}</td>
+                        <td class="fw-bold">{{ category.name }}</td>
+                        <td>
+                            <span class="badge bg-info">{{ category.recipes|length }} recette(s)</span>
+                        </td>
+                        <td class="text-end">
+                            <div class="btn-group" role="group">
+                                <a href="{{ path('app_admin_categories_edit', {id: category.id}) }}"
+                                   class="btn btn-sm btn-warning">
+                                    Modifier
+                                </a>
+                                <form method="post"
+                                      action="{{ path('app_admin_categories_delete', {id: category.id}) }}"
+                                      style="display: inline;"
+                                      onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer la catégorie « {{ category.name }} » ?')">
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        Supprimer
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center">
+                            <div class="alert alert-info mb-0">
+                                Aucune catégorie trouvée. <a href="{{ path('app_admin_categories_new') }}" class="alert-link">Créer une nouvelle catégorie</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {# Informations sur le nombre de catégories #}
+    <div class="mt-3">
+        <p class="text-muted">
+            Total : <strong>{{ categories|length }}</strong> catégorie(s)
+        </p>
+    </div>
+</div>
+
+{# Script pour la recherche en temps réel #}
+<script>
+    document.getElementById('searchInput')?.addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        const rows = document.querySelectorAll('.category-row');
+
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.style.display = text.includes(searchTerm) ? '' : 'none';
+        });
+    });
+</script>
+{% endblock %}

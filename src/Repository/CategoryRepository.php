@@ -16,28 +16,18 @@ class CategoryRepository extends ServiceEntityRepository
         parent::__construct($registry, Category::class);
     }
 
-    //    /**
-    //     * @return Category[] Returns an array of Category objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('c.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Category
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    /**
+     * Récupère toutes les catégories avec le nombre de recettes (optimisé N+1)
+     * @return Category[]
+     */
+    public function findAllWithRecipeCount(): array
+    {
+        return $this->createQueryBuilder('c')
+            ->leftJoin('c.recipes', 'r')
+            ->addSelect('r')
+            ->orderBy('c.name', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

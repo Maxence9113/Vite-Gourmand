@@ -16,28 +16,18 @@ class DietetaryRepository extends ServiceEntityRepository
         parent::__construct($registry, Dietetary::class);
     }
 
-    //    /**
-    //     * @return Dietetary[] Returns an array of Dietetary objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('d')
-    //            ->andWhere('d.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('d.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Dietetary
-    //    {
-    //        return $this->createQueryBuilder('d')
-    //            ->andWhere('d.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    /**
+     * Récupère tous les régimes alimentaires avec le nombre de menus (optimisé N+1)
+     * @return Dietetary[]
+     */
+    public function findAllWithMenuCount(): array
+    {
+        return $this->createQueryBuilder('d')
+            ->leftJoin('d.menus', 'm')
+            ->addSelect('m')
+            ->orderBy('d.name', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

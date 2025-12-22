@@ -33,7 +33,7 @@ final class ThemeController extends AbstractController
     }
 
     #[Route('/new', name: 'app_admin_themes_new')]
-    public function new(Request $request, EntityManagerInterface $em, FileUploader $themeFileUploader): Response
+    public function new(Request $request, EntityManagerInterface $em): Response
     {
         $theme = new Theme();
         $form = $this->createForm(ThemeType::class, $theme);
@@ -119,7 +119,7 @@ final class ThemeController extends AbstractController
     }
 
     #[Route('/{id}/delete', name: 'app_admin_themes_delete', methods: ['POST'])]
-    public function delete(Theme $theme, EntityManagerInterface $em, FileUploader $themeFileUploader): Response
+    public function delete(Theme $theme, EntityManagerInterface $em): Response
     {
         // Supprimer le fichier image associé
         $illustration = $theme->getIllustration();
