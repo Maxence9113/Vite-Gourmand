@@ -1,0 +1,124 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des Menus{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Gestion des Menus</h1>
+        <div>
+            <a href="{{ path('app_admin_dashboard') }}" class="btn btn-secondary">Retour au Dashboard</a>
+            <a href="{{ path('app_admin_menus_new') }}" class="btn btn-success">Ajouter un menu</a>
+        </div>
+    </div>
+
+    {# Afficher les messages flash #}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {% endfor %}
+
+    {# Barre de recherche #}
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <input type="text" class="form-control" placeholder="Rechercher un menu..." id="searchInput">
+        </div>
+    </div>
+
+    {# Grille des menus avec cartes #}
+    <div class="row" id="menusGrid">
+        {% for menu in menus %}
+        <div class="col-md-6 col-lg-4 mb-4 menu-card">
+            <div class="card h-100">
+                {% if menu.theme and menu.theme.illustration %}
+                    <img src="{{ menu.theme.illustration }}"
+                         class="card-img-top"
+                         alt="{{ menu.theme.textAlt ?: menu.theme.name }}"
+                         style="height: 200px; object-fit: cover;">
+                {% else %}
+                    <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
+                        <span class="text-white">Pas d'image</span>
+                    </div>
+                {% endif %}
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ menu.name }}</h5>
+
+                    <div class="mb-2">
+                        <span class="badge bg-primary">{{ menu.theme.name }}</span>
+                        {% if menu.dietetary|length > 0 %}
+                            {% for diet in menu.dietetary %}
+                                <span class="badge bg-success">{{ diet.name }}</span>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+                    <p class="card-text flex-grow-1">
+                        {{ menu.description|length > 120 ? menu.description|slice(0, 120) ~ '...' : menu.description }}
+                    </p>
+
+                    <div class="mb-2">
+                        <small class="text-muted">
+                            <strong>Min:</strong> {{ menu.nbPersonMin }} pers. |
+                            <strong>Prix:</strong> {{ menu.pricePerPerson|number_format(2, ',', ' ') }} €/pers.
+                        </small>
+                        <br>
+                        <small class="text-muted">
+                            <strong>Recettes:</strong> {{ menu.recipes|length }}
+                        </small>
+                    </div>
+
+                    <div class="btn-group mt-2" role="group">
+                        <a href="{{ path('app_admin_menus_edit', {id: menu.id}) }}" class="btn btn-sm btn-warning">
+                            Modifier
+                        </a>
+                        <form method="post"
+                              action="{{ path('app_admin_menus_delete', {id: menu.id}) }}"
+                              style="display: inline;"
+                              onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer le menu « {{ menu.name }} » ?')">
+                            <button type="submit" class="btn btn-sm btn-danger">
+                                Supprimer
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12">
+            <div class="alert alert-info text-center">
+                Aucun menu trouvé. <a href="{{ path('app_admin_menus_new') }}" class="alert-link">Créer un nouveau menu</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {# Informations sur le nombre de menus #}
+    <div class="mt-3">
+        <p class="text-muted">
+            Total : <strong>{{ menus|length }}</strong> menu(s)
+        </p>
+    </div>
+</div>
+
+{# Script pour la recherche en temps réel #}
+<script>
+    document.getElementById('searchInput')?.addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        const cards = document.querySelectorAll('.menu-card');
+
+        cards.forEach(card => {
+            const text = card.textContent.toLowerCase();
+            card.style.display = text.includes(searchTerm) ? '' : 'none';
+        });
+    });
+</script>
+{% endblock %}

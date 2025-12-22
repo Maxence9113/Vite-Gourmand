@@ -16,28 +16,47 @@ class RecipeRepository extends ServiceEntityRepository
         parent::__construct($registry, Recipe::class);
     }
 
-    //    /**
-    //     * @return Recipe[] Returns an array of Recipe objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('r.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * Récupère les recettes par nom de catégorie
+     * @param string $categoryName
+     * @return Recipe[]
+     */
+    public function findByCategoryName(string $categoryName): array
+    {
+        return $this->createQueryBuilder('r')
+            ->leftJoin('r.category', 'c')
+            ->andWhere('c.name = :categoryName')
+            ->setParameter('categoryName', $categoryName)
+            ->orderBy('r.title', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
-    //    public function findOneBySomeField($value): ?Recipe
-    //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    /**
+     * Récupère toutes les recettes groupées par catégorie en une seule requête
+     * Optimisé pour éviter le problème N+1
+     * @return array<string, Recipe[]>
+     */
+    public function findAllGroupedByCategory(): array
+    {
+        $recipes = $this->createQueryBuilder('r')
+            ->leftJoin('r.category', 'c')
+            ->addSelect('c')
+            ->orderBy('c.name', 'ASC')
+            ->addOrderBy('r.title', 'ASC')
+            ->getQuery()
+            ->getResult();
+
+        $grouped = [];
+        foreach ($recipes as $recipe) {
+            $categoryName = $recipe->getCategory()?->getName() ?? 'Sans catégorie';
+            if (!isset($grouped[$categoryName])) {
+                $grouped[$categoryName] = [];
+            }
+            $grouped[$categoryName][] = $recipe;
+        }
+
+        return $grouped;
+    }
 }

@@ -1,0 +1,401 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ isEdit ? 'Modifier' : 'Ajouter' }} un menu{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>{{ isEdit ? 'Modifier le menu' : 'Ajouter un nouveau menu' }}</h1>
+                <a href="{{ path('app_admin_menus') }}" class="btn btn-secondary">
+                    Retour à la liste
+                </a>
+            </div>
+
+            {# Afficher les messages flash #}
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    {{ form_start(form) }}
+
+                    {# Informations de base #}
+                    <div class="form-section mb-4">
+                        <div class="section-header mb-3">
+                            <h5 class="mb-0">
+                                <i class="bi bi-info-circle me-2"></i>Informations de base
+                            </h5>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form_row(form.name) }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form_row(form.theme) }}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            {{ form_row(form.description) }}
+                        </div>
+                    </div>
+
+                    {# Tarification #}
+                    <div class="form-section mb-4">
+                        <div class="section-header mb-3">
+                            <h5 class="mb-0">
+                                <i class="bi bi-cash-coin me-2"></i>Tarification
+                            </h5>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form_row(form.nb_person_min) }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form_row(form.price_per_person) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Recettes #}
+                    <div class="form-section mb-4">
+                        <div class="section-header mb-3">
+                            <h5 class="mb-0">
+                                <i class="bi bi-clipboard-check me-2"></i>Sélection des recettes
+                            </h5>
+                            <p class="text-muted small mb-0 mt-1">Dépliez chaque catégorie et cliquez sur les recettes à inclure dans ce menu.</p>
+                        </div>
+
+                    <style>
+                        /* Sections du formulaire */
+                        .form-section {
+                            padding: 1.5rem;
+                            background: linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%);
+                            border-radius: 0.5rem;
+                            border: 1px solid #e9ecef;
+                        }
+
+                        .section-header h5 {
+                            color: #495057;
+                            font-weight: 600;
+                            display: flex;
+                            align-items: center;
+                        }
+
+                        .section-header h5 i {
+                            color: #0c63e4;
+                        }
+
+                        /* Amélioration des champs de formulaire */
+                        .form-control, .form-select {
+                            border: 2px solid #e9ecef;
+                            transition: all 0.2s;
+                        }
+
+                        .form-control:focus, .form-select:focus {
+                            border-color: #0c63e4;
+                            box-shadow: 0 0 0 0.2rem rgba(12, 99, 228, 0.15);
+                        }
+
+                        /* Style des régimes alimentaires (checkboxes) */
+                        .dietary-choices .form-check {
+                            padding: 0.75rem 1rem;
+                            margin-bottom: 0.5rem;
+                            background-color: #ffffff;
+                            border-radius: 0.375rem;
+                            transition: all 0.2s;
+                            border: 2px solid #e9ecef;
+                            cursor: pointer;
+                        }
+
+                        .dietary-choices .form-check:hover {
+                            background-color: #f8f9fa;
+                            border-color: #0c63e4;
+                            transform: translateX(4px);
+                        }
+
+                        .dietary-choices .form-check-input {
+                            position: absolute;
+                            opacity: 0;
+                            pointer-events: none;
+                        }
+
+                        .dietary-choices .form-check-input:checked ~ .form-check-label {
+                            font-weight: 600;
+                            color: #0c63e4;
+                        }
+
+                        .dietary-choices .form-check-input:checked + .form-check-label::before {
+                            content: "✓ ";
+                            font-weight: bold;
+                            margin-right: 0.5rem;
+                        }
+
+                        .dietary-choices .form-check:has(input:checked) {
+                            background-color: #e7f1ff;
+                            border-color: #0c63e4;
+                        }
+
+                        .dietary-choices .form-check-label {
+                            cursor: pointer;
+                            font-size: 0.95rem;
+                            width: 100%;
+                            margin: 0;
+                        }
+
+                        /* Accordéon des recettes */
+                        .recipe-accordion .accordion-button {
+                            font-weight: 600;
+                            background-color: #f8f9fa;
+                        }
+
+                        .recipe-accordion .accordion-button:not(.collapsed) {
+                            background-color: #e7f1ff;
+                            color: #0c63e4;
+                        }
+
+                        .recipe-checkboxes {
+                            max-height: 250px;
+                            overflow-y: auto;
+                            padding: 0.5rem;
+                        }
+
+                        .recipe-checkboxes .form-check {
+                            padding: 0.75rem 1rem;
+                            margin-bottom: 0.5rem;
+                            background-color: #f8f9fa;
+                            border-radius: 0.375rem;
+                            transition: all 0.2s;
+                            border: 2px solid transparent;
+                            cursor: pointer;
+                        }
+
+                        .recipe-checkboxes .form-check:hover {
+                            background-color: #e9ecef;
+                            border-color: #0c63e4;
+                            transform: translateX(4px);
+                        }
+
+                        .recipe-checkboxes .form-check-input {
+                            position: absolute;
+                            opacity: 0;
+                            pointer-events: none;
+                        }
+
+                        .recipe-checkboxes .form-check-input:checked ~ .form-check-label {
+                            font-weight: 600;
+                            color: #0c63e4;
+                        }
+
+                        .recipe-checkboxes .form-check-input:checked + .form-check-label::before {
+                            content: "✓ ";
+                            font-weight: bold;
+                            margin-right: 0.5rem;
+                        }
+
+                        .recipe-checkboxes .form-check:has(input:checked) {
+                            background-color: #e7f1ff;
+                            border-color: #0c63e4;
+                        }
+
+                        .recipe-checkboxes .form-check-label {
+                            cursor: pointer;
+                            font-size: 0.95rem;
+                            width: 100%;
+                            margin: 0;
+                        }
+
+                        .accordion-badge {
+                            background-color: #0c63e4;
+                            color: white;
+                            padding: 0.25rem 0.5rem;
+                            border-radius: 0.375rem;
+                            font-size: 0.875rem;
+                            margin-left: 0.5rem;
+                        }
+                    </style>
+
+                    <div class="accordion recipe-accordion mb-3" id="recipesAccordion">
+                        {# Entrées #}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEntrees">
+                                    {{ form.entrees.vars.label }}
+                                    <span class="accordion-badge" id="badge-entrees">0</span>
+                                </button>
+                            </h2>
+                            <div id="collapseEntrees" class="accordion-collapse collapse" data-bs-parent="#recipesAccordion">
+                                <div class="accordion-body">
+                                    <div class="recipe-checkboxes">
+                                        {{ form_widget(form.entrees) }}
+                                    </div>
+                                    {{ form_errors(form.entrees) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        {# Plats #}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePlats">
+                                    {{ form.plats.vars.label }}
+                                    <span class="accordion-badge" id="badge-plats">0</span>
+                                </button>
+                            </h2>
+                            <div id="collapsePlats" class="accordion-collapse collapse" data-bs-parent="#recipesAccordion">
+                                <div class="accordion-body">
+                                    <div class="recipe-checkboxes">
+                                        {{ form_widget(form.plats) }}
+                                    </div>
+                                    {{ form_errors(form.plats) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        {# Fromages #}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFromages">
+                                    {{ form.fromages.vars.label }}
+                                    <span class="accordion-badge" id="badge-fromages">0</span>
+                                </button>
+                            </h2>
+                            <div id="collapseFromages" class="accordion-collapse collapse" data-bs-parent="#recipesAccordion">
+                                <div class="accordion-body">
+                                    <div class="recipe-checkboxes">
+                                        {{ form_widget(form.fromages) }}
+                                    </div>
+                                    {{ form_errors(form.fromages) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        {# Desserts #}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDesserts">
+                                    {{ form.desserts.vars.label }}
+                                    <span class="accordion-badge" id="badge-desserts">0</span>
+                                </button>
+                            </h2>
+                            <div id="collapseDesserts" class="accordion-collapse collapse" data-bs-parent="#recipesAccordion">
+                                <div class="accordion-body">
+                                    <div class="recipe-checkboxes">
+                                        {{ form_widget(form.desserts) }}
+                                    </div>
+                                    {{ form_errors(form.desserts) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+
+                    {# Régimes alimentaires #}
+                    <div class="form-section mb-4">
+                        <div class="section-header mb-3">
+                            <h5 class="mb-0">
+                                <i class="bi bi-heart-pulse me-2"></i>Régimes alimentaires
+                            </h5>
+                            <p class="text-muted small mb-0 mt-1">Sélectionnez les régimes alimentaires compatibles avec ce menu (optionnel).</p>
+                        </div>
+
+                        <div class="accordion" id="dietaryAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDietary">
+                                        Choisir les régimes alimentaires
+                                        <span class="accordion-badge" id="badge-dietary">0</span>
+                                    </button>
+                                </h2>
+                                <div id="collapseDietary" class="accordion-collapse collapse" data-bs-parent="#dietaryAccordion">
+                                    <div class="accordion-body">
+                                        <div class="dietary-choices">
+                                            {{ form_widget(form.dietetary) }}
+                                            {{ form_help(form.dietetary) }}
+                                            {{ form_errors(form.dietetary) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            // Fonction pour mettre à jour le badge d'une catégorie
+                            function updateBadge(containerId, badgeId) {
+                                const container = document.getElementById(containerId);
+                                if (!container) return;
+
+                                const checkboxes = container.querySelectorAll('input[type="checkbox"]:checked');
+                                const badge = document.getElementById(badgeId);
+                                if (badge) {
+                                    badge.textContent = checkboxes.length;
+                                }
+                            }
+
+                            // Fonction pour mettre à jour tous les badges
+                            function updateAllBadges() {
+                                updateBadge('collapseEntrees', 'badge-entrees');
+                                updateBadge('collapsePlats', 'badge-plats');
+                                updateBadge('collapseFromages', 'badge-fromages');
+                                updateBadge('collapseDesserts', 'badge-desserts');
+                                updateBadge('collapseDietary', 'badge-dietary');
+                            }
+
+                            // Mettre à jour les badges au chargement
+                            updateAllBadges();
+
+                            // Écouter les changements sur tous les checkboxes
+                            document.querySelectorAll('.recipe-checkboxes input[type="checkbox"], .dietary-choices input[type="checkbox"]').forEach(checkbox => {
+                                checkbox.addEventListener('change', updateAllBadges);
+                            });
+                        });
+                    </script>
+
+                    {% if isEdit %}
+                        <div class="alert alert-info">
+                            <strong>Informations actuelles :</strong><br>
+                            Thème : {{ menu.theme.name }}<br>
+                            Régimes alimentaires :
+                            {% if menu.dietetary|length > 0 %}
+                                {% for diet in menu.dietetary %}
+                                    {{ diet.name }}{% if not loop.last %}, {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                Aucun
+                            {% endif %}
+                            <br>
+                            Recettes : {{ menu.recipes|length }}
+                        </div>
+                    {% endif %}
+
+                    <div class="d-flex justify-content-between mt-4">
+                        <a href="{{ path('app_admin_menus') }}" class="btn btn-secondary">
+                            Annuler
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            {{ isEdit ? 'Modifier' : 'Créer' }} le menu
+                        </button>
+                    </div>
+
+                    {{ form_end(form) }}
+                </div>
+            </div>
+
+            {% if isEdit %}
+            <div class="mt-3">
+                <small class="text-muted">
+                    ID du menu : {{ menu.id }}
+                </small>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
