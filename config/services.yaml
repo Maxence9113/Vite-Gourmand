@@ -7,6 +7,7 @@ parameters:
     # Définit le chemin où seront stockées les illustrations de recettes
     # %kernel.project_dir% est remplacé par le chemin racine du projet
     recipe_illustrations_directory: '%kernel.project_dir%/public/uploads/recipe_illustrations'
+    theme_illustrations_directory: '%kernel.project_dir%/public/uploads/theme_illustrations'
 
 services:
     # default configuration for services in *this* file
@@ -26,13 +27,12 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    # Configuration du service FileUploader
-    # On injecte manuellement le paramètre $targetDirectory défini plus haut
-    App\Service\FileUploader:
+    # Service pour les recettes
+    App\Service\RecipeFileUploader:
         arguments:
             $targetDirectory: '%recipe_illustrations_directory%'
 
-    # Configuration de RecipeFixtures pour injecter le chemin du projet
-    App\DataFixtures\RecipeFixtures:
+    # Service pour les thèmes
+    App\Service\ThemeFileUploader:
         arguments:
-            $projectDir: '%kernel.project_dir%'
+            $targetDirectory: '%theme_illustrations_directory%'

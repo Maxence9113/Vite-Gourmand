@@ -10,6 +10,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 class RecipeFixtures extends Fixture implements DependentFixtureInterface
@@ -17,8 +18,13 @@ class RecipeFixtures extends Fixture implements DependentFixtureInterface
     private SluggerInterface $slugger;
     private string $projectDir;
 
-    public function __construct(SluggerInterface $slugger, string $projectDir)
-    {
+    public function __construct(
+        SluggerInterface $slugger,
+        
+        // L'Autowire sert a définir quel service utiliser (service.yaml)
+        #[Autowire(param: 'kernel.project_dir')]
+        string $projectDir
+    ) {
         $this->slugger = $slugger;
         $this->projectDir = $projectDir;
     }

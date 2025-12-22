@@ -40,7 +40,7 @@ class Recipe
     /**
      * @var Collection<int, Menu>
      */
-    #[ORM\ManyToMany(targetEntity: Menu::class, mappedBy: 'recipe')]
+    #[ORM\ManyToMany(targetEntity: Menu::class, mappedBy: 'recipes')]
     private Collection $menus;
 
     public function __construct()
