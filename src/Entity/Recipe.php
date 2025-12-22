@@ -37,10 +37,17 @@ class Recipe
     #[ORM\OneToMany(targetEntity: RecipeIllustration::class, mappedBy: 'recipe', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $recipeIllustrations;
 
+    /**
+     * @var Collection<int, Menu>
+     */
+    #[ORM\ManyToMany(targetEntity: Menu::class, mappedBy: 'recipe')]
+    private Collection $menus;
+
     public function __construct()
     {
         $this->allergen = new ArrayCollection();
         $this->recipeIllustrations = new ArrayCollection();
+        $this->menus = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -133,6 +140,33 @@ class Recipe
             if ($recipeIllustration->getRecipe() === $this) {
                 $recipeIllustration->setRecipe(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Menu>
+     */
+    public function getMenus(): Collection
+    {
+        return $this->menus;
+    }
+
+    public function addMenu(Menu $menu): static
+    {
+        if (!$this->menus->contains($menu)) {
+            $this->menus->add($menu);
+            $menu->addRecipe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMenu(Menu $menu): static
+    {
+        if ($this->menus->removeElement($menu)) {
+            $menu->removeRecipe($this);
         }
 
         return $this;
