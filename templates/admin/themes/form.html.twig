@@ -33,28 +33,6 @@
                         {{ form_row(form.description) }}
                     </div>
 
-                    <div class="mb-3">
-                        {{ form_row(form.imageFile) }}
-
-                        {# Afficher l'image actuelle en mode édition #}
-                        {% if isEdit and theme.illustration %}
-                            <div class="mt-2">
-                                <label class="form-label">Image actuelle :</label>
-                                <div>
-                                    <img src="{{ theme.illustration }}"
-                                         alt="{{ theme.textAlt ?: theme.name }}"
-                                         class="img-thumbnail"
-                                         style="max-width: 300px;">
-                                </div>
-                                <small class="text-muted">Téléchargez une nouvelle image pour remplacer celle-ci.</small>
-                            </div>
-                        {% endif %}
-                    </div>
-
-                    <div class="mb-3">
-                        {{ form_row(form.textAlt) }}
-                    </div>
-
                     <div class="d-flex justify-content-between mt-4">
                         <a href="{{ path('app_admin_themes') }}" class="btn btn-secondary">
                             Annuler

@@ -10,9 +10,19 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 class MenuFixtures extends Fixture implements DependentFixtureInterface
 {
+    private string $projectDir;
+
+    public function __construct(
+        #[Autowire(param: 'kernel.project_dir')]
+        string $projectDir
+    ) {
+        $this->projectDir = $projectDir;
+    }
+
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
@@ -25,6 +35,24 @@ class MenuFixtures extends Fixture implements DependentFixtureInterface
         // Si aucun thème n'existe, on ne peut pas créer de menus
         if (empty($themes)) {
             return;
+        }
+
+        // Images disponibles dans fixtures/images/themes (on les réutilise pour les menus)
+        $availableImages = [
+            ['filename' => 'anniversaire.jpg', 'alt' => 'Menu d\'anniversaire festif avec ballons et décoration colorée'],
+            ['filename' => 'barbecue.jpg', 'alt' => 'Menu barbecue avec grillades et légumes'],
+            ['filename' => 'mariage.jpg', 'alt' => 'Menu de mariage élégant avec décoration florale'],
+            ['filename' => 'noel.jpg', 'alt' => 'Menu de Noël avec décoration festive'],
+            ['filename' => 'nouvel_an.jpg', 'alt' => 'Menu de réveillon avec champagne'],
+            ['filename' => 'paques.jpg', 'alt' => 'Menu de Pâques printanier'],
+        ];
+
+        $fixturesImagesDir = $this->projectDir . '/fixtures/images/themes';
+        $uploadDir = $this->projectDir . '/public/uploads/menu_illustrations';
+
+        // S'assurer que le dossier d'upload existe
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0775, true);
         }
 
         // Créer 20 menus aléatoires
@@ -46,6 +74,20 @@ class MenuFixtures extends Fixture implements DependentFixtureInterface
 
             // Assigner le thème
             $menu->setTheme($theme);
+
+            // Assigner une illustration aléatoire
+            $randomImage = $availableImages[array_rand($availableImages)];
+            $sourceImagePath = $fixturesImagesDir . '/' . $randomImage['filename'];
+            $destinationFilename = 'menu_' . ($i + 1) . '_' . $randomImage['filename'];
+            $destinationPath = $uploadDir . '/' . $destinationFilename;
+
+            // Copier l'image depuis fixtures vers uploads
+            if (file_exists($sourceImagePath)) {
+                copy($sourceImagePath, $destinationPath);
+            }
+
+            $menu->setIllustration('/uploads/menu_illustrations/' . $destinationFilename);
+            $menu->setTextAlt($randomImage['alt']);
 
             // Ajouter 0 à 3 régimes alimentaires aléatoires
             if (!empty($dietetaryList)) {

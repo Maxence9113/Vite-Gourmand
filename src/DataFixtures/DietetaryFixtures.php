@@ -12,12 +12,9 @@ class DietetaryFixtures extends Fixture
     {
         $dietetaryList = [
             'Végétarien',
-            'Végétalien',
-            'Sans gluten',
-            'Sans lactose',
+            'Végan',
             'Halal',
             'Casher',
-            'Pescetarien',
             'Sans porc'
         ];
 

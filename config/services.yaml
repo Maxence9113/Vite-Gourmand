@@ -4,10 +4,10 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
-    # Définit le chemin où seront stockées les illustrations de recettes
+    # Définit le chemin où seront stockées les illustrations de recettes et menus
     # %kernel.project_dir% est remplacé par le chemin racine du projet
     recipe_illustrations_directory: '%kernel.project_dir%/public/uploads/recipe_illustrations'
-    theme_illustrations_directory: '%kernel.project_dir%/public/uploads/theme_illustrations'
+    menu_illustrations_directory: '%kernel.project_dir%/public/uploads/menu_illustrations'
 
 services:
     # default configuration for services in *this* file
@@ -32,7 +32,7 @@ services:
         arguments:
             $targetDirectory: '%recipe_illustrations_directory%'
 
-    # Service pour les thèmes
-    App\Service\ThemeFileUploader:
+    # Service pour les menus
+    App\Service\MenuFileUploader:
         arguments:
-            $targetDirectory: '%theme_illustrations_directory%'
+            $targetDirectory: '%menu_illustrations_directory%'

@@ -9,12 +9,14 @@ use App\Entity\Theme;
 use App\Repository\RecipeRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\GreaterThan;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -111,6 +113,36 @@ class MenuType extends AbstractType
                     ]),
                 ],
             ])
+            ->add('imageFile', FileType::class, [
+                'label' => 'Illustration du menu',
+                'mapped' => false,
+                'required' => !$options['is_edit'],
+                'attr' => [
+                    'class' => 'form-control',
+                    'accept' => 'image/jpeg,image/png,image/webp'
+                ],
+                'constraints' => [
+                    new File([
+                        'maxSize' => '2M',
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/png',
+                            'image/webp',
+                        ],
+                        'mimeTypesMessage' => 'Veuillez uploader une image valide (JPEG, PNG ou WebP)',
+                    ])
+                ],
+                'help' => 'Formats acceptés : JPEG, PNG, WebP. Taille maximale : 2 Mo.'
+            ])
+            ->add('textAlt', TextType::class, [
+                'label' => 'Texte alternatif (accessibilité)',
+                'required' => false,
+                'attr' => [
+                    'placeholder' => 'Description de l\'image pour les lecteurs d\'écran',
+                    'class' => 'form-control'
+                ],
+                'help' => 'Optionnel mais recommandé pour l\'accessibilité. Si vide, le nom du menu sera utilisé.'
+            ])
             ->add('dietetary', EntityType::class, [
                 'class' => Dietetary::class,
                 'choice_label' => 'name',
@@ -167,6 +199,7 @@ class MenuType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Menu::class,
+            'is_edit' => false,
         ]);
     }
 }

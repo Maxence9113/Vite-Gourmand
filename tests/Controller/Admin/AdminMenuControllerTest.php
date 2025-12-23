@@ -30,8 +30,6 @@ class AdminMenuControllerTest extends WebTestCase
         // Créer un thème et un régime alimentaire pour les tests
         $this->testTheme = new Theme();
         $this->testTheme->setName('Thème Test');
-        $this->testTheme->setTextAlt('Test');
-        $this->testTheme->setIllustration('/uploads/theme_illustrations/test.jpg');
         $this->testTheme->setDescription('Description test');
         $this->entityManager->persist($this->testTheme);
 

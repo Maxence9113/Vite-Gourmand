@@ -12,7 +12,7 @@ class AllergenFixtures extends Fixture
     {
         $allergenes = [
             'Gluten',
-            'Crustacés',
+            'Fruit de mer',
             'Œufs',
             'Poissons',
             'Arachides',
@@ -22,9 +22,6 @@ class AllergenFixtures extends Fixture
             'Céleri',
             'Moutarde',
             'Graines de sésame',
-            'Anhydride sulfureux et sulfites',
-            'Lupin',
-            'Mollusques'
         ];
 
         

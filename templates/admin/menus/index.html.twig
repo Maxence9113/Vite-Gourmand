@@ -39,10 +39,10 @@
         {% for menu in menus %}
         <div class="col-md-6 col-lg-4 mb-4 menu-card">
             <div class="card h-100">
-                {% if menu.theme and menu.theme.illustration %}
-                    <img src="{{ menu.theme.illustration }}"
+                {% if menu.illustration %}
+                    <img src="{{ menu.illustration }}"
                          class="card-img-top"
-                         alt="{{ menu.theme.textAlt ?: menu.theme.name }}"
+                         alt="{{ menu.textAlt ?: menu.name }}"
                          style="height: 200px; object-fit: cover;">
                 {% else %}
                     <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">

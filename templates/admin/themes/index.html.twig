@@ -32,13 +32,6 @@
         {% for theme in themes %}
         <div class="col-md-4 mb-4 theme-card">
             <div class="card h-100">
-                {% if theme.illustration %}
-                    <img src="{{ theme.illustration }}" class="card-img-top" alt="{{ theme.textAlt ?: theme.name }}" style="height: 200px; object-fit: cover;">
-                {% else %}
-                    <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
-                        <span class="text-white">Pas d'image</span>
-                    </div>
-                {% endif %}
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title">{{ theme.name }}</h5>
                     <p class="card-text flex-grow-1">

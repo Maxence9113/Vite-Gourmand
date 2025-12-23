@@ -35,8 +35,8 @@
                     <div class="carousel-inner">
                         {# Image principale du menu en premier #}
                         <div class="carousel-item active">
-                            <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&h=600&fit=crop"
-                                 alt="{{ menu.name }}"
+                            <img src="{{ menu.illustration ?? 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&h=600&fit=crop' }}"
+                                 alt="{{ menu.textAlt ?? menu.name }}"
                                  class="d-block w-100"
                                  style="height: 500px; object-fit: cover;">
                         </div>
@@ -73,8 +73,8 @@
                 <div class="d-flex gap-2 flex-wrap">
                     {# Miniature de l'image principale #}
                     <div class="thumbnail-item" data-bs-target="#menuCarousel" data-bs-slide-to="0" style="cursor: pointer;">
-                        <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=200&h=150&fit=crop"
-                             alt="{{ menu.name }}"
+                        <img src="{{ menu.illustration ?? 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=200&h=150&fit=crop' }}"
+                             alt="{{ menu.textAlt ?? menu.name }}"
                              class="img-fluid border border-2"
                              style="width: 80px; height: 80px; object-fit: cover;">
                     </div>

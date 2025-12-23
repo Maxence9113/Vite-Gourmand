@@ -28,6 +28,12 @@ class Menu
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $illustration = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $textAlt = null;
+
     #[ORM\ManyToOne(inversedBy: 'menus')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Theme $theme = null;
@@ -99,6 +105,30 @@ class Menu
     public function setDescription(string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getIllustration(): ?string
+    {
+        return $this->illustration;
+    }
+
+    public function setIllustration(?string $illustration): static
+    {
+        $this->illustration = $illustration;
+
+        return $this;
+    }
+
+    public function getTextAlt(): ?string
+    {
+        return $this->textAlt;
+    }
+
+    public function setTextAlt(?string $textAlt): static
+    {
+        $this->textAlt = $textAlt;
 
         return $this;
     }

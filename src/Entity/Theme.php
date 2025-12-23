@@ -19,14 +19,8 @@ class Theme
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $illustration = null;
-
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $textAlt = null;
 
     /**
      * @var Collection<int, Menu>
@@ -56,18 +50,6 @@ class Theme
         return $this;
     }
 
-    public function getIllustration(): ?string
-    {
-        return $this->illustration;
-    }
-
-    public function setIllustration(string $illustration): static
-    {
-        $this->illustration = $illustration;
-
-        return $this;
-    }
-
     public function getDescription(): ?string
     {
         return $this->description;
@@ -76,18 +58,6 @@ class Theme
     public function setDescription(string $description): static
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getTextAlt(): ?string
-    {
-        return $this->textAlt;
-    }
-
-    public function setTextAlt(?string $textAlt): static
-    {
-        $this->textAlt = $textAlt;
 
         return $this;
     }

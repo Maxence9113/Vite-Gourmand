@@ -71,8 +71,6 @@ class AdminThemeControllerTest extends WebTestCase
     {
         $theme = new Theme();
         $theme->setName('Thème à modifier');
-        $theme->setTextAlt('Texte original');
-        $theme->setIllustration('/uploads/theme_illustrations/test.jpg');
         $theme->setDescription('Description originale');
 
         $this->entityManager->persist($theme);
@@ -87,7 +85,6 @@ class AdminThemeControllerTest extends WebTestCase
         $this->assertEquals('Thème à modifier', $form['theme[name]']->getValue());
 
         $form['theme[name]'] = 'Thème modifié';
-        $form['theme[textAlt]'] = 'Texte modifié';
         $this->client->submit($form);
 
         $this->assertResponseRedirects('/admin/themes');
@@ -96,15 +93,12 @@ class AdminThemeControllerTest extends WebTestCase
         $updatedTheme = $this->entityManager->getRepository(Theme::class)->find($themeId);
         $this->assertNotNull($updatedTheme);
         $this->assertEquals('Thème modifié', $updatedTheme->getName());
-        $this->assertEquals('Texte modifié', $updatedTheme->getTextAlt());
     }
 
     public function testDeleteTheme(): void
     {
         $theme = new Theme();
         $theme->setName('Thème à supprimer');
-        $theme->setTextAlt('Test');
-        $theme->setIllustration('/uploads/theme_illustrations/test.jpg');
         $theme->setDescription('Description test');
 
         $this->entityManager->persist($theme);
