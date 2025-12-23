@@ -153,84 +153,58 @@
         </div>
 
         <div class="row">
-            {# Avis 1 #}
-            <div class="col-md-4 mb-4">
-                <div class="review-card h-100">
-                    <div class="review-stars mb-3">
-                        <i data-feather="star" width="20" class="star-filled"></i>
-                        <i data-feather="star" width="20" class="star-filled"></i>
-                        <i data-feather="star" width="20" class="star-filled"></i>
-                        <i data-feather="star" width="20" class="star-filled"></i>
-                        <i data-feather="star" width="20" class="star-filled"></i>
-                    </div>
-                    <p class="review-text mb-4">
-                        "Un service impeccable pour notre mariage ! Les plats étaient délicieux
-                        et nos invités nous en parlent encore. Merci à Julie et José pour leur professionnalisme."
-                    </p>
-                    <div class="d-flex align-items-center">
-                        <div class="review-avatar me-3">
-                            <i data-feather="user" width="24"></i>
-                        </div>
-                        <div>
-                            <h6 class="mb-0 fw-bold">Sophie Martin</h6>
-                            <small class="text-muted">Mariage - Juin 2024</small>
-                        </div>
-                    </div>
+            {% if reviews is empty %}
+                {# Afficher un message si aucun avis n'est disponible #}
+                <div class="col-12 text-center">
+                    <p class="text-muted">Aucun avis pour le moment. Soyez le premier à partager votre expérience !</p>
+                    {% if app.user %}
+                        <a href="{{ path('app_review_new') }}" class="btn btn-primary mt-3">
+                            <i data-feather="star" width="18" class="me-2"></i>
+                            Laisser un avis
+                        </a>
+                    {% endif %}
                 </div>
-            </div>
-
-            {# Avis 2 #}
-            <div class="col-md-4 mb-4">
-                <div class="review-card h-100">
-                    <div class="review-stars mb-3">
-                        <i data-feather="star" width="20" class="star-filled"></i>
-                        <i data-feather="star" width="20" class="star-filled"></i>
-                        <i data-feather="star" width="20" class="star-filled"></i>
-                        <i data-feather="star" width="20" class="star-filled"></i>
-                        <i data-feather="star" width="20" class="star-filled"></i>
-                    </div>
-                    <p class="review-text mb-4">
-                        "Excellent traiteur ! Menu de Noël parfait, respecte les allergies et
-                        propose des options végétariennes délicieuses. Je recommande vivement !"
-                    </p>
-                    <div class="d-flex align-items-center">
-                        <div class="review-avatar me-3">
-                            <i data-feather="user" width="24"></i>
-                        </div>
-                        <div>
-                            <h6 class="mb-0 fw-bold">Thomas Dubois</h6>
-                            <small class="text-muted">Repas de Noël - Décembre 2024</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {# Avis 3 #}
-            <div class="col-md-4 mb-4">
-                <div class="review-card h-100">
-                    <div class="review-stars mb-3">
-                        <i data-feather="star" width="20" class="star-filled"></i>
-                        <i data-feather="star" width="20" class="star-filled"></i>
-                        <i data-feather="star" width="20" class="star-filled"></i>
-                        <i data-feather="star" width="20" class="star-filled"></i>
-                        <i data-feather="star" width="20" class="star-filled"></i>
-                    </div>
-                    <p class="review-text mb-4">
-                        "Parfait pour notre événement d'entreprise ! Ponctualité, qualité,
-                        présentation soignée. Une équipe au top, nous referons appel à eux !"
-                    </p>
-                    <div class="d-flex align-items-center">
-                        <div class="review-avatar me-3">
-                            <i data-feather="user" width="24"></i>
-                        </div>
-                        <div>
-                            <h6 class="mb-0 fw-bold">Marie Leclerc</h6>
-                            <small class="text-muted">Événement entreprise - Octobre 2024</small>
+            {% else %}
+                {% for review in reviews %}
+                    <div class="col-md-4 mb-4">
+                        <div class="review-card h-100">
+                            <div class="review-stars mb-3">
+                                {% for i in 1..5 %}
+                                    {% if i <= review.rating %}
+                                        <i data-feather="star" width="20" class="star-filled"></i>
+                                    {% else %}
+                                        <i data-feather="star" width="20" class="star-empty"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            {% if review.comment %}
+                                <p class="review-text mb-4">
+                                    "{{ review.comment|length > 150 ? review.comment|slice(0, 150) ~ '...' : review.comment }}"
+                                </p>
+                            {% else %}
+                                <p class="review-text mb-4 text-muted fst-italic">
+                                    Pas de commentaire, juste une note de {{ review.rating }}/5.
+                                </p>
+                            {% endif %}
+                            <div class="mt-auto">
+                                <h6 class="mb-0 fw-bold">{{ review.customerName }}</h6>
+                                <small class="text-muted">{{ review.createdAt|date('d/m/Y') }}</small>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                {% endfor %}
+            {% endif %}
         </div>
+
+        {# Lien vers tous les avis #}
+        {% if reviews is not empty %}
+            <div class="text-center mt-4">
+                <a href="{{ path('app_review_index') }}" class="btn btn-outline-primary">
+                    <i data-feather="message-circle" width="18" class="me-2"></i>
+                    Voir tous les avis
+                </a>
+            </div>
+        {% endif %}
     </div>
 </section>
 
@@ -254,4 +228,23 @@
     </div>
 </section>
 
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .review-stars .star-filled {
+            color: #ffc107;
+            fill: #ffc107;
+            stroke: #f59e0b;
+            stroke-width: 1.5;
+        }
+
+        .review-stars .star-empty {
+            color: #e5e7eb;
+            fill: #f3f4f6;
+            stroke: #d1d5db;
+            stroke-width: 1.5;
+        }
+    </style>
 {% endblock %}

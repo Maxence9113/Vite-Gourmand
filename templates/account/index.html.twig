@@ -5,6 +5,14 @@
 {% block body %}
 
 <div class="container py-5">
+    {# Messages flash #}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {% endfor %}
+
     {# En-tête de la page #}
     <div class="row mb-4">
         <div class="col-12">
@@ -125,6 +133,10 @@
                 </div>
                 <div class="card-body">
                     <div class="d-grid gap-2">
+                        <a href="{{ path('app_review_new') }}" class="btn btn-primary">
+                            <i data-feather="star" width="18" class="me-2"></i>
+                            Laisser un avis
+                        </a>
                         <a href="{{ path('app_menu_catalog') }}" class="btn btn-outline-primary">
                             <i data-feather="book-open" width="18" class="me-2"></i>
                             Voir nos menus

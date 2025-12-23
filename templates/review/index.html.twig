@@ -1,0 +1,128 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Avis clients - Bordeaux Gourmant{% endblock %}
+
+{% block body %}
+
+<section class="py-5 bg-light">
+    <div class="container py-5">
+        <div class="text-center mb-5">
+            <span class="badge bg-secondary mb-3">Témoignages</span>
+            <h1 class="display-5 fw-bold mb-3" style="color: var(--primary);">
+                Avis de nos clients
+            </h1>
+            <p class="lead text-muted">
+                Découvrez ce que nos clients pensent de nos services
+            </p>
+
+            {% if app.user %}
+                <div class="mt-4">
+                    <a href="{{ path('app_review_new') }}" class="btn btn-primary btn-lg">
+                        <i data-feather="edit-3" width="20" class="me-2"></i>
+                        Laisser un avis
+                    </a>
+                </div>
+            {% else %}
+                <div class="alert alert-info mt-4 d-inline-block">
+                    <i data-feather="info" width="18" class="me-2"></i>
+                    <a href="{{ path('app_login') }}" class="alert-link">Connectez-vous</a> pour laisser un avis
+                </div>
+            {% endif %}
+        </div>
+
+        {% if reviews is empty %}
+            <div class="text-center py-5">
+                <i data-feather="message-circle" width="64" class="text-muted mb-3"></i>
+                <p class="lead text-muted">Aucun avis pour le moment. Soyez le premier à partager votre expérience !</p>
+            </div>
+        {% else %}
+            <div class="row">
+                {% for review in reviews %}
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="review-card h-100">
+                            <div class="review-stars mb-3">
+                                {% for i in 1..5 %}
+                                    {% if i <= review.rating %}
+                                        <i data-feather="star" width="20" class="star-filled"></i>
+                                    {% else %}
+                                        <i data-feather="star" width="20" class="star-empty"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+
+                            {% if review.comment %}
+                                <p class="review-text mb-4">
+                                    "{{ review.comment }}"
+                                </p>
+                            {% endif %}
+
+                            <div class="d-flex align-items-center mt-auto">
+                                <div class="review-avatar me-3">
+                                    <i data-feather="user" width="24"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0 fw-bold">{{ review.customerName }}</h6>
+                                    <small class="text-muted">{{ review.createdAt|date('d/m/Y') }}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .review-card {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .review-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .review-stars {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .review-stars .star-filled {
+            color: #ffc107;
+            fill: #ffc107;
+        }
+
+        .review-stars .star-empty {
+            color: #e9ecef;
+            fill: #e9ecef;
+        }
+
+        .review-text {
+            font-style: italic;
+            color: #6c757d;
+            line-height: 1.6;
+        }
+
+        .review-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+    </style>
+{% endblock %}
