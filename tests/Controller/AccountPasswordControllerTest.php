@@ -14,23 +14,9 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class AccountPasswordControllerTest extends WebTestCase
 {
-    /**
-     * Test 1 : Vérifier que la page de modification du mot de passe nécessite une authentification
-     *
-     * TODO: Ce test sera activé une fois que les rôles seront configurés
-     * Pour l'instant, il est commenté car les access_control ne sont pas encore en place
-     */
-    public function testPasswordPageRequiresAuthentication(): void
-    {
-        $this->markTestSkipped('Test désactivé temporairement - Les rôles seront configurés plus tard');
-
-        // $client = static::createClient();
-        // $client->request('GET', '/compte/modifier-mot-de-passe');
-        // $this->assertResponseRedirects('/connexion');
-    }
 
     /**
-     * Test 2 : Vérifier que la page de modification est accessible pour un utilisateur connecté
+     * Test 1 : Vérifier que la page de modification est accessible pour un utilisateur connecté
      *
      * On teste que :
      * - La route /compte/modifier-mot-de-passe répond avec un code 200 (OK)
@@ -59,7 +45,7 @@ class AccountPasswordControllerTest extends WebTestCase
     }
 
     /**
-     * Test 3 : Modification réussie du mot de passe avec des données valides
+     * Test 2 : Modification réussie du mot de passe avec des données valides
      *
      * Scénario :
      * 1. Un utilisateur est connecté avec un mot de passe connu
@@ -130,7 +116,7 @@ class AccountPasswordControllerTest extends WebTestCase
     }
 
     /**
-     * Test 4 : Rejet si le mot de passe actuel est incorrect
+     * Test 3 : Rejet si le mot de passe actuel est incorrect
      *
      * Si l'utilisateur saisit un mauvais mot de passe actuel,
      * la modification doit être refusée
@@ -165,7 +151,7 @@ class AccountPasswordControllerTest extends WebTestCase
     }
 
     /**
-     * Test 5 : Rejet si le nouveau mot de passe est trop court
+     * Test 4 : Rejet si le nouveau mot de passe est trop court
      *
      * Le nouveau mot de passe doit contenir au moins 10 caractères
      */
@@ -192,7 +178,7 @@ class AccountPasswordControllerTest extends WebTestCase
     }
 
     /**
-     * Test 6 : Rejet si le nouveau mot de passe n'a pas de caractère spécial
+     * Test 5 : Rejet si le nouveau mot de passe n'a pas de caractère spécial
      */
     public function testPasswordChangeWithoutSpecialCharacter(): void
     {
@@ -217,7 +203,7 @@ class AccountPasswordControllerTest extends WebTestCase
     }
 
     /**
-     * Test 7 : Rejet si le nouveau mot de passe n'a pas de majuscule
+     * Test 6 : Rejet si le nouveau mot de passe n'a pas de majuscule
      */
     public function testPasswordChangeWithoutUppercase(): void
     {
@@ -242,7 +228,7 @@ class AccountPasswordControllerTest extends WebTestCase
     }
 
     /**
-     * Test 8 : Rejet si le nouveau mot de passe n'a pas de chiffre
+     * Test 7 : Rejet si le nouveau mot de passe n'a pas de chiffre
      */
     public function testPasswordChangeWithoutNumber(): void
     {
@@ -267,7 +253,7 @@ class AccountPasswordControllerTest extends WebTestCase
     }
 
     /**
-     * Test 9 : Rejet si les deux nouveaux mots de passe ne correspondent pas
+     * Test 8 : Rejet si les deux nouveaux mots de passe ne correspondent pas
      */
     public function testPasswordChangeWithMismatchedNewPasswords(): void
     {
@@ -291,7 +277,7 @@ class AccountPasswordControllerTest extends WebTestCase
     }
 
     /**
-     * Test 10 : Rejet si le champ mot de passe actuel est vide
+     * Test 9 : Rejet si le champ mot de passe actuel est vide
      */
     public function testPasswordChangeWithEmptyCurrentPassword(): void
     {

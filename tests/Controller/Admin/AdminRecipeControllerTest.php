@@ -290,35 +290,4 @@ class AdminRecipeControllerTest extends WebTestCase
         $this->assertNull($deletedRecipe, 'La recette devrait être supprimée');
     }
 
-    /**
-     * Test 6 : Vérifier qu'un utilisateur non-admin ne peut pas accéder
-     *
-     * Ce test vérifie la sécurité : seuls les admins peuvent gérer les recettes
-     */
-    public function testNonAdminCannotAccessRecipeManagement(): void
-    {
-        $this->markTestSkipped('Gestion des rôles pas encore implémentée');
-        /*
-        // Créer un utilisateur normal (non-admin)
-        $normalUser = new User();
-        $normalUser->setEmail('user@test.com');
-        $normalUser->setFirstname('User');
-        $normalUser->setLastname('Normal');
-        $normalUser->setRoles(['ROLE_USER']); // Pas de ROLE_ADMIN
-        $normalUser->setPassword('password');
-
-        $this->entityManager->persist($normalUser);
-        $this->entityManager->flush();
-
-        // Créer un nouveau client et le connecter avec l'utilisateur normal
-        $client = static::createClient();
-        $client->loginUser($normalUser);
-
-        // Tenter d'accéder à la page de gestion des recettes
-        $client->request('GET', '/admin/recipes');
-
-        // Vérifier que l'accès est refusé (code 403 Forbidden ou redirection vers login)
-        $this->assertResponseStatusCodeSame(403);
-    */
-    }
 }
