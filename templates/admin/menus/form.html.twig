@@ -330,12 +330,22 @@
                             // Fonction pour mettre à jour le badge d'une catégorie
                             function updateBadge(containerId, badgeId) {
                                 const container = document.getElementById(containerId);
-                                if (!container) return;
+                                if (!container) {
+                                    console.warn('Container not found:', containerId);
+                                    return;
+                                }
 
                                 const checkboxes = container.querySelectorAll('input[type="checkbox"]:checked');
                                 const badge = document.getElementById(badgeId);
                                 if (badge) {
                                     badge.textContent = checkboxes.length;
+
+                                    // Changer la couleur du badge en fonction du nombre de sélections
+                                    if (checkboxes.length > 0) {
+                                        badge.style.backgroundColor = '#28a745';
+                                    } else {
+                                        badge.style.backgroundColor = '#6c757d';
+                                    }
                                 }
                             }
 
@@ -348,15 +358,49 @@
                                 updateBadge('collapseDietary', 'badge-dietary');
                             }
 
-                            // Mettre à jour les badges au chargement
-                            updateAllBadges();
+                            // Attendre un petit délai pour s'assurer que tout est chargé
+                            setTimeout(function() {
+                                // Mettre à jour les badges au chargement
+                                updateAllBadges();
 
-                            // Écouter les changements sur tous les checkboxes
-                            document.querySelectorAll('.recipe-checkboxes input[type="checkbox"], .dietary-choices input[type="checkbox"]').forEach(checkbox => {
-                                checkbox.addEventListener('change', updateAllBadges);
-                            });
+                                // Écouter les changements sur tous les checkboxes
+                                const allCheckboxes = document.querySelectorAll('.recipe-checkboxes input[type="checkbox"], .dietary-choices input[type="checkbox"]');
+                                console.log('Found checkboxes:', allCheckboxes.length);
+
+                                allCheckboxes.forEach(function(checkbox) {
+                                    checkbox.addEventListener('change', function() {
+                                        updateAllBadges();
+                                    });
+                                });
+                            }, 100);
                         });
                     </script>
+
+                    {# Illustration du menu #}
+                    <div class="form-section mb-4">
+                        <div class="section-header mb-3">
+                            <h5 class="mb-0">
+                                <i class="bi bi-image me-2"></i>Illustration du menu
+                            </h5>
+                            <p class="text-muted small mb-0 mt-1">Ajoutez une image représentative pour ce menu.</p>
+                        </div>
+
+                        {% if isEdit and menu.illustration %}
+                            <div class="mb-3">
+                                <label class="form-label">Image actuelle :</label>
+                                <div class="mb-2">
+                                    <img src="{{ menu.illustration }}" alt="{{ menu.textAlt ?: menu.name }}" class="img-thumbnail" style="max-height: 200px;">
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <div class="mb-3">
+                            {{ form_row(form.imageFile) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form_row(form.textAlt) }}
+                        </div>
+                    </div>
 
                     {% if isEdit %}
                         <div class="alert alert-info">

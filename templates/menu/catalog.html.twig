@@ -189,8 +189,8 @@
                             <div class="col-md-6 col-lg-4 menu-card-wrapper">
                                 <div class="menu-card h-100">
                                     <div class="menu-card-image">
-                                        <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=300&fit=crop"
-                                             alt="{{ menu.name }}"
+                                        <img src="{{ menu.illustration }}"
+                                             alt="{{ menu.textAlt ?: menu.name }}"
                                              class="img-fluid">
                                         <div class="menu-card-badge">
                                             <span class="badge bg-primary">{{ menu.theme.name }}</span>

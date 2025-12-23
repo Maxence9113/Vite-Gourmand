@@ -229,23 +229,27 @@
                     }) %}
                 {% endfor %}
 
-                {# Afficher par catégorie #}
-                {% for categoryName, recipes in recipesByCategory %}
-                    <div class="mb-4">
-                        <h5 class="fw-bold text-uppercase mb-3" style="color: var(--primary); letter-spacing: 1px; font-size: 0.9rem;">
-                            {{ categoryName }}
-                        </h5>
-                        <div class="row g-3">
-                            {% for recipe in recipes %}
-                                <div class="col-md-6">
-                                    <div class="border-start border-3 border-primary ps-3">
-                                        <h6 class="fw-bold mb-1">{{ recipe.title }}</h6>
-                                        <p class="small text-muted mb-1">{{ recipe.description }}</p>
+                {# Afficher par catégorie dans l'ordre : Entrée, Plat, Fromage, Dessert #}
+                {% set orderedCategories = ['Entrée', 'Plat', 'Fromage', 'Dessert'] %}
+                {% for categoryName in orderedCategories %}
+                    {% if categoryName in recipesByCategory|keys %}
+                        {% set recipes = recipesByCategory[categoryName] %}
+                        <div class="mb-4">
+                            <h5 class="fw-bold text-uppercase mb-3" style="color: var(--primary); letter-spacing: 1px; font-size: 0.9rem;">
+                                {{ categoryName }}
+                            </h5>
+                            <div class="row g-3">
+                                {% for recipe in recipes %}
+                                    <div class="col-md-6">
+                                        <div class="border-start border-3 border-primary ps-3">
+                                            <h6 class="fw-bold mb-1">{{ recipe.title }}</h6>
+                                            <p class="small text-muted mb-1">{{ recipe.description }}</p>
+                                        </div>
                                     </div>
-                                </div>
-                            {% endfor %}
+                                {% endfor %}
+                            </div>
                         </div>
-                    </div>
+                    {% endif %}
                 {% endfor %}
             </div>
         </div>
