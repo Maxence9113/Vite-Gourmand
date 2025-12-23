@@ -1,0 +1,246 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nos Menus - Vite & Gourmand{% endblock %}
+
+{% block body %}
+
+{# Hero Section #}
+<section class="menu-hero-section">
+    <div class="hero-overlay"></div>
+    <div class="container">
+        <div class="row align-items-center" style="min-height: 40vh;">
+            <div class="col-lg-8 mx-auto text-center text-white">
+                <h1 class="display-3 fw-bold mb-4">Nos Menus</h1>
+                <p class="lead mb-0">
+                    Découvrez notre sélection de menus gastronomiques pour tous vos événements
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# Catalog Section #}
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            {# Sidebar Filtres #}
+            <div class="col-lg-3 mb-4">
+                <div class="filter-sidebar bg-white rounded shadow-sm p-4 sticky-top" style="top: 100px;">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="mb-0 fw-bold">
+                            <i data-feather="filter" width="20" class="me-2"></i>
+                            Filtres
+                        </h5>
+                        <button id="resetFilters" class="btn btn-sm btn-outline-secondary">
+                            Réinitialiser
+                        </button>
+                    </div>
+
+                    <form id="filterForm" method="get" action="{{ path('app_menu_catalog') }}">
+                        {# Filtre Thème #}
+                        <div class="filter-group mb-4">
+                            <h6 class="fw-bold mb-3">
+                                <i data-feather="star" width="16" class="me-2"></i>
+                                Thème
+                            </h6>
+                            <select name="theme" class="form-select" id="themeFilter">
+                                <option value="">Tous les thèmes</option>
+                                {% for theme in themes %}
+                                    <option value="{{ theme.id }}" {% if currentFilters.theme == theme.id %}selected{% endif %}>
+                                        {{ theme.name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        {# Filtre Régimes alimentaires #}
+                        <div class="filter-group mb-4">
+                            <h6 class="fw-bold mb-3">
+                                <i data-feather="heart" width="16" class="me-2"></i>
+                                Régimes
+                            </h6>
+                            {% for dietetary in dietetaries %}
+                                <div class="form-check mb-2">
+                                    <input
+                                        class="form-check-input"
+                                        type="checkbox"
+                                        name="dietetary[]"
+                                        value="{{ dietetary.id }}"
+                                        id="dietetary{{ dietetary.id }}"
+                                        {% if dietetary.id in currentFilters.dietetary %}checked{% endif %}
+                                    >
+                                    <label class="form-check-label" for="dietetary{{ dietetary.id }}">
+                                        {{ dietetary.name }}
+                                    </label>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        {# Filtre Sans allergènes #}
+                        <div class="filter-group mb-4">
+                            <h6 class="fw-bold mb-3">
+                                <i data-feather="alert-circle" width="16" class="me-2"></i>
+                                Sans allergènes
+                            </h6>
+                            {% for allergen in allergens %}
+                                <div class="form-check mb-2">
+                                    <input
+                                        class="form-check-input"
+                                        type="checkbox"
+                                        name="allergen[]"
+                                        value="{{ allergen.id }}"
+                                        id="allergen{{ allergen.id }}"
+                                        {% if allergen.id in currentFilters.allergen %}checked{% endif %}
+                                    >
+                                    <label class="form-check-label" for="allergen{{ allergen.id }}">
+                                        Sans {{ allergen.name|lower }}
+                                    </label>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        {# Filtre Fourchette de prix #}
+                        <div class="filter-group mb-4">
+                            <h6 class="fw-bold mb-3">
+                                <i data-feather="dollar-sign" width="16" class="me-2"></i>
+                                Fourchette de prix
+                            </h6>
+                            <div class="mb-2">
+                                <label for="priceMin" class="form-label small text-muted">Prix minimum</label>
+                                <input
+                                    type="number"
+                                    class="form-control"
+                                    id="priceMin"
+                                    name="price_min"
+                                    placeholder="Min"
+                                    step="0.01"
+                                    min="0"
+                                    value="{{ currentFilters.price_min }}"
+                                >
+                            </div>
+                            <div>
+                                <label for="priceMax" class="form-label small text-muted">Prix maximum</label>
+                                <input
+                                    type="number"
+                                    class="form-control"
+                                    id="priceMax"
+                                    name="price_max"
+                                    placeholder="Max"
+                                    step="0.01"
+                                    min="0"
+                                    value="{{ currentFilters.price_max }}"
+                                >
+                            </div>
+                        </div>
+
+                        {# Filtre Nombre de personnes #}
+                        <div class="filter-group mb-4">
+                            <h6 class="fw-bold mb-3">
+                                <i data-feather="users" width="16" class="me-2"></i>
+                                Nombre de personnes
+                            </h6>
+                            <input
+                                type="number"
+                                class="form-control"
+                                name="nb_person_min"
+                                placeholder="Nombre de convives"
+                                value="{{ currentFilters.nb_person_min }}"
+                            >
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i data-feather="search" width="16" class="me-2"></i>
+                            Appliquer les filtres
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            {# Liste des menus #}
+            <div class="col-lg-9">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="mb-0">
+                        <span class="badge bg-primary">{{ menus|length }}</span>
+                        menu(s) trouvé(s)
+                    </h5>
+                    <div class="btn-group" role="group">
+                        <input type="radio" class="btn-check" name="viewMode" id="viewGrid" autocomplete="off" checked>
+                        <label class="btn btn-outline-secondary" for="viewGrid">
+                            <i data-feather="grid" width="16"></i>
+                        </label>
+                        <input type="radio" class="btn-check" name="viewMode" id="viewList" autocomplete="off">
+                        <label class="btn btn-outline-secondary" for="viewList">
+                            <i data-feather="list" width="16"></i>
+                        </label>
+                    </div>
+                </div>
+
+                <div id="menuGrid" class="row g-4">
+                    {% if menus is empty %}
+                        <div class="col-12">
+                            <div class="alert alert-info text-center">
+                                <i data-feather="info" width="24" class="mb-3"></i>
+                                <h5>Aucun menu trouvé</h5>
+                                <p class="mb-0">Essayez de modifier vos critères de recherche</p>
+                            </div>
+                        </div>
+                    {% else %}
+                        {% for menu in menus %}
+                            <div class="col-md-6 col-lg-4 menu-card-wrapper">
+                                <div class="menu-card h-100">
+                                    <div class="menu-card-image">
+                                        <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=300&fit=crop"
+                                             alt="{{ menu.name }}"
+                                             class="img-fluid">
+                                        <div class="menu-card-badge">
+                                            <span class="badge bg-primary">{{ menu.theme.name }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="menu-card-body">
+                                        <h5 class="menu-card-title">{{ menu.name }}</h5>
+                                        <p class="menu-card-description">
+                                            {{ menu.description|length > 100 ? menu.description|slice(0, 100) ~ '...' : menu.description }}
+                                        </p>
+
+                                        <div class="menu-card-tags mb-3">
+                                            {% for dietetary in menu.dietetary %}
+                                                <span class="badge bg-success-subtle text-success">
+                                                    {{ dietetary.name }}
+                                                </span>
+                                            {% endfor %}
+                                        </div>
+
+                                        <div class="menu-card-info mb-3">
+                                            <div class="d-flex justify-content-between text-muted small">
+                                                <span>
+                                                    <i data-feather="users" width="14"></i>
+                                                    Min. {{ menu.nbPersonMin }} pers.
+                                                </span>
+                                                <span>
+                                                    <i data-feather="coffee" width="14"></i>
+                                                    {{ menu.recipes|length }} plats
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="menu-card-price">
+                                                <span class="h4 mb-0 fw-bold text-primary">{{ menu.pricePerPerson|number_format(2, ',', ' ') }}€</span>
+                                                <small class="text-muted d-block">par personne</small>
+                                            </div>
+                                            <a href="{{ path('app_menu_show', {id: menu.id}) }}" class="btn btn-outline-primary">
+                                                Détails
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

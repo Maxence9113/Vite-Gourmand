@@ -1,0 +1,309 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ menu.name }} - Vite & Gourmand{% endblock %}
+
+{% block body %}
+
+{# Breadcrumb #}
+<section class="bg-light py-3">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item">
+                    <a href="{{ path('app_home') }}" class="text-muted text-decoration-none">
+                        <i data-feather="home" width="14" class="me-1"></i>
+                        Accueil
+                    </a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="{{ path('app_menu_catalog') }}" class="text-muted text-decoration-none">Nos menus</a>
+                </li>
+                <li class="breadcrumb-item active fw-medium">{{ menu.name }}</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+
+{# Menu Details #}
+<section class="py-4">
+    <div class="container">
+        <div class="row">
+            {# Galerie d'images - Gauche #}
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                {# Carrousel Bootstrap #}
+                <div id="menuCarousel" class="carousel slide mb-3" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        {# Image principale du menu en premier #}
+                        <div class="carousel-item active">
+                            <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&h=600&fit=crop"
+                                 alt="{{ menu.name }}"
+                                 class="d-block w-100"
+                                 style="height: 500px; object-fit: cover;">
+                        </div>
+
+                        {# Images des recettes #}
+                        {% for recipe in menu.recipes %}
+                            {% if recipe.recipeIllustrations|length > 0 %}
+                                {% set firstIllustration = recipe.recipeIllustrations|first %}
+                                <div class="carousel-item">
+                                    <img src="{{ firstIllustration.url }}"
+                                         alt="{{ firstIllustration.altText ?? recipe.title }}"
+                                         class="d-block w-100"
+                                         style="height: 500px; object-fit: cover;">
+                                    <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded">
+                                        <h5>{{ recipe.title }}</h5>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+
+                    {# Contrôles précédent/suivant #}
+                    <button class="carousel-control-prev" type="button" data-bs-target="#menuCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Précédent</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#menuCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Suivant</span>
+                    </button>
+                </div>
+
+                {# Miniatures cliquables #}
+                <div class="d-flex gap-2 flex-wrap">
+                    {# Miniature de l'image principale #}
+                    <div class="thumbnail-item" data-bs-target="#menuCarousel" data-bs-slide-to="0" style="cursor: pointer;">
+                        <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=200&h=150&fit=crop"
+                             alt="{{ menu.name }}"
+                             class="img-fluid border border-2"
+                             style="width: 80px; height: 80px; object-fit: cover;">
+                    </div>
+
+                    {# Miniatures des recettes #}
+                    {% for recipe in menu.recipes %}
+                        {% if recipe.recipeIllustrations|length > 0 %}
+                            {% set firstIllustration = recipe.recipeIllustrations|first %}
+                            <div class="thumbnail-item" data-bs-target="#menuCarousel" data-bs-slide-to="{{ loop.index }}" style="cursor: pointer;">
+                                <img src="{{ firstIllustration.url }}"
+                                     alt="{{ firstIllustration.altText ?? recipe.title }}"
+                                     class="img-fluid border border-2"
+                                     style="width: 80px; height: 80px; object-fit: cover;">
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            {# Informations du menu - Droite #}
+            <div class="col-lg-6">
+                {# Titre #}
+                <h1 class="h2 fw-bold mb-3">{{ menu.name }}</h1>
+
+                {# Badges diététiques #}
+                <div class="mb-3">
+                    {% for dietetary in menu.dietetary %}
+                        <span class="badge bg-success me-1 mb-1">{{ dietetary.name }}</span>
+                    {% endfor %}
+                </div>
+
+                {# Prix #}
+                <div class="mb-4">
+                    <div class="d-flex align-items-baseline">
+                        <span class="h3 fw-bold mb-0 me-2" style="color: var(--primary);">{{ menu.pricePerPerson|number_format(2, ',', ' ') }}€</span>
+                        <small class="text-muted">par personne</small>
+                    </div>
+                </div>
+
+                {# Description #}
+                <div class="mb-4">
+                    <p class="text-muted">{{ menu.description }}</p>
+                </div>
+
+                {# Allergènes #}
+                {% set menuAllergens = [] %}
+                {% for recipe in menu.recipes %}
+                    {% for allergen in recipe.allergen %}
+                        {% if allergen.id not in menuAllergens|column('id') %}
+                            {% set menuAllergens = menuAllergens|merge([allergen]) %}
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+
+                {% if menuAllergens|length > 0 %}
+                    <div class="alert alert-warning border-0 mb-4" style="background-color: #fff3cd;">
+                        <div class="d-flex align-items-start">
+                            <i data-feather="alert-triangle" width="20" class="me-2 flex-shrink-0 mt-1"></i>
+                            <div>
+                                <strong class="d-block mb-1">Allergènes présents</strong>
+                                <small>
+                                    {% for allergen in menuAllergens %}
+                                        {{ allergen.name }}{% if not loop.last %}, {% endif %}
+                                    {% endfor %}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <hr class="my-4">
+
+                {# Informations pratiques #}
+                <div class="mb-4">
+                    <h6 class="fw-bold mb-3">Informations pratiques</h6>
+
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <small class="text-muted d-block mb-1">Nombre de personnes</small>
+                            <strong>Minimum {{ menu.nbPersonMin }}</strong>
+                        </div>
+                        <div class="col-6">
+                            <small class="text-muted d-block mb-1">Nombre de plats</small>
+                            <strong>{{ menu.recipes|length }} recettes</strong>
+                        </div>
+                        <div class="col-12">
+                            <small class="text-muted d-block mb-1">Disponibilité</small>
+                            <strong>
+                                {% if menu.stock is defined and menu.stock is not null %}
+                                    {% if menu.stock > 0 %}
+                                        <span class="text-success">En stock ({{ menu.stock }} disponible{{ menu.stock > 1 ? 's' : '' }})</span>
+                                    {% else %}
+                                        <span class="text-danger">Stock épuisé</span>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="text-muted">Sur commande</span>
+                                {% endif %}
+                            </strong>
+                        </div>
+                        <div class="col-12">
+                            <small class="text-muted d-block mb-1">Délai de commande</small>
+                            <strong>48h avant la prestation</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="my-4">
+
+                {# Conditions #}
+                {% if menu.conditions is defined and menu.conditions is not null %}
+                    <div class="mb-4">
+                        <h6 class="fw-bold mb-2">Conditions particulières</h6>
+                        <p class="small text-muted mb-0">{{ menu.conditions|nl2br }}</p>
+                    </div>
+                    <hr class="my-4">
+                {% endif %}
+
+                {# Boutons d'action #}
+                <div class="d-grid gap-2">
+                    {% if app.user %}
+                        <a href="{{ path('app_order_create', {menu: menu.id}) }}" class="btn btn-secondary btn-lg">
+                            <i data-feather="shopping-cart" width="20" class="me-2"></i>
+                            Commander ce menu
+                        </a>
+                    {% else %}
+                        <button type="button" class="btn btn-secondary btn-lg" data-bs-toggle="modal" data-bs-target="#authRequiredModal">
+                            <i data-feather="shopping-cart" width="20" class="me-2"></i>
+                            Commander ce menu
+                        </button>
+                    {% endif %}
+                    <a href="{{ path('app_menu_catalog') }}" class="btn btn-outline-secondary">
+                        Retour au catalogue
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        {# Recettes du menu - Groupées par catégorie #}
+        <div class="row mt-5">
+            <div class="col-12">
+                <h3 class="fw-bold mb-4">Composition du menu</h3>
+
+                {# Regrouper les recettes par catégorie #}
+                {% set recipesByCategory = {} %}
+                {% for recipe in menu.recipes %}
+                    {% set categoryName = recipe.category.name %}
+                    {% if categoryName not in recipesByCategory|keys %}
+                        {% set recipesByCategory = recipesByCategory|merge({(categoryName): []}) %}
+                    {% endif %}
+                    {% set recipesByCategory = recipesByCategory|merge({
+                        (categoryName): recipesByCategory[categoryName]|merge([recipe])
+                    }) %}
+                {% endfor %}
+
+                {# Afficher par catégorie #}
+                {% for categoryName, recipes in recipesByCategory %}
+                    <div class="mb-4">
+                        <h5 class="fw-bold text-uppercase mb-3" style="color: var(--primary); letter-spacing: 1px; font-size: 0.9rem;">
+                            {{ categoryName }}
+                        </h5>
+                        <div class="row g-3">
+                            {% for recipe in recipes %}
+                                <div class="col-md-6">
+                                    <div class="border-start border-3 border-primary ps-3">
+                                        <h6 class="fw-bold mb-1">{{ recipe.title }}</h6>
+                                        <p class="small text-muted mb-1">{{ recipe.description }}</p>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        {# Call to action #}
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="cta-box text-center bg-light rounded p-5">
+                    <h3 class="fw-bold mb-3">Intéressé par ce menu ?</h3>
+                    <p class="lead mb-4">
+                        Contactez-nous pour personnaliser votre menu selon vos besoins et contraintes
+                    </p>
+                    <div class="d-flex gap-3 justify-content-center flex-wrap">
+                        <a href="#" class="btn btn-primary btn-lg">
+                            <i data-feather="phone" width="20" class="me-2"></i>
+                            Nous contacter
+                        </a>
+                        <a href="#" class="btn btn-outline-primary btn-lg">
+                            <i data-feather="mail" width="20" class="me-2"></i>
+                            Demander un devis
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# Modal d'authentification requise pour les visiteurs non connectés #}
+<div class="modal fade" id="authRequiredModal" tabindex="-1" aria-labelledby="authRequiredModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-bold" id="authRequiredModalLabel">
+                    <i data-feather="lock" width="20" class="me-2"></i>
+                    Connexion requise
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center py-4">
+                <div class="mb-4">
+                    <i data-feather="user-check" width="64" class="text-primary mb-3"></i>
+                    <p class="lead">Pour commander ce menu, vous devez être connecté à votre compte.</p>
+                    <p class="text-muted">Vous n'avez pas encore de compte ? C'est rapide et gratuit !</p>
+                </div>
+            </div>
+            <div class="modal-footer border-0 justify-content-center pb-4">
+                <a href="{{ path('app_login') }}?redirect={{ path('app_menu_show', {id: menu.id}) }}" class="btn btn-primary btn-lg me-2">
+                    <i data-feather="log-in" width="18" class="me-2"></i>
+                    Se connecter
+                </a>
+                <a href="{{ path('app_register') }}?redirect={{ path('app_menu_show', {id: menu.id}) }}" class="btn btn-outline-primary btn-lg">
+                    <i data-feather="user-plus" width="18" class="me-2"></i>
+                    Créer un compte
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

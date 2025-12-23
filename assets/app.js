@@ -19,10 +19,69 @@ window.bootstrap = bootstrap;
 // Importer les icons Data-feather
 import feather from 'feather-icons';
 
-// Remplacer les icônes au chargement de la page
-document.addEventListener('DOMContentLoaded', () => {
+// Fonction pour initialiser les icônes Feather
+function initFeatherIcons() {
     feather.replace();
-});
+}
+
+// Remplacer les icônes au chargement initial de la page
+document.addEventListener('DOMContentLoaded', initFeatherIcons);
+
+// Remplacer les icônes après chaque navigation Turbo
+document.addEventListener('turbo:load', initFeatherIcons);
+document.addEventListener('turbo:render', initFeatherIcons);
 
 import * as Turbo from '@hotwired/turbo';
 Turbo.setFormMode("off"); // Désactive Turbo pour TOUS les formulaires
+
+// Gestion des filtres du catalogue de menus
+function initMenuFilters() {
+    const filterForm = document.getElementById('filterForm');
+    const resetButton = document.getElementById('resetFilters');
+    const viewGridBtn = document.getElementById('viewGrid');
+    const viewListBtn = document.getElementById('viewList');
+    const menuGrid = document.getElementById('menuGrid');
+
+    if (filterForm) {
+        // Auto-submit du formulaire lors du changement de filtre
+        const filterInputs = filterForm.querySelectorAll('input, select');
+        filterInputs.forEach(input => {
+            input.addEventListener('change', () => {
+                filterForm.submit();
+            });
+        });
+
+        // Bouton reset
+        if (resetButton) {
+            resetButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.location.href = filterForm.action;
+            });
+        }
+    }
+
+    // Gestion de la vue grille/liste
+    if (viewGridBtn && viewListBtn && menuGrid) {
+        viewGridBtn.addEventListener('change', () => {
+            menuGrid.classList.remove('list-view');
+            menuGrid.classList.add('row', 'g-4');
+            document.querySelectorAll('.menu-card-wrapper').forEach(card => {
+                card.classList.remove('col-12');
+                card.classList.add('col-md-6', 'col-lg-4');
+            });
+        });
+
+        viewListBtn.addEventListener('change', () => {
+            menuGrid.classList.add('list-view');
+            menuGrid.classList.remove('row', 'g-4');
+            document.querySelectorAll('.menu-card-wrapper').forEach(card => {
+                card.classList.remove('col-md-6', 'col-lg-4');
+                card.classList.add('col-12');
+            });
+        });
+    }
+}
+
+// Initialiser au chargement
+document.addEventListener('DOMContentLoaded', initMenuFilters);
+document.addEventListener('turbo:load', initMenuFilters);
