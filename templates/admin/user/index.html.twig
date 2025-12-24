@@ -1,0 +1,150 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des utilisateurs{% endblock %}
+
+{% block body %}
+<div class="container my-5">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1>Gestion des utilisateurs</h1>
+        </div>
+        <div class="col-md-4 text-end">
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('admin_users_create_employee') }}" class="btn btn-primary">
+                    <i class="bi bi-person-plus"></i> Créer un employé
+                </a>
+            {% endif %}
+        </div>
+    </div>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+
+    {# Filtres de recherche #}
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title mb-3">
+                <i class="bi bi-funnel"></i> Filtres de recherche
+            </h5>
+            <form method="get" action="{{ path('admin_users_index') }}">
+                <div class="row g-3">
+                    <div class="col-md-{% if is_granted('ROLE_ADMIN') %}3{% else %}4{% endif %}">
+                        <label for="search" class="form-label">Recherche</label>
+                        <input type="text"
+                               class="form-control"
+                               id="search"
+                               name="search"
+                               placeholder="Email, nom ou prénom"
+                               value="{{ app.request.query.get('search') }}">
+                    </div>
+                    {% if is_granted('ROLE_ADMIN') %}
+                    <div class="col-md-3">
+                        <label for="role" class="form-label">Rôle</label>
+                        <select class="form-select" id="role" name="role">
+                            <option value="">Tous les rôles</option>
+                            <option value="ROLE_ADMIN" {% if app.request.query.get('role') == 'ROLE_ADMIN' %}selected{% endif %}>Administrateur</option>
+                            <option value="ROLE_EMPLOYEE" {% if app.request.query.get('role') == 'ROLE_EMPLOYEE' %}selected{% endif %}>Employé</option>
+                            <option value="ROLE_USER" {% if app.request.query.get('role') == 'ROLE_USER' %}selected{% endif %}>Utilisateur</option>
+                        </select>
+                    </div>
+                    {% endif %}
+                    <div class="col-md-{% if is_granted('ROLE_ADMIN') %}3{% else %}4{% endif %}">
+                        <label for="status" class="form-label">Statut</label>
+                        <select class="form-select" id="status" name="status">
+                            <option value="">Tous les statuts</option>
+                            <option value="1" {% if app.request.query.get('status') == '1' %}selected{% endif %}>Actif</option>
+                            <option value="0" {% if app.request.query.get('status') == '0' %}selected{% endif %}>Désactivé</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary me-2">
+                            <i class="bi bi-search"></i> Rechercher
+                        </button>
+                        <a href="{{ path('admin_users_index') }}" class="btn btn-secondary">
+                            <i class="bi bi-x-circle"></i> Réinitialiser
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Email</th>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Rôles</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.lastname }}</td>
+                            <td>{{ user.firstname }}</td>
+                            <td>
+                                {% if 'ROLE_ADMIN' in user.roles %}
+                                    <span class="badge bg-danger">Administrateur</span>
+                                {% elseif 'ROLE_EMPLOYEE' in user.roles %}
+                                    <span class="badge bg-warning">Employé</span>
+                                {% else %}
+                                    <span class="badge bg-info">Utilisateur</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if user.isEnabled %}
+                                    <span class="badge bg-success">Actif</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">Désactivé</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if 'ROLE_ADMIN' not in user.roles %}
+                                    <a href="{{ path('admin_users_edit', {id: user.id}) }}" class="btn btn-sm btn-primary">
+                                        <i class="bi bi-pencil"></i> Éditer
+                                    </a>
+                                    <form method="post" action="{{ path('admin_users_toggle_status', {id: user.id}) }}" class="d-inline">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('toggle-status' ~ user.id) }}">
+                                        <button type="submit" class="btn btn-sm btn-{{ user.isEnabled ? 'warning' : 'success' }}">
+                                            {{ user.isEnabled ? 'Désactiver' : 'Activer' }}
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <span class="text-muted">Compte admin protégé</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="7" class="text-center">Aucun utilisateur trouvé</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <a href="{{ path('app_admin_dashboard') }}" class="btn btn-secondary">Retour à l'administration</a>
+    </div>
+</div>
+{% endblock %}

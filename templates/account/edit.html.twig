@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier mon profil - Vite & Gourmand{% endblock %}
+
+{% block body %}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="d-flex align-items-center mb-4">
+                <a href="{{ path('app_account') }}" class="btn btn-outline-secondary me-3">
+                    <i data-feather="arrow-left" width="18"></i>
+                </a>
+                <h1 class="h2 fw-bold mb-0" style="color: var(--primary);">
+                    Modifier mon profil
+                </h1>
+            </div>
+
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+
+            {% for message in app.flashes('error') %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+
+            <div class="account-card">
+                <div class="card-header-custom">
+                    <h5 class="mb-0">
+                        <i data-feather="edit-3" width="20" class="me-2"></i>
+                        Informations personnelles
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label for="firstname" class="form-label fw-bold">
+                                    Prénom <span class="text-danger">*</span>
+                                </label>
+                                <input type="text"
+                                       class="form-control"
+                                       id="firstname"
+                                       name="firstname"
+                                       value="{{ app.user.firstname }}"
+                                       required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="lastname" class="form-label fw-bold">
+                                    Nom <span class="text-danger">*</span>
+                                </label>
+                                <input type="text"
+                                       class="form-control"
+                                       id="lastname"
+                                       name="lastname"
+                                       value="{{ app.user.lastname }}"
+                                       required>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Email</label>
+                            <div class="info-field bg-light">
+                                <i data-feather="mail" width="18" class="me-2"></i>
+                                {{ app.user.email }}
+                                <span class="badge bg-secondary ms-2">Non modifiable</span>
+                            </div>
+                            <div class="form-text">
+                                L'email sert d'identifiant de connexion et ne peut pas être modifié ici.
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ path('app_account') }}" class="btn btn-secondary">
+                                <i data-feather="x" width="18" class="me-2"></i>
+                                Annuler
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i data-feather="check" width="18" class="me-2"></i>
+                                Enregistrer les modifications
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

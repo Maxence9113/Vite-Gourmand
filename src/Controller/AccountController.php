@@ -17,8 +17,38 @@ final class AccountController extends AbstractController
     public function index(): Response
     {
         return $this->render('account/index.html.twig');
-    }    
-    
+    }
+
+    #[Route('/compte/modifier-profil', name: 'app_account_edit')]
+    public function edit(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        if ($request->isMethod('POST')) {
+            $firstname = $request->request->get('firstname');
+            $lastname = $request->request->get('lastname');
+
+            // Validation
+            if (!$firstname || !$lastname) {
+                $this->addFlash('error', 'Tous les champs sont requis.');
+                return $this->redirectToRoute('app_account_edit');
+            }
+
+            // Mise à jour des informations
+            $user->setFirstname($firstname);
+            $user->setLastname($lastname);
+
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Votre profil a été mis à jour avec succès.');
+
+            return $this->redirectToRoute('app_account');
+        }
+
+        return $this->render('account/edit.html.twig');
+    }
+
     #[Route('/compte/modifier-mot-de-passe', name: 'app_account_pwd_modify')]
     public function password(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher): Response
     {

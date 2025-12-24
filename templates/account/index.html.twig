@@ -71,6 +71,12 @@
                             </div>
                         </div>
                     </div>
+                    <div class="mt-3">
+                        <a href="{{ path('app_account_edit') }}" class="btn btn-primary">
+                            <i data-feather="edit-2" width="18" class="me-2"></i>
+                            Modifier mes informations
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -123,28 +129,62 @@
                 </div>
             </div>
 
-            {# Card Actions rapides #}
-            <div class="account-card">
+            {# Card Administration (si employé ou admin) #}
+            {% if is_granted('ROLE_EMPLOYEE') %}
+            <div class="account-card mb-4">
                 <div class="card-header-custom">
                     <h5 class="mb-0">
-                        <i data-feather="zap" width="20" class="me-2"></i>
-                        Actions rapides
+                        <i data-feather="settings" width="20" class="me-2"></i>
+                        Administration
                     </h5>
                 </div>
                 <div class="card-body">
                     <div class="d-grid gap-2">
-                        <a href="{{ path('app_review_new') }}" class="btn btn-primary">
-                            <i data-feather="star" width="18" class="me-2"></i>
-                            Laisser un avis
+                        <a href="{{ path('app_admin_dashboard') }}" class="btn btn-warning">
+                            <i data-feather="briefcase" width="18" class="me-2"></i>
+                            Administration
                         </a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {# Card Navigation #}
+            <div class="account-card mb-4">
+                <div class="card-header-custom">
+                    <h5 class="mb-0">
+                        <i data-feather="compass" width="20" class="me-2"></i>
+                        Navigation
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
                         <a href="{{ path('app_menu_catalog') }}" class="btn btn-outline-primary">
                             <i data-feather="book-open" width="18" class="me-2"></i>
                             Voir nos menus
+                        </a>
+                        <a href="{{ path('app_review_new') }}" class="btn btn-outline-primary">
+                            <i data-feather="star" width="18" class="me-2"></i>
+                            Laisser un avis
                         </a>
                         <a href="#" class="btn btn-outline-primary">
                             <i data-feather="phone" width="18" class="me-2"></i>
                             Nous contacter
                         </a>
+                    </div>
+                </div>
+            </div>
+
+            {# Card Déconnexion #}
+            <div class="account-card">
+                <div class="card-header-custom">
+                    <h5 class="mb-0">
+                        <i data-feather="log-out" width="20" class="me-2"></i>
+                        Session
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid">
                         <a href="{{ path('app_logout') }}" class="btn btn-outline-danger">
                             <i data-feather="log-out" width="18" class="me-2"></i>
                             Se déconnecter

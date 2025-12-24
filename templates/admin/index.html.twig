@@ -14,7 +14,11 @@
                 <div class="card-body">
                     <h5 class="card-title">Utilisateurs</h5>
                     <p class="card-text display-4">{{ stats.totalUsers }}</p>
-                    <a href="#" class="btn btn-primary btn-sm">Gérer</a>
+                    {% if is_granted('ROLE_EMPLOYEE') %}
+                        <a href="{{ path('admin_users_index') }}" class="btn btn-primary btn-sm">Gérer</a>
+                    {% else %}
+                        <a href="#" class="btn btn-secondary btn-sm disabled">Gérer</a>
+                    {% endif %}
                 </div>
             </div>
         </div>

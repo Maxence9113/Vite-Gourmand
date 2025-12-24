@@ -195,10 +195,11 @@
                 {# Boutons d'action #}
                 <div class="d-grid gap-2">
                     {% if app.user %}
-                        <a href="{{ path('app_order_create', {menu: menu.id}) }}" class="btn btn-secondary btn-lg">
+                        {# TODO: Implémenter la route app_order_create #}
+                        <button type="button" class="btn btn-secondary btn-lg" disabled>
                             <i data-feather="shopping-cart" width="20" class="me-2"></i>
-                            Commander ce menu
-                        </a>
+                            Commander ce menu (à venir)
+                        </button>
                     {% else %}
                         <button type="button" class="btn btn-secondary btn-lg" data-bs-toggle="modal" data-bs-target="#authRequiredModal">
                             <i data-feather="shopping-cart" width="20" class="me-2"></i>

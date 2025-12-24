@@ -1,0 +1,108 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Éditer l'utilisateur - {{ user.firstname }} {{ user.lastname }}{% endblock %}
+
+{% block body %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h1 class="mb-4">Éditer l'utilisateur</h1>
+
+            {% for message in app.flashes('error') %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+
+            <div class="card">
+                <div class="card-body">
+                    <form method="post">
+                        <div class="mb-4">
+                            <h5 class="card-subtitle mb-3 text-muted">Informations de l'utilisateur</h5>
+
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="firstname" class="form-label fw-bold">Prénom <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="firstname" name="firstname" value="{{ user.firstname }}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="lastname" class="form-label fw-bold">Nom <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="lastname" name="lastname" value="{{ user.lastname }}" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="email" class="form-label fw-bold">Email <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+                                <div class="form-text">L'email sert d'identifiant de connexion</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Statut du compte</label>
+                                <div class="d-flex align-items-center">
+                                    {% if user.isEnabled %}
+                                        <span class="badge bg-success me-3">Actif</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary me-3">Désactivé</span>
+                                    {% endif %}
+                                    <a href="{{ path('admin_users_toggle_status', {id: user.id}) }}"
+                                       class="btn btn-sm btn-{{ user.isEnabled ? 'warning' : 'success' }}"
+                                       onclick="event.preventDefault(); document.getElementById('toggle-status-form').submit();">
+                                        <i class="bi bi-power"></i> {{ user.isEnabled ? 'Désactiver le compte' : 'Activer le compte' }}
+                                    </a>
+                                </div>
+                                <div class="form-text">
+                                    {% if user.isEnabled %}
+                                        Un compte désactivé ne peut plus se connecter à l'application.
+                                    {% else %}
+                                        Activez le compte pour permettre à l'utilisateur de se connecter.
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        {% if is_granted('ROLE_ADMIN') %}
+                        <hr class="my-4">
+
+                        <div class="mb-4">
+                            <h5 class="card-subtitle mb-3 text-muted">Gestion du rôle</h5>
+
+                            <div class="mb-3">
+                                <label for="role" class="form-label fw-bold">Rôle de l'utilisateur <span class="text-danger">*</span></label>
+                                <select class="form-select" id="role" name="role" required>
+                                    <option value="ROLE_USER" {% if 'ROLE_EMPLOYEE' not in user.roles %}selected{% endif %}>
+                                        Utilisateur
+                                    </option>
+                                    <option value="ROLE_EMPLOYEE" {% if 'ROLE_EMPLOYEE' in user.roles %}selected{% endif %}>
+                                        Employé
+                                    </option>
+                                </select>
+                                <div class="form-text">
+                                    <strong>Utilisateur :</strong> Peut consulter les menus et passer des commandes.<br>
+                                    <strong>Employé :</strong> Peut gérer les menus, recettes, et commandes en plus des droits utilisateur.
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ path('admin_users_index') }}" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i> Annuler
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-lg"></i> Enregistrer les modifications
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# Formulaire caché pour la désactivation/activation #}
+<form id="toggle-status-form" method="post" action="{{ path('admin_users_toggle_status', {id: user.id}) }}" style="display: none;">
+    <input type="hidden" name="_token" value="{{ csrf_token('toggle-status' ~ user.id) }}">
+</form>
+{% endblock %}
