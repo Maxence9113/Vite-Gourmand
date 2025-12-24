@@ -30,6 +30,21 @@ class RoleHierarchyTest extends WebTestCase
 
         $this->passwordHasher = $this->client->getContainer()
             ->get(UserPasswordHasherInterface::class);
+
+        // Nettoyer la base de données avant chaque test
+        $this->cleanDatabase();
+    }
+
+    private function cleanDatabase(): void
+    {
+        $userRepo = $this->entityManager->getRepository(User::class);
+        $users = $userRepo->findAll();
+
+        foreach ($users as $user) {
+            $this->entityManager->remove($user);
+        }
+
+        $this->entityManager->flush();
     }
 
     protected function tearDown(): void
