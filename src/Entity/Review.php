@@ -32,6 +32,9 @@ class Review
     #[ORM\Column]
     private ?bool $isValidated = false;
 
+    #[ORM\OneToOne(mappedBy: 'review', cascade: ['persist', 'remove'])]
+    private ?Order $orderRef = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -93,6 +96,28 @@ class Review
     public function setIsValidated(bool $isValidated): static
     {
         $this->isValidated = $isValidated;
+
+        return $this;
+    }
+
+    public function getOrderRef(): ?Order
+    {
+        return $this->orderRef;
+    }
+
+    public function setOrderRef(?Order $orderRef): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($orderRef === null && $this->orderRef !== null) {
+            $this->orderRef->setReview(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($orderRef !== null && $orderRef->getReview() !== $this) {
+            $orderRef->setReview($this);
+        }
+
+        $this->orderRef = $orderRef;
 
         return $this;
     }
