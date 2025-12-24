@@ -10,16 +10,19 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class AccountController extends AbstractController
 {
     #[Route('/compte', name: 'app_account')]
+    #[IsGranted('ROLE_USER')]
     public function index(): Response
     {
         return $this->render('account/index.html.twig');
     }
 
     #[Route('/compte/modifier-profil', name: 'app_account_edit')]
+    #[IsGranted('ROLE_USER')]
     public function edit(Request $request, EntityManagerInterface $entityManager): Response
     {
         /** @var User $user */
@@ -50,6 +53,7 @@ final class AccountController extends AbstractController
     }
 
     #[Route('/compte/modifier-mot-de-passe', name: 'app_account_pwd_modify')]
+    #[IsGranted('ROLE_USER')]
     public function password(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher): Response
     {
         // Récupération du User connecté

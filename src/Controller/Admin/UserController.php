@@ -96,6 +96,7 @@ class UserController extends AbstractController
             }
 
             $this->addFlash('error', 'Tous les champs sont requis.');
+            return $this->redirectToRoute('admin_users_create_employee');
         }
 
         return $this->render('admin/user/create_employee.html.twig');
