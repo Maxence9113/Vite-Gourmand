@@ -30,7 +30,7 @@ class Review
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
-    private ?bool $isValidated = null;
+    private ?bool $isValidated = false;
 
     public function getId(): ?int
     {
