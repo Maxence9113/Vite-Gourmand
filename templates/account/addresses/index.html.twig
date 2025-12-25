@@ -1,0 +1,150 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes adresses - Vite & Gourmand{% endblock %}
+
+{% block body %}
+
+<div class="container py-5">
+    {# Messages flash #}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {% endfor %}
+
+    {# En-tête #}
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <a href="{{ path('app_account') }}" class="text-decoration-none text-muted mb-2 d-inline-block">
+                        <i data-feather="arrow-left" width="16"></i> Retour au compte
+                    </a>
+                    <h1 class="h2 fw-bold mb-1" style="color: var(--primary);">
+                        <i data-feather="map-pin" width="32" class="me-2"></i>
+                        Mes adresses
+                    </h1>
+                    <p class="text-muted mb-0">Gérez vos adresses de livraison</p>
+                </div>
+                <div>
+                    <a href="{{ path('app_account_address_new') }}" class="btn btn-primary">
+                        <i data-feather="plus" width="18" class="me-2"></i>
+                        Nouvelle adresse
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Liste des adresses #}
+    <div class="row g-4">
+        {% if addresses is empty %}
+            <div class="col-12">
+                <div class="account-card">
+                    <div class="card-body text-center py-5">
+                        <i data-feather="map-pin" width="64" class="mb-3" style="color: var(--primary); opacity: 0.3;"></i>
+                        <h5 class="mb-3">Aucune adresse enregistrée</h5>
+                        <p class="text-muted mb-4">Ajoutez une adresse pour faciliter vos futures commandes</p>
+                        <a href="{{ path('app_account_address_new') }}" class="btn btn-primary">
+                            <i data-feather="plus" width="18" class="me-2"></i>
+                            Ajouter ma première adresse
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            {% for address in addresses %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="account-card h-100 {% if address.isDefault %}border-primary{% endif %}">
+                        <div class="card-body">
+                            {# Badge par défaut #}
+                            {% if address.isDefault %}
+                                <div class="mb-3">
+                                    <span class="badge bg-primary">
+                                        <i data-feather="star" width="14"></i>
+                                        Adresse par défaut
+                                    </span>
+                                </div>
+                            {% endif %}
+
+                            {# Label #}
+                            {% if address.label %}
+                                <h5 class="card-title mb-3">
+                                    <i data-feather="tag" width="18" class="me-1"></i>
+                                    {{ address.label }}
+                                </h5>
+                            {% else %}
+                                <h5 class="card-title mb-3 text-muted">
+                                    <i data-feather="map-pin" width="18" class="me-1"></i>
+                                    Adresse #{{ address.id }}
+                                </h5>
+                            {% endif %}
+
+                            {# Adresse complète #}
+                            <div class="mb-3">
+                                <p class="mb-1 text-muted small fw-bold">
+                                    <i data-feather="map" width="16" class="me-1"></i>
+                                    Adresse
+                                </p>
+                                <p class="mb-0">{{ address.street }}</p>
+                                <p class="mb-0">{{ address.postalCode }} {{ address.city }}</p>
+                            </div>
+
+                            {# Téléphone #}
+                            <div class="mb-3">
+                                <p class="mb-1 text-muted small fw-bold">
+                                    <i data-feather="phone" width="16" class="me-1"></i>
+                                    Téléphone
+                                </p>
+                                <p class="mb-0">{{ address.phone }}</p>
+                            </div>
+
+                            {# Actions #}
+                            <div class="d-flex gap-2 flex-wrap">
+                                <a href="{{ path('app_account_address_edit', {id: address.id}) }}"
+                                   class="btn btn-sm btn-outline-primary flex-fill">
+                                    <i data-feather="edit-2" width="14" class="me-1"></i>
+                                    Modifier
+                                </a>
+
+                                {% if not address.isDefault %}
+                                    <form method="post"
+                                          action="{{ path('app_account_address_set_default', {id: address.id}) }}"
+                                          class="flex-fill"
+                                          onsubmit="return confirm('Définir cette adresse comme adresse par défaut ?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('set-default-' ~ address.id) }}">
+                                        <button type="submit" class="btn btn-sm btn-outline-success w-100">
+                                            <i data-feather="star" width="14" class="me-1"></i>
+                                            Par défaut
+                                        </button>
+                                    </form>
+                                {% endif %}
+
+                                <form method="post"
+                                      action="{{ path('app_account_address_delete', {id: address.id}) }}"
+                                      class="flex-fill"
+                                      onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette adresse ?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete-address-' ~ address.id) }}">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger w-100">
+                                        <i data-feather="trash-2" width="14" class="me-1"></i>
+                                        Supprimer
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

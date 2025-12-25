@@ -80,6 +80,42 @@
                 </div>
             </div>
 
+            {# Card Mes adresses #}
+            <div class="account-card mb-4">
+                <div class="card-header-custom">
+                    <h5 class="mb-0">
+                        <i data-feather="map-pin" width="20" class="me-2"></i>
+                        Mes adresses
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if app.user.addresses is empty %}
+                        <div class="text-center py-4">
+                            <i data-feather="map-pin" width="48" class="mb-3" style="color: var(--primary); opacity: 0.3;"></i>
+                            <p class="text-muted mb-3">Aucune adresse enregistrée</p>
+                            <a href="{{ path('app_account_address_new') }}" class="btn btn-primary btn-sm">
+                                <i data-feather="plus" width="18" class="me-2"></i>
+                                Ajouter une adresse
+                            </a>
+                        </div>
+                    {% else %}
+                        <p class="text-muted mb-3">
+                            Vous avez {{ app.user.addresses|length }} adresse(s) enregistrée(s)
+                        </p>
+                        <div class="d-grid gap-2">
+                            <a href="{{ path('app_account_addresses') }}" class="btn btn-outline-primary">
+                                <i data-feather="map-pin" width="18" class="me-2"></i>
+                                Gérer mes adresses
+                            </a>
+                            <a href="{{ path('app_account_address_new') }}" class="btn btn-outline-primary">
+                                <i data-feather="plus" width="18" class="me-2"></i>
+                                Ajouter une adresse
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
             {# Card Historique des commandes #}
             <div class="account-card">
                 <div class="card-header-custom">

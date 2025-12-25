@@ -97,6 +97,61 @@
                     </form>
                 </div>
             </div>
+
+            {# Section Adresses de l'utilisateur #}
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="card-subtitle mb-3 text-muted">
+                        <i class="bi bi-geo-alt"></i> Adresses de livraison
+                    </h5>
+
+                    {% if user.addresses is empty %}
+                        <div class="alert alert-info" role="alert">
+                            <i class="bi bi-info-circle me-2"></i>
+                            Cet utilisateur n'a pas encore enregistré d'adresse.
+                        </div>
+                    {% else %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Libellé</th>
+                                        <th>Adresse</th>
+                                        <th>Ville</th>
+                                        <th>Téléphone</th>
+                                        <th>Par défaut</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for address in user.addresses %}
+                                        <tr>
+                                            <td>
+                                                {% if address.label %}
+                                                    <span class="badge bg-secondary">{{ address.label }}</span>
+                                                {% else %}
+                                                    <span class="text-muted">-</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ address.street }}</td>
+                                            <td>{{ address.postalCode }} {{ address.city }}</td>
+                                            <td>{{ address.phone }}</td>
+                                            <td>
+                                                {% if address.isDefault %}
+                                                    <span class="badge bg-primary">
+                                                        <i class="bi bi-star-fill"></i> Oui
+                                                    </span>
+                                                {% else %}
+                                                    <span class="text-muted">Non</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
         </div>
     </div>
 </div>

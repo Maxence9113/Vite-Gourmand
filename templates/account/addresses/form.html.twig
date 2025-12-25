@@ -1,0 +1,133 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ isEdit ? 'Modifier' : 'Nouvelle' }} adresse - Vite & Gourmand{% endblock %}
+
+{% block body %}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            {# En-tête #}
+            <div class="mb-4">
+                <a href="{{ path('app_account_addresses') }}" class="text-decoration-none text-muted mb-2 d-inline-block">
+                    <i data-feather="arrow-left" width="16"></i> Retour à mes adresses
+                </a>
+                <h1 class="h2 fw-bold mb-1" style="color: var(--primary);">
+                    <i data-feather="{% if isEdit %}edit-2{% else %}plus{% endif %}" width="32" class="me-2"></i>
+                    {{ isEdit ? 'Modifier l\'adresse' : 'Nouvelle adresse' }}
+                </h1>
+                <p class="text-muted mb-0">
+                    {% if isEdit %}
+                        Modifiez les informations de votre adresse
+                    {% else %}
+                        Ajoutez une nouvelle adresse de livraison
+                    {% endif %}
+                </p>
+            </div>
+
+            {# Formulaire #}
+            <div class="account-card">
+                <div class="card-body">
+                    {{ form_start(form) }}
+
+                    <div class="row g-3">
+                        {# Label (optionnel) #}
+                        <div class="col-12">
+                            <div class="mb-3">
+                                {{ form_label(form.label, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                {{ form_widget(form.label) }}
+                                {{ form_help(form.label) }}
+                                {{ form_errors(form.label) }}
+                            </div>
+                        </div>
+
+                        {# Adresse #}
+                        <div class="col-12">
+                            <div class="mb-3">
+                                {{ form_label(form.street, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                <span class="text-danger">*</span>
+                                {{ form_widget(form.street) }}
+                                {{ form_errors(form.street) }}
+                            </div>
+                        </div>
+
+                        {# Code postal et Ville #}
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                {{ form_label(form.postalCode, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                <span class="text-danger">*</span>
+                                {{ form_widget(form.postalCode) }}
+                                {{ form_errors(form.postalCode) }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-8">
+                            <div class="mb-3">
+                                {{ form_label(form.city, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                <span class="text-danger">*</span>
+                                {{ form_widget(form.city) }}
+                                {{ form_errors(form.city) }}
+                            </div>
+                        </div>
+
+                        {# Téléphone #}
+                        <div class="col-12">
+                            <div class="mb-3">
+                                {{ form_label(form.phone, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                <span class="text-danger">*</span>
+                                {{ form_widget(form.phone) }}
+                                {{ form_help(form.phone) }}
+                                {{ form_errors(form.phone) }}
+                            </div>
+                        </div>
+
+                        {# Adresse par défaut #}
+                        <div class="col-12">
+                            <div class="form-check mb-3">
+                                {{ form_widget(form.isDefault, {'attr': {'class': 'form-check-input'}}) }}
+                                {{ form_label(form.isDefault, null, {'label_attr': {'class': 'form-check-label'}}) }}
+                                <div class="form-text">{{ form_help(form.isDefault) }}</div>
+                                {{ form_errors(form.isDefault) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Info Bordeaux #}
+                    <div class="alert alert-info d-flex align-items-start" role="alert">
+                        <i data-feather="info" width="20" class="me-2 mt-1"></i>
+                        <div>
+                            <strong>Frais de livraison :</strong>
+                            <ul class="mb-0 mt-2">
+                                <li>Bordeaux : 5€</li>
+                                <li>Hors Bordeaux : 5€ + 0,59€/km parcouru</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    {# Boutons d'action #}
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+                        <a href="{{ path('app_account_addresses') }}" class="btn btn-outline-secondary">
+                            <i data-feather="x" width="18" class="me-2"></i>
+                            Annuler
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i data-feather="{% if isEdit %}save{% else %}plus{% endif %}" width="18" class="me-2"></i>
+                            {{ isEdit ? 'Enregistrer les modifications' : 'Ajouter l\'adresse' }}
+                        </button>
+                    </div>
+
+                    {{ form_end(form) }}
+                </div>
+            </div>
+
+            {# Note sur les champs obligatoires #}
+            <div class="mt-3">
+                <small class="text-muted">
+                    <span class="text-danger">*</span> Champs obligatoires
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
