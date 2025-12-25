@@ -32,8 +32,8 @@ class Address
     #[ORM\Column(length: 255)]
     private ?string $phone = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?bool $isDefault = null;
+    #[ORM\Column]
+    private bool $isDefault = false;
 
     public function getId(): ?int
     {
@@ -112,12 +112,12 @@ class Address
         return $this;
     }
 
-    public function isDefault(): ?bool
+    public function isDefault(): bool
     {
         return $this->isDefault;
     }
 
-    public function setIsDefault(?bool $isDefault): static
+    public function setIsDefault(bool $isDefault): static
     {
         $this->isDefault = $isDefault;
 
