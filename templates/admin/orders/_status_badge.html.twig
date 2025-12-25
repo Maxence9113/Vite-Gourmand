@@ -1,0 +1,7 @@
+{# Composant réutilisable pour afficher un badge de statut de commande #}
+{% set badgeSize = large|default(false) ? 'fs-5 py-2 px-3' : '' %}
+
+<span class="badge bg-{{ status.badgeClass }} {{ badgeSize }}">
+    <i data-feather="{{ status.icon }}" style="width: {{ large|default(false) ? '18' : '14' }}px; height: {{ large|default(false) ? '18' : '14' }}px;"></i>
+    {{ status.label }}
+</span>

@@ -1,0 +1,334 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commande {{ order.orderNumber }} - Admin{% endblock %}
+
+{% block body %}
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Commande {{ order.orderNumber }}</h1>
+        <a href="{{ path('app_admin_orders') }}" class="btn btn-outline-secondary">
+            <i data-feather="arrow-left"></i> Retour à la liste
+        </a>
+    </div>
+
+    {# Flash messages #}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label == 'error' ? 'danger' : label }} alert-dismissible fade show mb-4" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <div class="row">
+        {# Colonne principale #}
+        <div class="col-lg-8">
+            {# Informations client #}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i data-feather="user"></i> Informations Client</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Nom complet :</strong><br>{{ order.customerFirstname }} {{ order.customerLastname }}</p>
+                            <p><strong>Email :</strong><br>{{ order.customerEmail }}</p>
+                            <p><strong>Téléphone :</strong><br>{{ order.customerPhone }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Compte utilisateur :</strong><br>
+                                {% if order.user %}
+                                    {{ order.user.firstname }} {{ order.user.lastname }}<br>
+                                    <small class="text-muted">{{ order.user.email }}</small>
+                                {% else %}
+                                    <span class="text-muted">Non associé</span>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# Informations de livraison #}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i data-feather="map-pin"></i> Livraison</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Adresse :</strong><br>{{ order.deliveryAddress }}</p>
+                            {% if order.deliveryDistanceKm %}
+                                <p><strong>Distance :</strong><br>{{ order.deliveryDistanceKm }} km</p>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Date et heure :</strong><br>
+                                <i data-feather="calendar" style="width: 16px; height: 16px;"></i>
+                                {{ order.deliveryDateTime|date('d/m/Y à H:i') }}
+                            </p>
+                            <p><strong>Coût de livraison :</strong><br>{{ (order.deliveryCost / 100)|number_format(2, ',', ' ') }} €</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# Détails de la commande #}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i data-feather="shopping-cart"></i> Détails de la commande</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-borderless mb-3">
+                        <tbody>
+                            <tr>
+                                <td><strong>Menu :</strong></td>
+                                <td>{{ order.menuName }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Nombre de personnes :</strong></td>
+                                <td>{{ order.numberOfPersons }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Prix par personne :</strong></td>
+                                <td>{{ (order.menuPricePerPerson / 100)|number_format(2, ',', ' ') }} €</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <hr>
+
+                    <table class="table table-sm mb-0">
+                        <tbody>
+                            <tr>
+                                <td><strong>Sous-total menu :</strong></td>
+                                <td class="text-end">{{ (order.menuSubtotal / 100)|number_format(2, ',', ' ') }} €</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Livraison :</strong></td>
+                                <td class="text-end">{{ (order.deliveryCost / 100)|number_format(2, ',', ' ') }} €</td>
+                            </tr>
+                            {% if order.discountAmount %}
+                            <tr class="table-success">
+                                <td><strong>Réduction (10%) :</strong></td>
+                                <td class="text-end">- {{ (order.discountAmount / 100)|number_format(2, ',', ' ') }} €</td>
+                            </tr>
+                            {% endif %}
+                            <tr class="table-active">
+                                <td><strong>TOTAL :</strong></td>
+                                <td class="text-end"><h5 class="mb-0">{{ (order.totalPrice / 100)|number_format(2, ',', ' ') }} €</h5></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            {# Matériel prêté #}
+            {% if order.hasMaterialLoan %}
+            <div class="card mb-4 border-info">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i data-feather="box"></i> Prêt de matériel</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Matériel prêté :</strong><br>
+                                <span class="badge bg-info">Oui</span>
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Date limite de retour :</strong><br>
+                                {% if order.materialReturnDeadline %}
+                                    {{ order.materialReturnDeadline|date('d/m/Y') }}
+                                {% else %}
+                                    <span class="text-muted">Non définie</span>
+                                {% endif %}
+                            </p>
+                        </div>
+                        <div class="col-12">
+                            <p><strong>Statut du retour :</strong><br>
+                                {% if order.materialReturned %}
+                                    <span class="badge bg-success">
+                                        <i data-feather="check-circle" style="width: 14px; height: 14px;"></i> Retourné
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-warning">
+                                        <i data-feather="clock" style="width: 14px; height: 14px;"></i> En attente
+                                    </span>
+                                {% endif %}
+                            </p>
+
+                            {% if not order.materialReturned and order.status.value == 'waiting_material_return' %}
+                                <form method="post" action="{{ path('app_admin_orders_material_returned', {id: order.id}) }}"
+                                      onsubmit="return confirm('Confirmer que le matériel a bien été retourné ?');">
+                                    <button type="submit" class="btn btn-success">
+                                        <i data-feather="check"></i> Marquer comme retourné
+                                    </button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {# Annulation #}
+            {% if order.status.value == 'cancelled' %}
+            <div class="card mb-4 border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0"><i data-feather="x-circle"></i> Annulation</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Date d'annulation :</strong><br>{{ order.cancelledAt|date('d/m/Y à H:i') }}</p>
+                    <p><strong>Détails de l'annulation :</strong><br>
+                        <span style="white-space: pre-line;">{{ order.cancellationReason }}</span>
+                    </p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        {# Colonne latérale #}
+        <div class="col-lg-4">
+            {# Statut actuel #}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i data-feather="activity"></i> Statut</h5>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-3">
+                        {% include 'admin/orders/_status_badge.html.twig' with {'status': order.status, 'large': true} %}
+                    </div>
+
+                    {# Actions de changement de statut #}
+                    {% if not order.status.isFinal %}
+                        <hr>
+                        <form method="post" action="{{ path('app_admin_orders_change_status', {id: order.id}) }}">
+                            <label for="new_status" class="form-label">Changer le statut :</label>
+                            <select name="status" id="new_status" class="form-select mb-3">
+                                {% for nextStatus in order.status.getNextStatuses %}
+                                    <option value="{{ nextStatus.value }}">{{ nextStatus.label }}</option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i data-feather="refresh-cw"></i> Mettre à jour
+                            </button>
+                        </form>
+                    {% endif %}
+
+                    {# Bouton d'annulation #}
+                    {% if order.canBeCancelled %}
+                        <button type="button" class="btn btn-danger w-100 mt-2" data-bs-toggle="modal" data-bs-target="#cancelModal">
+                            <i data-feather="x"></i> Annuler la commande
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+
+            {# Historique des statuts #}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i data-feather="clock"></i> Historique</h5>
+                </div>
+                <div class="card-body">
+                    {% if order.statusHistory is not empty %}
+                        <div class="timeline">
+                            {% for history in order.statusHistory|reverse %}
+                                <div class="timeline-item mb-3">
+                                    <div class="d-flex">
+                                        <div class="flex-shrink-0">
+                                            <span class="badge bg-{{ constant('App\\Enum\\OrderStatus::' ~ history.status|upper).badgeClass }}">
+                                                <i data-feather="{{ constant('App\\Enum\\OrderStatus::' ~ history.status|upper).icon }}" style="width: 14px; height: 14px;"></i>
+                                            </span>
+                                        </div>
+                                        <div class="flex-grow-1 ms-3">
+                                            <strong>{{ history.label }}</strong><br>
+                                            <small class="text-muted">{{ history.changed_at }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted mb-0">Aucun historique disponible.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            {# Dates importantes #}
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i data-feather="calendar"></i> Dates</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Créée le :</strong><br>
+                        <small>{{ order.createdAt|date('d/m/Y à H:i') }}</small>
+                    </p>
+                    {% if order.acceptedAt %}
+                        <p><strong>Acceptée le :</strong><br>
+                            <small>{{ order.acceptedAt|date('d/m/Y à H:i') }}</small>
+                        </p>
+                    {% endif %}
+                    {% if order.completedAt %}
+                        <p><strong>Terminée le :</strong><br>
+                            <small>{{ order.completedAt|date('d/m/Y à H:i') }}</small>
+                        </p>
+                    {% endif %}
+                    <p class="mb-0"><strong>Dernière mise à jour :</strong><br>
+                        <small>{{ order.updatedAt|date('d/m/Y à H:i') }}</small>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# Modal d'annulation #}
+<div class="modal fade" id="cancelModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" action="{{ path('app_admin_orders_cancel', {id: order.id}) }}">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">Annuler la commande</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-warning">
+                        <i data-feather="alert-triangle"></i>
+                        Vous êtes sur le point d'annuler la commande <strong>{{ order.orderNumber }}</strong>.
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="contact_method" class="form-label">Mode de contact client <span class="text-danger">*</span></label>
+                        <select name="contact_method" id="contact_method" class="form-select" required>
+                            <option value="">-- Sélectionnez --</option>
+                            <option value="phone">Appel téléphonique (GSM)</option>
+                            <option value="email">Email</option>
+                        </select>
+                        <small class="text-muted">Vous devez avoir contacté le client avant d'annuler la commande</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="reason" class="form-label">Motif de l'annulation <span class="text-danger">*</span></label>
+                        <textarea name="reason" id="reason" class="form-control" rows="4" required
+                                  placeholder="Expliquez le motif de l'annulation et le résultat du contact avec le client..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <button type="submit" class="btn btn-danger">Confirmer l'annulation</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof feather !== 'undefined') {
+            feather.replace();
+        }
+    });
+</script>
+{% endblock %}

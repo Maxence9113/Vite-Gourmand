@@ -69,8 +69,8 @@ class MenuFixtures extends Fixture implements DependentFixtureInterface
             // Nombre minimum de personnes (entre 2 et 20)
             $menu->setNbPersonMin($faker->numberBetween(2, 20));
 
-            // Prix par personne (entre 25€ et 150€)
-            $menu->setPricePerPerson($faker->randomFloat(2, 25, 150));
+            // Prix par personne (entre 25€ et 150€) - stocké en centimes
+            $menu->setPricePerPerson($faker->numberBetween(2500, 15000));
 
             // Assigner le thème
             $menu->setTheme($theme);
