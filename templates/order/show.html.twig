@@ -1,0 +1,213 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commande {{ order.orderNumber }}{% endblock %}
+
+{% block body %}
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Commande {{ order.orderNumber }}</h1>
+        <a href="{{ path('app_account_orders') }}" class="btn btn-secondary">
+            <i data-feather="arrow-left"></i> Retour à mes commandes
+        </a>
+    </div>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Statut de la commande</h5>
+                    <span class="badge bg-{{ order.status.badgeClass }} fs-6">
+                        <i data-feather="{{ order.status.icon }}"></i>
+                        {{ order.status.label }}
+                    </span>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted mb-2">
+                        Commande passée le {{ order.createdAt|date('d/m/Y à H:i') }}
+                    </p>
+
+                    {% if order.status.label == 'Annulée' %}
+                        <div class="alert alert-warning">
+                            <strong>Raison de l'annulation:</strong>
+                            {{ order.cancellationReason ?? 'Non spécifiée' }}
+                        </div>
+                    {% endif %}
+
+                    {% if order.canBeCancelled %}
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancelModal">
+                            <i data-feather="x-circle"></i> Annuler la commande
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Détails du menu</h5>
+                </div>
+                <div class="card-body">
+                    <h4>{{ order.menuName }}</h4>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <i data-feather="users" class="text-muted"></i>
+                                    <strong>Nombre de personnes:</strong> {{ order.numberOfPersons }}
+                                </li>
+                                <li class="mb-2">
+                                    <i data-feather="dollar-sign" class="text-muted"></i>
+                                    <strong>Prix par personne:</strong> {{ (order.menuPricePerPerson / 100)|number_format(2, ',', ' ') }}€
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Informations de livraison</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="mb-2"><strong>Date et heure:</strong></p>
+                            <p>{{ order.deliveryDateTime|date('d/m/Y à H:i') }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-2"><strong>Adresse:</strong></p>
+                            <p>{{ order.deliveryAddress }}</p>
+                        </div>
+                    </div>
+
+                    {% if order.hasMaterialLoan %}
+                        <div class="alert alert-info mt-3">
+                            <i data-feather="package"></i>
+                            <strong>Emprunt de matériel</strong>
+                            <p class="mb-0">
+                                Date limite de retour: {{ order.materialReturnDeadline|date('d/m/Y') }}
+                                {% if order.materialReturned %}
+                                    <span class="badge bg-success">Matériel retourné</span>
+                                {% else %}
+                                    <span class="badge bg-warning">En attente de retour</span>
+                                {% endif %}
+                            </p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if order.canReceiveReview %}
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Laisser un avis</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Votre commande a été livrée. Qu'en avez-vous pensé ?</p>
+                        <a href="#" class="btn btn-primary">
+                            <i data-feather="star"></i> Écrire un avis
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Récapitulatif financier</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Sous-total menu:</span>
+                        <strong>{{ (order.menuSubtotal / 100)|number_format(2, ',', ' ') }}€</strong>
+                    </div>
+
+                    {% if order.discountAmount %}
+                        <div class="d-flex justify-content-between mb-2 text-success">
+                            <span>Réduction (10%):</span>
+                            <strong>- {{ (order.discountAmount / 100)|number_format(2, ',', ' ') }}€</strong>
+                        </div>
+                    {% endif %}
+
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Frais de livraison:</span>
+                        <strong>{{ (order.deliveryCost / 100)|number_format(2, ',', ' ') }}€</strong>
+                    </div>
+
+                    {% if order.deliveryDistanceKm %}
+                        <small class="text-muted d-block mb-2">
+                            Distance: {{ order.deliveryDistanceKm }} km
+                        </small>
+                    {% endif %}
+
+                    <hr>
+
+                    <div class="d-flex justify-content-between">
+                        <span class="h5">Total:</span>
+                        <strong class="h5 text-primary">{{ (order.totalPrice / 100)|number_format(2, ',', ' ') }}€</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Historique</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        {% for entry in order.statusHistory %}
+                            <li class="mb-2">
+                                <small class="text-muted">{{ entry.changed_at }}</small>
+                                <div>
+                                    <span class="badge bg-secondary">{{ entry.label }}</span>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# Modal d'annulation #}
+<div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cancelModalLabel">Annuler la commande</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" action="{{ path('app_order_cancel', {id: order.id}) }}">
+                <div class="modal-body">
+                    <p>Êtes-vous sûr de vouloir annuler cette commande ?</p>
+                    <div class="mb-3">
+                        <label for="reason" class="form-label">Raison (optionnel)</label>
+                        <textarea class="form-control" id="reason" name="reason" rows="3"></textarea>
+                    </div>
+                    <input type="hidden" name="_token" value="{{ csrf_token('cancel-order-' ~ order.id) }}">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <button type="submit" class="btn btn-danger">Confirmer l'annulation</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

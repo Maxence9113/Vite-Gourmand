@@ -118,21 +118,71 @@
 
             {# Card Historique des commandes #}
             <div class="account-card">
-                <div class="card-header-custom">
+                <div class="card-header-custom d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">
                         <i data-feather="shopping-bag" width="20" class="me-2"></i>
                         Mes commandes
                     </h5>
+                    {% if totalOrders > 0 %}
+                        <span class="badge bg-primary">{{ totalOrders }}</span>
+                    {% endif %}
                 </div>
                 <div class="card-body">
-                    <div class="text-center py-5">
-                        <i data-feather="package" width="64" class="mb-3" style="color: var(--primary); opacity: 0.3;"></i>
-                        <p class="text-muted mb-3">Vous n'avez pas encore passé de commande</p>
-                        <a href="{{ path('app_menu_catalog') }}" class="btn btn-primary">
-                            <i data-feather="book-open" width="18" class="me-2"></i>
-                            Découvrir nos menus
-                        </a>
-                    </div>
+                    {% if recentOrders is empty %}
+                        <div class="text-center py-5">
+                            <i data-feather="package" width="64" class="mb-3" style="color: var(--primary); opacity: 0.3;"></i>
+                            <p class="text-muted mb-3">Vous n'avez pas encore passé de commande</p>
+                            <a href="{{ path('app_menu_catalog') }}" class="btn btn-primary">
+                                <i data-feather="book-open" width="18" class="me-2"></i>
+                                Découvrir nos menus
+                            </a>
+                        </div>
+                    {% else %}
+                        <p class="text-muted mb-3">Vos dernières commandes</p>
+
+                        {# Liste des dernières commandes #}
+                        <div class="list-group mb-3">
+                            {% for order in recentOrders %}
+                                <a href="{{ path('app_order_show', {id: order.id}) }}" class="list-group-item list-group-item-action">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div class="flex-grow-1">
+                                            <div class="d-flex align-items-center mb-1">
+                                                <strong class="me-2">{{ order.orderNumber }}</strong>
+                                                <span class="badge bg-{{ order.status.badgeClass }} badge-sm">
+                                                    {{ order.status.label }}
+                                                </span>
+                                            </div>
+                                            <div class="text-muted small">
+                                                <i data-feather="calendar" width="14" class="me-1"></i>
+                                                {{ order.createdAt|date('d/m/Y') }}
+                                                <span class="mx-2">•</span>
+                                                <i data-feather="truck" width="14" class="me-1"></i>
+                                                Livraison le {{ order.deliveryDateTime|date('d/m/Y') }}
+                                            </div>
+                                            <div class="text-muted small mt-1">
+                                                {{ order.menuName }} - {{ order.numberOfPersons }} personne(s)
+                                            </div>
+                                        </div>
+                                        <div class="text-end ms-3">
+                                            <strong class="text-primary">{{ (order.totalPrice / 100)|number_format(2, ',', ' ') }}€</strong>
+                                        </div>
+                                    </div>
+                                </a>
+                            {% endfor %}
+                        </div>
+
+                        {# Bouton pour voir toutes les commandes #}
+                        <div class="d-grid gap-2">
+                            <a href="{{ path('app_account_orders') }}" class="btn btn-outline-primary">
+                                <i data-feather="list" width="18" class="me-2"></i>
+                                Voir toutes mes commandes ({{ totalOrders }})
+                            </a>
+                            <a href="{{ path('app_menu_catalog') }}" class="btn btn-primary">
+                                <i data-feather="plus-circle" width="18" class="me-2"></i>
+                                Passer une nouvelle commande
+                            </a>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
 

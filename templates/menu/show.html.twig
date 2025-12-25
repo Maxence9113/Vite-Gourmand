@@ -109,7 +109,7 @@
                 {# Prix #}
                 <div class="mb-4">
                     <div class="d-flex align-items-baseline">
-                        <span class="h3 fw-bold mb-0 me-2" style="color: var(--primary);">{{ menu.pricePerPerson|number_format(2, ',', ' ') }}€</span>
+                        <span class="h3 fw-bold mb-0 me-2" style="color: var(--primary);">{{ (menu.pricePerPerson / 100)|number_format(2, ',', ' ') }}€</span>
                         <small class="text-muted">par personne</small>
                     </div>
                 </div>
@@ -195,13 +195,12 @@
                 {# Boutons d'action #}
                 <div class="d-grid gap-2">
                     {% if app.user %}
-                        {# TODO: Implémenter la route app_order_create #}
-                        <button type="button" class="btn btn-secondary btn-lg" disabled>
+                        <a href="{{ path('app_order_new', {id: menu.id}) }}" class="btn btn-primary btn-lg" data-turbo="false">
                             <i data-feather="shopping-cart" width="20" class="me-2"></i>
-                            Commander ce menu (à venir)
-                        </button>
+                            Commander ce menu
+                        </a>
                     {% else %}
-                        <button type="button" class="btn btn-secondary btn-lg" data-bs-toggle="modal" data-bs-target="#authRequiredModal">
+                        <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#authRequiredModal">
                             <i data-feather="shopping-cart" width="20" class="me-2"></i>
                             Commander ce menu
                         </button>

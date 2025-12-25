@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Form\AddressType;
 use App\Form\PasswordUserType;
 use App\Repository\AddressRepository;
+use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,9 +20,25 @@ final class AccountController extends AbstractController
 {
     #[Route('/compte', name: 'app_account')]
     #[IsGranted('ROLE_USER')]
-    public function index(): Response
+    public function index(OrderRepository $orderRepository): Response
     {
-        return $this->render('account/index.html.twig');
+        /** @var User $user */
+        $user = $this->getUser();
+
+        // Récupérer les 3 dernières commandes de l'utilisateur
+        $recentOrders = $orderRepository->findBy(
+            ['user' => $user],
+            ['createdAt' => 'DESC'],
+            3
+        );
+
+        // Compter le nombre total de commandes
+        $totalOrders = $orderRepository->count(['user' => $user]);
+
+        return $this->render('account/index.html.twig', [
+            'recentOrders' => $recentOrders,
+            'totalOrders' => $totalOrders,
+        ]);
     }
 
     #[Route('/compte/modifier-profil', name: 'app_account_edit')]

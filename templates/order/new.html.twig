@@ -1,0 +1,230 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle commande - {{ menu.name }}{% endblock %}
+
+{% block body %}
+<div class="container my-5" data-turbo="false">
+    <div class="row">
+        <div class="col-lg-8">
+            <h1 class="mb-4">Passer une commande</h1>
+
+            {% for message in app.flashes('error') %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Menu sélectionné</h5>
+                    <h3 class="text-primary">{{ menu.name }}</h3>
+                    <p class="text-muted">{{ menu.description }}</p>
+                    <div class="d-flex gap-3">
+                        <span class="badge bg-info">{{ (menu.pricePerPerson / 100)|number_format(2, ',', ' ') }}€ / personne</span>
+                        <span class="badge bg-secondary">Minimum {{ menu.nbPersonMin }} personnes</span>
+                    </div>
+                </div>
+            </div>
+
+            {{ form_start(form, {'attr': {'data-controller': 'order-calculator'}}) }}
+
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Détails de la commande</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3" style="display: none;">
+                        {{ form_row(form.menu, {
+                            'value': menu.id,
+                            'attr': {'data-menu-id': menu.id, 'data-menu-price': menu.pricePerPerson, 'data-menu-min': menu.nbPersonMin}
+                        }) }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_row(form.numberOfPersons) }}
+                        <small class="text-muted">
+                            Minimum pour ce menu: {{ menu.nbPersonMin }} personnes
+                        </small>
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_row(form.deliveryDateTime) }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_row(form.deliveryAddress) }}
+                        <small class="text-muted">
+                            <a href="{{ path('app_account_address_new') }}" target="_blank">Ajouter une nouvelle adresse</a>
+                        </small>
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_row(form.hasMaterialLoan) }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <a href="{{ path('app_menu_catalog') }}" class="btn btn-secondary">
+                    <i data-feather="arrow-left"></i> Retour aux menus
+                </a>
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i data-feather="check-circle"></i> Confirmer la commande
+                </button>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card" style="top: 20px;">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Récapitulatif</h5>
+                </div>
+                <div class="card-body">
+                    <div id="order-summary">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Menu:</span>
+                            <strong>{{ menu.name }}</strong>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Prix par personne:</span>
+                            <strong>{{ (menu.pricePerPerson / 100)|number_format(2, ',', ' ') }}€</strong>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Nombre de personnes:</span>
+                            <strong><span id="persons-display">{{ menu.nbPersonMin }}</span></strong>
+                        </div>
+
+                        <hr>
+
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Sous-total menu:</span>
+                            <strong><span id="subtotal-display">{{ (menu.pricePerPerson * menu.nbPersonMin / 100)|number_format(2, ',', ' ') }}</span>€</strong>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Frais de livraison:</span>
+                            <strong><span id="delivery-display">5,00</span>€</strong>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2 text-success discount-row" id="discount-row" style="display: none !important;">
+                            <span>Réduction (10%):</span>
+                            <strong>- <span id="discount-display">0,00</span>€</strong>
+                        </div>
+                        <div id="discount-message" class="alert alert-info py-2 px-3 mt-2 mb-2" style="display: none !important; font-size: 0.85rem;">
+                            <i data-feather="info" width="16"></i>
+                            <span id="discount-message-text">Ajoutez des personnes pour bénéficier de la réduction !</span>
+                        </div>
+
+                        <hr>
+
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="h5">Total:</span>
+                            <strong class="h5 text-primary"><span id="total-display">{{ ((menu.pricePerPerson * menu.nbPersonMin + 500) / 100)|number_format(2, ',', ' ') }}</span>€</strong>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info mt-3 mb-0">
+                        <small>
+                            <i data-feather="info"></i>
+                            Les frais de livraison définitifs seront calculés selon votre adresse.
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const personsInput = document.querySelector('#order_numberOfPersons');
+    const addressSelect = document.querySelector('#order_deliveryAddress');
+    const menuPrice = {{ menu.pricePerPerson }};
+    const menuMin = {{ menu.nbPersonMin }};
+
+    function updateSummary() {
+        const persons = parseInt(personsInput.value) || menuMin;
+
+        // Sous-total
+        const subtotal = menuPrice * persons;
+        document.getElementById('subtotal-display').textContent = (subtotal / 100).toFixed(2).replace('.', ',');
+
+        // Réduction si 5+ personnes au-delà du minimum
+        const extraPersons = persons - menuMin;
+        let discount = 0;
+        const discountRow = document.getElementById('discount-row');
+
+        if (extraPersons >= 5) {
+            discount = subtotal * 0.10;
+            if (discountRow) {
+                discountRow.style.setProperty('display', 'flex', 'important');
+            }
+            document.getElementById('discount-display').textContent = (discount / 100).toFixed(2).replace('.', ',');
+        } else {
+            if (discountRow) {
+                discountRow.style.setProperty('display', 'none', 'important');
+            }
+            document.getElementById('discount-display').textContent = '0,00';
+        }
+
+        // Livraison (sera calculée en fonction de l'adresse côté serveur)
+        const delivery = 500; // 5€ base
+        document.getElementById('delivery-display').textContent = (delivery / 100).toFixed(2).replace('.', ',');
+
+        // Total
+        const total = subtotal + delivery - discount;
+        document.getElementById('total-display').textContent = (total / 100).toFixed(2).replace('.', ',');
+
+        // Nombre de personnes
+        document.getElementById('persons-display').textContent = persons;
+
+        // Afficher/masquer le message de réduction
+        const discountMessage = document.getElementById('discount-message');
+        if (discountMessage) {
+            if (extraPersons >= 5) {
+                discountMessage.className = 'alert alert-success py-2 px-3 mt-2 mb-2';
+                discountMessage.style.fontSize = '0.85rem';
+                discountMessage.style.setProperty('display', 'block', 'important');
+                discountMessage.innerHTML = '<i data-feather="gift" width="16"></i> <strong>Réduction de 10% appliquée !</strong>';
+                if (typeof feather !== 'undefined') {
+                    feather.replace();
+                }
+            } else {
+                const remaining = 5 - extraPersons;
+                if (remaining > 0 && persons >= menuMin) {
+                    discountMessage.className = 'alert alert-info py-2 px-3 mt-2 mb-2';
+                    discountMessage.style.fontSize = '0.85rem';
+                    discountMessage.style.setProperty('display', 'block', 'important');
+                    discountMessage.innerHTML = '<i data-feather="info" width="16"></i> Ajoutez encore <strong>' + remaining + ' personne' + (remaining > 1 ? 's' : '') + '</strong> pour bénéficier de 10% de réduction !';
+                    if (typeof feather !== 'undefined') {
+                        feather.replace();
+                    }
+                } else {
+                    discountMessage.style.setProperty('display', 'none', 'important');
+                }
+            }
+        }
+    }
+
+    // S'assurer que l'input existe avant d'ajouter les listeners
+    if (personsInput) {
+        // Écouter les événements input et change pour plus de fiabilité
+        personsInput.addEventListener('input', updateSummary);
+        personsInput.addEventListener('change', updateSummary);
+
+        // Mise à jour initiale
+        updateSummary();
+    }
+
+    if (addressSelect) {
+        addressSelect.addEventListener('change', updateSummary);
+    }
+
+    // Initialiser feather icons
+    if (typeof feather !== 'undefined') {
+        feather.replace();
+    }
+});
+</script>
+{% endblock %}

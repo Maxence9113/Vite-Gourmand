@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes commandes{% endblock %}
+
+{% block body %}
+<div class="container my-5">
+    <h1 class="mb-4">Mes commandes</h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+
+    {% if orders is empty %}
+        <div class="alert alert-info">
+            <i data-feather="info"></i>
+            Vous n'avez pas encore passé de commande.
+            <a href="{{ path('app_menu') }}" class="alert-link">Découvrir nos menus</a>
+        </div>
+    {% else %}
+        <div class="row">
+            {% for order in orders %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span class="fw-bold">{{ order.orderNumber }}</span>
+                            <span class="badge bg-{{ order.status.badgeClass }}">
+                                {{ order.status.label }}
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ order.menuName }}</h5>
+                            <ul class="list-unstyled mb-3">
+                                <li>
+                                    <i data-feather="users" class="text-muted"></i>
+                                    {{ order.numberOfPersons }} personne{{ order.numberOfPersons > 1 ? 's' : '' }}
+                                </li>
+                                <li>
+                                    <i data-feather="calendar" class="text-muted"></i>
+                                    {{ order.deliveryDateTime|date('d/m/Y à H:i') }}
+                                </li>
+                                <li>
+                                    <i data-feather="map-pin" class="text-muted"></i>
+                                    {{ order.deliveryAddress|slice(0, 50) }}{{ order.deliveryAddress|length > 50 ? '...' : '' }}
+                                </li>
+                            </ul>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <strong class="text-primary h5 mb-0">
+                                    {{ (order.totalPrice / 100)|number_format(2, ',', ' ') }}€
+                                </strong>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <a href="{{ path('app_order_show', {id: order.id}) }}" class="btn btn-sm btn-primary w-100">
+                                <i data-feather="eye"></i> Voir les détails
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
