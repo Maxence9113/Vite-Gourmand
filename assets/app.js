@@ -27,11 +27,9 @@ function initFeatherIcons() {
 // Remplacer les icônes au chargement initial de la page
 document.addEventListener('DOMContentLoaded', initFeatherIcons);
 
-// Remplacer les icônes après chaque navigation Turbo
-document.addEventListener('turbo:load', initFeatherIcons);
-document.addEventListener('turbo:render', initFeatherIcons);
-
+// Désactiver Turbo complètement pour éviter les conflits d'import maps
 import * as Turbo from '@hotwired/turbo';
+Turbo.session.drive = false; // Désactive la navigation Turbo
 Turbo.setFormMode("off"); // Désactive Turbo pour TOUS les formulaires
 
 // Gestion des filtres du catalogue de menus
@@ -84,4 +82,3 @@ function initMenuFilters() {
 
 // Initialiser au chargement
 document.addEventListener('DOMContentLoaded', initMenuFilters);
-document.addEventListener('turbo:load', initMenuFilters);

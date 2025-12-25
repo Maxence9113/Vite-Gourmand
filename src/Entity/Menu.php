@@ -23,7 +23,7 @@ class Menu
     private ?int $nb_person_min = null;
 
     #[ORM\Column]
-    private ?float $price_per_person = null;
+    private ?int $price_per_person = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
@@ -85,12 +85,12 @@ class Menu
         return $this;
     }
 
-    public function getPricePerPerson(): ?float
+    public function getPricePerPerson(): ?int
     {
         return $this->price_per_person;
     }
 
-    public function setPricePerPerson(float $price_per_person): static
+    public function setPricePerPerson(int $price_per_person): static
     {
         $this->price_per_person = $price_per_person;
 
