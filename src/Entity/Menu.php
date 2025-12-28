@@ -34,6 +34,9 @@ class Menu
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $textAlt = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $stock = null;
+
     #[ORM\ManyToOne(inversedBy: 'menus')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Theme $theme = null;
@@ -189,6 +192,32 @@ class Menu
     public function removeRecipe(Recipe $recipe): static
     {
         $this->recipes->removeElement($recipe);
+
+        return $this;
+    }
+
+    public function getStock(): ?int
+    {
+        return $this->stock;
+    }
+
+    public function setStock(?int $stock): static
+    {
+        $this->stock = $stock;
+
+        return $this;
+    }
+
+    public function isAvailable(): bool
+    {
+        return $this->stock === null || $this->stock >= $this->nb_person_min;
+    }
+
+    public function decrementStock(int $quantity = 1): static
+    {
+        if ($this->stock !== null) {
+            $this->stock = max(0, $this->stock - $quantity);
+        }
 
         return $this;
     }

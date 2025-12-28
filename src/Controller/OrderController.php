@@ -97,7 +97,7 @@ final class OrderController extends AbstractController
                 $order->hasMaterialLoan()
             );
 
-            $this->orderManager->saveOrder($createdOrder);
+            $this->orderManager->saveOrder($createdOrder, $selectedMenu);
 
             $this->addFlash('success', sprintf(
                 'Votre commande #%s a été créée avec succès !',

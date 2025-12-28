@@ -75,6 +75,11 @@ class MenuFixtures extends Fixture implements DependentFixtureInterface
             // Assigner le thème
             $menu->setTheme($theme);
 
+            // Stock: 70% ont un stock limité (5-50), 30% ont un stock illimité (null)
+            if ($faker->boolean(70)) {
+                $menu->setStock($faker->numberBetween(5, 50));
+            }
+
             // Assigner une illustration aléatoire
             $randomImage = $availableImages[array_rand($availableImages)];
             $sourceImagePath = $fixturesImagesDir . '/' . $randomImage['filename'];

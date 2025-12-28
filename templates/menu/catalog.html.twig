@@ -194,6 +194,13 @@
                                              class="img-fluid">
                                         <div class="menu-card-badge">
                                             <span class="badge bg-primary">{{ menu.theme.name }}</span>
+                                            {% if menu.stock is not null %}
+                                                {% if menu.stock == 0 %}
+                                                    <span class="badge bg-danger ms-1">Épuisé</span>
+                                                {% elseif menu.stock <= 5 %}
+                                                    <span class="badge bg-warning text-dark ms-1">Stock limité</span>
+                                                {% endif %}
+                                            {% endif %}
                                         </div>
                                     </div>
                                     <div class="menu-card-body">
@@ -233,9 +240,15 @@
                                                     <i data-feather="eye" width="14"></i> Détails
                                                 </a>
                                                 {% if app.user %}
-                                                    <a href="{{ path('app_order_new', {id: menu.id}) }}" class="btn btn-primary btn-sm" data-turbo="false">
-                                                        <i data-feather="shopping-cart" width="14"></i>
-                                                    </a>
+                                                    {% if menu.isAvailable %}
+                                                        <a href="{{ path('app_order_new', {id: menu.id}) }}" class="btn btn-primary btn-sm" data-turbo="false">
+                                                            <i data-feather="shopping-cart" width="14"></i>
+                                                        </a>
+                                                    {% else %}
+                                                        <button class="btn btn-secondary btn-sm" disabled>
+                                                            <i data-feather="x-circle" width="14"></i> Indisponible
+                                                        </button>
+                                                    {% endif %}
                                                 {% endif %}
                                             </div>
                                         </div>

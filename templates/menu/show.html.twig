@@ -195,10 +195,17 @@
                 {# Boutons d'action #}
                 <div class="d-grid gap-2">
                     {% if app.user %}
-                        <a href="{{ path('app_order_new', {id: menu.id}) }}" class="btn btn-primary btn-lg" data-turbo="false">
-                            <i data-feather="shopping-cart" width="20" class="me-2"></i>
-                            Commander ce menu
-                        </a>
+                        {% if menu.isAvailable %}
+                            <a href="{{ path('app_order_new', {id: menu.id}) }}" class="btn btn-primary btn-lg" data-turbo="false">
+                                <i data-feather="shopping-cart" width="20" class="me-2"></i>
+                                Commander ce menu
+                            </a>
+                        {% else %}
+                            <button class="btn btn-secondary btn-lg" disabled>
+                                <i data-feather="x-circle" width="20" class="me-2"></i>
+                                Menu indisponible
+                            </button>
+                        {% endif %}
                     {% else %}
                         <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#authRequiredModal">
                             <i data-feather="shopping-cart" width="20" class="me-2"></i>

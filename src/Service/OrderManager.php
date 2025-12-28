@@ -39,6 +39,20 @@ class OrderManager
         \DateTimeImmutable $deliveryDateTime,
         bool $hasMaterialLoan = false
     ): Order {
+        // Vérifier si le menu est disponible en stock
+        if (!$menu->isAvailable()) {
+            throw new \LogicException('Ce menu n\'est plus disponible en stock');
+        }
+
+        // Vérifier si le stock est suffisant pour le nombre de personnes
+        if ($menu->getStock() !== null && $menu->getStock() < $numberOfPersons) {
+            throw new \LogicException(sprintf(
+                'Stock insuffisant. Il reste %d place(s) disponible(s) pour ce menu, mais vous avez demandé %d personnes.',
+                $menu->getStock(),
+                $numberOfPersons
+            ));
+        }
+
         $order = new Order();
 
         // Informations utilisateur
@@ -158,11 +172,17 @@ class OrderManager
     }
 
     /**
-     * Persiste une commande en base de données
+     * Persiste une commande en base de données et décrémente le stock du menu
      */
-    public function saveOrder(Order $order): void
+    public function saveOrder(Order $order, ?Menu $menu = null): void
     {
         $this->entityManager->persist($order);
+
+        // Décrémenter le stock du menu si fourni (en fonction du nombre de personnes)
+        if ($menu !== null) {
+            $menu->decrementStock($order->getNumberOfPersons());
+        }
+
         $this->entityManager->flush();
     }
 

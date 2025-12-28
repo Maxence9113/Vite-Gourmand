@@ -18,6 +18,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\GreaterThan;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Positive;
@@ -98,6 +99,22 @@ class MenuType extends AbstractType
                         'message' => 'Le prix doit être supérieur à 0',
                     ]),
                 ],
+            ])
+            ->add('stock', IntegerType::class, [
+                'label' => 'Stock disponible (nombre de personnes)',
+                'required' => false,
+                'attr' => [
+                    'placeholder' => 'Laisser vide pour stock illimité',
+                    'class' => 'form-control',
+                    'min' => 0
+                ],
+                'constraints' => [
+                    new GreaterThanOrEqual([
+                        'value' => 0,
+                        'message' => 'Le stock ne peut pas être négatif',
+                    ]),
+                ],
+                'help' => 'Laissez vide pour un stock illimité. Sinon, indiquez le nombre total de personnes pouvant être servies.',
             ])
             ->add('theme', EntityType::class, [
                 'class' => Theme::class,
