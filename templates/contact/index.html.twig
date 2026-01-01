@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contactez-nous{% endblock %}
+
+{% block body %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h1 class="mb-4">Contactez-nous</h1>
+
+            <p class="lead mb-4">
+                Une question sur nos menus ? Besoin d'informations pour votre événement ?
+                N'hésitez pas à nous contacter, nous vous répondrons dans les plus brefs délais.
+            </p>
+
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    {{ form_start(form) }}
+
+                    <div class="mb-3">
+                        {{ form_label(form.name) }}
+                        {{ form_widget(form.name) }}
+                        {{ form_errors(form.name) }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_label(form.email) }}
+                        {{ form_widget(form.email) }}
+                        {{ form_errors(form.email) }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_label(form.subject) }}
+                        {{ form_widget(form.subject) }}
+                        {{ form_errors(form.subject) }}
+                    </div>
+
+                    <div class="mb-4">
+                        {{ form_label(form.message) }}
+                        {{ form_widget(form.message) }}
+                        {{ form_errors(form.message) }}
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i data-feather="send" width="18"></i>
+                            Envoyer le message
+                        </button>
+                    </div>
+
+                    {{ form_end(form) }}
+                </div>
+            </div>
+
+            <div class="row mt-5">
+                <div class="col-md-6 mb-3">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i data-feather="mail" width="20"></i>
+                                Email
+                            </h5>
+                            <p class="card-text">
+                                <a href="mailto:contact@vitegourmand.fr">contact@vitegourmand.fr</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i data-feather="phone" width="20"></i>
+                                Téléphone
+                            </h5>
+                            <p class="card-text">
+                                <a href="tel:+33556123456">05 56 12 34 56</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-info mt-4">
+                <i data-feather="info" width="18"></i>
+                <strong>Temps de réponse :</strong> Nous nous engageons à répondre à votre message sous 24h ouvrées.
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
