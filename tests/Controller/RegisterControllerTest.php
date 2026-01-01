@@ -5,6 +5,7 @@ namespace App\Tests\Controller;
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mime\Email;
 
 /**
  * Tests fonctionnels du contrôleur d'inscription
@@ -14,6 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class RegisterControllerTest extends WebTestCase
 {
+    use \Symfony\Bundle\FrameworkBundle\Test\MailerAssertionsTrait;
     /**
      * Test 1 : Vérifier que la page d'inscription est accessible
      *
@@ -59,6 +61,9 @@ class RegisterControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
+        // Activer le profiler pour capturer les emails
+        $client->enableProfiler();
+
         // 1. Accéder à la page d'inscription
         $crawler = $client->request('GET', '/inscription');
 
@@ -77,10 +82,29 @@ class RegisterControllerTest extends WebTestCase
         // 4. Vérifier la redirection vers la page de connexion
         $this->assertResponseRedirects('/connexion');
 
+        // 5. Vérifier qu'un email de bienvenue a été envoyé (AVANT de suivre la redirection)
+        $this->assertEmailCount(1);
+
+        $email = $this->getMailerMessage();
+        $this->assertInstanceOf(Email::class, $email);
+
+        // Vérifier le destinataire
+        $this->assertEmailAddressContains($email, 'To', 'jean.dupont@test.fr');
+
+        // Vérifier l'expéditeur
+        $this->assertEmailAddressContains($email, 'From', 'contact@vitegourmand.fr');
+
+        // Vérifier le sujet
+        $this->assertEmailHeaderSame($email, 'Subject', 'Bienvenue chez Vite & Gourmand !');
+
+        // Vérifier que le corps de l'email contient le prénom et nom
+        $this->assertEmailHtmlBodyContains($email, 'Jean');
+        $this->assertEmailHtmlBodyContains($email, 'Dupont');
+
         // Suivre la redirection
         $client->followRedirect();
 
-        // 5. Vérifier que l'utilisateur a bien été créé en base de données
+        // 6. Vérifier que l'utilisateur a bien été créé en base de données
         $entityManager = $client->getContainer()->get('doctrine')->getManager();
         $userRepository = $entityManager->getRepository(User::class);
 
@@ -288,5 +312,56 @@ class RegisterControllerTest extends WebTestCase
         // L'inscription doit être rejetée
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertSelectorExists('.invalid-feedback');
+    }
+
+    /**
+     * Test 10 : Vérifier que l'email de bienvenue est envoyé lors d'une inscription réussie
+     *
+     * Ce test se concentre spécifiquement sur la vérification de l'envoi d'email
+     */
+    public function testWelcomeEmailIsSentOnSuccessfulRegistration(): void
+    {
+        $client = static::createClient();
+
+        // Activer le profiler pour capturer les emails
+        $client->enableProfiler();
+
+        // 1. Accéder à la page d'inscription
+        $crawler = $client->request('GET', '/inscription');
+
+        // 2. Remplir et soumettre le formulaire
+        $form = $crawler->selectButton('Créer mon compte')->form([
+            'register_user[firstname]' => 'Marie',
+            'register_user[lastname]' => 'Martin',
+            'register_user[email]' => 'marie.martin@test.fr',
+            'register_user[plainPassword][first]' => 'SecurePass123!@',
+            'register_user[plainPassword][second]' => 'SecurePass123!@',
+        ]);
+
+        $client->submit($form);
+
+        // 3. Vérifier qu'exactement 1 email a été envoyé
+        $this->assertEmailCount(1);
+
+        // 4. Récupérer l'email envoyé
+        $email = $this->getMailerMessage();
+
+        // 5. Vérifications sur l'email
+        $this->assertInstanceOf(Email::class, $email);
+
+        // Vérifier le destinataire
+        $this->assertEmailAddressContains($email, 'To', 'marie.martin@test.fr');
+
+        // Vérifier l'expéditeur
+        $this->assertEmailAddressContains($email, 'From', 'contact@vitegourmand.fr');
+
+        // Vérifier le sujet
+        $this->assertEmailHeaderSame($email, 'Subject', 'Bienvenue chez Vite & Gourmand !');
+
+        // Vérifier le contenu HTML de l'email
+        $this->assertEmailHtmlBodyContains($email, 'Marie Martin');
+        $this->assertEmailHtmlBodyContains($email, 'Bienvenue chez Vite & Gourmand !');
+        $this->assertEmailHtmlBodyContains($email, 'Nous sommes ravis de vous compter parmi nos clients');
+        $this->assertEmailHtmlBodyContains($email, 'Découvrir nos menus');
     }
 }

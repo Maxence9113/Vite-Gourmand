@@ -1,0 +1,182 @@
+{# Template d'email de confirmation de commande #}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmation de commande {{ orderNumber }}</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .email-container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header {
+            border-bottom: 3px solid #198754;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            color: #198754;
+            margin: 0;
+            font-size: 24px;
+        }
+        .success-badge {
+            background-color: #d1e7dd;
+            color: #0f5132;
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        .content {
+            margin: 20px 0;
+        }
+        .order-details {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        .detail-label {
+            font-weight: bold;
+            color: #495057;
+        }
+        .detail-value {
+            color: #212529;
+        }
+        .total-row {
+            background-color: #e7f3ff;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .info-box {
+            background-color: #cfe2ff;
+            border-left: 4px solid #0d6efd;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: #0d6efd;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #dee2e6;
+            text-align: center;
+            color: #6c757d;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <h1>Commande confirmée !</h1>
+            <div class="success-badge">Commande {{ orderNumber }}</div>
+        </div>
+
+        <div class="content">
+            <p>Bonjour {{ firstname }} {{ lastname }},</p>
+
+            <p>Nous avons bien reçu votre commande. Merci de votre confiance !</p>
+
+            <div class="order-details">
+                <h3 style="margin-top: 0; color: #0d6efd;">Détails de votre commande</h3>
+
+                <div class="detail-row">
+                    <span class="detail-label">Numéro de commande :</span>
+                    <span class="detail-value">{{ orderNumber }}</span>
+                </div>
+
+                <div class="detail-row">
+                    <span class="detail-label">Menu :</span>
+                    <span class="detail-value">{{ menuName }}</span>
+                </div>
+
+                <div class="detail-row">
+                    <span class="detail-label">Nombre de personnes :</span>
+                    <span class="detail-value">{{ numberOfPersons }}</span>
+                </div>
+
+                <div class="detail-row">
+                    <span class="detail-label">Date de livraison :</span>
+                    <span class="detail-value">{{ deliveryDateTime|date('d/m/Y') }}</span>
+                </div>
+
+                <div class="detail-row">
+                    <span class="detail-label">Heure de livraison :</span>
+                    <span class="detail-value">{{ deliveryDateTime|date('H:i') }}</span>
+                </div>
+
+                <div class="detail-row">
+                    <span class="detail-label">Adresse de livraison :</span>
+                    <span class="detail-value">{{ deliveryAddress }}</span>
+                </div>
+
+                <div class="total-row">
+                    <div class="detail-row" style="border: none;">
+                        <span>Total :</span>
+                        <span>{{ totalPrice|number_format(2, ',', ' ') }} €</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <strong>Prochaines étapes :</strong>
+                <ol style="margin: 10px 0;">
+                    <li>Notre équipe va valider votre commande</li>
+                    <li>Vous pourrez suivre l'état de votre commande depuis votre espace client</li>
+                    <li>Nous vous notifierons à chaque étape de la préparation</li>
+                </ol>
+            </div>
+
+            <p style="text-align: center;">
+                <a href="{{ url('app_account_orders') }}" class="cta-button">Suivre ma commande</a>
+            </p>
+
+            <p>Pour toute question concernant votre commande, n'hésitez pas à nous contacter en précisant votre numéro de commande.</p>
+
+            <p>À très bientôt,<br>
+            <strong>L'équipe Vite & Gourmand</strong></p>
+        </div>
+
+        <div class="footer">
+            <p>Vite & Gourmand - Traiteur à Bordeaux</p>
+            <p>Email : <a href="mailto:contact@vitegourmand.fr">contact@vitegourmand.fr</a></p>
+        </div>
+    </div>
+</body>
+</html>

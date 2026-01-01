@@ -12,6 +12,9 @@ use Symfony\Component\Mime\Address;
  */
 class EmailService
 {
+    private const COMPANY_EMAIL = 'contact@vitegourmand.fr';
+    private const COMPANY_NAME = 'Vite & Gourmand';
+
     public function __construct(
         private MailerInterface $mailer,
     ) {
@@ -32,19 +35,10 @@ class EmailService
         string $message
     ): void {
         $email = (new TemplatedEmail())
-            // De qui vient l'email (l'utilisateur qui remplit le formulaire)
             ->from(new Address($senderEmail, $senderName))
-
-            // À qui envoyer (l'adresse du restaurant)
-            ->to(new Address('contact@vitegourmand.fr', 'Vite & Gourmand'))
-
-            // Sujet de l'email
+            ->to(new Address(self::COMPANY_EMAIL, self::COMPANY_NAME))
             ->subject('[Contact] ' . $subject)
-
-            // Template Twig pour le rendu HTML
             ->htmlTemplate('emails/contact.html.twig')
-
-            // Variables passées au template
             ->context([
                 'senderName' => $senderName,
                 'senderEmail' => $senderEmail,
@@ -53,7 +47,190 @@ class EmailService
             ])
         ;
 
-        // Envoi de l'email
+        $this->mailer->send($email);
+    }
+
+    /**
+     * Envoie un email de bienvenue lors de la création d'un compte utilisateur
+     *
+     * @param string $userEmail Email de l'utilisateur
+     * @param string $userFirstname Prénom de l'utilisateur
+     * @param string $userLastname Nom de l'utilisateur
+     */
+    public function sendWelcomeEmail(
+        string $userEmail,
+        string $userFirstname,
+        string $userLastname
+    ): void {
+        $email = (new TemplatedEmail())
+            ->from(new Address(self::COMPANY_EMAIL, self::COMPANY_NAME))
+            ->to(new Address($userEmail, "$userFirstname $userLastname"))
+            ->subject('Bienvenue chez ' . self::COMPANY_NAME . ' !')
+            ->htmlTemplate('emails/welcome.html.twig')
+            ->context([
+                'firstname' => $userFirstname,
+                'lastname' => $userLastname,
+            ])
+        ;
+
+        $this->mailer->send($email);
+    }
+
+    /**
+     * Envoie un email de réinitialisation de mot de passe
+     *
+     * @param string $userEmail Email de l'utilisateur
+     * @param string $userFirstname Prénom de l'utilisateur
+     * @param string $resetToken Token de réinitialisation
+     * @param string $resetUrl URL de réinitialisation
+     */
+    public function sendPasswordResetEmail(
+        string $userEmail,
+        string $userFirstname,
+        string $resetToken,
+        string $resetUrl
+    ): void {
+        $email = (new TemplatedEmail())
+            ->from(new Address(self::COMPANY_EMAIL, self::COMPANY_NAME))
+            ->to(new Address($userEmail, $userFirstname))
+            ->subject('Réinitialisation de votre mot de passe')
+            ->htmlTemplate('emails/password_reset.html.twig')
+            ->context([
+                'firstname' => $userFirstname,
+                'resetUrl' => $resetUrl,
+                'resetToken' => $resetToken,
+            ])
+        ;
+
+        $this->mailer->send($email);
+    }
+
+    /**
+     * Envoie un email de confirmation de commande
+     *
+     * @param string $userEmail Email du client
+     * @param string $userFirstname Prénom du client
+     * @param string $userLastname Nom du client
+     * @param string $orderNumber Numéro de commande
+     * @param string $menuName Nom du menu
+     * @param int $numberOfPersons Nombre de personnes
+     * @param int $totalPrice Prix total en centimes
+     * @param \DateTimeImmutable $deliveryDateTime Date et heure de livraison
+     * @param string $deliveryAddress Adresse de livraison
+     */
+    public function sendOrderConfirmationEmail(
+        string $userEmail,
+        string $userFirstname,
+        string $userLastname,
+        string $orderNumber,
+        string $menuName,
+        int $numberOfPersons,
+        int $totalPrice,
+        \DateTimeImmutable $deliveryDateTime,
+        string $deliveryAddress
+    ): void {
+        $email = (new TemplatedEmail())
+            ->from(new Address(self::COMPANY_EMAIL, self::COMPANY_NAME))
+            ->to(new Address($userEmail, "$userFirstname $userLastname"))
+            ->subject('Confirmation de votre commande ' . $orderNumber)
+            ->htmlTemplate('emails/order_confirmation.html.twig')
+            ->context([
+                'firstname' => $userFirstname,
+                'lastname' => $userLastname,
+                'orderNumber' => $orderNumber,
+                'menuName' => $menuName,
+                'numberOfPersons' => $numberOfPersons,
+                'totalPrice' => $totalPrice / 100, // Conversion centimes en euros
+                'deliveryDateTime' => $deliveryDateTime,
+                'deliveryAddress' => $deliveryAddress,
+            ])
+        ;
+
+        $this->mailer->send($email);
+    }
+
+    /**
+     * Envoie un email de notification lorsque la commande est terminée
+     * pour inviter l'utilisateur à laisser un avis
+     *
+     * @param string $userEmail Email du client
+     * @param string $userFirstname Prénom du client
+     * @param string $orderNumber Numéro de commande
+     * @param string $reviewUrl URL pour laisser un avis
+     */
+    public function sendOrderCompletedEmail(
+        string $userEmail,
+        string $userFirstname,
+        string $orderNumber,
+        string $reviewUrl
+    ): void {
+        $email = (new TemplatedEmail())
+            ->from(new Address(self::COMPANY_EMAIL, self::COMPANY_NAME))
+            ->to(new Address($userEmail, $userFirstname))
+            ->subject('Votre commande ' . $orderNumber . ' est terminée !')
+            ->htmlTemplate('emails/order_completed.html.twig')
+            ->context([
+                'firstname' => $userFirstname,
+                'orderNumber' => $orderNumber,
+                'reviewUrl' => $reviewUrl,
+            ])
+        ;
+
+        $this->mailer->send($email);
+    }
+
+    /**
+     * Envoie un email de rappel de retour de matériel
+     * Si le matériel n'est pas restitué sous 10 jours ouvrés, 600€ de frais seront facturés
+     *
+     * @param string $userEmail Email du client
+     * @param string $userFirstname Prénom du client
+     * @param string $orderNumber Numéro de commande
+     * @param \DateTimeImmutable $deadline Date limite de retour
+     */
+    public function sendMaterialReturnReminderEmail(
+        string $userEmail,
+        string $userFirstname,
+        string $orderNumber,
+        \DateTimeImmutable $deadline
+    ): void {
+        $email = (new TemplatedEmail())
+            ->from(new Address(self::COMPANY_EMAIL, self::COMPANY_NAME))
+            ->to(new Address($userEmail, $userFirstname))
+            ->subject('Rappel : retour de matériel pour la commande ' . $orderNumber)
+            ->htmlTemplate('emails/material_return_reminder.html.twig')
+            ->context([
+                'firstname' => $userFirstname,
+                'orderNumber' => $orderNumber,
+                'deadline' => $deadline,
+                'penaltyAmount' => 600, // 600€ de frais selon le cahier des charges
+            ])
+        ;
+
+        $this->mailer->send($email);
+    }
+
+    /**
+     * Envoie un email de notification à un nouvel employé
+     * Le mot de passe n'est pas communiqué par email pour des raisons de sécurité
+     *
+     * @param string $employeeEmail Email de l'employé
+     * @param string $employeeUsername Username de l'employé (son email)
+     */
+    public function sendEmployeeAccountCreatedEmail(
+        string $employeeEmail,
+        string $employeeUsername
+    ): void {
+        $email = (new TemplatedEmail())
+            ->from(new Address(self::COMPANY_EMAIL, self::COMPANY_NAME))
+            ->to(new Address($employeeEmail))
+            ->subject('Votre compte employé a été créé')
+            ->htmlTemplate('emails/employee_account_created.html.twig')
+            ->context([
+                'username' => $employeeUsername,
+            ])
+        ;
+
         $this->mailer->send($email);
     }
 }

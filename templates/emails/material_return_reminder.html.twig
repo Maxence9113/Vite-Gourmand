@@ -1,0 +1,152 @@
+{# Template d'email de rappel pour le retour de matériel #}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rappel : Retour de matériel</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .email-container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header {
+            border-bottom: 3px solid #ffc107;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #ffc107;
+            margin: 0;
+            font-size: 24px;
+        }
+        .content {
+            margin: 20px 0;
+        }
+        .content p {
+            margin-bottom: 15px;
+        }
+        .warning-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+            color: #664d03;
+        }
+        .danger-box {
+            background-color: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+            color: #842029;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            margin: 5px 0;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        .info-label {
+            font-weight: bold;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: #0d6efd;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #dee2e6;
+            text-align: center;
+            color: #6c757d;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <h1>Rappel : Retour de matériel</h1>
+        </div>
+
+        <div class="content">
+            <p>Bonjour {{ firstname }},</p>
+
+            <p>Nous espérons que votre événement s'est bien déroulé !</p>
+
+            <p>Nous vous contactons concernant le matériel que nous avons mis à votre disposition pour la commande <strong>{{ orderNumber }}</strong>.</p>
+
+            <div class="warning-box">
+                <p style="margin: 0 0 10px 0; font-size: 16px;"><strong>⚠️ Informations importantes</strong></p>
+
+                <div class="info-row">
+                    <span class="info-label">Commande :</span>
+                    <span>{{ orderNumber }}</span>
+                </div>
+
+                <div class="info-row">
+                    <span class="info-label">Date limite de retour :</span>
+                    <span><strong>{{ deadline|date('d/m/Y') }}</strong></span>
+                </div>
+
+                <p style="margin-top: 15px;">
+                    Le matériel doit être restitué avant cette date limite.
+                </p>
+            </div>
+
+            <div class="danger-box">
+                <p style="margin: 0; font-size: 14px;">
+                    <strong>⚠️ Attention :</strong> Conformément à nos conditions générales de vente,
+                    si le matériel n'est pas restitué dans les <strong>10 jours ouvrés</strong> suivant la livraison,
+                    des frais de <strong>{{ penaltyAmount }} €</strong> seront facturés.
+                </p>
+            </div>
+
+            <p><strong>Pour organiser le retour du matériel :</strong></p>
+            <ul>
+                <li>Contactez-nous par téléphone ou par email</li>
+                <li>Nous conviendrons ensemble d'un créneau pour la récupération</li>
+                <li>Assurez-vous que le matériel soit propre et en bon état</li>
+            </ul>
+
+            <p style="text-align: center;">
+                <a href="mailto:contact@vitegourmand.fr?subject=Retour de matériel - {{ orderNumber }}" class="cta-button">
+                    Nous contacter
+                </a>
+            </p>
+
+            <p>Nous restons à votre disposition pour toute question.</p>
+
+            <p>Cordialement,<br>
+            <strong>L'équipe Vite & Gourmand</strong></p>
+        </div>
+
+        <div class="footer">
+            <p>Vite & Gourmand - Traiteur à Bordeaux</p>
+            <p>Email : <a href="mailto:contact@vitegourmand.fr">contact@vitegourmand.fr</a></p>
+            <p>Ce rappel concerne la commande {{ orderNumber }}</p>
+        </div>
+    </div>
+</body>
+</html>

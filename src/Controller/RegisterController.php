@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegisterUserType;
+use App\Service\EmailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,7 +18,8 @@ final class RegisterController extends AbstractController
     public function index(
         Request $request,
         EntityManagerInterface $entityManager,
-        UserPasswordHasherInterface $passwordHasher
+        UserPasswordHasherInterface $passwordHasher,
+        EmailService $emailService
     ): Response {
         $user = new User();
         $form = $this->createForm(RegisterUserType::class, $user);
@@ -38,6 +40,18 @@ final class RegisterController extends AbstractController
             // Enregistrer l'utilisateur en base de données
             $entityManager->persist($user);
             $entityManager->flush();
+
+            // Envoyer l'email de bienvenue
+            try {
+                $emailService->sendWelcomeEmail(
+                    userEmail: $user->getEmail(),
+                    userFirstname: $user->getFirstname(),
+                    userLastname: $user->getLastname()
+                );
+            } catch (\Exception $e) {
+                // Logger l'erreur mais ne pas bloquer l'inscription
+                // Le compte est créé même si l'email échoue
+            }
 
             // Message de succès
             $this->addFlash('success', 'Votre compte a été créé avec succès ! Vous pouvez maintenant vous connecter.');

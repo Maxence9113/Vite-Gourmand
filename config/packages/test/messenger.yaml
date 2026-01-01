@@ -1,0 +1,6 @@
+framework:
+    messenger:
+        transports:
+            # Use sync transport for all messages in test environment
+            # This ensures emails are sent immediately and available for assertions
+            async: 'in-memory://'
