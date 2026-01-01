@@ -194,8 +194,8 @@ class DisabledAccountAuthenticationTest extends WebTestCase
         // Ne devrait PAS contenir le message de compte désactivé
         $this->assertStringNotContainsString('compte a été désactivé', $content);
 
-        // Devrait contenir un message d'identifiants invalides
-        $this->assertStringContainsString('Identifiants invalides', $content);
+        // Devrait contenir un message d'identifiants invalides (en anglais)
+        $this->assertStringContainsString('Invalid credentials', $content);
     }
 
     /**
