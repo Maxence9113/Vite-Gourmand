@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Service\EmailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,7 +20,8 @@ class UserController extends AbstractController
     public function __construct(
         private EntityManagerInterface $entityManager,
         private UserRepository $userRepository,
-        private UserPasswordHasherInterface $passwordHasher
+        private UserPasswordHasherInterface $passwordHasher,
+        private EmailService $emailService
     ) {
     }
 
@@ -88,7 +90,11 @@ class UserController extends AbstractController
                 $this->entityManager->persist($user);
                 $this->entityManager->flush();
 
-                // TODO: Implémenter l'envoi d'email de notification
+                // Envoyer l'email de notification à l'employé
+                $this->emailService->sendEmployeeAccountCreatedEmail(
+                    employeeEmail: $email,
+                    employeeUsername: $email
+                );
 
                 $this->addFlash('success', 'Le compte employé a été créé avec succès.');
 
