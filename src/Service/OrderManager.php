@@ -8,6 +8,7 @@ use App\Entity\Order;
 use App\Entity\User;
 use App\Enum\OrderStatus;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Service centralisant la logique métier des commandes
@@ -24,7 +25,9 @@ use Doctrine\ORM\EntityManagerInterface;
 class OrderManager
 {
     public function __construct(
-        private EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager,
+        private EmailService $emailService,
+        private UrlGeneratorInterface $urlGenerator
     ) {
     }
 
@@ -172,7 +175,7 @@ class OrderManager
     }
 
     /**
-     * Persiste une commande en base de données et décrémente le stock du menu
+     * Persiste une commande en base de données, décrémente le stock du menu et envoie l'email de confirmation
      */
     public function saveOrder(Order $order, ?Menu $menu = null): void
     {
@@ -184,6 +187,27 @@ class OrderManager
         }
 
         $this->entityManager->flush();
+
+        // Envoyer l'email de confirmation de commande
+        $this->sendOrderConfirmationEmail($order);
+    }
+
+    /**
+     * Envoie l'email de confirmation de commande au client
+     */
+    private function sendOrderConfirmationEmail(Order $order): void
+    {
+        $this->emailService->sendOrderConfirmationEmail(
+            userEmail: $order->getCustomerEmail(),
+            userFirstname: $order->getCustomerFirstname(),
+            userLastname: $order->getCustomerLastname(),
+            orderNumber: $order->getOrderNumber(),
+            menuName: $order->getMenuName(),
+            numberOfPersons: $order->getNumberOfPersons(),
+            totalPrice: $order->getTotalPrice(),
+            deliveryDateTime: $order->getDeliveryDateTime(),
+            deliveryAddress: $order->getDeliveryAddress()
+        );
     }
 
     /**

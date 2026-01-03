@@ -5,11 +5,13 @@ namespace App\Controller\Admin;
 use App\Entity\Order;
 use App\Enum\OrderStatus;
 use App\Repository\OrderRepository;
+use App\Service\EmailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/admin/orders')]
@@ -101,7 +103,9 @@ final class OrderAdminController extends AbstractController
     public function changeStatus(
         Order $order,
         Request $request,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        EmailService $emailService,
+        UrlGeneratorInterface $urlGenerator
     ): Response {
         $newStatusValue = $request->request->get('status');
 
@@ -145,6 +149,9 @@ final class OrderAdminController extends AbstractController
 
         $em->flush();
 
+        // Envoyer les emails en fonction du nouveau statut
+        $this->sendStatusChangeEmail($order, $newStatus, $emailService, $urlGenerator);
+
         $this->addFlash('success', sprintf(
             'La commande #%s est maintenant "%s".',
             $order->getOrderNumber(),
@@ -154,10 +161,58 @@ final class OrderAdminController extends AbstractController
         return $this->redirectToRoute('app_admin_orders_show', ['id' => $order->getId()]);
     }
 
+    /**
+     * Envoie les emails automatiques en fonction du changement de statut
+     */
+    private function sendStatusChangeEmail(
+        Order $order,
+        OrderStatus $newStatus,
+        EmailService $emailService,
+        UrlGeneratorInterface $urlGenerator
+    ): void {
+        // Email de validation de commande (quand l'employé accepte la commande)
+        if ($newStatus === OrderStatus::VALIDATED) {
+            $emailService->sendOrderValidatedEmail(
+                userEmail: $order->getCustomerEmail(),
+                userFirstname: $order->getCustomerFirstname(),
+                orderNumber: $order->getOrderNumber(),
+                deliveryDateTime: $order->getDeliveryDateTime()
+            );
+        }
+
+        // Email de rappel de retour de matériel
+        if ($newStatus === OrderStatus::WAITING_MATERIAL_RETURN && $order->hasMaterialLoan()) {
+            $emailService->sendMaterialReturnReminderEmail(
+                userEmail: $order->getCustomerEmail(),
+                userFirstname: $order->getCustomerFirstname(),
+                orderNumber: $order->getOrderNumber(),
+                deadline: $order->getMaterialReturnDeadline()
+            );
+        }
+
+        // Email de commande terminée avec invitation à laisser un avis
+        if ($newStatus === OrderStatus::COMPLETED) {
+            $reviewUrl = $urlGenerator->generate(
+                'app_order_show',
+                ['id' => $order->getId()],
+                UrlGeneratorInterface::ABSOLUTE_URL
+            );
+
+            $emailService->sendOrderCompletedEmail(
+                userEmail: $order->getCustomerEmail(),
+                userFirstname: $order->getCustomerFirstname(),
+                orderNumber: $order->getOrderNumber(),
+                reviewUrl: $reviewUrl
+            );
+        }
+    }
+
     #[Route('/{id}/mark-material-returned', name: 'app_admin_orders_material_returned', methods: ['POST'])]
     public function markMaterialReturned(
         Order $order,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        EmailService $emailService,
+        UrlGeneratorInterface $urlGenerator
     ): Response {
         if (!$order->hasMaterialLoan()) {
             $this->addFlash('error', 'Cette commande ne comporte pas de prêt de matériel.');
@@ -173,6 +228,9 @@ final class OrderAdminController extends AbstractController
         $order->changeStatus(OrderStatus::COMPLETED);
 
         $em->flush();
+
+        // Envoyer l'email de commande terminée
+        $this->sendStatusChangeEmail($order, OrderStatus::COMPLETED, $emailService, $urlGenerator);
 
         $this->addFlash('success', 'Le matériel a été marqué comme retourné et la commande est terminée.');
 

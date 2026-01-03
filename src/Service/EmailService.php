@@ -106,6 +106,35 @@ class EmailService
     }
 
     /**
+     * Envoie un email de validation de commande (quand l'employé accepte la commande)
+     *
+     * @param string $userEmail Email du client
+     * @param string $userFirstname Prénom du client
+     * @param string $orderNumber Numéro de commande
+     * @param \DateTimeImmutable $deliveryDateTime Date et heure de livraison
+     */
+    public function sendOrderValidatedEmail(
+        string $userEmail,
+        string $userFirstname,
+        string $orderNumber,
+        \DateTimeImmutable $deliveryDateTime
+    ): void {
+        $email = (new TemplatedEmail())
+            ->from(new Address(self::COMPANY_EMAIL, self::COMPANY_NAME))
+            ->to(new Address($userEmail, $userFirstname))
+            ->subject('Votre commande ' . $orderNumber . ' a été validée !')
+            ->htmlTemplate('emails/order_validated.html.twig')
+            ->context([
+                'firstname' => $userFirstname,
+                'orderNumber' => $orderNumber,
+                'deliveryDateTime' => $deliveryDateTime,
+            ])
+        ;
+
+        $this->mailer->send($email);
+    }
+
+    /**
      * Envoie un email de confirmation de commande
      *
      * @param string $userEmail Email du client

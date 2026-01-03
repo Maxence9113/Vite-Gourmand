@@ -1,0 +1,121 @@
+{# Template d'email pour la validation de commande par un employé #}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commande validée</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .email-container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header {
+            border-bottom: 3px solid #198754;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            color: #198754;
+            margin: 0;
+            font-size: 24px;
+        }
+        .success-icon {
+            font-size: 48px;
+            color: #198754;
+            margin: 10px 0;
+        }
+        .content {
+            margin: 20px 0;
+        }
+        .content p {
+            margin-bottom: 15px;
+        }
+        .info-box {
+            background-color: #d1e7dd;
+            border-left: 4px solid #198754;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .info-box p {
+            margin: 5px 0;
+        }
+        .info-box strong {
+            color: #0f5132;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: #0d6efd;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #dee2e6;
+            text-align: center;
+            color: #6c757d;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <div class="success-icon">✓</div>
+            <h1>Commande validée !</h1>
+        </div>
+
+        <div class="content">
+            <p>Bonjour {{ firstname }},</p>
+
+            <p>Excellente nouvelle ! Votre commande <strong>{{ orderNumber }}</strong> a été validée par notre équipe.</p>
+
+            <div class="info-box">
+                <p><strong>Date de livraison prévue :</strong></p>
+                <p style="font-size: 18px; margin: 10px 0;">
+                    {{ deliveryDateTime|date('d/m/Y') }} à {{ deliveryDateTime|date('H:i') }}
+                </p>
+            </div>
+
+            <p><strong>Que se passe-t-il maintenant ?</strong></p>
+            <ol>
+                <li>Notre équipe cuisine prépare votre commande avec soin</li>
+                <li>Vous recevrez une notification à chaque étape (préparation, livraison)</li>
+                <li>Votre commande sera livrée à la date et l'heure prévues</li>
+            </ol>
+
+            <p style="text-align: center;">
+                <a href="{{ url('app_account_orders') }}" class="cta-button">Suivre ma commande</a>
+            </p>
+
+            <p>Nous mettons tout en œuvre pour que votre événement soit une réussite !</p>
+
+            <p>À très bientôt,<br>
+            <strong>L'équipe Vite & Gourmand</strong></p>
+        </div>
+
+        <div class="footer">
+            <p>Vite & Gourmand - Traiteur à Bordeaux depuis 25 ans</p>
+            <p>Email : <a href="mailto:contact@vitegourmand.fr">contact@vitegourmand.fr</a></p>
+        </div>
+    </div>
+</body>
+</html>

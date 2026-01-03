@@ -7,9 +7,11 @@ use App\Entity\Menu;
 use App\Entity\Order;
 use App\Entity\User;
 use App\Enum\OrderStatus;
+use App\Service\EmailService;
 use App\Service\OrderManager;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Tests unitaires du service OrderManager
@@ -18,15 +20,23 @@ use PHPUnit\Framework\TestCase;
 class OrderManagerTest extends TestCase
 {
     private EntityManagerInterface&\PHPUnit\Framework\MockObject\MockObject $entityManager;
+    private EmailService&\PHPUnit\Framework\MockObject\MockObject $emailService;
+    private UrlGeneratorInterface&\PHPUnit\Framework\MockObject\MockObject $urlGenerator;
     private OrderManager $orderManager;
 
     protected function setUp(): void
     {
-        // Créer un mock de l'EntityManager
+        // Créer des mocks des dépendances
         $this->entityManager = $this->createMock(EntityManagerInterface::class);
+        $this->emailService = $this->createMock(EmailService::class);
+        $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
 
-        // Créer le service OrderManager avec le mock
-        $this->orderManager = new OrderManager($this->entityManager);
+        // Créer le service OrderManager avec les mocks
+        $this->orderManager = new OrderManager(
+            $this->entityManager,
+            $this->emailService,
+            $this->urlGenerator
+        );
     }
 
     // ========================
@@ -372,6 +382,15 @@ class OrderManagerTest extends TestCase
     public function testSaveOrderCallsPersistAndFlush(): void
     {
         $order = new Order();
+        $order->initialize();
+        $order->setCustomerEmail('test@example.com');
+        $order->setCustomerFirstname('Test');
+        $order->setCustomerLastname('User');
+        $order->setMenuName('Menu Test');
+        $order->setNumberOfPersons(5);
+        $order->setTotalPrice(10000);
+        $order->setDeliveryDateTime(new \DateTimeImmutable('+3 days'));
+        $order->setDeliveryAddress('123 Test Street');
 
         $this->entityManager
             ->expects($this->once())
@@ -381,6 +400,22 @@ class OrderManagerTest extends TestCase
         $this->entityManager
             ->expects($this->once())
             ->method('flush');
+
+        // Vérifier que l'email est envoyé
+        $this->emailService
+            ->expects($this->once())
+            ->method('sendOrderConfirmationEmail')
+            ->with(
+                $this->equalTo('test@example.com'),
+                $this->equalTo('Test'),
+                $this->equalTo('User'),
+                $this->anything(), // orderNumber
+                $this->equalTo('Menu Test'),
+                $this->equalTo(5),
+                $this->equalTo(10000),
+                $this->anything(), // deliveryDateTime
+                $this->equalTo('123 Test Street')
+            );
 
         $this->orderManager->saveOrder($order);
     }
