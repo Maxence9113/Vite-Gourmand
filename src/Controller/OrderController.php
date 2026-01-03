@@ -13,6 +13,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -164,5 +165,36 @@ final class OrderController extends AbstractController
         }
 
         return $this->redirectToRoute('app_order_show', ['id' => $order->getId()]);
+    }
+
+    #[Route('/api/commande/calculer-frais-livraison/{addressId}', name: 'app_order_calculate_delivery_cost', methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
+    public function calculateDeliveryCost(int $addressId): JsonResponse
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        // Récupérer l'adresse
+        $address = $this->entityManager->getRepository(Address::class)->find($addressId);
+
+        if (!$address) {
+            return new JsonResponse(['error' => 'Adresse introuvable'], 404);
+        }
+
+        // SÉCURITÉ: Vérifier que l'adresse appartient bien à l'utilisateur
+        if ($address->getUser() !== $user) {
+            return new JsonResponse(['error' => 'Accès refusé'], 403);
+        }
+
+        // Calculer les frais de livraison
+        $deliveryCostData = $this->orderManager->calculateDeliveryCostForAddress($address);
+
+        return new JsonResponse([
+            'success' => true,
+            'isInBordeaux' => $deliveryCostData['isInBordeaux'],
+            'distanceKm' => $deliveryCostData['distanceKm'],
+            'deliveryCost' => $deliveryCostData['deliveryCost'],
+            'deliveryCostFormatted' => number_format($deliveryCostData['deliveryCost'] / 100, 2, ',', ' ') . ' €',
+        ]);
     }
 }

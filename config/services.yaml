@@ -36,3 +36,8 @@ services:
     App\Service\MenuFileUploader:
         arguments:
             $targetDirectory: '%menu_illustrations_directory%'
+
+    # Service OpenRouteService pour géolocalisation et calcul de distance
+    App\Service\OpenRouteService:
+        arguments:
+            $apiKey: '%env(OPENROUTESERVICE_API_KEY)%'

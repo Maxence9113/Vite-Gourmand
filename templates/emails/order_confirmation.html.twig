@@ -146,6 +146,25 @@
                     <span class="detail-value">{{ deliveryAddress }}</span>
                 </div>
 
+                <h3 style="margin-top: 20px; margin-bottom: 10px; color: #0d6efd; font-size: 16px;">Détail du montant</h3>
+
+                <div class="detail-row">
+                    <span class="detail-label">Sous-total menu :</span>
+                    <span class="detail-value">{{ menuSubtotal|number_format(2, ',', ' ') }} €</span>
+                </div>
+
+                <div class="detail-row">
+                    <span class="detail-label">Frais de livraison {% if deliveryDistanceKm %}({{ deliveryDistanceKm }} km){% endif %} :</span>
+                    <span class="detail-value">{{ deliveryCost|number_format(2, ',', ' ') }} €</span>
+                </div>
+
+                {% if discountAmount %}
+                <div class="detail-row" style="color: #198754;">
+                    <span class="detail-label">Réduction (10%) :</span>
+                    <span class="detail-value">- {{ discountAmount|number_format(2, ',', ' ') }} €</span>
+                </div>
+                {% endif %}
+
                 <div class="total-row">
                     <div class="detail-row" style="border: none;">
                         <span>Total :</span>

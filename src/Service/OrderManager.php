@@ -8,7 +8,6 @@ use App\Entity\Order;
 use App\Entity\User;
 use App\Enum\OrderStatus;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Service centralisant la logique métier des commandes
@@ -27,7 +26,7 @@ class OrderManager
     public function __construct(
         private EntityManagerInterface $entityManager,
         private EmailService $emailService,
-        private UrlGeneratorInterface $urlGenerator
+        private OpenRouteService $openRouteService
     ) {
     }
 
@@ -122,32 +121,37 @@ class OrderManager
     }
 
     /**
-     * Vérifie si une adresse est dans Bordeaux
+     * Vérifie si une adresse est dans Bordeaux (codes postaux : 33000, 33100, 33200, 33300, 33800)
      */
     private function isAddressInBordeaux(Address $address): bool
     {
-        $city = strtolower(trim($address->getCity()));
         $postalCode = $address->getPostalCode();
 
-        // Bordeaux et ses quartiers
-        return $city === 'bordeaux' || str_starts_with($postalCode, '330');
+        // Vérifier si le code postal correspond à Bordeaux
+        return $this->openRouteService->isPostalCodeInBordeaux($postalCode);
     }
 
     /**
-     * Calcule la distance depuis Bordeaux (simulation basée sur le code postal)
-     * Dans un vrai système, on utiliserait une API de géolocalisation
+     * Calcule la distance routière réelle depuis Bordeaux via l'API OpenRouteService
      */
-    private function calculateDistance(Address $address): int
+    private function calculateDistance(Address $address): ?int
     {
-        $postalCode = $address->getPostalCode();
-        $firstTwoDigits = (int)substr($postalCode, 0, 2);
+        $fullAddress = sprintf(
+            '%s, %s %s',
+            $address->getStreet(),
+            $address->getPostalCode(),
+            $address->getCity()
+        );
 
-        // Simulation: plus le département est éloigné, plus la distance est grande
-        // 33 = Gironde (base)
-        $departmentDistance = abs($firstTwoDigits - 33);
+        $result = $this->openRouteService->getDistanceFromBordeaux($fullAddress);
 
-        // Estimation: ~50km par département d'écart
-        return max(10, $departmentDistance * 50);
+        // Si le calcul échoue, on retourne null ce qui déclenchera un coût de base
+        if ($result['distance'] === null) {
+            return null;
+        }
+
+        // Arrondir au kilomètre supérieur
+        return (int)ceil($result['distance']);
     }
 
     /**
@@ -206,7 +210,11 @@ class OrderManager
             numberOfPersons: $order->getNumberOfPersons(),
             totalPrice: $order->getTotalPrice(),
             deliveryDateTime: $order->getDeliveryDateTime(),
-            deliveryAddress: $order->getDeliveryAddress()
+            deliveryAddress: $order->getDeliveryAddress(),
+            menuSubtotal: $order->getMenuSubtotal(),
+            deliveryCost: $order->getDeliveryCost(),
+            discountAmount: $order->getDiscountAmount(),
+            deliveryDistanceKm: $order->getDeliveryDistanceKm()
         );
     }
 
@@ -229,5 +237,27 @@ class OrderManager
         return $this->entityManager
             ->getRepository(Order::class)
             ->findBy(['user' => $user], ['createdAt' => 'DESC']);
+    }
+
+    /**
+     * Calcule les frais de livraison pour une adresse donnée
+     *
+     * @param Address $address Adresse de livraison
+     * @return array{isInBordeaux: bool, distanceKm: int|null, deliveryCost: int}
+     */
+    public function calculateDeliveryCostForAddress(Address $address): array
+    {
+        $isInBordeaux = $this->isAddressInBordeaux($address);
+        $distanceKm = $isInBordeaux ? null : $this->calculateDistance($address);
+
+        // Créer une commande temporaire pour utiliser sa méthode de calcul
+        $tempOrder = new Order();
+        $deliveryCost = $tempOrder->calculateDeliveryCost($isInBordeaux, $distanceKm);
+
+        return [
+            'isInBordeaux' => $isInBordeaux,
+            'distanceKm' => $distanceKm,
+            'deliveryCost' => $deliveryCost,
+        ];
     }
 }

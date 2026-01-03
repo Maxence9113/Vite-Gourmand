@@ -146,6 +146,10 @@ class EmailService
      * @param int $totalPrice Prix total en centimes
      * @param \DateTimeImmutable $deliveryDateTime Date et heure de livraison
      * @param string $deliveryAddress Adresse de livraison
+     * @param int $menuSubtotal Sous-total du menu en centimes
+     * @param int $deliveryCost Frais de livraison en centimes
+     * @param int|null $discountAmount Montant de la réduction en centimes (null si pas de réduction)
+     * @param int|null $deliveryDistanceKm Distance de livraison en km (null si dans Bordeaux)
      */
     public function sendOrderConfirmationEmail(
         string $userEmail,
@@ -156,7 +160,11 @@ class EmailService
         int $numberOfPersons,
         int $totalPrice,
         \DateTimeImmutable $deliveryDateTime,
-        string $deliveryAddress
+        string $deliveryAddress,
+        int $menuSubtotal = 0,
+        int $deliveryCost = 500,
+        ?int $discountAmount = null,
+        ?int $deliveryDistanceKm = null
     ): void {
         $email = (new TemplatedEmail())
             ->from(new Address(self::COMPANY_EMAIL, self::COMPANY_NAME))
@@ -172,6 +180,10 @@ class EmailService
                 'totalPrice' => $totalPrice / 100, // Conversion centimes en euros
                 'deliveryDateTime' => $deliveryDateTime,
                 'deliveryAddress' => $deliveryAddress,
+                'menuSubtotal' => $menuSubtotal / 100, // Conversion centimes en euros
+                'deliveryCost' => $deliveryCost / 100, // Conversion centimes en euros
+                'discountAmount' => $discountAmount ? $discountAmount / 100 : null, // Conversion centimes en euros
+                'deliveryDistanceKm' => $deliveryDistanceKm,
             ])
         ;
 

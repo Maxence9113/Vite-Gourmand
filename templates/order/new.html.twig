@@ -163,6 +163,53 @@ document.addEventListener('DOMContentLoaded', function() {
     const menuPrice = {{ menu.pricePerPerson }};
     const menuMin = {{ menu.nbPersonMin }};
 
+    // Variable pour stocker les frais de livraison actuels
+    let currentDeliveryCost = 500; // 5€ par défaut
+    let isCalculatingDelivery = false;
+
+    async function fetchDeliveryCost(addressId) {
+        if (!addressId || isCalculatingDelivery) return;
+
+        isCalculatingDelivery = true;
+        const deliveryDisplay = document.getElementById('delivery-display');
+        const originalText = deliveryDisplay.textContent;
+        deliveryDisplay.textContent = 'Calcul...';
+
+        try {
+            const response = await fetch(`{{ path('app_order_calculate_delivery_cost', {addressId: '__ADDRESS_ID__'}) }}`.replace('__ADDRESS_ID__', addressId));
+
+            if (!response.ok) {
+                throw new Error('Erreur lors du calcul des frais de livraison');
+            }
+
+            const data = await response.json();
+
+            if (data.success) {
+                currentDeliveryCost = data.deliveryCost;
+                updateSummary();
+
+                // Afficher un message informatif sur la distance
+                const deliveryInfo = document.querySelector('.alert.alert-info');
+                if (deliveryInfo) {
+                    if (data.isInBordeaux) {
+                        deliveryInfo.innerHTML = '<small><i data-feather="info"></i> Livraison à Bordeaux : frais fixes de 5,00€</small>';
+                    } else if (data.distanceKm) {
+                        deliveryInfo.innerHTML = `<small><i data-feather="info"></i> Distance estimée : ${data.distanceKm} km - Frais de livraison : ${data.deliveryCostFormatted}</small>`;
+                    }
+                    if (typeof feather !== 'undefined') {
+                        feather.replace();
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('Erreur:', error);
+            deliveryDisplay.textContent = originalText;
+            // En cas d'erreur, on garde les frais par défaut
+        } finally {
+            isCalculatingDelivery = false;
+        }
+    }
+
     function updateSummary() {
         const persons = parseInt(personsInput.value) || menuMin;
 
@@ -188,12 +235,11 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('discount-display').textContent = '0,00';
         }
 
-        // Livraison (sera calculée en fonction de l'adresse côté serveur)
-        const delivery = 500; // 5€ base
-        document.getElementById('delivery-display').textContent = (delivery / 100).toFixed(2).replace('.', ',');
+        // Livraison (utilise la valeur calculée via l'API)
+        document.getElementById('delivery-display').textContent = (currentDeliveryCost / 100).toFixed(2).replace('.', ',');
 
         // Total
-        const total = subtotal + delivery - discount;
+        const total = subtotal + currentDeliveryCost - discount;
         document.getElementById('total-display').textContent = (total / 100).toFixed(2).replace('.', ',');
 
         // Nombre de personnes
@@ -238,7 +284,18 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     if (addressSelect) {
-        addressSelect.addEventListener('change', updateSummary);
+        // Calculer les frais de livraison quand l'adresse change
+        addressSelect.addEventListener('change', async function() {
+            const addressId = this.value;
+            if (addressId) {
+                await fetchDeliveryCost(addressId);
+            }
+        });
+
+        // Calculer les frais au chargement si une adresse est déjà sélectionnée
+        if (addressSelect.value) {
+            fetchDeliveryCost(addressSelect.value);
+        }
     }
 
     // Initialiser feather icons
