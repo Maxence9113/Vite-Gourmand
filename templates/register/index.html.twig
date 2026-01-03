@@ -75,7 +75,7 @@
                     {{ form_errors(registerForm.email) }}
 
                     {# Mot de passe #}
-                    <div class="form-floating mb-3">
+                    <div class="form-floating mb-3 position-relative">
                         {{ form_widget(registerForm.plainPassword.first, {
                             'attr': {
                                 'class': 'form-control',
@@ -86,11 +86,17 @@
                             <i data-feather="lock" width="16" class="me-1"></i>
                             Mot de passe
                         </label>
+                        <button type="button"
+                                class="btn btn-sm position-absolute end-0 top-50 translate-middle-y me-2"
+                                style="border: none; background: none; z-index: 10;"
+                                onclick="togglePasswordVisibility('{{ registerForm.plainPassword.first.vars.id }}', this)">
+                            <i data-feather="eye" width="20"></i>
+                        </button>
                     </div>
                     {{ form_errors(registerForm.plainPassword.first) }}
 
                     {# Confirmation mot de passe #}
-                    <div class="form-floating mb-3">
+                    <div class="form-floating mb-3 position-relative">
                         {{ form_widget(registerForm.plainPassword.second, {
                             'attr': {
                                 'class': 'form-control',
@@ -101,6 +107,12 @@
                             <i data-feather="check-circle" width="16" class="me-1"></i>
                             Confirmer le mot de passe
                         </label>
+                        <button type="button"
+                                class="btn btn-sm position-absolute end-0 top-50 translate-middle-y me-2"
+                                style="border: none; background: none; z-index: 10;"
+                                onclick="togglePasswordVisibility('{{ registerForm.plainPassword.second.vars.id }}', this)">
+                            <i data-feather="eye" width="20"></i>
+                        </button>
                     </div>
                     {{ form_errors(registerForm.plainPassword.second) }}
 
@@ -143,5 +155,25 @@
         </div>
     </div>
 </div>
+
+<script>
+function togglePasswordVisibility(inputId, button) {
+    const input = document.getElementById(inputId);
+    const icon = button.querySelector('i');
+
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.setAttribute('data-feather', 'eye-off');
+    } else {
+        input.type = 'password';
+        icon.setAttribute('data-feather', 'eye');
+    }
+
+    // Réinitialiser les icônes Feather
+    if (typeof feather !== 'undefined') {
+        feather.replace();
+    }
+}
+</script>
 
 {% endblock %}

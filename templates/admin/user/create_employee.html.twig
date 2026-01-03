@@ -36,7 +36,15 @@
 
                         <div class="mb-3">
                             <label for="password" class="form-label">Mot de passe</label>
-                            <input type="password" class="form-control" id="password" name="password" required minlength="10">
+                            <div class="position-relative">
+                                <input type="password" class="form-control" id="password" name="password" required minlength="10">
+                                <button type="button"
+                                        class="btn btn-sm position-absolute end-0 top-50 translate-middle-y me-2"
+                                        style="border: none; background: none; z-index: 10;"
+                                        onclick="togglePasswordVisibility('password', this)">
+                                    <i data-feather="eye" width="20"></i>
+                                </button>
+                            </div>
                             <div class="form-text">
                                 Le mot de passe doit contenir au minimum 10 caractères avec au moins :
                                 <ul class="mb-0 mt-1">
@@ -66,6 +74,24 @@
 </div>
 
 <script>
+function togglePasswordVisibility(inputId, button) {
+    const input = document.getElementById(inputId);
+    const icon = button.querySelector('i');
+
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.setAttribute('data-feather', 'eye-off');
+    } else {
+        input.type = 'password';
+        icon.setAttribute('data-feather', 'eye');
+    }
+
+    // Réinitialiser les icônes Feather
+    if (typeof feather !== 'undefined') {
+        feather.replace();
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     const passwordInput = document.getElementById('password');
     const form = passwordInput.closest('form');
