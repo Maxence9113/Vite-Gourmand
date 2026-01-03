@@ -8,6 +8,7 @@ use App\Entity\Order;
 use App\Entity\User;
 use App\Enum\OrderStatus;
 use App\Service\EmailService;
+use App\Service\OpenRouteService;
 use App\Service\OrderManager;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
@@ -21,7 +22,7 @@ class OrderManagerTest extends TestCase
 {
     private EntityManagerInterface&\PHPUnit\Framework\MockObject\MockObject $entityManager;
     private EmailService&\PHPUnit\Framework\MockObject\MockObject $emailService;
-    private UrlGeneratorInterface&\PHPUnit\Framework\MockObject\MockObject $urlGenerator;
+    private OpenRouteService&\PHPUnit\Framework\MockObject\MockObject $openRouteService;
     private OrderManager $orderManager;
 
     protected function setUp(): void
@@ -29,13 +30,25 @@ class OrderManagerTest extends TestCase
         // Créer des mocks des dépendances
         $this->entityManager = $this->createMock(EntityManagerInterface::class);
         $this->emailService = $this->createMock(EmailService::class);
-        $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
+        $this->openRouteService = $this->createMock(OpenRouteService::class);
+
+        // Configurer le mock OpenRouteService avec des comportements par défaut
+        $this->openRouteService
+            ->method('isPostalCodeInBordeaux')
+            ->willReturnCallback(function (string $postalCode) {
+                // Codes postaux de Bordeaux : 33000, 33100, 33200, 33300, 33800
+                return in_array($postalCode, ['33000', '33100', '33200', '33300', '33800']);
+            });
+
+        $this->openRouteService
+            ->method('getDistanceFromBordeaux')
+            ->willReturn(['distance' => 10, 'duration' => 600]); // 10 km par défaut
 
         // Créer le service OrderManager avec les mocks
         $this->orderManager = new OrderManager(
             $this->entityManager,
             $this->emailService,
-            $this->urlGenerator
+            $this->openRouteService
         );
     }
 
@@ -218,17 +231,17 @@ class OrderManagerTest extends TestCase
         // Sous-total: 50€ × 10 = 500€ = 50000 centimes
         $this->assertEquals(50000, $order->getMenuSubtotal());
 
-        // Distance calculée: abs(75 - 33) * 50 = 42 * 50 = 2100 km
-        $this->assertEquals(2100, $order->getDeliveryDistanceKm());
+        // Distance calculée par OpenRouteService (mockée à 10 km)
+        $this->assertEquals(10, $order->getDeliveryDistanceKm());
 
-        // Livraison: 5€ base + (2100km × 0.59€) = 5€ + 1239€ = 1244€ = 124400 centimes
-        $this->assertEquals(124400, $order->getDeliveryCost());
+        // Livraison: 5€ base + (10km × 0.59€) = 5€ + 5.90€ = 10.90€ = 1090 centimes
+        $this->assertEquals(1090, $order->getDeliveryCost());
 
         // Réduction: 10% de 500€ = 5000 centimes
         $this->assertEquals(5000, $order->getDiscountAmount());
 
-        // Total: 50000 + 124400 - 5000 = 169400 centimes
-        $this->assertEquals(169400, $order->getTotalPrice());
+        // Total: 50000 + 1090 - 5000 = 46090 centimes
+        $this->assertEquals(46090, $order->getTotalPrice());
     }
 
     public function testCalculateOrderPricingWithoutDiscount(): void
@@ -388,7 +401,11 @@ class OrderManagerTest extends TestCase
         $order->setCustomerLastname('User');
         $order->setMenuName('Menu Test');
         $order->setNumberOfPersons(5);
-        $order->setTotalPrice(10000);
+        $order->setMenuSubtotal(25000); // 250€
+        $order->setDeliveryCost(500);   // 5€
+        $order->setDiscountAmount(null); // Pas de réduction
+        $order->setDeliveryDistanceKm(null); // Bordeaux
+        $order->setTotalPrice(25500);   // 255€
         $order->setDeliveryDateTime(new \DateTimeImmutable('+3 days'));
         $order->setDeliveryAddress('123 Test Street');
 
@@ -401,7 +418,7 @@ class OrderManagerTest extends TestCase
             ->expects($this->once())
             ->method('flush');
 
-        // Vérifier que l'email est envoyé
+        // Vérifier que l'email est envoyé avec tous les paramètres
         $this->emailService
             ->expects($this->once())
             ->method('sendOrderConfirmationEmail')
@@ -412,9 +429,13 @@ class OrderManagerTest extends TestCase
                 $this->anything(), // orderNumber
                 $this->equalTo('Menu Test'),
                 $this->equalTo(5),
-                $this->equalTo(10000),
+                $this->equalTo(25500), // totalPrice
                 $this->anything(), // deliveryDateTime
-                $this->equalTo('123 Test Street')
+                $this->equalTo('123 Test Street'),
+                $this->equalTo(25000), // menuSubtotal
+                $this->equalTo(500),   // deliveryCost
+                $this->equalTo(null),  // discountAmount
+                $this->equalTo(null)   // deliveryDistanceKm
             );
 
         $this->orderManager->saveOrder($order);

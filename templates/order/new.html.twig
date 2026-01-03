@@ -217,13 +217,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const subtotal = menuPrice * persons;
         document.getElementById('subtotal-display').textContent = (subtotal / 100).toFixed(2).replace('.', ',');
 
-        // Réduction si 5+ personnes au-delà du minimum
+        // Réduction de 10% si 5 personnes de plus que le minimum
         const extraPersons = persons - menuMin;
         let discount = 0;
         const discountRow = document.getElementById('discount-row');
 
+        // Réduction appliquée UNE SEULE FOIS dès qu'on atteint minimum + 5 personnes
         if (extraPersons >= 5) {
-            discount = subtotal * 0.10;
+            discount = subtotal * 0.10; // 10% du sous-total
             if (discountRow) {
                 discountRow.style.setProperty('display', 'flex', 'important');
             }

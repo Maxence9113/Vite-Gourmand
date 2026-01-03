@@ -130,4 +130,135 @@
     </div>
 </div>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const postalCodeInput = document.querySelector('#address_postalCode');
+    const cityInput = document.querySelector('#address_city');
+    const cityContainer = cityInput ? cityInput.parentElement : null;
+
+    if (!postalCodeInput || !cityInput || !cityContainer) {
+        return; // Les champs n'existent pas sur la page
+    }
+
+    let fetchTimeout = null;
+    let originalCityValue = cityInput.value; // Sauvegarder la valeur initiale (en cas de modification)
+    let citySelectElement = null;
+
+    // Fonction pour transformer l'input en select
+    function convertToSelect(cities) {
+        // Créer un élément select
+        const select = document.createElement('select');
+        select.id = 'address_city';
+        select.name = 'address[city]';
+        select.className = cityInput.className;
+        select.required = cityInput.required;
+
+        // Ajouter une option par défaut
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.textContent = 'Sélectionnez une ville';
+        select.appendChild(defaultOption);
+
+        // Ajouter les villes
+        cities.forEach(city => {
+            const option = document.createElement('option');
+            option.value = city;
+            option.textContent = city;
+
+            // Sélectionner automatiquement si c'est la seule ville ou si elle correspond à la valeur actuelle
+            if (cities.length === 1 || city === originalCityValue) {
+                option.selected = true;
+            }
+
+            select.appendChild(option);
+        });
+
+        // Remplacer l'input par le select
+        cityInput.replaceWith(select);
+        citySelectElement = select;
+
+        // Animer pour indiquer le changement
+        select.classList.add('border-success');
+        setTimeout(() => {
+            select.classList.remove('border-success');
+        }, 2000);
+    }
+
+    // Fonction pour revenir à un input text
+    function convertToInput() {
+        if (!citySelectElement) return;
+
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.id = 'address_city';
+        input.name = 'address[city]';
+        input.className = citySelectElement.className.replace('border-success', '');
+        input.required = citySelectElement.required;
+        input.placeholder = 'Bordeaux';
+        input.value = citySelectElement.value || originalCityValue;
+
+        citySelectElement.replaceWith(input);
+        citySelectElement = null;
+    }
+
+    // Fonction pour récupérer les villes depuis le code postal
+    async function fetchCitiesFromPostalCode(postalCode) {
+        // Validation basique : le code postal doit avoir exactement 5 chiffres
+        if (!/^[0-9]{5}$/.test(postalCode)) {
+            // Si le code postal est incomplet, revenir à un input
+            convertToInput();
+            return;
+        }
+
+        try {
+            const response = await fetch(`{{ path('app_address_get_city_from_postal_code', {postalCode: '__POSTAL_CODE__'}) }}`.replace('__POSTAL_CODE__', postalCode));
+            const data = await response.json();
+
+            if (data.success && data.cities && data.cities.length > 0) {
+                // Transformer en select avec toutes les villes
+                convertToSelect(data.cities);
+            } else {
+                // Pas de ville trouvée, revenir à un input
+                convertToInput();
+            }
+        } catch (error) {
+            console.error('Erreur lors de la récupération des villes:', error);
+            // En cas d'erreur, revenir à un input
+            convertToInput();
+        }
+    }
+
+    // Écouter les changements du code postal
+    postalCodeInput.addEventListener('input', function() {
+        const postalCode = this.value.trim();
+
+        // Annuler la requête précédente si elle existe
+        if (fetchTimeout) {
+            clearTimeout(fetchTimeout);
+        }
+
+        // Attendre 500ms après que l'utilisateur a fini de taper
+        fetchTimeout = setTimeout(() => {
+            fetchCitiesFromPostalCode(postalCode);
+        }, 500);
+    });
+
+    // Aussi déclencher la recherche lorsque le champ perd le focus
+    postalCodeInput.addEventListener('blur', function() {
+        const postalCode = this.value.trim();
+
+        if (fetchTimeout) {
+            clearTimeout(fetchTimeout);
+        }
+
+        fetchCitiesFromPostalCode(postalCode);
+    });
+
+    // Si le code postal est déjà rempli au chargement, charger les villes
+    if (postalCodeInput.value && postalCodeInput.value.length === 5) {
+        fetchCitiesFromPostalCode(postalCodeInput.value);
+    }
+});
+</script>
+
 {% endblock %}

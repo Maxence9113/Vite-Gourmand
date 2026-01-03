@@ -10,11 +10,13 @@ use App\Repository\AddressRepository;
 use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final class AccountController extends AbstractController
 {
@@ -257,5 +259,71 @@ final class AccountController extends AbstractController
         }
 
         return $this->redirectToRoute('app_account_addresses');
+    }
+
+    /**
+     * API endpoint pour obtenir la ville depuis un code postal
+     * Utilise l'API du gouvernement français (api-adresse.data.gouv.fr)
+     */
+    #[Route('/api/adresse/ville-depuis-code-postal/{postalCode}', name: 'app_address_get_city_from_postal_code', methods: ['GET'])]
+    public function getCityFromPostalCode(string $postalCode, HttpClientInterface $httpClient): JsonResponse
+    {
+        // Validation basique du code postal
+        if (!preg_match('/^[0-9]{5}$/', $postalCode)) {
+            return new JsonResponse([
+                'success' => false,
+                'error' => 'Code postal invalide'
+            ], 400);
+        }
+
+        try {
+            // Appel à l'API du gouvernement français pour géocoder le code postal
+            // On augmente la limite pour obtenir plusieurs résultats
+            $response = $httpClient->request('GET', 'https://api-adresse.data.gouv.fr/search/', [
+                'query' => [
+                    'q' => $postalCode,
+                    'limit' => 20
+                ]
+            ]);
+
+            $data = $response->toArray();
+
+            // Vérifier si on a des résultats
+            if (empty($data['features'])) {
+                return new JsonResponse([
+                    'success' => false,
+                    'error' => 'Aucune ville trouvée pour ce code postal'
+                ], 404);
+            }
+
+            // Extraire toutes les villes uniques pour ce code postal
+            $cities = [];
+            foreach ($data['features'] as $feature) {
+                $city = $feature['properties']['city'] ?? null;
+                $postcode = $feature['properties']['postcode'] ?? null;
+
+                // Vérifier que la ville existe et que le code postal correspond exactement
+                if ($city && $postcode === $postalCode && !in_array($city, $cities, true)) {
+                    $cities[] = $city;
+                }
+            }
+
+            if (empty($cities)) {
+                return new JsonResponse([
+                    'success' => false,
+                    'error' => 'Aucune ville trouvée pour ce code postal'
+                ], 404);
+            }
+
+            return new JsonResponse([
+                'success' => true,
+                'cities' => $cities
+            ]);
+        } catch (\Exception $e) {
+            return new JsonResponse([
+                'success' => false,
+                'error' => 'Erreur lors de la récupération de la ville : ' . $e->getMessage()
+            ], 500);
+        }
     }
 }
