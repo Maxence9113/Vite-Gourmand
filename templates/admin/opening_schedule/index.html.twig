@@ -1,0 +1,131 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des horaires d'ouverture{% endblock %}
+
+{% block body %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h2">Horaires d'ouverture</h1>
+                <div>
+                    {% if schedules|length == 0 %}
+                        <form method="post" action="{{ path('app_admin_opening_schedule_initialize') }}" class="d-inline">
+                            <input type="hidden" name="_token" value="{{ csrf_token('initialize') }}">
+                            <button type="submit" class="btn btn-primary">
+                                <i data-feather="plus-circle"></i>
+                                Initialiser les horaires
+                            </button>
+                        </form>
+                    {% endif %}
+                    <a href="{{ path('app_admin_opening_schedule_new') }}" class="btn btn-success ms-2">
+                        <i data-feather="plus"></i>
+                        Ajouter un horaire
+                    </a>
+                </div>
+            </div>
+
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+
+            {% for message in app.flashes('warning') %}
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+
+            {% for message in app.flashes('error') %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    {% if schedules|length > 0 %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Jour</th>
+                                        <th>Statut</th>
+                                        <th>Horaires</th>
+                                        <th class="text-end">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in schedules %}
+                                        <tr>
+                                            <td><strong>{{ item.label }}</strong></td>
+                                            <td>
+                                                {% if item.isOpen %}
+                                                    <span class="badge bg-success">Ouvert</span>
+                                                {% else %}
+                                                    <span class="badge bg-secondary">Fermé</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if item.isOpen and item.openingTime and item.closingTime %}
+                                                    {{ item.openingTime }} - {{ item.closingTime }}
+                                                {% else %}
+                                                    <span class="text-muted">-</span>
+                                                {% endif %}
+                                            </td>
+                                            <td class="text-end">
+                                                {% if item.schedule %}
+                                                    <a href="{{ path('app_admin_opening_schedule_edit', {id: item.schedule.id}) }}"
+                                                       class="btn btn-sm btn-outline-primary">
+                                                        <i data-feather="edit"></i>
+                                                        Modifier
+                                                    </a>
+                                                    <form method="post"
+                                                          action="{{ path('app_admin_opening_schedule_delete', {id: item.schedule.id}) }}"
+                                                          class="d-inline"
+                                                          onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet horaire ?');">
+                                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ item.schedule.id) }}">
+                                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                            <i data-feather="trash-2"></i>
+                                                            Supprimer
+                                                        </button>
+                                                    </form>
+                                                {% else %}
+                                                    <span class="text-muted">Non configuré</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i data-feather="clock" class="mb-3" style="width: 48px; height: 48px; color: #6c757d;"></i>
+                            <p class="text-muted mb-3">Aucun horaire configuré.</p>
+                            <form method="post" action="{{ path('app_admin_opening_schedule_initialize') }}">
+                                <input type="hidden" name="_token" value="{{ csrf_token('initialize') }}">
+                                <button type="submit" class="btn btn-primary">
+                                    Initialiser avec les horaires par défaut
+                                </button>
+                            </form>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if schedules|length > 0 %}
+                <div class="alert alert-info mt-4">
+                    <i data-feather="info"></i>
+                    <strong>Information :</strong> Les horaires configurés ici sont utilisés pour valider les dates de livraison des commandes.
+                    Les clients ne pourront commander que pendant les heures d'ouverture (avec un délai minimum de 48h).
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

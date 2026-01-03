@@ -29,41 +29,23 @@
                 </div>
             </div>
 
-            {# Colonne 2 : Horaires d'ouverture #}
+            {# Colonne 2 : Horaires d'ouverture (dynamiques depuis la BDD) #}
             <div class="col-lg-4 col-md-6 text-center text-lg-start">
                 <h5 class="footer-title mb-3">
                     <i data-feather="clock" width="20" class="me-2"></i>
                     Horaires d'ouverture
                 </h5>
                 <ul class="list-unstyled footer-schedule">
-                    <li>
-                        <span>Lundi</span>
-                        <span class="text-secondary">9h00 - 18h00</span>
-                    </li>
-                    <li>
-                        <span>Mardi</span>
-                        <span class="text-secondary">9h00 - 18h00</span>
-                    </li>
-                    <li>
-                        <span>Mercredi</span>
-                        <span class="text-secondary">9h00 - 18h00</span>
-                    </li>
-                    <li>
-                        <span>Jeudi</span>
-                        <span class="text-secondary">9h00 - 18h00</span>
-                    </li>
-                    <li>
-                        <span>Vendredi</span>
-                        <span class="text-secondary">9h00 - 18h00</span>
-                    </li>
-                    <li>
-                        <span>Samedi</span>
-                        <span class="text-secondary">10h00 - 16h00</span>
-                    </li>
-                    <li>
-                        <span>Dimanche</span>
-                        <span class="text-danger fw-bold">Fermé</span>
-                    </li>
+                    {% for schedule in opening_schedules %}
+                        <li>
+                            <span>{{ schedule.label }}</span>
+                            {% if schedule.isOpen and schedule.openingTime and schedule.closingTime %}
+                                <span class="text-secondary">{{ schedule.openingTime }} - {{ schedule.closingTime }}</span>
+                            {% else %}
+                                <span class="text-danger fw-bold">Fermé</span>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
                 </ul>
             </div>
 

@@ -12,10 +12,9 @@ use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\Callback;
+use App\Validator\ValidDeliveryDateTime;
 use Symfony\Component\Validator\Constraints\GreaterThan;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class OrderType extends AbstractType
 {
@@ -75,19 +74,7 @@ class OrderType extends AbstractType
                     new NotBlank([
                         'message' => 'La date de livraison ne peut pas être vide',
                     ]),
-                    new Callback([
-                        'callback' => function ($value, ExecutionContextInterface $context) {
-                            if ($value instanceof \DateTimeInterface) {
-                                $now = new \DateTimeImmutable();
-                                $minDeliveryDate = $now->modify('+48 hours');
-
-                                if ($value < $minDeliveryDate) {
-                                    $context->buildViolation('La livraison doit être prévue au minimum 48h à l\'avance')
-                                        ->addViolation();
-                                }
-                            }
-                        },
-                    ]),
+                    new ValidDeliveryDateTime(),
                 ],
             ])
             ->add('deliveryAddress', EntityType::class, [

@@ -69,7 +69,22 @@
                     </div>
 
                     <div class="mb-3">
-                        {{ form_row(form.deliveryDateTime) }}
+                        {{ form_row(form.deliveryDateTime, {
+                            'help': 'Minimum 48h à l\'avance - Uniquement pendant nos horaires d\'ouverture'
+                        }) }}
+                        <div class="alert alert-info mt-2 mb-0">
+                            <small>
+                                <i data-feather="clock" width="16"></i>
+                                <strong>Horaires d'ouverture :</strong><br>
+                                {% for schedule in opening_schedules %}
+                                    {% if schedule.isOpen %}
+                                        {{ schedule.label }}: {{ schedule.openingTime }} - {{ schedule.closingTime }}<br>
+                                    {% else %}
+                                        {{ schedule.label }}: <span class="text-danger">Fermé</span><br>
+                                    {% endif %}
+                                {% endfor %}
+                            </small>
+                        </div>
                     </div>
 
                     <div class="mb-3">

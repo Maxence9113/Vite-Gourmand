@@ -26,7 +26,8 @@ class OrderManager
     public function __construct(
         private EntityManagerInterface $entityManager,
         private EmailService $emailService,
-        private OpenRouteService $openRouteService
+        private OpenRouteService $openRouteService,
+        private OpeningScheduleManager $openingScheduleManager
     ) {
     }
 
@@ -53,6 +54,15 @@ class OrderManager
                 $menu->getStock(),
                 $numberOfPersons
             ));
+        }
+
+        // Vérifier que la date de livraison est valide (48h minimum + horaires d'ouverture)
+        if (!$this->openingScheduleManager->isValidDeliveryDateTime($deliveryDateTime)) {
+            $nextOpening = $this->openingScheduleManager->getNextOpeningTime($deliveryDateTime);
+            $nextOpeningStr = $nextOpening ? $nextOpening->format('d/m/Y à H:i') : 'une date ultérieure';
+            throw new \LogicException(
+                'La livraison ne peut pas avoir lieu à cette date/heure. Le restaurant est fermé ou le délai de 48h n\'est pas respecté. Prochaine ouverture : ' . $nextOpeningStr
+            );
         }
 
         $order = new Order();
