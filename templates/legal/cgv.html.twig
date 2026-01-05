@@ -1,0 +1,311 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Conditions Générales de Vente - Bordeaux Gourmand{% endblock %}
+
+{% block body %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <h1 class="mb-4">Conditions Générales de Vente</h1>
+
+            <div class="alert alert-warning border-warning" role="alert">
+                <h4 class="alert-heading"><i data-feather="alert-triangle" width="20"></i> Avertissement Important</h4>
+                <p class="mb-2"><strong>Ce document a été généré automatiquement par intelligence artificielle à des fins de démonstration et d'apprentissage.</strong></p>
+                <p class="mb-2">Il ne constitue en aucun cas un document juridique validé par un professionnel du droit et ne doit pas être utilisé en l'état pour un site web en production.</p>
+                <p class="mb-0"><strong>Avant toute mise en ligne :</strong> Il est impératif de faire réviser et adapter ce document par un avocat spécialisé en droit commercial, droit de la consommation et droit du numérique afin qu'il soit conforme à la législation en vigueur et adapté à votre activité spécifique.</p>
+            </div>
+
+            <div class="alert alert-info">
+                <p class="mb-0"><strong>Date d'entrée en vigueur :</strong> {{ "now"|date("d/m/Y") }}</p>
+            </div>
+
+            <section class="mb-4">
+                <h2 class="h4 mb-3">Article 1 - Objet</h2>
+                <p>Les présentes Conditions Générales de Vente (CGV) régissent les relations contractuelles entre :</p>
+                <ul>
+                    <li><strong>Vite & Gourmand</strong>, SARL au capital de [montant] euros, dont le siège social est situé à [adresse], 33000 Bordeaux, immatriculée au RCS de Bordeaux sous le numéro [SIRET], ci-après dénommée "le Prestataire" ou "la Société",</li>
+                </ul>
+                <p>Et</p>
+                <ul>
+                    <li>Toute personne physique ou morale souhaitant procéder à la commande de prestations de service traiteur, ci-après dénommée "le Client".</li>
+                </ul>
+                <p>Les présentes CGV s'appliquent à toutes les commandes passées via le site internet bordeauxgourmand.fr ou par tout autre moyen.</p>
+            </section>
+
+            <section class="mb-4">
+                <h2 class="h4 mb-3">Article 2 - Prestations proposées</h2>
+                <p>Vite & Gourmand propose des prestations de service traiteur pour tous types d'événements (repas de Noël, Pâques, événements professionnels, mariages, etc.).</p>
+                <p>Les menus proposés comportent :</p>
+                <ul>
+                    <li>Une description détaillée des plats (entrées, plats principaux, desserts)</li>
+                    <li>Les allergènes contenus dans chaque plat</li>
+                    <li>Le nombre de personnes minimum par commande</li>
+                    <li>Le prix correspondant au nombre de personnes minimum</li>
+                    <li>Les conditions particulières (délai de commande, précautions de stockage, etc.)</li>
+                    <li>Le régime alimentaire concerné (végétarien, vegan, classique, etc.)</li>
+                </ul>
+            </section>
+
+            <section class="mb-4">
+                <h2 class="h4 mb-3">Article 3 - Commandes</h2>
+
+                <h3 class="h5 mb-2">3.1 Modalités de commande</h3>
+                <p>Pour passer commande, le Client doit obligatoirement créer un compte sur le site bordeauxgourmand.fr. La création de compte nécessite la fourniture des informations suivantes :</p>
+                <ul>
+                    <li>Nom et prénom</li>
+                    <li>Numéro de téléphone mobile</li>
+                    <li>Adresse email</li>
+                    <li>Adresse postale</li>
+                    <li>Mot de passe sécurisé (minimum 10 caractères avec au moins une majuscule, une minuscule, un chiffre et un caractère spécial)</li>
+                </ul>
+
+                <h3 class="h5 mb-2 mt-3">3.2 Informations requises pour la prestation</h3>
+                <p>Lors de la commande, le Client doit fournir :</p>
+                <ul>
+                    <li>L'adresse de livraison de la prestation</li>
+                    <li>La date et l'heure souhaitées pour la livraison</li>
+                    <li>Le menu choisi</li>
+                    <li>Le nombre de personnes (minimum requis selon le menu)</li>
+                </ul>
+
+                <h3 class="h5 mb-2 mt-3">3.3 Nombre minimum de convives</h3>
+                <p>Chaque menu est soumis à un nombre minimum de personnes, indiqué dans la description du menu. Il n'est pas possible de commander en dessous de ce seuil.</p>
+
+                <h3 class="h5 mb-2 mt-3">3.4 Remise quantitative</h3>
+                <p>Une réduction de <strong>10%</strong> est automatiquement appliquée pour toute commande concernant un nombre de personnes supérieur de 5 ou plus au nombre minimum indiqué dans le menu.</p>
+
+                <h3 class="h5 mb-2 mt-3">3.5 Délais de commande</h3>
+                <p>Certains menus nécessitent un délai de commande minimum (par exemple, X jours ou semaines avant la date de la prestation). Ce délai est précisé dans les conditions de chaque menu et doit impérativement être respecté.</p>
+
+                <h3 class="h5 mb-2 mt-3">3.6 Disponibilité et stocks</h3>
+                <p>Les menus sont proposés dans la limite des stocks disponibles. Le nombre de commandes restantes disponibles pour chaque menu est indiqué sur le site. En cas d'indisponibilité d'un menu après validation de la commande, le Client sera immédiatement informé et pourra choisir un autre menu ou annuler sa commande avec remboursement intégral.</p>
+
+                <h3 class="h5 mb-2 mt-3">3.7 Confirmation de commande</h3>
+                <p>Dès la validation de sa commande, le Client reçoit un email de confirmation récapitulant :</p>
+                <ul>
+                    <li>Les détails de la commande (menu, nombre de personnes)</li>
+                    <li>Le prix total (prix du menu + frais de livraison)</li>
+                    <li>Les informations de livraison (adresse, date, heure)</li>
+                    <li>Les conditions particulières du menu</li>
+                </ul>
+            </section>
+
+            <section class="mb-4">
+                <h2 class="h4 mb-3">Article 4 - Tarifs</h2>
+
+                <h3 class="h5 mb-2">4.1 Prix des menus</h3>
+                <p>Les prix des menus sont indiqués en euros TTC (Toutes Taxes Comprises) et incluent la TVA applicable au jour de la commande.</p>
+                <p>Les prix affichés sur le site correspondent au nombre minimum de personnes indiqué pour chaque menu.</p>
+
+                <h3 class="h5 mb-2 mt-3">4.2 Frais de livraison</h3>
+                <p>Les frais de livraison sont calculés selon les modalités suivantes :</p>
+                <ul>
+                    <li><strong>Livraison à Bordeaux :</strong> 5,00 € TTC</li>
+                    <li><strong>Livraison hors Bordeaux :</strong> 5,00 € + 0,59 € par kilomètre parcouru depuis Bordeaux</li>
+                </ul>
+                <p>Les frais de livraison sont calculés automatiquement lors de la commande en fonction de l'adresse de livraison fournie.</p>
+
+                <h3 class="h5 mb-2 mt-3">4.3 Révision des prix</h3>
+                <p>Le Prestataire se réserve le droit de modifier ses tarifs à tout moment. Toutefois, les prix applicables sont ceux en vigueur au moment de la validation de la commande par le Client.</p>
+            </section>
+
+            <section class="mb-4">
+                <h2 class="h4 mb-3">Article 5 - Paiement</h2>
+
+                <h3 class="h5 mb-2">5.1 Modalités de paiement</h3>
+                <p>Le paiement de la commande s'effectue en ligne via les moyens de paiement proposés sur le site (carte bancaire, etc.).</p>
+
+                <h3 class="h5 mb-2 mt-3">5.2 Sécurisation du paiement</h3>
+                <p>Les transactions bancaires sont sécurisées et aucune donnée bancaire n'est conservée par le Prestataire.</p>
+
+                <h3 class="h5 mb-2 mt-3">5.3 Validation de la commande</h3>
+                <p>La commande n'est définitive qu'après encaissement du paiement par le Prestataire.</p>
+            </section>
+
+            <section class="mb-4">
+                <h2 class="h4 mb-3">Article 6 - Modification et annulation de commande</h2>
+
+                <h3 class="h5 mb-2">6.1 Par le Client</h3>
+                <p><strong>Avant acceptation par un employé :</strong></p>
+                <ul>
+                    <li>Le Client peut librement annuler ou modifier sa commande depuis son espace personnel</li>
+                    <li>Toutes les modifications sont possibles (date, heure, adresse, nombre de personnes), sauf le choix du menu</li>
+                    <li>En cas d'annulation, le Client sera intégralement remboursé</li>
+                </ul>
+
+                <p><strong>Après acceptation par un employé :</strong></p>
+                <ul>
+                    <li>Aucune modification ni annulation n'est possible par le Client</li>
+                    <li>Le Client peut suivre l'état d'avancement de sa commande depuis son espace personnel</li>
+                </ul>
+
+                <h3 class="h5 mb-2 mt-3">6.2 Par le Prestataire</h3>
+                <p>Le Prestataire se réserve le droit d'annuler ou de modifier une commande dans les cas suivants :</p>
+                <ul>
+                    <li>Indisponibilité des produits</li>
+                    <li>Informations erronées ou incomplètes fournies par le Client</li>
+                    <li>Cas de force majeure</li>
+                </ul>
+                <p>Dans tous les cas, un employé contactera obligatoirement le Client par téléphone ou email avant toute modification ou annulation. Un motif d'annulation précisant le mode de contact et la raison sera systématiquement enregistré.</p>
+                <p>En cas d'annulation à l'initiative du Prestataire, le Client sera intégralement remboursé dans un délai de 14 jours.</p>
+            </section>
+
+            <section class="mb-4">
+                <h2 class="h4 mb-3">Article 7 - Livraison</h2>
+
+                <h3 class="h5 mb-2">7.1 Modalités de livraison</h3>
+                <p>La livraison est effectuée à l'adresse et à la date/heure indiquées par le Client lors de la commande.</p>
+                <p>Le Client s'engage à être présent ou à désigner une personne habilitée à réceptionner la commande au moment de la livraison.</p>
+
+                <h3 class="h5 mb-2 mt-3">7.2 Suivi de commande</h3>
+                <p>Une fois la commande acceptée, le Client peut suivre son état d'avancement via son espace personnel. Les différents statuts sont :</p>
+                <ul>
+                    <li><strong>Accepté :</strong> La commande a été validée par l'équipe</li>
+                    <li><strong>En préparation :</strong> La commande est en cours de préparation par l'équipe cuisine</li>
+                    <li><strong>En cours de livraison :</strong> La commande est en cours d'acheminement</li>
+                    <li><strong>Livré :</strong> La commande a été livrée au Client</li>
+                    <li><strong>En attente du retour de matériel :</strong> Du matériel a été prêté et doit être restitué</li>
+                    <li><strong>Terminée :</strong> La prestation est totalement achevée</li>
+                </ul>
+
+                <h3 class="h5 mb-2 mt-3">7.3 Retard de livraison</h3>
+                <p>En cas de retard de livraison, le Client sera informé dans les meilleurs délais. Le Prestataire mettra tout en œuvre pour respecter les délais de livraison convenus.</p>
+            </section>
+
+            <section class="mb-4">
+                <h2 class="h4 mb-3">Article 8 - Prêt de matériel</h2>
+
+                <h3 class="h5 mb-2">8.1 Conditions de prêt</h3>
+                <p>Pour certaines prestations, du matériel peut être prêté au Client (vaisselle, chafing dishes, etc.).</p>
+                <p>Le Client s'engage à restituer ce matériel dans le même état qu'il a été livré.</p>
+
+                <h3 class="h5 mb-2 mt-3">8.2 Restitution du matériel</h3>
+                <p>Lorsque la commande passe au statut "En attente du retour de matériel", le Client reçoit automatiquement un email l'informant qu'il doit restituer le matériel prêté.</p>
+                <p><strong>Le matériel doit être restitué dans un délai maximum de 10 jours ouvrés</strong> à compter de la réception de cet email.</p>
+                <p>Pour organiser la restitution, le Client doit prendre contact avec la Société par téléphone ou email.</p>
+
+                <h3 class="h5 mb-2 mt-3">8.3 Non-restitution ou restitution tardive</h3>
+                <p>En cas de non-restitution du matériel dans le délai de 10 jours ouvrés, le Client devra s'acquitter d'une somme forfaitaire de <strong>600 € TTC</strong> correspondant à la valeur du matériel prêté.</p>
+                <p>Cette somme sera automatiquement facturée au Client.</p>
+
+                <h3 class="h5 mb-2 mt-3">8.4 Matériel endommagé</h3>
+                <p>En cas de détérioration ou de perte du matériel, le Client sera tenu de rembourser la valeur du matériel selon un barème qui lui sera communiqué.</p>
+            </section>
+
+            <section class="mb-4">
+                <h2 class="h4 mb-3">Article 9 - Avis clients</h2>
+
+                <h3 class="h5 mb-2">9.1 Dépôt d'avis</h3>
+                <p>Une fois la commande terminée, le Client reçoit un email l'invitant à donner son avis sur la prestation.</p>
+                <p>L'avis comprend :</p>
+                <ul>
+                    <li>Une note de 1 à 5 étoiles</li>
+                    <li>Un commentaire textuel</li>
+                </ul>
+
+                <h3 class="h5 mb-2 mt-3">9.2 Modération des avis</h3>
+                <p>Les avis sont soumis à validation par un employé ou administrateur avant publication sur le site.</p>
+                <p>Le Prestataire se réserve le droit de refuser la publication d'avis contenant :</p>
+                <ul>
+                    <li>Des propos injurieux, diffamatoires ou discriminatoires</li>
+                    <li>Des informations personnelles (noms, adresses, etc.)</li>
+                    <li>Des contenus sans rapport avec la prestation</li>
+                </ul>
+
+                <h3 class="h5 mb-2 mt-3">9.3 Publication des avis</h3>
+                <p>Les avis validés sont affichés sur la page d'accueil du site.</p>
+            </section>
+
+            <section class="mb-4">
+                <h2 class="h4 mb-3">Article 10 - Allergènes et régimes alimentaires</h2>
+
+                <h3 class="h5 mb-2">10.1 Information sur les allergènes</h3>
+                <p>Conformément à la réglementation en vigueur, tous les allergènes contenus dans les plats sont clairement indiqués dans la description de chaque menu.</p>
+                <p>Il appartient au Client de consulter attentivement ces informations avant de passer commande.</p>
+
+                <h3 class="h5 mb-2 mt-3">10.2 Responsabilité du Client</h3>
+                <p>Le Client déclare avoir pris connaissance de la liste des allergènes et s'engage à en informer ses convives si nécessaire.</p>
+                <p>Le Prestataire ne saurait être tenu responsable en cas de réaction allergique si les informations ont été correctement communiquées sur le site.</p>
+
+                <h3 class="h5 mb-2 mt-3">10.3 Régimes spécifiques</h3>
+                <p>Chaque menu indique le(s) régime(s) alimentaire(s) concerné(s) : végétarien, vegan, classique, etc.</p>
+            </section>
+
+            <section class="mb-4">
+                <h2 class="h4 mb-3">Article 11 - Précautions de stockage</h2>
+                <p>Certains menus nécessitent des précautions particulières de stockage (conservation au réfrigérateur, consommation dans un délai déterminé, etc.).</p>
+                <p>Ces précautions sont indiquées dans les conditions de chaque menu et doivent être scrupuleusement respectées par le Client.</p>
+                <p>Le Prestataire ne saurait être tenu responsable des conséquences d'un non-respect de ces précautions par le Client.</p>
+            </section>
+
+            <section class="mb-4">
+                <h2 class="h4 mb-3">Article 12 - Réclamations</h2>
+                <p>Toute réclamation concernant une commande doit être formulée :</p>
+                <ul>
+                    <li>Par email à l'adresse : contact@bordeauxgourmand.fr</li>
+                    <li>Par téléphone au : [Numéro de téléphone]</li>
+                    <li>Via le formulaire de contact disponible sur le site</li>
+                </ul>
+                <p>La réclamation doit être effectuée dans un délai maximum de 48 heures suivant la livraison.</p>
+                <p>Le Prestataire s'engage à traiter toute réclamation dans les meilleurs délais et à apporter une réponse dans un délai maximum de 7 jours ouvrés.</p>
+            </section>
+
+            <section class="mb-4">
+                <h2 class="h4 mb-3">Article 13 - Responsabilité</h2>
+                <p>Le Prestataire s'engage à fournir des prestations conformes aux normes d'hygiène et de sécurité alimentaire en vigueur.</p>
+                <p>La responsabilité du Prestataire ne saurait être engagée dans les cas suivants :</p>
+                <ul>
+                    <li>Non-respect par le Client des précautions de stockage indiquées</li>
+                    <li>Informations erronées ou incomplètes fournies par le Client lors de la commande</li>
+                    <li>Absence du Client ou de son représentant au moment de la livraison</li>
+                    <li>Cas de force majeure (intempéries exceptionnelles, grèves, etc.)</li>
+                </ul>
+            </section>
+
+            <section class="mb-4">
+                <h2 class="h4 mb-3">Article 14 - Données personnelles</h2>
+                <p>Conformément au Règlement Général sur la Protection des Données (RGPD) et à la loi Informatique et Libertés, les données personnelles collectées font l'objet d'un traitement informatique.</p>
+                <p>Pour plus d'informations, consultez notre <a href="{{ path('app_legal_privacy') }}">Politique de confidentialité</a>.</p>
+            </section>
+
+            <section class="mb-4">
+                <h2 class="h4 mb-3">Article 15 - Force majeure</h2>
+                <p>La responsabilité du Prestataire ne pourra être mise en œuvre si l'inexécution ou le retard dans l'exécution de l'une de ses obligations découle d'un cas de force majeure.</p>
+                <p>Sont considérés comme cas de force majeure les événements échappant au contrôle du Prestataire, imprévisibles et insurmontables.</p>
+            </section>
+
+            <section class="mb-4">
+                <h2 class="h4 mb-3">Article 16 - Droit applicable et juridiction compétente</h2>
+                <p>Les présentes CGV sont soumises au droit français.</p>
+                <p>En cas de litige et à défaut d'accord amiable, le litige sera porté devant les tribunaux compétents de Bordeaux.</p>
+            </section>
+
+            <section class="mb-4">
+                <h2 class="h4 mb-3">Article 17 - Médiation</h2>
+                <p>Conformément à l'article L. 612-1 du Code de la consommation, le Client a le droit de recourir gratuitement à un médiateur de la consommation en vue de la résolution amiable du litige qui l'oppose au Prestataire.</p>
+                <p>À cet effet, le Prestataire garantit au Client le recours effectif à un dispositif de médiation de la consommation.</p>
+                <p>Coordonnées du médiateur :</p>
+                <ul>
+                    <li><strong>Nom :</strong> [Nom du médiateur]</li>
+                    <li><strong>Adresse :</strong> [Adresse du médiateur]</li>
+                    <li><strong>Site internet :</strong> [Site du médiateur]</li>
+                </ul>
+            </section>
+
+            <section class="mb-4">
+                <h2 class="h4 mb-3">Article 18 - Acceptation des CGV</h2>
+                <p>La validation de la commande par le Client vaut acceptation pleine et entière des présentes Conditions Générales de Vente.</p>
+                <p>Le Client reconnaît avoir pris connaissance des présentes CGV et les avoir acceptées en cochant la case prévue à cet effet avant la validation définitive de sa commande.</p>
+            </section>
+
+            <div class="alert alert-info mt-4">
+                <p class="mb-0"><strong>Dernière mise à jour :</strong> {{ "now"|date("d/m/Y") }}</p>
+            </div>
+
+            <div class="text-center mt-4">
+                <a href="{{ path('app_home') }}" class="btn btn-primary">Retour à l'accueil</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
