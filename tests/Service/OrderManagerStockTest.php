@@ -4,8 +4,10 @@ namespace App\Tests\Service;
 
 use App\Entity\Address;
 use App\Entity\Menu;
+use App\Entity\OpeningSchedule;
 use App\Entity\Theme;
 use App\Entity\User;
+use App\Enum\DayOfWeek;
 use App\Service\OrderManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -24,6 +26,40 @@ class OrderManagerStockTest extends KernelTestCase
         $this->orderManager = $container->get(OrderManager::class);
 
         $this->entityManager->beginTransaction();
+
+        // Créer les horaires d'ouverture pour les tests
+        $this->createOpeningSchedules();
+    }
+
+    private function createOpeningSchedules(): void
+    {
+        $schedules = [
+            ['day' => DayOfWeek::MONDAY, 'opening' => '09:00', 'closing' => '18:00', 'isOpen' => true],
+            ['day' => DayOfWeek::TUESDAY, 'opening' => '09:00', 'closing' => '18:00', 'isOpen' => true],
+            ['day' => DayOfWeek::WEDNESDAY, 'opening' => '09:00', 'closing' => '18:00', 'isOpen' => true],
+            ['day' => DayOfWeek::THURSDAY, 'opening' => '09:00', 'closing' => '18:00', 'isOpen' => true],
+            ['day' => DayOfWeek::FRIDAY, 'opening' => '09:00', 'closing' => '18:00', 'isOpen' => true],
+            ['day' => DayOfWeek::SATURDAY, 'opening' => '10:00', 'closing' => '16:00', 'isOpen' => true],
+            ['day' => DayOfWeek::SUNDAY, 'opening' => null, 'closing' => null, 'isOpen' => false],
+        ];
+
+        foreach ($schedules as $data) {
+            $schedule = new OpeningSchedule();
+            $schedule->setDayOfWeek($data['day']);
+            $schedule->setIsOpen($data['isOpen']);
+
+            if ($data['opening'] !== null) {
+                $schedule->setOpeningTime(new \DateTimeImmutable($data['opening']));
+            }
+
+            if ($data['closing'] !== null) {
+                $schedule->setClosingTime(new \DateTimeImmutable($data['closing']));
+            }
+
+            $this->entityManager->persist($schedule);
+        }
+
+        $this->entityManager->flush();
     }
 
     protected function tearDown(): void

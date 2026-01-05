@@ -4,8 +4,10 @@ namespace App\Tests\Controller;
 
 use App\Entity\Address;
 use App\Entity\Menu;
+use App\Entity\OpeningSchedule;
 use App\Entity\Order;
 use App\Entity\User;
+use App\Enum\DayOfWeek;
 use App\Enum\OrderStatus;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -31,6 +33,7 @@ class OrderControllerTest extends WebTestCase
         $this->createTestUser();
         $this->createTestAddress();
         $this->createTestMenu();
+        $this->createOpeningSchedules();
     }
 
     protected function tearDown(): void
@@ -176,9 +179,12 @@ class OrderControllerTest extends WebTestCase
         $crawler = $this->client->request('GET', '/commande/nouvelle/' . $this->testMenu->getId());
 
         // Remplir le formulaire
+        // Date de livraison : +3 jours à 12h00 (pendant les horaires d'ouverture)
+        $deliveryDateTime = (new \DateTimeImmutable('+3 days'))->setTime(12, 0);
+
         $form = $crawler->selectButton('Confirmer la commande')->form([
             'order[numberOfPersons]' => 10,
-            'order[deliveryDateTime]' => (new \DateTimeImmutable('+3 days'))->format('Y-m-d\TH:i'),
+            'order[deliveryDateTime]' => $deliveryDateTime->format('Y-m-d\TH:i'),
             'order[hasMaterialLoan]' => true,
         ]);
 
@@ -201,9 +207,12 @@ class OrderControllerTest extends WebTestCase
 
         $crawler = $this->client->request('GET', '/commande/nouvelle/' . $this->testMenu->getId());
 
+        // Date de livraison : +3 jours à 12h00 (pendant les horaires d'ouverture)
+        $deliveryDateTime = (new \DateTimeImmutable('+3 days'))->setTime(12, 0);
+
         $form = $crawler->selectButton('Confirmer la commande')->form([
             'order[numberOfPersons]' => 3, // Moins que le minimum (5)
-            'order[deliveryDateTime]' => (new \DateTimeImmutable('+3 days'))->format('Y-m-d\TH:i'),
+            'order[deliveryDateTime]' => $deliveryDateTime->format('Y-m-d\TH:i'),
         ]);
 
         $form['order[deliveryAddress]']->select($this->testAddress->getId());
@@ -445,6 +454,46 @@ class OrderControllerTest extends WebTestCase
     // ========================
     // Helper methods
     // ========================
+
+    private function createOpeningSchedules(): void
+    {
+        // Vérifier si les horaires existent déjà
+        $scheduleRepository = $this->entityManager->getRepository(OpeningSchedule::class);
+        $existingSchedules = $scheduleRepository->findAll();
+
+        if (count($existingSchedules) > 0) {
+            return; // Les horaires existent déjà
+        }
+
+        // Créer les horaires d'ouverture pour les tests
+        $schedules = [
+            ['day' => DayOfWeek::MONDAY, 'opening' => '09:00', 'closing' => '18:00', 'isOpen' => true],
+            ['day' => DayOfWeek::TUESDAY, 'opening' => '09:00', 'closing' => '18:00', 'isOpen' => true],
+            ['day' => DayOfWeek::WEDNESDAY, 'opening' => '09:00', 'closing' => '18:00', 'isOpen' => true],
+            ['day' => DayOfWeek::THURSDAY, 'opening' => '09:00', 'closing' => '18:00', 'isOpen' => true],
+            ['day' => DayOfWeek::FRIDAY, 'opening' => '09:00', 'closing' => '18:00', 'isOpen' => true],
+            ['day' => DayOfWeek::SATURDAY, 'opening' => '10:00', 'closing' => '16:00', 'isOpen' => true],
+            ['day' => DayOfWeek::SUNDAY, 'opening' => null, 'closing' => null, 'isOpen' => false],
+        ];
+
+        foreach ($schedules as $data) {
+            $schedule = new OpeningSchedule();
+            $schedule->setDayOfWeek($data['day']);
+            $schedule->setIsOpen($data['isOpen']);
+
+            if ($data['opening'] !== null) {
+                $schedule->setOpeningTime(new \DateTimeImmutable($data['opening']));
+            }
+
+            if ($data['closing'] !== null) {
+                $schedule->setClosingTime(new \DateTimeImmutable($data['closing']));
+            }
+
+            $this->entityManager->persist($schedule);
+        }
+
+        $this->entityManager->flush();
+    }
 
     private function createTestOrder(): Order
     {

@@ -8,6 +8,7 @@ use App\Entity\Order;
 use App\Entity\User;
 use App\Enum\OrderStatus;
 use App\Service\EmailService;
+use App\Service\OpeningScheduleManager;
 use App\Service\OpenRouteService;
 use App\Service\OrderManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,6 +24,7 @@ class OrderManagerTest extends TestCase
     private EntityManagerInterface&\PHPUnit\Framework\MockObject\MockObject $entityManager;
     private EmailService&\PHPUnit\Framework\MockObject\MockObject $emailService;
     private OpenRouteService&\PHPUnit\Framework\MockObject\MockObject $openRouteService;
+    private OpeningScheduleManager&\PHPUnit\Framework\MockObject\MockObject $openingScheduleManager;
     private OrderManager $orderManager;
 
     protected function setUp(): void
@@ -31,6 +33,7 @@ class OrderManagerTest extends TestCase
         $this->entityManager = $this->createMock(EntityManagerInterface::class);
         $this->emailService = $this->createMock(EmailService::class);
         $this->openRouteService = $this->createMock(OpenRouteService::class);
+        $this->openingScheduleManager = $this->createMock(OpeningScheduleManager::class);
 
         // Configurer le mock OpenRouteService avec des comportements par défaut
         $this->openRouteService
@@ -44,11 +47,17 @@ class OrderManagerTest extends TestCase
             ->method('getDistanceFromBordeaux')
             ->willReturn(['distance' => 10, 'duration' => 600]); // 10 km par défaut
 
+        // Configurer le mock OpeningScheduleManager pour accepter toutes les dates (par défaut)
+        $this->openingScheduleManager
+            ->method('isValidDeliveryDateTime')
+            ->willReturn(true);
+
         // Créer le service OrderManager avec les mocks
         $this->orderManager = new OrderManager(
             $this->entityManager,
             $this->emailService,
-            $this->openRouteService
+            $this->openRouteService,
+            $this->openingScheduleManager
         );
     }
 
