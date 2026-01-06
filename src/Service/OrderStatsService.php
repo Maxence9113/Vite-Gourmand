@@ -90,6 +90,9 @@ class OrderStatsService
         // On met 0 par défaut (vous pourrez l'améliorer plus tard si besoin)
         $stats->setMenuId(0);
         $stats->setMenuName($order->getMenuName());
+        // Note : Le thème n'est pas stocké dans Order, on met une valeur par défaut
+        // Les vraies stats viendront principalement des fixtures qui ont le vrai thème
+        $stats->setThemeName('Autre');
         // totalPrice est en centimes dans Order, on le convertit en euros pour MongoDB
         $stats->setTotalPrice($order->getTotalPrice() / 100);
         $stats->setNumberOfPeople($order->getNumberOfPersons());

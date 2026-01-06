@@ -46,6 +46,12 @@ class OrderStats
     private string $menuName;
 
     /**
+     * Nom du thème du menu (pour filtrer et grouper par thème)
+     */
+    #[MongoDB\Field(type: 'string')]
+    private string $themeName;
+
+    /**
      * Prix total de la commande en euros
      */
     #[MongoDB\Field(type: 'float')]
@@ -85,6 +91,11 @@ class OrderStats
         return $this->menuName;
     }
 
+    public function getThemeName(): string
+    {
+        return $this->themeName;
+    }
+
     public function getTotalPrice(): float
     {
         return $this->totalPrice;
@@ -117,6 +128,12 @@ class OrderStats
     public function setMenuName(string $menuName): self
     {
         $this->menuName = $menuName;
+        return $this;
+    }
+
+    public function setThemeName(string $themeName): self
+    {
+        $this->themeName = $themeName;
         return $this;
     }
 

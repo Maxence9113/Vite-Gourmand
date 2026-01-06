@@ -43,7 +43,8 @@ class OrderStatsRepository
     public function getOrderCountByMenu(
         ?string $menuName = null,
         ?\DateTime $startDate = null,
-        ?\DateTime $endDate = null
+        ?\DateTime $endDate = null,
+        ?string $themeName = null
     ): array {
         $builder = $this->documentManager
             ->createAggregationBuilder(OrderStats::class);
@@ -52,6 +53,11 @@ class OrderStatsRepository
         // Filtre par nom de menu si fourni
         if ($menuName !== null) {
             $builder->match()->field('menuName')->equals($menuName);
+        }
+
+        // Filtre par thème si fourni
+        if ($themeName !== null) {
+            $builder->match()->field('themeName')->equals($themeName);
         }
 
         // Filtre par période si fournie
@@ -100,7 +106,8 @@ class OrderStatsRepository
     public function getRevenueByMenu(
         ?string $menuName = null,
         ?\DateTime $startDate = null,
-        ?\DateTime $endDate = null
+        ?\DateTime $endDate = null,
+        ?string $themeName = null
     ): array {
         $builder = $this->documentManager
             ->createAggregationBuilder(OrderStats::class);
@@ -109,6 +116,11 @@ class OrderStatsRepository
         // Filtre par nom de menu si fourni
         if ($menuName !== null) {
             $builder->match()->field('menuName')->equals($menuName);
+        }
+
+        // Filtre par thème si fourni
+        if ($themeName !== null) {
+            $builder->match()->field('themeName')->equals($themeName);
         }
 
         // Filtre par période si fournie
@@ -124,6 +136,7 @@ class OrderStatsRepository
         $builder
             ->group()
             ->field('_id')->expression('$menuName')
+            ->field('themeName')->first('$themeName')
             ->field('totalRevenue')->sum('$totalPrice');
 
         // ==================== ÉTAPE 3 : TRI ====================
@@ -136,6 +149,7 @@ class OrderStatsRepository
             ->project()
             ->excludeFields(['_id'])
             ->field('menuName')->expression('$_id')
+            ->field('themeName')->expression('$themeName')
             ->field('totalRevenue')->expression('$totalRevenue');
 
         // Exécution de l'agrégation
@@ -263,5 +277,138 @@ class OrderStatsRepository
 
         // Extraire juste les noms de menu (retirer les _id)
         return array_map(fn($item) => $item['_id'], $menus);
+    }
+
+    /**
+     * Récupère la liste des noms de thèmes distincts
+     *
+     * @return array Liste des noms de thèmes
+     */
+    public function getDistinctThemeNames(): array
+    {
+        $builder = $this->documentManager
+            ->createAggregationBuilder(OrderStats::class);
+
+        $builder
+            ->group()
+            ->field('_id')->expression('$themeName');
+
+        $builder->sort(['_id' => 1]);
+
+        $result = $builder->hydrate(false)->execute();
+        $themes = iterator_to_array($result);
+
+        return array_map(fn($item) => $item['_id'], $themes);
+    }
+
+    /**
+     * Récupère le nombre de commandes par thème (pour le graphique principal)
+     *
+     * @param string|null $themeName Filtrer par thème
+     * @param \DateTime|null $startDate Date de début
+     * @param \DateTime|null $endDate Date de fin
+     * @return array Tableau avec themeName et count
+     */
+    public function getOrderCountByTheme(
+        ?string $themeName = null,
+        ?\DateTime $startDate = null,
+        ?\DateTime $endDate = null
+    ): array {
+        $builder = $this->documentManager
+            ->createAggregationBuilder(OrderStats::class);
+
+        // Filtre par période
+        if ($startDate || $endDate) {
+            $matchConditions = [];
+            if ($startDate) {
+                $matchConditions['orderDate']['$gte'] = $startDate;
+            }
+            if ($endDate) {
+                $matchConditions['orderDate']['$lte'] = $endDate;
+            }
+            if (!empty($matchConditions)) {
+                $builder->match()->field('orderDate')->range($matchConditions['orderDate']['$gte'] ?? null, $matchConditions['orderDate']['$lte'] ?? null);
+            }
+        }
+
+        // Filtre par thème si spécifié
+        if ($themeName) {
+            $builder->match()->field('themeName')->equals($themeName);
+        }
+
+        // Grouper par themeName et compter
+        $builder
+            ->group()
+            ->field('_id')->expression('$themeName')
+            ->field('count')->sum(1);
+
+        // Trier par nombre de commandes décroissant
+        $builder->sort(['count' => -1]);
+
+        $result = $builder->hydrate(false)->execute();
+        $stats = iterator_to_array($result);
+
+        // Reformater pour avoir themeName et count
+        return array_map(function ($item) {
+            return [
+                'themeName' => $item['_id'],
+                'count' => $item['count']
+            ];
+        }, $stats);
+    }
+
+    /**
+     * Récupère le chiffre d'affaires par thème
+     *
+     * @param string|null $themeName Filtrer par thème
+     * @param \DateTime|null $startDate Date de début
+     * @param \DateTime|null $endDate Date de fin
+     * @return array Tableau avec themeName et totalRevenue
+     */
+    public function getRevenueByTheme(
+        ?string $themeName = null,
+        ?\DateTime $startDate = null,
+        ?\DateTime $endDate = null
+    ): array {
+        $builder = $this->documentManager
+            ->createAggregationBuilder(OrderStats::class);
+
+        // Filtre par période
+        if ($startDate || $endDate) {
+            $matchConditions = [];
+            if ($startDate) {
+                $matchConditions['orderDate']['$gte'] = $startDate;
+            }
+            if ($endDate) {
+                $matchConditions['orderDate']['$lte'] = $endDate;
+            }
+            if (!empty($matchConditions)) {
+                $builder->match()->field('orderDate')->range($matchConditions['orderDate']['$gte'] ?? null, $matchConditions['orderDate']['$lte'] ?? null);
+            }
+        }
+
+        // Filtre par thème si spécifié
+        if ($themeName) {
+            $builder->match()->field('themeName')->equals($themeName);
+        }
+
+        // Grouper par themeName et sommer les prix
+        $builder
+            ->group()
+            ->field('_id')->expression('$themeName')
+            ->field('totalRevenue')->sum('$totalPrice');
+
+        // Trier par CA décroissant
+        $builder->sort(['totalRevenue' => -1]);
+
+        $result = $builder->hydrate(false)->execute();
+        $stats = iterator_to_array($result);
+
+        return array_map(function ($item) {
+            return [
+                'themeName' => $item['_id'],
+                'totalRevenue' => round($item['totalRevenue'], 2)
+            ];
+        }, $stats);
     }
 }
