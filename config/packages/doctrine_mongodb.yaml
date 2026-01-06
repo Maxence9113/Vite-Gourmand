@@ -13,6 +13,8 @@ doctrine_mongodb:
                 App:
                     dir: '%kernel.project_dir%/src/Document'
                     prefix: 'App\Document'
+            profiler:
+                enabled: false
 
 when@prod:
     doctrine_mongodb:

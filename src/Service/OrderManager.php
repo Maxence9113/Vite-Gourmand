@@ -27,7 +27,8 @@ class OrderManager
         private EntityManagerInterface $entityManager,
         private EmailService $emailService,
         private OpenRouteService $openRouteService,
-        private OpeningScheduleManager $openingScheduleManager
+        private OpeningScheduleManager $openingScheduleManager,
+        private OrderStatsService $orderStatsService // Nouveau service pour sauvegarder les stats dans MongoDB
     ) {
     }
 
@@ -171,6 +172,13 @@ class OrderManager
     {
         $order->changeStatus($newStatus);
         $this->entityManager->flush();
+
+        // ==================== SAUVEGARDE DES STATS DANS MONGODB ====================
+        // Enregistrer les statistiques uniquement quand la commande est livrée
+        // Cela garantit que seules les commandes effectivement réalisées sont comptabilisées
+        if ($newStatus === OrderStatus::DELIVERED) {
+            $this->orderStatsService->saveOrderStats($order);
+        }
     }
 
     /**
@@ -186,6 +194,9 @@ class OrderManager
         $order->changeStatus(OrderStatus::CANCELLED);
 
         $this->entityManager->flush();
+
+        // Les commandes annulées ne sont pas enregistrées dans les statistiques MongoDB
+        // Seules les commandes livrées (DELIVERED) sont comptabilisées
     }
 
     /**
@@ -201,6 +212,10 @@ class OrderManager
         }
 
         $this->entityManager->flush();
+
+        // Les stats MongoDB ne sont pas enregistrées ici
+        // Elles seront enregistrées uniquement quand la commande passera au statut DELIVERED
+        // via la méthode changeOrderStatus()
 
         // Envoyer l'email de confirmation de commande
         $this->sendOrderConfirmationEmail($order);

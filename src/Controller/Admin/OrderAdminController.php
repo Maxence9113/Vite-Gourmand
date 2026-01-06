@@ -6,6 +6,7 @@ use App\Entity\Order;
 use App\Enum\OrderStatus;
 use App\Repository\OrderRepository;
 use App\Service\EmailService;
+use App\Service\OrderManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -104,6 +105,7 @@ final class OrderAdminController extends AbstractController
         Order $order,
         Request $request,
         EntityManagerInterface $em,
+        OrderManager $orderManager,
         EmailService $emailService,
         UrlGeneratorInterface $urlGenerator
     ): Response {
@@ -138,16 +140,14 @@ final class OrderAdminController extends AbstractController
             return $this->redirectToRoute('app_admin_orders_show', ['id' => $order->getId()]);
         }
 
-        // Changer le statut
-        $order->changeStatus($newStatus);
-
         // Si passage en WAITING_MATERIAL_RETURN, définir la deadline de retour (J+2)
         if ($newStatus === OrderStatus::WAITING_MATERIAL_RETURN && $order->hasMaterialLoan()) {
             $deadline = new \DateTimeImmutable('+2 days');
             $order->setMaterialReturnDeadline($deadline);
         }
 
-        $em->flush();
+        // Changer le statut via OrderManager (qui gérera aussi les stats MongoDB si DELIVERED)
+        $orderManager->changeOrderStatus($order, $newStatus);
 
         // Envoyer les emails en fonction du nouveau statut
         $this->sendStatusChangeEmail($order, $newStatus, $emailService, $urlGenerator);
