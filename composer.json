@@ -9,6 +9,7 @@
         "ext-iconv": "*",
         "doctrine/doctrine-bundle": "^2.18",
         "doctrine/doctrine-migrations-bundle": "^3.7",
+        "doctrine/mongodb-odm-bundle": "^5.5",
         "doctrine/orm": "^3.5",
         "easycorp/easyadmin-bundle": "^4.27",
         "fakerphp/faker": "^1.24",

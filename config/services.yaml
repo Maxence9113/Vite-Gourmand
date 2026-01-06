@@ -8,6 +8,8 @@ parameters:
     # %kernel.project_dir% est remplacé par le chemin racine du projet
     recipe_illustrations_directory: '%kernel.project_dir%/public/uploads/recipe_illustrations'
     menu_illustrations_directory: '%kernel.project_dir%/public/uploads/menu_illustrations'
+    env(MONGODB_URI): ''
+    env(MONGODB_DB): ''
 
 services:
     # default configuration for services in *this* file
