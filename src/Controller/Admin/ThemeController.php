@@ -4,83 +4,86 @@ namespace App\Controller\Admin;
 
 use App\Entity\Theme;
 use App\Form\ThemeType;
-use App\Repository\ThemeRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+/**
+ * Contrôleur de gestion des thèmes
+ */
 #[Route('/admin/themes')]
-final class ThemeController extends AbstractController
+final class ThemeController extends AbstractCrudController
 {
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        parent::__construct($entityManager);
+    }
+
+    protected function getEntityClass(): string
+    {
+        return Theme::class;
+    }
+
+    protected function getFormTypeClass(): string
+    {
+        return ThemeType::class;
+    }
+
+    protected function getRoutePrefix(): string
+    {
+        return 'app_admin_themes';
+    }
+
+    protected function getIndexTemplate(): string
+    {
+        return 'admin/themes/index.html.twig';
+    }
+
+    protected function getFormTemplate(): string
+    {
+        return 'admin/themes/form.html.twig';
+    }
+
+    protected function getEntityTemplateVariable(): string
+    {
+        return 'theme';
+    }
+
+    protected function getEntityListTemplateVariable(): string
+    {
+        return 'themes';
+    }
+
+    protected function getEntityDisplayName(): string
+    {
+        return 'Le thème';
+    }
+
+    // Theme n'a pas de méthode optimisée, utilise findAll() par défaut
+    // Theme n'a pas de vérification de relations, peut être supprimé directement
 
     #[Route('', name: 'app_admin_themes')]
-    public function index(ThemeRepository $themeRepository): Response
+    public function index(): Response
     {
-        // Récupérer tous les thèmes
-        $themes = $themeRepository->findAll();
-
-        return $this->render('admin/themes/index.html.twig', [
-            'themes' => $themes,
-        ]);
+        return $this->indexAction();
     }
 
     #[Route('/new', name: 'app_admin_themes_new')]
-    public function new(Request $request, EntityManagerInterface $em): Response
+    public function new(Request $request): Response
     {
-        $theme = new Theme();
-        $form = $this->createForm(ThemeType::class, $theme);
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em->persist($theme);
-            $em->flush();
-
-            $this->addFlash('success', 'Le thème "' . $theme->getName() . '" a été créé avec succès !');
-
-            return $this->redirectToRoute('app_admin_themes');
-        }
-
-        return $this->render('admin/themes/form.html.twig', [
-            'form' => $form,
-            'theme' => $theme,
-            'isEdit' => false,
-        ]);
+        return $this->newAction($request);
     }
 
     #[Route('/{id}/edit', name: 'app_admin_themes_edit')]
-    public function edit(Theme $theme, Request $request, EntityManagerInterface $em): Response
+    public function edit(Theme $theme, Request $request): Response
     {
-        $form = $this->createForm(ThemeType::class, $theme);
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em->flush();
-
-            $this->addFlash('success', 'Le thème "' . $theme->getName() . '" a été modifié avec succès !');
-
-            return $this->redirectToRoute('app_admin_themes');
-        }
-
-        return $this->render('admin/themes/form.html.twig', [
-            'form' => $form,
-            'theme' => $theme,
-            'isEdit' => true,
-        ]);
+        return $this->editAction($theme, $request);
     }
 
     #[Route('/{id}/delete', name: 'app_admin_themes_delete', methods: ['POST'])]
-    public function delete(Theme $theme, EntityManagerInterface $em): Response
+    public function delete(Theme $theme): Response
     {
-        $themeName = $theme->getName();
-        $em->remove($theme);
-        $em->flush();
-
-        $this->addFlash('success', 'Le thème "' . $themeName . '" a été supprimé avec succès !');
-
-        return $this->redirectToRoute('app_admin_themes');
+        return $this->deleteAction($theme);
     }
 }

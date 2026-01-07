@@ -4,89 +4,97 @@ namespace App\Controller\Admin;
 
 use App\Entity\Allergen;
 use App\Form\AllergenType;
-use App\Repository\AllergenRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+/**
+ * Contrôleur de gestion des allergènes
+ */
 #[Route('/admin/allergens')]
-final class AllergenController extends AbstractController
+final class AllergenController extends AbstractCrudController
 {
-    #[Route('', name: 'app_admin_allergens')]
-    public function index(AllergenRepository $allergenRepository): Response
+    public function __construct(EntityManagerInterface $entityManager)
     {
-        // Utiliser la méthode optimisée pour éviter le problème N+1
-        $allergens = $allergenRepository->findAllWithRecipeCount();
+        parent::__construct($entityManager);
+    }
 
-        return $this->render('admin/allergens/index.html.twig', [
-            'allergens' => $allergens,
-        ]);
+    protected function getEntityClass(): string
+    {
+        return Allergen::class;
+    }
+
+    protected function getFormTypeClass(): string
+    {
+        return AllergenType::class;
+    }
+
+    protected function getRoutePrefix(): string
+    {
+        return 'app_admin_allergens';
+    }
+
+    protected function getIndexTemplate(): string
+    {
+        return 'admin/allergens/index.html.twig';
+    }
+
+    protected function getFormTemplate(): string
+    {
+        return 'admin/allergens/form.html.twig';
+    }
+
+    protected function getEntityTemplateVariable(): string
+    {
+        return 'allergen';
+    }
+
+    protected function getEntityListTemplateVariable(): string
+    {
+        return 'allergens';
+    }
+
+    protected function getEntityDisplayName(): string
+    {
+        return "L'allergène";
+    }
+
+    protected function getRepositoryFindAllMethod(): string
+    {
+        return 'findAllWithRecipeCount';
+    }
+
+    protected function canDelete(object $entity): ?string
+    {
+        /** @var Allergen $entity */
+        if ($entity->getRecipes()->count() > 0) {
+            return 'Impossible de supprimer l\'allergène "' . $entity->getName() . '" car il est utilisé par ' . $entity->getRecipes()->count() . ' recette(s).';
+        }
+        return null;
+    }
+
+    #[Route('', name: 'app_admin_allergens')]
+    public function index(): Response
+    {
+        return $this->indexAction();
     }
 
     #[Route('/new', name: 'app_admin_allergens_new')]
-    public function new(Request $request, EntityManagerInterface $em): Response
+    public function new(Request $request): Response
     {
-        $allergen = new Allergen();
-        $form = $this->createForm(AllergenType::class, $allergen);
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em->persist($allergen);
-            $em->flush();
-
-            $this->addFlash('success', 'L\'allergène "' . $allergen->getName() . '" a été créé avec succès !');
-
-            return $this->redirectToRoute('app_admin_allergens');
-        }
-
-        return $this->render('admin/allergens/form.html.twig', [
-            'form' => $form,
-            'allergen' => $allergen,
-            'isEdit' => false,
-        ]);
+        return $this->newAction($request);
     }
 
     #[Route('/{id}/edit', name: 'app_admin_allergens_edit')]
-    public function edit(Allergen $allergen, Request $request, EntityManagerInterface $em): Response
+    public function edit(Allergen $allergen, Request $request): Response
     {
-        $form = $this->createForm(AllergenType::class, $allergen);
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em->flush();
-
-            $this->addFlash('success', 'L\'allergène "' . $allergen->getName() . '" a été modifié avec succès !');
-
-            return $this->redirectToRoute('app_admin_allergens');
-        }
-
-        return $this->render('admin/allergens/form.html.twig', [
-            'form' => $form,
-            'allergen' => $allergen,
-            'isEdit' => true,
-        ]);
+        return $this->editAction($allergen, $request);
     }
 
     #[Route('/{id}/delete', name: 'app_admin_allergens_delete', methods: ['POST'])]
-    public function delete(Allergen $allergen, EntityManagerInterface $em): Response
+    public function delete(Allergen $allergen): Response
     {
-        $allergenName = $allergen->getName();
-
-        // Vérifier si l'allergène est utilisé par des recettes
-        if ($allergen->getRecipes()->count() > 0) {
-            $this->addFlash('error', 'Impossible de supprimer l\'allergène "' . $allergenName . '" car il est utilisé par ' . $allergen->getRecipes()->count() . ' recette(s).');
-            return $this->redirectToRoute('app_admin_allergens');
-        }
-
-        $em->remove($allergen);
-        $em->flush();
-
-        $this->addFlash('success', 'L\'allergène "' . $allergenName . '" a été supprimé avec succès !');
-
-        return $this->redirectToRoute('app_admin_allergens');
+        return $this->deleteAction($allergen);
     }
 }
