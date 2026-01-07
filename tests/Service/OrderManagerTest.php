@@ -11,6 +11,7 @@ use App\Service\EmailService;
 use App\Service\OpeningScheduleManager;
 use App\Service\OpenRouteService;
 use App\Service\OrderManager;
+use App\Service\OrderStatsService;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -25,6 +26,7 @@ class OrderManagerTest extends TestCase
     private EmailService&\PHPUnit\Framework\MockObject\MockObject $emailService;
     private OpenRouteService&\PHPUnit\Framework\MockObject\MockObject $openRouteService;
     private OpeningScheduleManager&\PHPUnit\Framework\MockObject\MockObject $openingScheduleManager;
+    private OrderStatsService&\PHPUnit\Framework\MockObject\MockObject $orderStatsService;
     private OrderManager $orderManager;
 
     protected function setUp(): void
@@ -52,12 +54,16 @@ class OrderManagerTest extends TestCase
             ->method('isValidDeliveryDateTime')
             ->willReturn(true);
 
+        // Créer le mock OrderStatsService
+        $this->orderStatsService = $this->createMock(OrderStatsService::class);
+
         // Créer le service OrderManager avec les mocks
         $this->orderManager = new OrderManager(
             $this->entityManager,
             $this->emailService,
             $this->openRouteService,
-            $this->openingScheduleManager
+            $this->openingScheduleManager,
+            $this->orderStatsService
         );
     }
 

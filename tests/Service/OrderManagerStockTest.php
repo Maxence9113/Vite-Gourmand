@@ -108,7 +108,11 @@ class OrderManagerStockTest extends KernelTestCase
         $this->entityManager->flush();
 
         // Créer une commande pour 10 personnes
-        $deliveryDateTime = new \DateTimeImmutable('+3 days');
+        // Trouver le prochain lundi à 12h (au moins 48h dans le futur)
+        $deliveryDateTime = new \DateTimeImmutable('next monday 12:00');
+        if ($deliveryDateTime < new \DateTimeImmutable('+48 hours')) {
+            $deliveryDateTime = new \DateTimeImmutable('next monday +1 week 12:00');
+        }
         $order = $this->orderManager->createOrder(
             $user,
             $menu,
@@ -167,7 +171,11 @@ class OrderManagerStockTest extends KernelTestCase
         $this->entityManager->flush();
 
         // Créer une commande
-        $deliveryDateTime = new \DateTimeImmutable('+3 days');
+        // Trouver le prochain lundi à 12h (au moins 48h dans le futur)
+        $deliveryDateTime = new \DateTimeImmutable('next monday 12:00');
+        if ($deliveryDateTime < new \DateTimeImmutable('+48 hours')) {
+            $deliveryDateTime = new \DateTimeImmutable('next monday +1 week 12:00');
+        }
         $order = $this->orderManager->createOrder(
             $user,
             $menu,
@@ -228,7 +236,11 @@ class OrderManagerStockTest extends KernelTestCase
         $this->entityManager->flush();
 
         // Tentative de création de commande (devrait échouer)
-        $deliveryDateTime = new \DateTimeImmutable('+3 days');
+        // Trouver le prochain lundi à 12h (au moins 48h dans le futur)
+        $deliveryDateTime = new \DateTimeImmutable('next monday 12:00');
+        if ($deliveryDateTime < new \DateTimeImmutable('+48 hours')) {
+            $deliveryDateTime = new \DateTimeImmutable('next monday +1 week 12:00');
+        }
         $this->orderManager->createOrder(
             $user,
             $menu,
@@ -279,7 +291,11 @@ class OrderManagerStockTest extends KernelTestCase
         $this->entityManager->flush();
 
         // Créer une commande pour exactement 10 personnes
-        $deliveryDateTime = new \DateTimeImmutable('+3 days');
+        // Trouver le prochain lundi à 12h (au moins 48h dans le futur)
+        $deliveryDateTime = new \DateTimeImmutable('next monday 12:00');
+        if ($deliveryDateTime < new \DateTimeImmutable('+48 hours')) {
+            $deliveryDateTime = new \DateTimeImmutable('next monday +1 week 12:00');
+        }
         $order = $this->orderManager->createOrder(
             $user,
             $menu,
@@ -340,7 +356,11 @@ class OrderManagerStockTest extends KernelTestCase
         $this->entityManager->flush();
 
         // Tentative de commander pour 20 personnes (> stock de 15)
-        $deliveryDateTime = new \DateTimeImmutable('+3 days');
+        // Trouver le prochain lundi à 12h (au moins 48h dans le futur)
+        $deliveryDateTime = new \DateTimeImmutable('next monday 12:00');
+        if ($deliveryDateTime < new \DateTimeImmutable('+48 hours')) {
+            $deliveryDateTime = new \DateTimeImmutable('next monday +1 week 12:00');
+        }
         $this->orderManager->createOrder(
             $user,
             $menu,

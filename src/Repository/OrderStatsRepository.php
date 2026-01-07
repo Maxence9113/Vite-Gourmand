@@ -88,7 +88,7 @@ class OrderStatsRepository
             ->field('count')->expression('$count');
 
         // Exécution de l'agrégation
-        $result = $builder->hydrate(false)->execute();
+        $result = $builder->hydrate(false)->getAggregation()->getIterator();
 
         return iterator_to_array($result);
     }
@@ -153,7 +153,7 @@ class OrderStatsRepository
             ->field('totalRevenue')->expression('$totalRevenue');
 
         // Exécution de l'agrégation
-        $result = $builder->hydrate(false)->execute();
+        $result = $builder->hydrate(false)->getAggregation()->getIterator();
 
         return iterator_to_array($result);
     }
@@ -230,7 +230,7 @@ class OrderStatsRepository
             ->field('avgPeoplePerOrder')->avg('$numberOfPeople');
 
         // Exécution
-        $result = $builder->hydrate(false)->execute();
+        $result = $builder->hydrate(false)->getAggregation()->getIterator();
         $stats = iterator_to_array($result);
 
         // Si aucune commande, retourner des valeurs par défaut
@@ -272,7 +272,7 @@ class OrderStatsRepository
         $builder->sort(['_id' => 1]);
 
         // Exécution
-        $result = $builder->hydrate(false)->execute();
+        $result = $builder->hydrate(false)->getAggregation()->getIterator();
         $menus = iterator_to_array($result);
 
         // Extraire juste les noms de menu (retirer les _id)
@@ -295,7 +295,7 @@ class OrderStatsRepository
 
         $builder->sort(['_id' => 1]);
 
-        $result = $builder->hydrate(false)->execute();
+        $result = $builder->hydrate(false)->getAggregation()->getIterator();
         $themes = iterator_to_array($result);
 
         return array_map(fn($item) => $item['_id'], $themes);
@@ -345,7 +345,7 @@ class OrderStatsRepository
         // Trier par nombre de commandes décroissant
         $builder->sort(['count' => -1]);
 
-        $result = $builder->hydrate(false)->execute();
+        $result = $builder->hydrate(false)->getAggregation()->getIterator();
         $stats = iterator_to_array($result);
 
         // Reformater pour avoir themeName et count
@@ -401,7 +401,7 @@ class OrderStatsRepository
         // Trier par CA décroissant
         $builder->sort(['totalRevenue' => -1]);
 
-        $result = $builder->hydrate(false)->execute();
+        $result = $builder->hydrate(false)->getAggregation()->getIterator();
         $stats = iterator_to_array($result);
 
         return array_map(function ($item) {
