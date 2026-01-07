@@ -274,4 +274,59 @@ class EmailService
 
         $this->mailer->send($email);
     }
+
+    /**
+     * Envoie automatiquement les emails appropriés lors d'un changement de statut de commande
+     * Centralise la logique d'envoi d'emails selon le nouveau statut
+     *
+     * @param \App\Entity\Order $order La commande concernée
+     * @param \App\Enum\OrderStatus $newStatus Le nouveau statut
+     * @param string|null $reviewUrl URL pour laisser un avis (requis pour statut COMPLETED)
+     */
+    public function sendStatusChangeNotification(
+        \App\Entity\Order $order,
+        \App\Enum\OrderStatus $newStatus,
+        ?string $reviewUrl = null
+    ): void {
+        // Email de validation de commande (quand l'employé accepte la commande)
+        if ($newStatus === \App\Enum\OrderStatus::VALIDATED) {
+            $this->sendOrderValidatedEmail(
+                userEmail: $order->getCustomerEmail(),
+                userFirstname: $order->getCustomerFirstname(),
+                orderNumber: $order->getOrderNumber(),
+                deliveryDateTime: $order->getDeliveryDateTime()
+            );
+            return;
+        }
+
+        // Email de rappel de retour de matériel
+        if ($newStatus === \App\Enum\OrderStatus::WAITING_MATERIAL_RETURN && $order->hasMaterialLoan()) {
+            $this->sendMaterialReturnReminderEmail(
+                userEmail: $order->getCustomerEmail(),
+                userFirstname: $order->getCustomerFirstname(),
+                orderNumber: $order->getOrderNumber(),
+                deadline: $order->getMaterialReturnDeadline()
+            );
+            return;
+        }
+
+        // Email de commande terminée avec invitation à laisser un avis
+        if ($newStatus === \App\Enum\OrderStatus::COMPLETED) {
+            if (!$reviewUrl) {
+                throw new \InvalidArgumentException(
+                    'L\'URL de review est requise pour envoyer l\'email de commande terminée'
+                );
+            }
+
+            $this->sendOrderCompletedEmail(
+                userEmail: $order->getCustomerEmail(),
+                userFirstname: $order->getCustomerFirstname(),
+                orderNumber: $order->getOrderNumber(),
+                reviewUrl: $reviewUrl
+            );
+            return;
+        }
+
+        // Pas d'email à envoyer pour les autres statuts
+    }
 }
