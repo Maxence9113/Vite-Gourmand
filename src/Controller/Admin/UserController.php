@@ -32,37 +32,13 @@ class UserController extends AbstractController
         $role = $request->query->get('role', '');
         $status = $request->query->get('status', '');
 
-        $qb = $this->userRepository->createQueryBuilder('u');
+        // Déterminer si l'utilisateur est employé (mais pas admin)
+        $isEmployee = $this->isGranted('ROLE_EMPLOYEE') && !$this->isGranted('ROLE_ADMIN');
 
-        // Si l'utilisateur est EMPLOYEE (mais pas ADMIN), ne montrer que les utilisateurs ROLE_USER
-        if ($this->isGranted('ROLE_EMPLOYEE') && !$this->isGranted('ROLE_ADMIN')) {
-            $qb->andWhere('u.roles LIKE :roleUser')
-               ->andWhere('u.roles NOT LIKE :roleEmployee')
-               ->andWhere('u.roles NOT LIKE :roleAdmin')
-               ->setParameter('roleUser', '%ROLE_USER%')
-               ->setParameter('roleEmployee', '%ROLE_EMPLOYEE%')
-               ->setParameter('roleAdmin', '%ROLE_ADMIN%');
-        }
+        // Filtrer par rôle uniquement si admin
+        $roleFilter = ($role && $this->isGranted('ROLE_ADMIN')) ? $role : '';
 
-        // Filtre de recherche (email, nom ou prénom)
-        if ($search) {
-            $qb->andWhere('u.email LIKE :search OR u.lastname LIKE :search OR u.firstname LIKE :search')
-               ->setParameter('search', '%' . $search . '%');
-        }
-
-        // Filtre par rôle (seulement pour les admins)
-        if ($role && $this->isGranted('ROLE_ADMIN')) {
-            $qb->andWhere('u.roles LIKE :role')
-               ->setParameter('role', '%' . $role . '%');
-        }
-
-        // Filtre par statut
-        if ($status !== '') {
-            $qb->andWhere('u.isEnabled = :status')
-               ->setParameter('status', (bool) $status);
-        }
-
-        $users = $qb->getQuery()->getResult();
+        $users = $this->userRepository->findWithFilters($search, $roleFilter, $status, $isEmployee);
 
         return $this->render('admin/user/index.html.twig', [
             'users' => $users,
