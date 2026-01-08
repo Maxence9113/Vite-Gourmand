@@ -67,6 +67,36 @@ abstract class AbstractCrudController extends AbstractController
     abstract protected function getEntityDisplayName(): string;
 
     /**
+     * Retourne le participe passé "créé" accordé selon le genre de l'entité
+     * Ex: "créé" pour masculin, "créée" pour féminin
+     * Peut être surchargé si nécessaire
+     */
+    protected function getCreatedVerb(): string
+    {
+        return 'créé';
+    }
+
+    /**
+     * Retourne le participe passé "modifié" accordé selon le genre de l'entité
+     * Ex: "modifié" pour masculin, "modifiée" pour féminin
+     * Peut être surchargé si nécessaire
+     */
+    protected function getModifiedVerb(): string
+    {
+        return 'modifié';
+    }
+
+    /**
+     * Retourne le participe passé "supprimé" accordé selon le genre de l'entité
+     * Ex: "supprimé" pour masculin, "supprimée" pour féminin
+     * Peut être surchargé si nécessaire
+     */
+    protected function getDeletedVerb(): string
+    {
+        return 'supprimé';
+    }
+
+    /**
      * Retourne la méthode du repository pour récupérer toutes les entités
      * Par défaut utilise findAll(), peut être surchargé pour utiliser des méthodes optimisées
      * Ex: 'findAllWithRecipeCount', 'findAllWithMenuCount'
@@ -129,7 +159,7 @@ abstract class AbstractCrudController extends AbstractController
 
             $this->addFlash(
                 'success',
-                $this->getEntityDisplayName() . ' "' . $this->getEntityName($entity) . '" a été créé avec succès !'
+                $this->getEntityDisplayName() . ' "' . $this->getEntityName($entity) . '" a été ' . $this->getCreatedVerb() . ' avec succès !'
             );
 
             return $this->redirectToRoute($this->getRoutePrefix());
@@ -155,7 +185,7 @@ abstract class AbstractCrudController extends AbstractController
 
             $this->addFlash(
                 'success',
-                $this->getEntityDisplayName() . ' "' . $this->getEntityName($entity) . '" a été modifié avec succès !'
+                $this->getEntityDisplayName() . ' "' . $this->getEntityName($entity) . '" a été ' . $this->getModifiedVerb() . ' avec succès !'
             );
 
             return $this->redirectToRoute($this->getRoutePrefix());
@@ -187,7 +217,7 @@ abstract class AbstractCrudController extends AbstractController
 
         $this->addFlash(
             'success',
-            $this->getEntityDisplayName() . ' "' . $entityName . '" a été supprimé avec succès !'
+            $this->getEntityDisplayName() . ' "' . $entityName . '" a été ' . $this->getDeletedVerb() . ' avec succès !'
         );
 
         return $this->redirectToRoute($this->getRoutePrefix());

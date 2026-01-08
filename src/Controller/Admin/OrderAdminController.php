@@ -204,8 +204,13 @@ final class OrderAdminController extends AbstractController
         $reason = $request->request->get('reason');
 
         // Validation du mode de contact
-        if (empty($contactMethod) || !in_array($contactMethod, ['phone', 'email'])) {
-            $this->addFlash('error', 'Veuillez indiquer un mode de contact valide (téléphone ou email).');
+        if (empty($contactMethod)) {
+            $this->addFlash('error', 'Veuillez indiquer le mode de contact utilisé avec le client.');
+            return $this->redirectToRoute('app_admin_orders_show', ['id' => $order->getId()]);
+        }
+
+        if (!in_array($contactMethod, ['phone', 'email'])) {
+            $this->addFlash('error', 'Mode de contact invalide.');
             return $this->redirectToRoute('app_admin_orders_show', ['id' => $order->getId()]);
         }
 

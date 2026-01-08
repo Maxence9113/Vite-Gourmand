@@ -60,6 +60,22 @@ final class CategoryController extends AbstractCrudController
         return 'La catégorie';
     }
 
+    // Surcharge pour l'accord grammatical féminin
+    protected function getCreatedVerb(): string
+    {
+        return 'créée';
+    }
+
+    protected function getModifiedVerb(): string
+    {
+        return 'modifiée';
+    }
+
+    protected function getDeletedVerb(): string
+    {
+        return 'supprimée';
+    }
+
     protected function getRepositoryFindAllMethod(): string
     {
         return 'findAllWithRecipeCount';

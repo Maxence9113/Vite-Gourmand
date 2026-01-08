@@ -57,6 +57,7 @@ final class OrderController extends AbstractController
         $order = new Order();
         $form = $this->createForm(OrderType::class, $order, [
             'user' => $user,
+            'menu' => $menu,
         ]);
 
         $form->handleRequest($request);

@@ -21,6 +21,7 @@ class OrderType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $user = $options['user'];
+        $menu = $options['menu'];
 
         $builder
             ->add('menu', EntityType::class, [
@@ -35,6 +36,7 @@ class OrderType extends AbstractType
                 },
                 'label' => 'Menu',
                 'placeholder' => 'Sélectionnez un menu',
+                'data' => $menu,
                 'attr' => [
                     'class' => 'form-select',
                     'data-order-target' => 'menuSelect'
@@ -120,8 +122,10 @@ class OrderType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Order::class,
             'user' => null,
+            'menu' => null,
         ]);
 
         $resolver->setAllowedTypes('user', ['null', 'App\Entity\User']);
+        $resolver->setAllowedTypes('menu', ['null', 'App\Entity\Menu']);
     }
 }

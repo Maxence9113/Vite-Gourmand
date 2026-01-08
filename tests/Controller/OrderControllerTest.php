@@ -179,8 +179,14 @@ class OrderControllerTest extends WebTestCase
         $crawler = $this->client->request('GET', '/commande/nouvelle/' . $this->testMenu->getId());
 
         // Remplir le formulaire
-        // Date de livraison : +3 jours à 12h00 (pendant les horaires d'ouverture)
-        $deliveryDateTime = (new \DateTimeImmutable('+3 days'))->setTime(12, 0);
+        // Date de livraison : trouver un jour ouvré (lundi à vendredi) dans 3+ jours à 12h00
+        $deliveryDateTime = new \DateTimeImmutable('+3 days');
+        $deliveryDateTime = $deliveryDateTime->setTime(12, 0);
+
+        // S'assurer que c'est un jour ouvré (lundi à vendredi)
+        while ($deliveryDateTime->format('N') >= 6) { // 6 = Samedi, 7 = Dimanche
+            $deliveryDateTime = $deliveryDateTime->modify('+1 day');
+        }
 
         $form = $crawler->selectButton('Confirmer la commande')->form([
             'order[numberOfPersons]' => 10,
@@ -207,8 +213,14 @@ class OrderControllerTest extends WebTestCase
 
         $crawler = $this->client->request('GET', '/commande/nouvelle/' . $this->testMenu->getId());
 
-        // Date de livraison : +3 jours à 12h00 (pendant les horaires d'ouverture)
-        $deliveryDateTime = (new \DateTimeImmutable('+3 days'))->setTime(12, 0);
+        // Date de livraison : trouver un jour ouvré dans 3+ jours à 12h00
+        $deliveryDateTime = new \DateTimeImmutable('+3 days');
+        $deliveryDateTime = $deliveryDateTime->setTime(12, 0);
+
+        // S'assurer que c'est un jour ouvré (lundi à vendredi)
+        while ($deliveryDateTime->format('N') >= 6) {
+            $deliveryDateTime = $deliveryDateTime->modify('+1 day');
+        }
 
         $form = $crawler->selectButton('Confirmer la commande')->form([
             'order[numberOfPersons]' => 3, // Moins que le minimum (5)
