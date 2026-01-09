@@ -43,3 +43,9 @@ services:
     App\Service\OpenRouteService:
         arguments:
             $apiKey: '%env(OPENROUTESERVICE_API_KEY)%'
+
+    # Service Email avec configuration depuis .env
+    App\Service\EmailService:
+        arguments:
+            $companyEmail: '%env(COMPANY_EMAIL)%'
+            $companyName: '%env(COMPANY_NAME)%'

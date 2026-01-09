@@ -92,7 +92,7 @@ class RegisterControllerTest extends WebTestCase
         $this->assertEmailAddressContains($email, 'To', 'jean.dupont@test.fr');
 
         // Vérifier l'expéditeur
-        $this->assertEmailAddressContains($email, 'From', 'contact@vitegourmand.fr');
+        $this->assertEmailAddressContains($email, 'From', 'contact@maxencedupuis.com');
 
         // Vérifier le sujet
         $this->assertEmailHeaderSame($email, 'Subject', 'Bienvenue chez Vite & Gourmand !');
@@ -353,7 +353,7 @@ class RegisterControllerTest extends WebTestCase
         $this->assertEmailAddressContains($email, 'To', 'marie.martin@test.fr');
 
         // Vérifier l'expéditeur
-        $this->assertEmailAddressContains($email, 'From', 'contact@vitegourmand.fr');
+        $this->assertEmailAddressContains($email, 'From', 'contact@maxencedupuis.com');
 
         // Vérifier le sujet
         $this->assertEmailHeaderSame($email, 'Subject', 'Bienvenue chez Vite & Gourmand !');

@@ -12,16 +12,15 @@ use Symfony\Component\Mime\Address;
  */
 class EmailService
 {
-    private const COMPANY_EMAIL = 'contact@vitegourmand.fr';
-    private const COMPANY_NAME = 'Vite & Gourmand';
-
     public function __construct(
         private MailerInterface $mailer,
+        private string $companyEmail,
+        private string $companyName,
     ) {
     }
 
     /**
-     * Envoie un email de contact depuis le formulaire public
+     * Envoie un email de contact depuis le formulaire public (à l'entreprise)
      *
      * @param string $senderName Nom de l'expéditeur
      * @param string $senderEmail Email de l'expéditeur
@@ -35,8 +34,9 @@ class EmailService
         string $message
     ): void {
         $email = (new TemplatedEmail())
-            ->from(new Address($senderEmail, $senderName))
-            ->to(new Address(self::COMPANY_EMAIL, self::COMPANY_NAME))
+            ->from(new Address($this->companyEmail, $this->companyName))
+            ->replyTo(new Address($senderEmail, $senderName))
+            ->to(new Address($this->companyEmail, $this->companyName))
             ->subject('[Contact] ' . $subject)
             ->htmlTemplate('emails/contact.html.twig')
             ->context([
@@ -44,6 +44,32 @@ class EmailService
                 'senderEmail' => $senderEmail,
                 'subject' => $subject,
                 'message' => $message,
+            ])
+        ;
+
+        $this->mailer->send($email);
+    }
+
+    /**
+     * Envoie un email de confirmation au visiteur qui a rempli le formulaire de contact
+     *
+     * @param string $senderName Nom du visiteur
+     * @param string $senderEmail Email du visiteur
+     * @param string $subject Sujet du message envoyé
+     */
+    public function sendContactConfirmationEmail(
+        string $senderName,
+        string $senderEmail,
+        string $subject
+    ): void {
+        $email = (new TemplatedEmail())
+            ->from(new Address($this->companyEmail, $this->companyName))
+            ->to(new Address($senderEmail, $senderName))
+            ->subject('Confirmation de votre message - ' . $this->companyName)
+            ->htmlTemplate('emails/contact_confirmation.html.twig')
+            ->context([
+                'senderName' => $senderName,
+                'subject' => $subject,
             ])
         ;
 
@@ -63,9 +89,9 @@ class EmailService
         string $userLastname
     ): void {
         $email = (new TemplatedEmail())
-            ->from(new Address(self::COMPANY_EMAIL, self::COMPANY_NAME))
+            ->from(new Address($this->companyEmail, $this->companyName))
             ->to(new Address($userEmail, "$userFirstname $userLastname"))
-            ->subject('Bienvenue chez ' . self::COMPANY_NAME . ' !')
+            ->subject('Bienvenue chez ' . $this->companyName . ' !')
             ->htmlTemplate('emails/welcome.html.twig')
             ->context([
                 'firstname' => $userFirstname,
@@ -91,7 +117,7 @@ class EmailService
         string $resetUrl
     ): void {
         $email = (new TemplatedEmail())
-            ->from(new Address(self::COMPANY_EMAIL, self::COMPANY_NAME))
+            ->from(new Address($this->companyEmail, $this->companyName))
             ->to(new Address($userEmail, $userFirstname))
             ->subject('Réinitialisation de votre mot de passe')
             ->htmlTemplate('emails/password_reset.html.twig')
@@ -120,7 +146,7 @@ class EmailService
         \DateTimeImmutable $deliveryDateTime
     ): void {
         $email = (new TemplatedEmail())
-            ->from(new Address(self::COMPANY_EMAIL, self::COMPANY_NAME))
+            ->from(new Address($this->companyEmail, $this->companyName))
             ->to(new Address($userEmail, $userFirstname))
             ->subject('Votre commande ' . $orderNumber . ' a été validée !')
             ->htmlTemplate('emails/order_validated.html.twig')
@@ -167,7 +193,7 @@ class EmailService
         ?int $deliveryDistanceKm = null
     ): void {
         $email = (new TemplatedEmail())
-            ->from(new Address(self::COMPANY_EMAIL, self::COMPANY_NAME))
+            ->from(new Address($this->companyEmail, $this->companyName))
             ->to(new Address($userEmail, "$userFirstname $userLastname"))
             ->subject('Confirmation de votre commande ' . $orderNumber)
             ->htmlTemplate('emails/order_confirmation.html.twig')
@@ -206,7 +232,7 @@ class EmailService
         string $reviewUrl
     ): void {
         $email = (new TemplatedEmail())
-            ->from(new Address(self::COMPANY_EMAIL, self::COMPANY_NAME))
+            ->from(new Address($this->companyEmail, $this->companyName))
             ->to(new Address($userEmail, $userFirstname))
             ->subject('Votre commande ' . $orderNumber . ' est terminée !')
             ->htmlTemplate('emails/order_completed.html.twig')
@@ -236,7 +262,7 @@ class EmailService
         \DateTimeImmutable $deadline
     ): void {
         $email = (new TemplatedEmail())
-            ->from(new Address(self::COMPANY_EMAIL, self::COMPANY_NAME))
+            ->from(new Address($this->companyEmail, $this->companyName))
             ->to(new Address($userEmail, $userFirstname))
             ->subject('Rappel : retour de matériel pour la commande ' . $orderNumber)
             ->htmlTemplate('emails/material_return_reminder.html.twig')
@@ -263,7 +289,7 @@ class EmailService
         string $employeeUsername
     ): void {
         $email = (new TemplatedEmail())
-            ->from(new Address(self::COMPANY_EMAIL, self::COMPANY_NAME))
+            ->from(new Address($this->companyEmail, $this->companyName))
             ->to(new Address($employeeEmail))
             ->subject('Votre compte employé a été créé')
             ->htmlTemplate('emails/employee_account_created.html.twig')

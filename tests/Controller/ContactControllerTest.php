@@ -117,7 +117,7 @@ class ContactControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/contact');
 
         // Vérifier que la page contient les informations de contact
-        $this->assertSelectorExists('a[href="mailto:contact@vitegourmand.fr"]');
+        $this->assertSelectorExists('a[href="mailto:contact@maxencedupuis.com"]');
         $this->assertSelectorExists('a[href="tel:+33556123456"]');
     }
 }

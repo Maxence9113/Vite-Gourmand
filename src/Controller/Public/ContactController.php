@@ -25,7 +25,7 @@ class ContactController extends AbstractController
             $data = $form->getData();
 
             try {
-                // Envoi de l'email via le service
+                // Envoi de l'email à l'entreprise
                 $emailService->sendContactEmail(
                     senderName: $data['name'],
                     senderEmail: $data['email'],
@@ -33,8 +33,15 @@ class ContactController extends AbstractController
                     message: $data['message']
                 );
 
+                // Envoi de l'email de confirmation au visiteur
+                $emailService->sendContactConfirmationEmail(
+                    senderName: $data['name'],
+                    senderEmail: $data['email'],
+                    subject: $data['subject']
+                );
+
                 // Message de succès
-                $this->addFlash('success', 'Votre message a bien été envoyé ! Nous vous répondrons dans les plus brefs délais.');
+                $this->addFlash('success', 'Votre message a bien été envoyé ! Un email de confirmation vous a été envoyé. Nous vous répondrons dans les plus brefs délais.');
 
                 // Redirection pour éviter la resoumission du formulaire
                 return $this->redirectToRoute('app_contact');

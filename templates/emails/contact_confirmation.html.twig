@@ -1,10 +1,10 @@
-{# Template d'email de bienvenue pour les nouveaux utilisateurs #}
+{# Template d'email de confirmation après envoi du formulaire de contact #}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bienvenue chez Vite & Gourmand</title>
+    <title>Confirmation de votre message</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -38,22 +38,18 @@
         .content p {
             margin-bottom: 15px;
         }
-        .cta-button {
-            display: inline-block;
-            background-color: #0d6efd;
-            color: #ffffff;
-            text-decoration: none;
-            padding: 12px 30px;
-            border-radius: 5px;
-            margin: 20px 0;
-            font-weight: bold;
-        }
         .highlight-box {
             background-color: #f8f9fa;
             border-left: 4px solid #0d6efd;
             padding: 15px;
             margin: 20px 0;
             border-radius: 4px;
+        }
+        .info-item {
+            margin: 10px 0;
+        }
+        .info-item strong {
+            color: #0d6efd;
         }
         .footer {
             margin-top: 30px;
@@ -68,35 +64,25 @@
 <body>
     <div class="email-container">
         <div class="header">
-            <h1>Bienvenue chez Vite & Gourmand !</h1>
+            <h1>Message bien reçu !</h1>
         </div>
 
         <div class="content">
-            <p>Bonjour {{ firstname }} {{ lastname }},</p>
+            <p>Bonjour {{ senderName }},</p>
 
-            <p>Nous sommes ravis de vous compter parmi nos clients !</p>
-
-            <p>Votre compte a été créé avec succès. Vous pouvez désormais profiter de tous nos services :</p>
+            <p>Nous avons bien reçu votre message et nous vous en remercions.</p>
 
             <div class="highlight-box">
-                <ul>
-                    <li>Parcourir notre sélection de menus pour tous vos événements</li>
-                    <li>Commander en quelques clics</li>
-                    <li>Suivre vos commandes en temps réel</li>
-                    <li>Laisser des avis sur nos prestations</li>
-                    <li>Gérer vos informations personnelles</li>
-                </ul>
+                <div class="info-item">
+                    <strong>Sujet :</strong> {{ subject }}
+                </div>
             </div>
 
-            <p style="text-align: center;">
-                <a href="{{ url('app_menu_catalog') }}" class="cta-button">Découvrir nos menus</a>
-            </p>
+            <p>Notre équipe va étudier votre demande et vous répondra dans les <strong>plus brefs délais</strong>, généralement sous 48 heures ouvrées.</p>
 
-            <p>Depuis 25 ans, nous proposons des prestations de qualité pour vos événements à Bordeaux et ses alentours. Notre équipe de professionnels est à votre service pour faire de chaque moment un instant gourmand inoubliable.</p>
+            <p>Si votre demande est urgente, n'hésitez pas à nous contacter directement par téléphone.</p>
 
-            <p>Si vous avez des questions, n'hésitez pas à nous contacter.</p>
-
-            <p>À très bientôt,<br>
+            <p>Cordialement,<br>
             <strong>L'équipe Vite & Gourmand</strong></p>
         </div>
 
