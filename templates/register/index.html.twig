@@ -156,24 +156,10 @@
     </div>
 </div>
 
-<script>
-function togglePasswordVisibility(inputId, button) {
-    const input = document.getElementById(inputId);
-    const icon = button.querySelector('i');
 
-    if (input.type === 'password') {
-        input.type = 'text';
-        icon.setAttribute('data-feather', 'eye-off');
-    } else {
-        input.type = 'password';
-        icon.setAttribute('data-feather', 'eye');
-    }
+{% endblock %}
 
-    // Réinitialiser les icônes Feather
-    if (typeof feather !== 'undefined') {
-        feather.replace();
-    }
-}
-</script>
-
+{% block javascripts %}
+    {{ parent() }}
+    {{ importmap('password-toggle') }}
 {% endblock %}

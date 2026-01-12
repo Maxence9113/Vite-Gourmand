@@ -26,6 +26,27 @@
 
     /* Couleurs de fond */
     --bg-soft: #F5F2EE;      /* Fond doux beige */
+
+    /* ========================================
+       OVERRIDE DES VARIABLES BOOTSTRAP
+       Pour remplacer le bleu par défaut par nos couleurs
+       ======================================== */
+    --bs-primary: #9B5366;
+    --bs-primary-rgb: 155, 83, 102;
+    --bs-secondary: #C9A961;
+    --bs-secondary-rgb: 201, 169, 97;
+    --bs-success: #6BAA75;
+    --bs-success-rgb: 107, 170, 117;
+    --bs-danger: #D97076;
+    --bs-danger-rgb: 217, 112, 118;
+    --bs-warning: #E8B563;
+    --bs-warning-rgb: 232, 181, 99;
+    --bs-info: #6BA5B8;
+    --bs-info-rgb: 107, 165, 184;
+    --bs-light: #FAF8F5;
+    --bs-light-rgb: 250, 248, 245;
+    --bs-dark: #3A3A3A;
+    --bs-dark-rgb: 58, 58, 58;
 }
 
 /* ========================================
@@ -162,11 +183,14 @@ main {
     transition: all 0.3s ease;
 }
 
-.btn-primary:hover {
-    background-color: var(--primary-dark);
-    border-color: var(--primary-dark);
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+    background-color: var(--primary-dark) !important;
+    border-color: var(--primary-dark) !important;
+    color: var(--white) !important;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(139, 21, 56, 0.3);
+    box-shadow: 0 4px 12px rgba(155, 83, 102, 0.4) !important;
 }
 
 .btn-secondary {
@@ -176,9 +200,12 @@ main {
     font-weight: 600;
 }
 
-.btn-secondary:hover {
-    background-color: var(--secondary-dark);
-    border-color: var(--secondary-dark);
+.btn-secondary:hover,
+.btn-secondary:focus,
+.btn-secondary:active {
+    background-color: var(--secondary-dark) !important;
+    border-color: var(--secondary-dark) !important;
+    color: var(--dark) !important;
 }
 
 .btn-outline-primary {
@@ -186,10 +213,12 @@ main {
     color: var(--primary);
 }
 
-.btn-outline-primary:hover {
-    background-color: var(--primary);
-    border-color: var(--primary);
-    color: var(--white);
+.btn-outline-primary:hover,
+.btn-outline-primary:focus,
+.btn-outline-primary:active {
+    background-color: var(--primary) !important;
+    border-color: var(--primary) !important;
+    color: var(--white) !important;
 }
 
 /* ========================================

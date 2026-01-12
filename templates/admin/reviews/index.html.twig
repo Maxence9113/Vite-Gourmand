@@ -1,6 +1,7 @@
 {% extends 'admin/base_admin.html.twig' %}
 
 {% block title %}Gestion des Avis{% endblock %}
+{% block page_title %}Gestion des Avis Clients{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
@@ -159,7 +160,7 @@
                                 <form method="post"
                                       action="{{ path('app_admin_reviews_delete', {id: review.id}) }}"
                                       style="display: inline;"
-                                      onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet avis ?')">
+                                      data-confirm="Êtes-vous sûr de vouloir supprimer cet avis ?">
                                     <button type="submit" class="btn btn-sm btn-danger" title="Supprimer">
                                         <i data-feather="trash-2" width="16"></i>
                                     </button>
@@ -189,72 +190,80 @@
     </div>
 </div>
 
-{# Script pour la recherche, le filtrage et le tri #}
-<script src="{{ asset('table-sort.js') }}"></script>
-<script>
-    // Initialiser le tri du tableau (exclure les colonnes Commentaire et Actions)
-    initTableSort('reviewsTable', {
-        excludeColumns: [3, 5]
-    });
+{% endblock %}
 
-    document.addEventListener('DOMContentLoaded', function() {
-        const searchInput = document.getElementById('searchInput');
-        const filterStatus = document.getElementById('filterStatus');
-        const rows = document.querySelectorAll('.review-row');
+{% block javascripts %}
+    {{ parent() }}
+    {{ importmap('table-search') }}
+    {{ importmap('confirmation-dialog') }}
+    <script src="{{ asset('table-sort.js') }}"></script>
+    <script>
+        // Initialiser le tri du tableau
+        initTableSort('reviewsTable', {
+            excludeColumns: [3, 5]
+        });
 
-        function filterRows() {
-            const searchTerm = searchInput?.value.toLowerCase() || '';
-            const statusFilter = filterStatus?.value || 'all';
+        // Initialiser la recherche en temps réel
+        initTableSearch('searchInput', '.review-row');
 
-            rows.forEach(row => {
-                const text = row.textContent.toLowerCase();
-                const status = row.dataset.status;
+        // Filtre par statut
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterStatus = document.getElementById('filterStatus');
+            const rows = document.querySelectorAll('.review-row');
 
-                const matchesSearch = text.includes(searchTerm);
-                const matchesStatus = statusFilter === 'all' || status === statusFilter;
+            filterStatus?.addEventListener('change', function() {
+                const statusFilter = this.value;
 
-                row.style.display = matchesSearch && matchesStatus ? '' : 'none';
+                rows.forEach(row => {
+                    const status = row.dataset.status;
+                    const matchesStatus = statusFilter === 'all' || status === statusFilter;
+
+                    if (!matchesStatus) {
+                        row.style.display = 'none';
+                    } else if (row.style.display === 'none') {
+                        row.style.display = '';
+                    }
+                });
             });
+        });
+
+        function toggleComment(id) {
+            const preview = document.getElementById('preview-' + id);
+            const full = document.getElementById('full-' + id);
+
+            preview.classList.toggle('d-none');
+            full.classList.toggle('d-none');
+        }
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .rating-stars {
+            display: flex;
+            gap: 0.125rem;
         }
 
-        searchInput?.addEventListener('input', filterRows);
-        filterStatus?.addEventListener('change', filterRows);
-    });
+        .rating-stars .star-filled {
+            color: #ffc107;
+            fill: #ffc107;
+            stroke: #f59e0b;
+            stroke-width: 1.5;
+        }
 
-    function toggleComment(id) {
-        const preview = document.getElementById('preview-' + id);
-        const full = document.getElementById('full-' + id);
+        .rating-stars .star-empty {
+            color: #e5e7eb;
+            fill: #f3f4f6;
+            stroke: #d1d5db;
+            stroke-width: 1.5;
+        }
 
-        preview.classList.toggle('d-none');
-        full.classList.toggle('d-none');
-    }
-</script>
-
-<style>
-    .rating-stars {
-        display: flex;
-        gap: 0.125rem;
-    }
-
-    .rating-stars .star-filled {
-        color: #ffc107;
-        fill: #ffc107;
-        stroke: #f59e0b;
-        stroke-width: 1.5;
-    }
-
-    .rating-stars .star-empty {
-        color: #e5e7eb;
-        fill: #f3f4f6;
-        stroke: #d1d5db;
-        stroke-width: 1.5;
-    }
-
-    .comment-preview {
-        max-width: 300px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-</style>
+        .comment-preview {
+            max-width: 300px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    </style>
 {% endblock %}

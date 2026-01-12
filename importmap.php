@@ -20,6 +20,22 @@ return [
         'path' => './assets/admin-recipe-illustrations.js',
         'entrypoint' => true,
     ],
+    'table-search' => [
+        'path' => './assets/table-search.js',
+        'entrypoint' => true,
+    ],
+    'password-validator' => [
+        'path' => './assets/password-validator.js',
+        'entrypoint' => true,
+    ],
+    'password-toggle' => [
+        'path' => './assets/password-toggle.js',
+        'entrypoint' => true,
+    ],
+    'confirmation-dialog' => [
+        'path' => './assets/confirmation-dialog.js',
+        'entrypoint' => true,
+    ],
     '@hotwired/stimulus' => [
         'version' => '3.2.2',
     ],

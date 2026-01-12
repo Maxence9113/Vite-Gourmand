@@ -150,7 +150,7 @@
                     <form method="post"
                           action="{{ path('app_admin_themes_delete', {id: theme.id}) }}"
                           style="display: inline;"
-                          onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer le thème « {{ theme.name }} » ?')">
+                          data-confirm="Êtes-vous sûr de vouloir supprimer le thème « {{ theme.name }} » ?">
                         <button type="submit" class="btn btn-danger">
                             Supprimer
                         </button>
@@ -172,22 +172,20 @@
     </div>
 </div>
 
-<script src="{{ asset('table-sort.js') }}"></script>
-<script>
-    // Initialiser le tri du tableau (exclure la dernière colonne "Actions")
-    initTableSort('themesTable', {
-        excludeColumns: [3]
-    });
+{% endblock %}
 
-    // Recherche en temps réel
-    document.getElementById('searchInput')?.addEventListener('input', function(e) {
-        const searchTerm = e.target.value.toLowerCase();
-        const rows = document.querySelectorAll('.theme-row');
-
-        rows.forEach(row => {
-            const text = row.textContent.toLowerCase();
-            row.style.display = text.includes(searchTerm) ? '' : 'none';
+{% block javascripts %}
+    {{ parent() }}
+    {{ importmap('table-search') }}
+    {{ importmap('confirmation-dialog') }}
+    <script src="{{ asset('table-sort.js') }}"></script>
+    <script>
+        // Initialiser le tri du tableau
+        initTableSort('themesTable', {
+            excludeColumns: [3]
         });
-    });
-</script>
+
+        // Initialiser la recherche en temps réel
+        initTableSearch('searchInput', '.theme-row');
+    </script>
 {% endblock %}

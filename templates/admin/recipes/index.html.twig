@@ -78,7 +78,7 @@
                                     Modifier
                                 </a>
                                 <form method="post" action="{{ path('app_admin_recipes_delete', {id: recipe.id}) }}" style="display: inline;"
-                                      onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer la recette « {{ recipe.title }} » ?')">
+                                      data-confirm="Êtes-vous sûr de vouloir supprimer la recette « {{ recipe.title }} » ?">
                                     <button type="submit" class="btn btn-sm btn-danger" title="Supprimer">
                                         Supprimer
                                     </button>
@@ -106,23 +106,20 @@
     </div>
 </div>
 
-{# Script pour la recherche en temps réel et le tri #}
-<script src="{{ asset('table-sort.js') }}"></script>
-<script>
-    // Initialiser le tri du tableau (exclure la dernière colonne "Actions")
-    initTableSort('recipesTable', {
-        excludeColumns: [5]
-    });
+{% endblock %}
 
-    // Recherche en temps réel
-    document.getElementById('searchInput')?.addEventListener('input', function(e) {
-        const searchTerm = e.target.value.toLowerCase();
-        const rows = document.querySelectorAll('.recipe-row');
-
-        rows.forEach(row => {
-            const text = row.textContent.toLowerCase();
-            row.style.display = text.includes(searchTerm) ? '' : 'none';
+{% block javascripts %}
+    {{ parent() }}
+    {{ importmap('table-search') }}
+    {{ importmap('confirmation-dialog') }}
+    <script src="{{ asset('table-sort.js') }}"></script>
+    <script>
+        // Initialiser le tri du tableau
+        initTableSort('recipesTable', {
+            excludeColumns: [5]
         });
-    });
-</script>
+
+        // Initialiser la recherche en temps réel
+        initTableSearch('searchInput', '.recipe-row');
+    </script>
 {% endblock %}
