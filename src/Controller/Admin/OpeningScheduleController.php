@@ -4,7 +4,9 @@ namespace App\Controller\Admin;
 
 use App\Entity\OpeningSchedule;
 use App\Enum\DayOfWeek;
+use App\Form\BulkOpeningScheduleType;
 use App\Form\OpeningScheduleType;
+use App\Repository\OpeningScheduleRepository;
 use App\Service\OpeningScheduleManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,13 +25,58 @@ class OpeningScheduleController extends AbstractController
     ) {
     }
 
-    #[Route('', name: 'app_admin_opening_schedule_index', methods: ['GET'])]
-    public function index(): Response
+    #[Route('', name: 'app_admin_opening_schedule_index', methods: ['GET', 'POST'])]
+    public function index(Request $request, OpeningScheduleRepository $repository): Response
     {
+        $form = $this->createForm(BulkOpeningScheduleType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $days = $data['days'];
+            $isOpen = $data['isOpen'] ?? false;
+            $openingTime = $data['openingTime'];
+            $closingTime = $data['closingTime'];
+
+            // Convertir DateTime en DateTimeImmutable si nécessaire
+            $openingTimeImmutable = $openingTime instanceof \DateTime
+                ? \DateTimeImmutable::createFromMutable($openingTime)
+                : $openingTime;
+            $closingTimeImmutable = $closingTime instanceof \DateTime
+                ? \DateTimeImmutable::createFromMutable($closingTime)
+                : $closingTime;
+
+            // Si des horaires sont fournis, le restaurant est automatiquement ouvert
+            if ($openingTimeImmutable && $closingTimeImmutable) {
+                $isOpen = true;
+            }
+
+            foreach ($days as $day) {
+                $schedule = $repository->findOneBy(['dayOfWeek' => $day]);
+
+                if (!$schedule) {
+                    $schedule = new OpeningSchedule();
+                    $schedule->setDayOfWeek($day);
+                    $this->entityManager->persist($schedule);
+                }
+
+                $schedule->setIsOpen($isOpen);
+                $schedule->setOpeningTime($openingTimeImmutable);
+                $schedule->setClosingTime($closingTimeImmutable);
+            }
+
+            $this->entityManager->flush();
+
+            $this->addFlash('success', 'Horaires modifiés avec succès pour ' . count($days) . ' jour(s).');
+
+            return $this->redirectToRoute('app_admin_opening_schedule_index');
+        }
+
         $schedules = $this->openingScheduleManager->getFormattedSchedules();
 
         return $this->render('admin/opening_schedule/index.html.twig', [
             'schedules' => $schedules,
+            'form' => $form,
         ]);
     }
 
@@ -52,6 +99,53 @@ class OpeningScheduleController extends AbstractController
         return $this->render('admin/opening_schedule/new.html.twig', [
             'form' => $form,
             'opening_schedule' => $openingSchedule,
+        ]);
+    }
+
+    #[Route('/edition-masse', name: 'app_admin_opening_schedule_bulk_edit', methods: ['GET', 'POST'])]
+    public function bulkEdit(Request $request, OpeningScheduleRepository $repository): Response
+    {
+        $form = $this->createForm(BulkOpeningScheduleType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $days = $data['days'];
+            $isOpen = $data['isOpen'] ?? false; // Gérer le cas où la checkbox n'est pas cochée
+            $openingTime = $data['openingTime'];
+            $closingTime = $data['closingTime'];
+
+            // Convertir DateTime en DateTimeImmutable si nécessaire
+            $openingTimeImmutable = $openingTime instanceof \DateTime
+                ? \DateTimeImmutable::createFromMutable($openingTime)
+                : $openingTime;
+            $closingTimeImmutable = $closingTime instanceof \DateTime
+                ? \DateTimeImmutable::createFromMutable($closingTime)
+                : $closingTime;
+
+            foreach ($days as $day) {
+                $schedule = $repository->findOneBy(['dayOfWeek' => $day]);
+
+                if (!$schedule) {
+                    $schedule = new OpeningSchedule();
+                    $schedule->setDayOfWeek($day);
+                    $this->entityManager->persist($schedule);
+                }
+
+                $schedule->setIsOpen($isOpen);
+                $schedule->setOpeningTime($openingTimeImmutable);
+                $schedule->setClosingTime($closingTimeImmutable);
+            }
+
+            $this->entityManager->flush();
+
+            $this->addFlash('success', 'Horaires modifiés avec succès pour ' . count($days) . ' jour(s).');
+
+            return $this->redirectToRoute('app_admin_opening_schedule_index');
+        }
+
+        return $this->render('admin/opening_schedule/bulk_edit.html.twig', [
+            'form' => $form,
         ]);
     }
 

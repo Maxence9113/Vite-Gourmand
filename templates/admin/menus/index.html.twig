@@ -1,123 +1,210 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/base_admin.html.twig' %}
 
 {% block title %}Gestion des Menus{% endblock %}
+{% block page_title %}Gestion des Menus{% endblock %}
 
-{% block body %}
-<div class="container mt-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>Gestion des Menus</h1>
-        <div>
-            <a href="{{ path('app_admin_dashboard') }}" class="btn btn-secondary">Retour au Dashboard</a>
-            <a href="{{ path('app_admin_menus_new') }}" class="btn btn-success">Ajouter un menu</a>
-        </div>
+{% block content %}
+<style>
+    .action-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+
+    .btn-add {
+        background: #27ae60;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: background 0.2s;
+    }
+
+    .btn-add:hover {
+        background: #229954;
+        color: white;
+    }
+
+    .search-box {
+        max-width: 400px;
+    }
+
+    .search-box input {
+        width: 100%;
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 0.95rem;
+    }
+
+    .table-container {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table th {
+        text-align: left;
+        padding: 12px;
+        border-bottom: 2px solid #e9ecef;
+        color: #7f8c8d;
+        font-weight: 600;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .table td {
+        padding: 12px;
+        border-bottom: 1px solid #e9ecef;
+        vertical-align: middle;
+    }
+
+    .table tbody tr:hover {
+        background: #f8f9fa;
+    }
+
+    .btn {
+        padding: 6px 12px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-size: 0.85rem;
+        display: inline-block;
+        margin-right: 5px;
+        transition: all 0.2s;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-warning {
+        background: #f39c12;
+        color: white;
+    }
+
+    .btn-warning:hover {
+        background: #d68910;
+        color: white;
+    }
+
+    .btn-danger {
+        background: #e74c3c;
+        color: white;
+    }
+
+    .btn-danger:hover {
+        background: #c0392b;
+        color: white;
+    }
+
+    .badge {
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        margin-right: 4px;
+        display: inline-block;
+    }
+
+    .badge-primary {
+        background: #3498db;
+        color: white;
+    }
+
+    .badge-success {
+        background: #27ae60;
+        color: white;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #95a5a6;
+    }
+</style>
+
+<div class="action-bar">
+    <div class="search-box">
+        <input type="text" placeholder="🔍 Rechercher un menu..." id="searchInput">
     </div>
+    <a href="{{ path('app_admin_menus_new') }}" class="btn-add">+ Ajouter un menu</a>
+</div>
 
-    {# Afficher les messages flash #}
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    {% endfor %}
+<div class="table-container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nom</th>
+                <th>Thème</th>
+                <th>Régimes</th>
+                <th>Prix/pers</th>
+                <th>Min. pers.</th>
+                <th>Recettes</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for menu in menus %}
+            <tr class="menu-row">
+                <td><strong>#{{ menu.id }}</strong></td>
+                <td>{{ menu.name }}</td>
+                <td><span class="badge badge-primary">{{ menu.theme.name }}</span></td>
+                <td>
+                    {% if menu.dietetary|length > 0 %}
+                        {% for diet in menu.dietetary %}
+                            <span class="badge badge-success">{{ diet.name }}</span>
+                        {% endfor %}
+                    {% else %}
+                        <span style="color: #95a5a6;">-</span>
+                    {% endif %}
+                </td>
+                <td>{{ menu.pricePerPerson|number_format(2, ',', ' ') }} €</td>
+                <td>{{ menu.nbPersonMin }}</td>
+                <td>{{ menu.recipes|length }}</td>
+                <td>
+                    <a href="{{ path('app_admin_menus_edit', {id: menu.id}) }}" class="btn btn-warning">
+                        Modifier
+                    </a>
+                    <form method="post"
+                          action="{{ path('app_admin_menus_delete', {id: menu.id}) }}"
+                          style="display: inline;"
+                          onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer le menu « {{ menu.name }} » ?')">
+                        <button type="submit" class="btn btn-danger">
+                            Supprimer
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="8" class="empty-state">
+                    Aucun menu trouvé. <a href="{{ path('app_admin_menus_new') }}" style="color: #3498db;">Créer un nouveau menu</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-    {% for message in app.flashes('error') %}
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    {% endfor %}
-
-    {# Barre de recherche #}
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <input type="text" class="form-control" placeholder="Rechercher un menu..." id="searchInput">
-        </div>
-    </div>
-
-    {# Grille des menus avec cartes #}
-    <div class="row" id="menusGrid">
-        {% for menu in menus %}
-        <div class="col-md-6 col-lg-4 mb-4 menu-card">
-            <div class="card h-100">
-                {% if menu.illustration %}
-                    <img src="{{ menu.illustration }}"
-                         class="card-img-top"
-                         alt="{{ menu.textAlt ?: menu.name }}"
-                         style="height: 200px; object-fit: cover;">
-                {% else %}
-                    <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
-                        <span class="text-white">Pas d'image</span>
-                    </div>
-                {% endif %}
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title">{{ menu.name }}</h5>
-
-                    <div class="mb-2">
-                        <span class="badge bg-primary">{{ menu.theme.name }}</span>
-                        {% if menu.dietetary|length > 0 %}
-                            {% for diet in menu.dietetary %}
-                                <span class="badge bg-success">{{ diet.name }}</span>
-                            {% endfor %}
-                        {% endif %}
-                    </div>
-
-                    <p class="card-text flex-grow-1">
-                        {{ menu.description|length > 120 ? menu.description|slice(0, 120) ~ '...' : menu.description }}
-                    </p>
-
-                    <div class="mb-2">
-                        <small class="text-muted">
-                            <strong>Min:</strong> {{ menu.nbPersonMin }} pers. |
-                            <strong>Prix:</strong> {{ menu.pricePerPerson|number_format(2, ',', ' ') }} €/pers.
-                        </small>
-                        <br>
-                        <small class="text-muted">
-                            <strong>Recettes:</strong> {{ menu.recipes|length }}
-                        </small>
-                    </div>
-
-                    <div class="btn-group mt-2" role="group">
-                        <a href="{{ path('app_admin_menus_edit', {id: menu.id}) }}" class="btn btn-sm btn-warning">
-                            Modifier
-                        </a>
-                        <form method="post"
-                              action="{{ path('app_admin_menus_delete', {id: menu.id}) }}"
-                              style="display: inline;"
-                              onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer le menu « {{ menu.name }} » ?')">
-                            <button type="submit" class="btn btn-sm btn-danger">
-                                Supprimer
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% else %}
-        <div class="col-12">
-            <div class="alert alert-info text-center">
-                Aucun menu trouvé. <a href="{{ path('app_admin_menus_new') }}" class="alert-link">Créer un nouveau menu</a>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-
-    {# Informations sur le nombre de menus #}
-    <div class="mt-3">
-        <p class="text-muted">
-            Total : <strong>{{ menus|length }}</strong> menu(s)
-        </p>
+    <div style="margin-top: 20px; color: #7f8c8d; font-size: 0.9rem;">
+        Total : <strong>{{ menus|length }}</strong> menu(s)
     </div>
 </div>
 
-{# Script pour la recherche en temps réel #}
 <script>
     document.getElementById('searchInput')?.addEventListener('input', function(e) {
         const searchTerm = e.target.value.toLowerCase();
-        const cards = document.querySelectorAll('.menu-card');
+        const rows = document.querySelectorAll('.menu-row');
 
-        cards.forEach(card => {
-            const text = card.textContent.toLowerCase();
-            card.style.display = text.includes(searchTerm) ? '' : 'none';
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.style.display = text.includes(searchTerm) ? '' : 'none';
         });
     });
 </script>
