@@ -64,3 +64,15 @@ ALTER TABLE `order` ADD CONSTRAINT FK_F5299398A76ED395 FOREIGN KEY (user_id) REF
 ALTER TABLE `order` ADD CONSTRAINT FK_F52993983E2E969B FOREIGN KEY (review_id) REFERENCES review (id);
 
 ALTER TABLE password_reset_token ADD CONSTRAINT FK_6B7BA4B6A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE;
+
+-- Administrateur José (ROLE_ADMIN)
+-- Mot de passe: Admin1234!@
+INSERT INTO user (email, firstname, lastname, roles, password, is_enabled) 
+VALUES (
+    'jose@vitegourmand.fr',
+    'José',
+    'Martinez',
+    '["ROLE_ADMIN"]',
+    '$2y$13$8JWNJQ4tE6llhMYhqVYIy.r1PR/OP3KBydOWiVaAzV20xXvv69hDe',
+    1
+);

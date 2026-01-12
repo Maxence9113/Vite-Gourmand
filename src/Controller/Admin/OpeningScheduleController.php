@@ -112,6 +112,7 @@ class OpeningScheduleController extends AbstractController
             DayOfWeek::SUNDAY => [null, null, false],
         ];
 
+        /** @var DayOfWeek $day */
         foreach ($defaultSchedules as $day => $data) {
             $schedule = new OpeningSchedule();
             $schedule->setDayOfWeek($day);
