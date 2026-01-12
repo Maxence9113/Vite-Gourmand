@@ -36,6 +36,36 @@ return [
         'path' => './assets/confirmation-dialog.js',
         'entrypoint' => true,
     ],
+    'admin-dashboard-styles' => [
+        'path' => './assets/styles/admin/dashboard.css',
+        'type' => 'css',
+        'entrypoint' => true,
+    ],
+    'admin-themes-list-styles' => [
+        'path' => './assets/styles/admin/themes-list.css',
+        'type' => 'css',
+        'entrypoint' => true,
+    ],
+    'admin-opening-schedule-styles' => [
+        'path' => './assets/styles/admin/opening-schedule.css',
+        'type' => 'css',
+        'entrypoint' => true,
+    ],
+    'admin-menu-form-styles' => [
+        'path' => './assets/styles/admin/menu-form.css',
+        'type' => 'css',
+        'entrypoint' => true,
+    ],
+    'admin-menus-list-styles' => [
+        'path' => './assets/styles/admin/menus-list.css',
+        'type' => 'css',
+        'entrypoint' => true,
+    ],
+    'admin-reviews-styles' => [
+        'path' => './assets/styles/admin/reviews.css',
+        'type' => 'css',
+        'entrypoint' => true,
+    ],
     '@hotwired/stimulus' => [
         'version' => '3.2.2',
     ],
