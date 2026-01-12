@@ -1,0 +1,63 @@
+/**
+ * Styles pour le système de tri des tableaux
+ */
+
+/* En-têtes triables */
+th.sortable {
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    padding-right: 25px !important;
+    transition: background-color 0.2s ease;
+}
+
+th.sortable:hover {
+    background-color: rgba(13, 110, 253, 0.05);
+}
+
+/* Indicateur de tri */
+.sort-indicator {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.3;
+    font-size: 0.9em;
+    transition: all 0.2s ease;
+    font-weight: normal;
+}
+
+/* Indicateur actif */
+th.sortable .sort-indicator.active {
+    opacity: 1;
+    color: #0d6efd;
+    font-weight: bold;
+}
+
+/* Animation au survol */
+th.sortable:hover .sort-indicator {
+    opacity: 0.6;
+}
+
+/* Style pour les tableaux avec tri */
+.table-sortable {
+    position: relative;
+}
+
+/* Effet de transition lors du tri */
+.table-sortable tbody tr {
+    transition: all 0.3s ease;
+}
+
+/* Responsive: ajuster l'espacement sur mobile */
+@media (max-width: 768px) {
+    th.sortable {
+        padding-right: 20px !important;
+        font-size: 0.9em;
+    }
+
+    .sort-indicator {
+        right: 5px;
+        font-size: 0.8em;
+    }
+}

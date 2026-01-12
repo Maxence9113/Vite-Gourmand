@@ -36,7 +36,7 @@
     {# Tableau des recettes #}
     <div class="card">
         <div class="card-body">
-            <table class="table table-hover">
+            <table class="table table-hover table-sortable" id="recipesTable">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -49,18 +49,18 @@
                 </thead>
                 <tbody>
                     {% for recipe in recipes %}
-                    <tr>
+                    <tr class="recipe-row">
                         <td>{{ recipe.id }}</td>
                         <td>{{ recipe.title }}</td>
                         <td>{{ recipe.description|length > 50 ? recipe.description|slice(0, 50) ~ '...' : recipe.description }}</td>
-                        <td>
+                        <td data-sort="{% if recipe.category %}{{ recipe.category.name }}{% else %}Non défini{% endif %}">
                             {% if recipe.category %}
                                 <span class="badge bg-info">{{ recipe.category.name }}</span>
                             {% else %}
                                 <span class="badge bg-secondary">Non défini</span>
                             {% endif %}
                         </td>
-                        <td>
+                        <td data-sort="{% if recipe.allergen|length > 0 %}{% for allergen in recipe.allergen %}{{ allergen.name }} {% endfor %}{% else %}Aucun{% endif %}">
                             {% if recipe.allergen|length > 0 %}
                                 {% for allergen in recipe.allergen %}
                                     <span class="badge bg-warning text-dark">{{ allergen.name }}</span>
@@ -106,11 +106,18 @@
     </div>
 </div>
 
-{# Script pour la recherche en temps réel (optionnel) #}
+{# Script pour la recherche en temps réel et le tri #}
+<script src="{{ asset('table-sort.js') }}"></script>
 <script>
+    // Initialiser le tri du tableau (exclure la dernière colonne "Actions")
+    initTableSort('recipesTable', {
+        excludeColumns: [5]
+    });
+
+    // Recherche en temps réel
     document.getElementById('searchInput')?.addEventListener('input', function(e) {
         const searchTerm = e.target.value.toLowerCase();
-        const rows = document.querySelectorAll('tbody tr');
+        const rows = document.querySelectorAll('.recipe-row');
 
         rows.forEach(row => {
             const text = row.textContent.toLowerCase();

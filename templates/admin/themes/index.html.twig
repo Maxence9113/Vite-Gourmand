@@ -126,7 +126,7 @@
 </div>
 
 <div class="table-container">
-    <table class="table">
+    <table class="table table-sortable" id="themesTable">
         <thead>
             <tr>
                 <th>#</th>
@@ -172,7 +172,14 @@
     </div>
 </div>
 
+<script src="{{ asset('table-sort.js') }}"></script>
 <script>
+    // Initialiser le tri du tableau (exclure la dernière colonne "Actions")
+    initTableSort('themesTable', {
+        excludeColumns: [3]
+    });
+
+    // Recherche en temps réel
     document.getElementById('searchInput')?.addEventListener('input', function(e) {
         const searchTerm = e.target.value.toLowerCase();
         const rows = document.querySelectorAll('.theme-row');

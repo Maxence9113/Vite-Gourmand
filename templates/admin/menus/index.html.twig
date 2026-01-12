@@ -137,7 +137,7 @@
 </div>
 
 <div class="table-container">
-    <table class="table">
+    <table class="table table-sortable" id="menusTable">
         <thead>
             <tr>
                 <th>#</th>
@@ -155,8 +155,8 @@
             <tr class="menu-row">
                 <td><strong>#{{ menu.id }}</strong></td>
                 <td>{{ menu.name }}</td>
-                <td><span class="badge badge-primary">{{ menu.theme.name }}</span></td>
-                <td>
+                <td data-sort="{{ menu.theme.name }}"><span class="badge badge-primary">{{ menu.theme.name }}</span></td>
+                <td data-sort="{% if menu.dietetary|length > 0 %}{% for diet in menu.dietetary %}{{ diet.name }} {% endfor %}{% else %}-{% endif %}">
                     {% if menu.dietetary|length > 0 %}
                         {% for diet in menu.dietetary %}
                             <span class="badge badge-success">{{ diet.name }}</span>
@@ -165,9 +165,9 @@
                         <span style="color: #95a5a6;">-</span>
                     {% endif %}
                 </td>
-                <td>{{ menu.pricePerPerson|number_format(2, ',', ' ') }} €</td>
+                <td data-sort="{{ menu.pricePerPerson }}">{{ menu.pricePerPerson|number_format(2, ',', ' ') }} €</td>
                 <td>{{ menu.nbPersonMin }}</td>
-                <td>{{ menu.recipes|length }}</td>
+                <td data-sort="{{ menu.recipes|length }}">{{ menu.recipes|length }}</td>
                 <td>
                     <a href="{{ path('app_admin_menus_edit', {id: menu.id}) }}" class="btn btn-warning">
                         Modifier
@@ -197,7 +197,14 @@
     </div>
 </div>
 
+<script src="{{ asset('table-sort.js') }}"></script>
 <script>
+    // Initialiser le tri du tableau (exclure la dernière colonne "Actions")
+    initTableSort('menusTable', {
+        excludeColumns: [7]
+    });
+
+    // Recherche en temps réel
     document.getElementById('searchInput')?.addEventListener('input', function(e) {
         const searchTerm = e.target.value.toLowerCase();
         const rows = document.querySelectorAll('.menu-row');
