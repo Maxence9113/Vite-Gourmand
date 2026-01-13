@@ -28,7 +28,8 @@
 ###< phpunit/phpunit ###
 
 ###> symfony/asset-mapper ###
-/public/assets/
+# Les assets compilés ne sont pas ignorés pour Heroku
+# Mais on ignore les vendors d'asset-mapper en développement
 /assets/vendor/
 ###< symfony/asset-mapper ###
 
