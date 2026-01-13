@@ -28,10 +28,11 @@ class CreateAdminCommand extends Command
     protected function configure(): void
     {
         $this
-            ->addOption('email', null, InputOption::VALUE_OPTIONAL, 'Email de l\'admin', 'jose@vitegourmand.fr')
+            ->addOption('email', null, InputOption::VALUE_OPTIONAL, 'Email de l\'utilisateur', 'jose@vitegourmand.fr')
             ->addOption('firstname', null, InputOption::VALUE_OPTIONAL, 'Prénom', 'José')
             ->addOption('lastname', null, InputOption::VALUE_OPTIONAL, 'Nom', 'Martinez')
             ->addOption('password', null, InputOption::VALUE_OPTIONAL, 'Mot de passe', 'Admin1234!@')
+            ->addOption('role', null, InputOption::VALUE_OPTIONAL, 'Rôle de l\'utilisateur (ROLE_ADMIN, ROLE_EMPLOYEE, ROLE_USER)', 'ROLE_ADMIN')
         ;
     }
 
@@ -43,6 +44,7 @@ class CreateAdminCommand extends Command
         $firstname = $input->getOption('firstname');
         $lastname = $input->getOption('lastname');
         $password = $input->getOption('password');
+        $role = $input->getOption('role');
 
         // Vérifier si un utilisateur avec cet email existe déjà
         $existingUser = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
@@ -52,28 +54,28 @@ class CreateAdminCommand extends Command
             return Command::FAILURE;
         }
 
-        // Créer l'utilisateur admin
-        $admin = new User();
-        $admin->setEmail($email);
-        $admin->setFirstname($firstname);
-        $admin->setLastname($lastname);
-        $admin->setRoles(['ROLE_ADMIN']);
-        $admin->setIsEnabled(true);
+        // Créer l'utilisateur
+        $user = new User();
+        $user->setEmail($email);
+        $user->setFirstname($firstname);
+        $user->setLastname($lastname);
+        $user->setRoles([$role]);
+        $user->setIsEnabled(true);
 
-        $hashedPassword = $this->passwordHasher->hashPassword($admin, $password);
-        $admin->setPassword($hashedPassword);
+        $hashedPassword = $this->passwordHasher->hashPassword($user, $password);
+        $user->setPassword($hashedPassword);
 
-        $this->entityManager->persist($admin);
+        $this->entityManager->persist($user);
         $this->entityManager->flush();
 
-        $io->success('Utilisateur administrateur créé avec succès !');
+        $io->success('Utilisateur créé avec succès !');
         $io->table(
             ['Propriété', 'Valeur'],
             [
                 ['Email', $email],
                 ['Prénom', $firstname],
                 ['Nom', $lastname],
-                ['Rôle', 'ROLE_ADMIN'],
+                ['Rôle', $role],
             ]
         );
 
