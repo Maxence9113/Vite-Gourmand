@@ -1,0 +1,129 @@
+/* ========================================
+   TYPOGRAPHIE
+   Styles typographiques selon la charte Figma
+   ======================================== */
+
+/* Titres */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--bordeaux);
+}
+
+h1 {
+    font-size: clamp(2rem, 5vw, 4rem);
+}
+
+h2 {
+    font-size: clamp(1.75rem, 4vw, 3rem);
+}
+
+h3 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+h4 {
+    font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+}
+
+h5 {
+    font-size: var(--text-lg);
+}
+
+h6 {
+    font-size: var(--text-base);
+}
+
+/* Paragraphes */
+p {
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    line-height: 1.8;
+}
+
+/* Textes spéciaux */
+.text-xs {
+    font-size: var(--text-xs);
+}
+
+.text-sm {
+    font-size: var(--text-sm);
+}
+
+.text-lg {
+    font-size: var(--text-lg);
+}
+
+.text-xl {
+    font-size: var(--text-xl);
+}
+
+/* Couleurs de texte */
+.text-bordeaux {
+    color: var(--bordeaux);
+}
+
+.text-gold {
+    color: var(--gold);
+}
+
+.text-white {
+    color: var(--white);
+}
+
+.text-dark {
+    color: var(--dark-text);
+}
+
+/* Poids de police */
+.font-light {
+    font-weight: 300;
+}
+
+.font-normal {
+    font-weight: 400;
+}
+
+.font-medium {
+    font-weight: 500;
+}
+
+.font-semibold {
+    font-weight: 600;
+}
+
+.font-bold {
+    font-weight: 700;
+}
+
+/* Familles de police */
+.font-heading {
+    font-family: var(--font-heading);
+}
+
+.font-body {
+    font-family: var(--font-body);
+}
+
+/* Alignement */
+.text-left {
+    text-align: left;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+/* Séparateur doré (élément de design Figma) */
+.divider-gold {
+    width: 96px;
+    height: 4px;
+    background-color: var(--gold);
+    border-radius: var(--radius-sm);
+    margin: var(--spacing-sm) auto;
+}
