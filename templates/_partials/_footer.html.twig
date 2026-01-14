@@ -1,124 +1,73 @@
+{# FOOTER - Copié depuis la maquette Figma #}
 <footer class="footer">
-    <div class="container py-5">
-        <div class="row g-4 justify-content-center">
+    <div class="container footer-container">
+        <div class="footer-grid">
+            {# Contact #}
+            <div class="footer-section">
+                <h3 class="footer-title">Contact</h3>
+                <div class="footer-content">
+                    <div class="footer-item">
+                        <span data-icon="map-pin" data-icon-width="20" data-icon-height="20" class="footer-icon"></span>
+                        <span>25 Rue des Chartrons<br>33000 Bordeaux</span>
+                    </div>
+                    <div class="footer-item">
+                        <span data-icon="phone" data-icon-width="20" data-icon-height="20" class="footer-icon"></span>
+                        <a href="tel:+33556123456" class="footer-link">05 56 12 34 56</a>
+                    </div>
+                    <div class="footer-item">
+                        <span data-icon="mail" data-icon-width="20" data-icon-height="20" class="footer-icon"></span>
+                        <a href="mailto:contact@vite-gourmand.fr" class="footer-link">contact@vite-gourmand.fr</a>
+                    </div>
+                </div>
+                <a href="{{ path('app_contact') }}" class="btn btn-footer">
+                    Nous contacter
+                </a>
+            </div>
 
-            {# Colonne 1 : À propos #}
-            <div class="col-lg-4 col-md-6 text-center text-lg-start">
-                <h5 class="footer-title mb-3">
-                    <i data-feather="award" width="20" class="me-2"></i>
-                    Vite & Gourmand
-                </h5>
-                <p class="footer-text">
-                    Traiteur événementiel à Bordeaux depuis 25 ans.
-                    Julie et José vous proposent des menus gastronomiques
-                    pour tous vos événements.
-                </p>
-                <div class="social-links mt-3 justify-content-center justify-content-lg-start">
-                    <a href="#" aria-label="Facebook" class="social-icon">
-                        <i data-feather="facebook" width="20"></i>
-                    </a>
-                    <a href="#" aria-label="Instagram" class="social-icon">
-                        <i data-feather="instagram" width="20"></i>
-                    </a>
-                    <a href="#" aria-label="Twitter" class="social-icon">
-                        <i data-feather="twitter" width="20"></i>
-                    </a>
-                    <a href="#" aria-label="Mail" class="social-icon">
-                        <i data-feather="mail" width="20"></i>
-                    </a>
+            {# Horaires #}
+            <div class="footer-section">
+                <h3 class="footer-title">Horaires</h3>
+                <div class="footer-content">
+                    <div class="footer-item">
+                        <span data-icon="clock" data-icon-width="20" data-icon-height="20" class="footer-icon"></span>
+                        <div class="footer-schedule">
+                            {% if opening_schedules is defined and opening_schedules is not empty %}
+                                {% for schedule in opening_schedules %}
+                                    <p>
+                                        {{ schedule.label }} :
+                                        {% if schedule.isOpen and schedule.openingTime and schedule.closingTime %}
+                                            {{ schedule.openingTime }} - {{ schedule.closingTime }}
+                                        {% else %}
+                                            <span class="text-closed">Fermé</span>
+                                        {% endif %}
+                                    </p>
+                                {% endfor %}
+                            {% else %}
+                                <p>Lundi - Vendredi : 9h - 18h</p>
+                                <p>Samedi : 10h - 16h</p>
+                                <p>Dimanche : Sur commande</p>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            {# Colonne 2 : Horaires d'ouverture (dynamiques depuis la BDD) #}
-            <div class="col-lg-4 col-md-6 text-center text-lg-start">
-                <h5 class="footer-title mb-3">
-                    <i data-feather="clock" width="20" class="me-2"></i>
-                    Horaires d'ouverture
-                </h5>
-                <ul class="list-unstyled footer-schedule">
-                    {% for schedule in opening_schedules %}
-                        <li>
-                            <span>{{ schedule.label }}</span>
-                            {% if schedule.isOpen and schedule.openingTime and schedule.closingTime %}
-                                <span class="text-secondary">{{ schedule.openingTime }} - {{ schedule.closingTime }}</span>
-                            {% else %}
-                                <span class="text-danger fw-bold">Fermé</span>
-                            {% endif %}
-                        </li>
-                    {% endfor %}
-                </ul>
+            {# Informations légales #}
+            <div class="footer-section">
+                <h3 class="footer-title">Informations légales</h3>
+                <div class="footer-content">
+                    <div class="footer-legal">
+                        <a href="{{ path('app_legal_mentions') }}" class="footer-legal-link">Mentions légales</a>
+                        <a href="{{ path('app_legal_cgv') }}" class="footer-legal-link">Conditions générales de vente</a>
+                        <a href="{{ path('app_legal_privacy') }}" class="footer-legal-link">Politique de confidentialité</a>
+                    </div>
+                </div>
             </div>
-
-            {# Colonne 3 : Liens utiles - Masquée sur mobile, visible sur desktop #}
-            <div class="col-lg-4 col-md-6 text-center text-lg-start d-none d-lg-block">
-                <h5 class="footer-title mb-3">
-                    <i data-feather="link" width="20" class="me-2"></i>
-                    Liens utiles
-                </h5>
-                <ul class="list-unstyled footer-links">
-                    <li class="mb-2">
-                        <a href="{{ path('app_home') }}">
-                            <i data-feather="chevron-right" width="16" class="me-1"></i>
-                            Accueil
-                        </a>
-                    </li>
-                    <li class="mb-2">
-                        <a href="{{ path('app_menu_catalog') }}">
-                            <i data-feather="chevron-right" width="16" class="me-1"></i>
-                            Nos Menus
-                        </a>
-                    </li>
-                    <li class="mb-2">
-                        <a href="{{ path('app_contact') }}">
-                            <i data-feather="chevron-right" width="16" class="me-1"></i>
-                            Contact
-                        </a>
-                    </li>
-                    <li class="mb-2">
-                        <a href="{{ path('app_legal_mentions') }}">
-                            <i data-feather="chevron-right" width="16" class="me-1"></i>
-                            Mentions légales
-                        </a>
-                    </li>
-                    <li class="mb-2">
-                        <a href="{{ path('app_legal_cgv') }}">
-                            <i data-feather="chevron-right" width="16" class="me-1"></i>
-                            Conditions générales de vente
-                        </a>
-                    </li>
-                    <li class="mb-2">
-                        <a href="{{ path('app_legal_privacy') }}">
-                            <i data-feather="chevron-right" width="16" class="me-1"></i>
-                            Politique de confidentialité (RGPD)
-                        </a>
-                    </li>
-                </ul>
-            </div>
-
         </div>
 
-        {# Barre de copyright #}
-        <div class="row mt-4 pt-4 border-top border-secondary">
-            <div class="col-12 text-center mb-3 d-lg-none">
-                <p class="mb-0 small footer-legal-links">
-                    <a href="{{ path('app_legal_mentions') }}" class="text-secondary">Mentions légales</a>
-                    <span class="mx-2">•</span>
-                    <a href="{{ path('app_legal_cgv') }}" class="text-secondary">CGV</a>
-                    <span class="mx-2">•</span>
-                    <a href="{{ path('app_legal_privacy') }}" class="text-secondary">RGPD</a>
-                </p>
-            </div>
-            <div class="col-md-6 text-center text-md-start">
-                <p class="mb-0 small">
-                    &copy; {{ "now"|date("Y") }} Vite & Gourmand - Tous droits réservés
-                </p>
-            </div>
-            <div class="col-md-6 text-center text-md-end">
-                <p class="mb-0 small">
-                    <i data-feather="map-pin" width="14" class="me-1"></i>
-                    Bordeaux, France
-                </p>
-            </div>
+        {# Copyright bar #}
+        <div class="footer-copyright">
+            <p>&copy; {{ 'now'|date('Y') }} Vite & Gourmand - Traiteur gastronomique à Bordeaux depuis 1999</p>
         </div>
     </div>
 </footer>
