@@ -1,96 +1,149 @@
-<nav class="navbar navbar-expand-lg">
-    <div class="container-fluid">
-        {# Logo / Nom de l'entreprise #}
-        <a class="navbar-brand d-flex align-items-center" href="{{ path('app_home') }}">
-            <i data-feather="coffee" class="me-2" style="color: var(--primary);"></i>
-            <span>Vite & Gourmand</span>
+{# HEADER - Copié depuis la maquette Figma #}
+<header class="header">
+    <div class="container header-container">
+        {# Logo #}
+        <a href="{{ path('app_home') }}" class="header-logo">
+            <div class="logo-icon">
+                <span data-icon="chef-hat" data-icon-width="28" data-icon-height="28"></span>
+            </div>
+            <div class="logo-text">
+                <h1>Vite & Gourmand</h1>
+                <p class="logo-subtitle">Traiteur gastronomique depuis 1999</p>
+            </div>
         </a>
 
-        {# Bouton toggle pour mobile #}
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+        {# Desktop Navigation #}
+        <nav class="header-nav">
+            <a href="{{ path('app_home') }}"
+               class="nav-link {% if app.request.attributes.get('_route') == 'app_home' %}active{% endif %}">
+                Accueil
+            </a>
+            <a href="{{ path('app_menu_catalog') }}"
+               class="nav-link {% if app.request.attributes.get('_route') starts with 'app_menu' %}active{% endif %}">
+                Menus
+            </a>
+            <a href="{{ path('app_contact') }}"
+               class="nav-link {% if app.request.attributes.get('_route') == 'app_contact' %}active{% endif %}">
+                Contact
+            </a>
+        </nav>
 
-        {# Menu principal #}
-        <div class="collapse navbar-collapse" id="navbarMain">
-            <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link {% if app.request.attributes.get('_route') == 'app_home' %}active{% endif %}"
-                       aria-current="page"
-                       href="{{ path('app_home') }}">
-                        Accueil
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if app.request.attributes.get('_route') starts with 'app_menu' %}active{% endif %}"
-                       href="{{ path('app_menu_catalog') }}">
-                        Nos Menus
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if app.request.attributes.get('_route') == 'app_contact' %}active{% endif %}"
-                       href="{{ path('app_contact') }}">
-                        Contact
-                    </a>
-                </li>
-            </ul>
+        {# User Actions - Desktop #}
+        <div class="header-actions">
+            {% if app.user %}
+                <button type="button" class="btn btn-user" id="userMenuToggle">
+                    <span data-icon="user" data-icon-width="20" data-icon-height="20"></span>
+                    Mon compte
+                </button>
 
-            {# Partie droite : Compte utilisateur & Panier #}
-            <div class="d-flex align-items-center gap-3">
-                {% if app.user %}
-                    {# Utilisateur connecté #}
-                    <div class="dropdown">
-                        <a class="nav-link dropdown-toggle d-flex align-items-center"
-                           href="#"
-                           role="button"
-                           data-bs-toggle="dropdown"
-                           aria-expanded="false">
-                            <i data-feather="user" class="me-1"></i>
-                            <span class="d-none d-md-inline">{{ app.user.firstname }}</span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li>
-                                <a class="dropdown-item" href="{{ path('app_account') }}">
-                                    <i data-feather="user" class="me-2" width="16"></i>
-                                    Mon compte
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#">
-                                    <i data-feather="shopping-bag" class="me-2" width="16"></i>
-                                    Mes commandes
-                                </a>
-                            </li>
-                            {% if is_granted('ROLE_EMPLOYEE') %}
-                                <li><hr class="dropdown-divider"></li>
-                                <li>
-                                    <a class="dropdown-item" href="{{ path('app_admin_dashboard') }}">
-                                        <i data-feather="settings" class="me-2" width="16"></i>
-                                        Administration
-                                    </a>
-                                </li>
-                            {% endif %}
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <a class="dropdown-item text-danger" href="{{ path('app_logout') }}">
-                                    <i data-feather="log-out" class="me-2" width="16"></i>
-                                    Se déconnecter
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                {% else %}
-                    {# Utilisateur non connecté #}
-                    <a href="{{ path('app_register') }}" class="btn btn-outline-primary btn-sm">
-                        S'inscrire
-                    </a>
-                    <a href="{{ path('app_login') }}" class="btn btn-primary btn-sm">
-                        <i data-feather="log-in" width="16" class="me-1"></i>
-                        Connexion
-                    </a>
-                {% endif %}
-
-            </div>
+                {# Dropdown menu #}
+                <div id="userDropdown" class="user-dropdown">
+                    <a href="{{ path('app_account') }}" class="dropdown-item">Mon compte</a>
+                    <a href="#" class="dropdown-item">Mes commandes</a>
+                    {% if is_granted('ROLE_EMPLOYEE') %}
+                        <div class="dropdown-divider"></div>
+                        <a href="{{ path('app_admin_dashboard') }}" class="dropdown-item">Administration</a>
+                    {% endif %}
+                    <div class="dropdown-divider"></div>
+                    <a href="{{ path('app_logout') }}" class="dropdown-item logout">Se déconnecter</a>
+                </div>
+            {% else %}
+                <a href="{{ path('app_login') }}" class="btn btn-user">
+                    <span data-icon="log-in" data-icon-width="20" data-icon-height="20"></span>
+                    Connexion
+                </a>
+                <a href="{{ path('app_register') }}" class="btn btn-outline">
+                    <span data-icon="user-plus" data-icon-width="20" data-icon-height="20"></span>
+                    S'inscrire
+                </a>
+            {% endif %}
         </div>
+
+        {# Mobile Menu Button #}
+        <button type="button" class="mobile-menu-toggle" id="mobileMenuToggle">
+            <span data-icon="menu" data-icon-width="24" data-icon-height="24"></span>
+        </button>
     </div>
-</nav>
+
+    {# Mobile Menu #}
+    <div class="mobile-menu" id="mobileMenu">
+        <nav class="mobile-nav">
+            <a href="{{ path('app_home') }}"
+               class="mobile-nav-link {% if app.request.attributes.get('_route') == 'app_home' %}active{% endif %}">
+                Accueil
+            </a>
+            <a href="{{ path('app_menu_catalog') }}"
+               class="mobile-nav-link {% if app.request.attributes.get('_route') starts with 'app_menu' %}active{% endif %}">
+                Menus
+            </a>
+            <a href="{{ path('app_contact') }}"
+               class="mobile-nav-link {% if app.request.attributes.get('_route') == 'app_contact' %}active{% endif %}">
+                Contact
+            </a>
+            {% if app.user %}
+                <a href="{{ path('app_account') }}" class="btn btn-user" style="width: 100%; margin-top: 1rem;">
+                    <span data-icon="user" data-icon-width="20" data-icon-height="20"></span>
+                    Mon compte
+                </a>
+            {% else %}
+                <a href="{{ path('app_login') }}" class="btn btn-user" style="width: 100%; margin-top: 1rem;">
+                    <span data-icon="log-in" data-icon-width="20" data-icon-height="20"></span>
+                    Connexion
+                </a>
+                <a href="{{ path('app_register') }}" class="btn btn-outline" style="width: 100%; margin-top: 0.5rem;">
+                    <span data-icon="user-plus" data-icon-width="20" data-icon-height="20"></span>
+                    S'inscrire
+                </a>
+            {% endif %}
+        </nav>
+    </div>
+</header>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // User dropdown
+    const userToggle = document.getElementById('userMenuToggle');
+    const userDropdown = document.getElementById('userDropdown');
+
+    if (userToggle && userDropdown) {
+        userToggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            userDropdown.classList.toggle('show');
+        });
+
+        document.addEventListener('click', function() {
+            userDropdown.classList.remove('show');
+        });
+    }
+
+    // Mobile menu
+    const mobileToggle = document.getElementById('mobileMenuToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    if (mobileToggle && mobileMenu) {
+        mobileToggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            mobileMenu.classList.toggle('show');
+
+            // Change icon
+            const icon = this.querySelector('[data-icon]');
+            const currentIcon = icon.getAttribute('data-icon');
+            icon.setAttribute('data-icon', currentIcon === 'menu' ? 'x' : 'menu');
+
+            // Reinit icons
+            window.ViteGourmand?.initIcons?.();
+        });
+
+        // Close on link click
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                mobileMenu.classList.remove('show');
+                const icon = mobileToggle.querySelector('[data-icon]');
+                icon.setAttribute('data-icon', 'menu');
+                window.ViteGourmand?.initIcons?.();
+            });
+        });
+    }
+});
+</script>
