@@ -25,8 +25,9 @@ final class MenuController extends AbstractController
         $themeId = $request->query->get('theme');
         $dietetaryIds = $request->query->all('dietetary');
         $allergenIds = $request->query->all('allergen');
-        $priceMin = $request->query->get('price_min') ? (float) $request->query->get('price_min') : null;
-        $priceMax = $request->query->get('price_max') ? (float) $request->query->get('price_max') : null;
+        // Convertir les prix en centimes (base de données stocke en centimes)
+        $priceMin = $request->query->get('price_min') ? (float) $request->query->get('price_min') * 100 : null;
+        $priceMax = $request->query->get('price_max') ? (float) $request->query->get('price_max') * 100 : null;
         $nbPersonMin = $request->query->get('nb_person_min') ? (int) $request->query->get('nb_person_min') : null;
 
         $menus = $menuRepository->findByFilters(

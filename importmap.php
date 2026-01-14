@@ -20,6 +20,52 @@ return [
         'path' => './assets/admin-recipe-illustrations.js',
         'entrypoint' => true,
     ],
+    'table-search' => [
+        'path' => './assets/table-search.js',
+        'entrypoint' => true,
+    ],
+    'password-validator' => [
+        'path' => './assets/password-validator.js',
+        'entrypoint' => true,
+    ],
+    'password-toggle' => [
+        'path' => './assets/password-toggle.js',
+        'entrypoint' => true,
+    ],
+    'confirmation-dialog' => [
+        'path' => './assets/confirmation-dialog.js',
+        'entrypoint' => true,
+    ],
+    'admin-dashboard-styles' => [
+        'path' => './assets/styles/admin/dashboard.css',
+        'type' => 'css',
+        'entrypoint' => true,
+    ],
+    'admin-themes-list-styles' => [
+        'path' => './assets/styles/admin/themes-list.css',
+        'type' => 'css',
+        'entrypoint' => true,
+    ],
+    'admin-opening-schedule-styles' => [
+        'path' => './assets/styles/admin/opening-schedule.css',
+        'type' => 'css',
+        'entrypoint' => true,
+    ],
+    'admin-menu-form-styles' => [
+        'path' => './assets/styles/admin/menu-form.css',
+        'type' => 'css',
+        'entrypoint' => true,
+    ],
+    'admin-menus-list-styles' => [
+        'path' => './assets/styles/admin/menus-list.css',
+        'type' => 'css',
+        'entrypoint' => true,
+    ],
+    'admin-reviews-styles' => [
+        'path' => './assets/styles/admin/reviews.css',
+        'type' => 'css',
+        'entrypoint' => true,
+    ],
     '@hotwired/stimulus' => [
         'version' => '3.2.2',
     ],
@@ -28,18 +74,5 @@ return [
     ],
     '@hotwired/turbo' => [
         'version' => '7.3.0',
-    ],
-    'bootstrap' => [
-        'version' => '5.3.8',
-    ],
-    '@popperjs/core' => [
-        'version' => '2.11.8',
-    ],
-    'bootstrap/dist/css/bootstrap.min.css' => [
-        'version' => '5.3.8',
-        'type' => 'css',
-    ],
-    'feather-icons' => [
-        'version' => '4.29.2',
     ],
 ];

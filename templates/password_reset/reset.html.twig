@@ -107,53 +107,14 @@
     </div>
 </div>
 
-<script>
-function togglePasswordVisibility(inputId, button) {
-    const input = document.getElementById(inputId);
-    const icon = button.querySelector('i');
 
-    if (input.type === 'password') {
-        input.type = 'text';
-        icon.setAttribute('data-feather', 'eye-off');
-    } else {
-        input.type = 'password';
-        icon.setAttribute('data-feather', 'eye');
-    }
+{% endblock %}
 
-    // Réinitialiser les icônes Feather
-    if (typeof feather !== 'undefined') {
-        feather.replace();
-    }
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('resetPasswordForm');
-    const passwordInput = document.getElementById('password');
-    const confirmPasswordInput = document.getElementById('confirm_password');
-
-    form.addEventListener('submit', function(e) {
-        const password = passwordInput.value;
-        const confirmPassword = confirmPasswordInput.value;
-
-        // Vérifier que les mots de passe correspondent
-        if (password !== confirmPassword) {
-            e.preventDefault();
-            alert('Les mots de passe ne correspondent pas.');
-            return;
-        }
-
-        // Validation de la complexité du mot de passe
-        const hasUpperCase = /[A-Z]/.test(password);
-        const hasLowerCase = /[a-z]/.test(password);
-        const hasNumber = /[0-9]/.test(password);
-        const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-
-        if (!hasUpperCase || !hasLowerCase || !hasNumber || !hasSpecialChar) {
-            e.preventDefault();
-            alert('Le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial.');
-        }
-    });
-});
-</script>
-
+{% block javascripts %}
+    {{ parent() }}
+    {{ importmap('password-validator') }}
+    {{ importmap('password-toggle') }}
+    <script>
+        initPasswordValidation('resetPasswordForm', 'password', 'confirm_password');
+    </script>
 {% endblock %}

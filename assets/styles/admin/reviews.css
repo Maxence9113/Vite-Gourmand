@@ -1,0 +1,25 @@
+.rating-stars {
+    display: flex;
+    gap: 0.125rem;
+}
+
+.rating-stars .star-filled {
+    color: #ffc107;
+    fill: #ffc107;
+    stroke: #f59e0b;
+    stroke-width: 1.5;
+}
+
+.rating-stars .star-empty {
+    color: #e5e7eb;
+    fill: #f3f4f6;
+    stroke: #d1d5db;
+    stroke-width: 1.5;
+}
+
+.comment-preview {
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

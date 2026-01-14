@@ -1,8 +1,8 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/base_admin.html.twig' %}
 
 {% block title %}Créer un compte employé{% endblock %}
 
-{% block body %}
+{% block content %}
 <div class="container my-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -73,41 +73,13 @@
     </div>
 </div>
 
-<script>
-function togglePasswordVisibility(inputId, button) {
-    const input = document.getElementById(inputId);
-    const icon = button.querySelector('i');
+{% endblock %}
 
-    if (input.type === 'password') {
-        input.type = 'text';
-        icon.setAttribute('data-feather', 'eye-off');
-    } else {
-        input.type = 'password';
-        icon.setAttribute('data-feather', 'eye');
-    }
-
-    // Réinitialiser les icônes Feather
-    if (typeof feather !== 'undefined') {
-        feather.replace();
-    }
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    const passwordInput = document.getElementById('password');
-    const form = passwordInput.closest('form');
-
-    form.addEventListener('submit', function(e) {
-        const password = passwordInput.value;
-        const hasUpperCase = /[A-Z]/.test(password);
-        const hasLowerCase = /[a-z]/.test(password);
-        const hasNumber = /[0-9]/.test(password);
-        const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-
-        if (!hasUpperCase || !hasLowerCase || !hasNumber || !hasSpecialChar) {
-            e.preventDefault();
-            alert('Le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial.');
-        }
-    });
-});
-</script>
+{% block javascripts %}
+    {{ parent() }}
+    {{ importmap('password-validator') }}
+    {{ importmap('password-toggle') }}
+    <script>
+        initPasswordValidation('password', 'password', null);
+    </script>
 {% endblock %}

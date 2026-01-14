@@ -1,8 +1,8 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/base_admin.html.twig' %}
 
 {% block title %}Gestion des Allergènes{% endblock %}
 
-{% block body %}
+{% block content %}
 <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>Gestion des Allergènes</h1>
@@ -37,7 +37,7 @@
     {# Table des allergènes #}
     <div class="card">
         <div class="card-body">
-            <table class="table table-striped table-hover">
+            <table class="table table-striped table-hover table-sortable" id="allergensTable">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -46,12 +46,12 @@
                         <th class="text-end">Actions</th>
                     </tr>
                 </thead>
-                <tbody id="allergensTable">
+                <tbody>
                     {% for allergen in allergens %}
                     <tr class="allergen-row">
                         <td>{{ allergen.id }}</td>
                         <td class="fw-bold">{{ allergen.name }}</td>
-                        <td>
+                        <td data-sort="{{ allergen.recipes|length }}">
                             <span class="badge bg-warning">{{ allergen.recipes|length }} recette(s)</span>
                         </td>
                         <td class="text-end">
@@ -63,7 +63,7 @@
                                 <form method="post"
                                       action="{{ path('app_admin_allergens_delete', {id: allergen.id}) }}"
                                       style="display: inline;"
-                                      onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer l\'allergène « {{ allergen.name }} » ?')">
+                                      data-confirm="Êtes-vous sûr de vouloir supprimer l'allergène « {{ allergen.name }} » ?">
                                     <button type="submit" class="btn btn-sm btn-danger">
                                         Supprimer
                                     </button>
@@ -93,16 +93,20 @@
     </div>
 </div>
 
-{# Script pour la recherche en temps réel #}
-<script>
-    document.getElementById('searchInput')?.addEventListener('input', function(e) {
-        const searchTerm = e.target.value.toLowerCase();
-        const rows = document.querySelectorAll('.allergen-row');
+{% endblock %}
 
-        rows.forEach(row => {
-            const text = row.textContent.toLowerCase();
-            row.style.display = text.includes(searchTerm) ? '' : 'none';
+{% block javascripts %}
+    {{ parent() }}
+    {{ importmap('table-search') }}
+    {{ importmap('confirmation-dialog') }}
+    <script src="{{ asset('table-sort.js') }}"></script>
+    <script>
+        // Initialiser le tri du tableau
+        initTableSort('allergensTable', {
+            excludeColumns: [3]
         });
-    });
-</script>
+
+        // Initialiser la recherche en temps réel
+        initTableSearch('searchInput', '.allergen-row');
+    </script>
 {% endblock %}
