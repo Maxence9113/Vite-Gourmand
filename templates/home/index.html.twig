@@ -7,13 +7,13 @@
 {# ========================================
    HERO SECTION
    ======================================== #}
-<section class="hero-section" style="background-image: url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=1920&h=1080&fit=crop');">
+<section style="background-image: url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=1920&h=1080&fit=crop');">
     <div class="hero-overlay"></div>
     <div class="container">
         <div class="hero-content">
             <h1>L'excellence gastronomique pour vos événements</h1>
             <p>Depuis 25 ans, Julie et José subliment vos moments avec des créations culinaires d'exception</p>
-            <a href="{{ path('app_menu_catalog') }}" class="btn btn-secondary btn-lg">
+            <a href="{{ path('app_menu_catalog') }}" style="font-size: 1.1rem; padding: 12px 24px;">
                 <span data-icon="arrow-right" data-icon-width="20" data-icon-height="20"></span>
                 Découvrir nos menus
             </a>
@@ -67,7 +67,7 @@
                 </div>
 
                 {# 100% satisfaits #}
-                <div class="stat-card" style="grid-column: 1 / -1;">
+                <div style="grid-column: 1 / -1;">
                     <span data-icon="heart" data-icon-width="48" data-icon-height="48" class="stat-icon"></span>
                     <div class="stat-number">100%</div>
                     <p style="margin: 0;">Clients satisfaits</p>
@@ -170,15 +170,15 @@
                                 "{{ review.comment|length > 150 ? review.comment|slice(0, 150) ~ '...' : review.comment }}"
                             </p>
                         {% else %}
-                            <p class="testimonial-text" style="font-style: italic; opacity: 0.7;">
+                            <p style="font-style: italic; opacity: 0.7;">
                                 Pas de commentaire, juste une note de {{ review.rating }}/5.
                             </p>
                         {% endif %}
 
                         {# Auteur #}
                         <div style="border-top: 1px solid var(--beige); padding-top: var(--spacing-md);">
-                            <p class="testimonial-author" style="margin-bottom: 0.25rem;">{{ review.customerName }}</p>
-                            <p class="testimonial-event" style="margin: 0;">{{ review.createdAt|date('d/m/Y') }}</p>
+                            <p style="margin-bottom: 0.25rem;">{{ review.customerName }}</p>
+                            <p style="margin: 0;">{{ review.createdAt|date('d/m/Y') }}</p>
                         </div>
                     </div>
                 {% endfor %}
@@ -189,15 +189,15 @@
                           style="position: absolute; top: 1rem; right: 1rem; opacity: 0.2; color: var(--gold);"></span>
                     <div class="testimonial-stars">
                         {% for i in 1..5 %}
-                            <span data-icon="star" data-icon-width="20" data-icon-height="20" class="star-icon" style="fill: var(--gold);"></span>
+                            <span data-icon="star" data-icon-width="20" data-icon-height="20" style="fill: var(--gold);"></span>
                         {% endfor %}
                     </div>
                     <p class="testimonial-text">
                         "Un service exceptionnel ! Les plats étaient sublimes et nos invités en parlent encore. Julie et José ont su créer une ambiance gastronomique parfaite pour notre mariage."
                     </p>
                     <div style="border-top: 1px solid var(--beige); padding-top: var(--spacing-md);">
-                        <p class="testimonial-author" style="margin-bottom: 0.25rem;">Marie Dubois</p>
-                        <p class="testimonial-event" style="margin: 0;">Mariage - Juin 2023</p>
+                        <p style="margin-bottom: 0.25rem;">Marie Dubois</p>
+                        <p style="margin: 0;">Mariage - Juin 2023</p>
                     </div>
                 </div>
 
@@ -206,15 +206,15 @@
                           style="position: absolute; top: 1rem; right: 1rem; opacity: 0.2; color: var(--gold);"></span>
                     <div class="testimonial-stars">
                         {% for i in 1..5 %}
-                            <span data-icon="star" data-icon-width="20" data-icon-height="20" class="star-icon" style="fill: var(--gold);"></span>
+                            <span data-icon="star" data-icon-width="20" data-icon-height="20" style="fill: var(--gold);"></span>
                         {% endfor %}
                     </div>
                     <p class="testimonial-text">
                         "Professionnalisme et qualité au rendez-vous. Nos 150 convives ont été ravis. La présentation était digne d'un restaurant étoilé. Je recommande vivement !"
                     </p>
                     <div style="border-top: 1px solid var(--beige); padding-top: var(--spacing-md);">
-                        <p class="testimonial-author" style="margin-bottom: 0.25rem;">Pierre Lefèvre</p>
-                        <p class="testimonial-event" style="margin: 0;">Événement d'entreprise - Mars 2023</p>
+                        <p style="margin-bottom: 0.25rem;">Pierre Lefèvre</p>
+                        <p style="margin: 0;">Événement d'entreprise - Mars 2023</p>
                     </div>
                 </div>
 
@@ -223,15 +223,15 @@
                           style="position: absolute; top: 1rem; right: 1rem; opacity: 0.2; color: var(--gold);"></span>
                     <div class="testimonial-stars">
                         {% for i in 1..5 %}
-                            <span data-icon="star" data-icon-width="20" data-icon-height="20" class="star-icon" style="fill: var(--gold);"></span>
+                            <span data-icon="star" data-icon-width="20" data-icon-height="20" style="fill: var(--gold);"></span>
                         {% endfor %}
                     </div>
                     <p class="testimonial-text">
                         "Une cuisine raffinée avec des produits frais et locaux. L'équipe est aux petits soins. Mon anniversaire était parfait grâce à Vite & Gourmand !"
                     </p>
                     <div style="border-top: 1px solid var(--beige); padding-top: var(--spacing-md);">
-                        <p class="testimonial-author" style="margin-bottom: 0.25rem;">Sophie Bernard</p>
-                        <p class="testimonial-event" style="margin: 0;">Anniversaire - Décembre 2023</p>
+                        <p style="margin-bottom: 0.25rem;">Sophie Bernard</p>
+                        <p style="margin: 0;">Anniversaire - Décembre 2023</p>
                     </div>
                 </div>
 
@@ -240,15 +240,15 @@
                           style="position: absolute; top: 1rem; right: 1rem; opacity: 0.2; color: var(--gold);"></span>
                     <div class="testimonial-stars">
                         {% for i in 1..5 %}
-                            <span data-icon="star" data-icon-width="20" data-icon-height="20" class="star-icon" style="fill: var(--gold);"></span>
+                            <span data-icon="star" data-icon-width="20" data-icon-height="20" style="fill: var(--gold);"></span>
                         {% endfor %}
                     </div>
                     <p class="testimonial-text">
                         "Des saveurs exceptionnelles et une présentation soignée. Le menu végétarien était particulièrement réussi. Service impeccable du début à la fin."
                     </p>
                     <div style="border-top: 1px solid var(--beige); padding-top: var(--spacing-md);">
-                        <p class="testimonial-author" style="margin-bottom: 0.25rem;">Laurent Petit</p>
-                        <p class="testimonial-event" style="margin: 0;">Baptême - Avril 2023</p>
+                        <p style="margin-bottom: 0.25rem;">Laurent Petit</p>
+                        <p style="margin: 0;">Baptême - Avril 2023</p>
                     </div>
                 </div>
             {% endif %}

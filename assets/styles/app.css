@@ -456,11 +456,17 @@ p {
     display: flex;
     align-items: center;
     gap: 1rem;
+    position: relative;
 }
 
 .header-actions .btn {
     min-width: 130px;
-    width: 130px;
+}
+
+.header-actions .btn-user {
+    width: auto;
+    min-width: auto;
+    white-space: nowrap;
 }
 
 .btn-user {
@@ -487,47 +493,54 @@ p {
     box-shadow: var(--shadow-md);
 }
 
-/* User Dropdown */
-.user-dropdown {
-    position: absolute;
-    top: calc(100% + 8px);
-    right: 0;
-    background: white;
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg);
-    min-width: 200px;
-    padding: 0.5rem 0;
-    display: none;
-    flex-direction: column;
-    z-index: 1001;
-}
-
-.user-dropdown.show {
+/* Bouton compte utilisateur */
+.btn-account {
     display: flex;
-}
-
-.dropdown-item {
-    display: block;
-    padding: 0.75rem 1rem;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 8px 16px;
+    background: white;
     color: var(--dark-text);
-    text-decoration: none;
+    border: 2px solid var(--beige);
+    border-radius: var(--radius-sm);
     font-family: var(--font-body);
     font-size: 0.875rem;
-    transition: background-color var(--transition-fast);
+    text-decoration: none;
+    transition: all 0.3s ease;
 }
 
-.dropdown-item:hover {
-    background-color: var(--beige);
+.btn-account:hover {
+    background: var(--beige);
+    border-color: var(--bordeaux);
 }
 
-.dropdown-item.logout {
-    color: #D97076;
+.btn-account .account-avatar {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background-color: var(--bordeaux);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
 }
 
-.dropdown-divider {
-    height: 1px;
-    background-color: var(--beige);
-    margin: 0.5rem 0;
+.btn-account .account-avatar [data-icon] {
+    color: white;
+}
+
+.btn-account .account-name {
+    font-weight: 600;
+}
+
+/* Bouton admin */
+.btn-admin {
+    background-color: var(--gold);
+    color: var(--dark-text);
+}
+
+.btn-admin:hover {
+    background-color: #CDA434;
 }
 
 /* Mobile Menu Toggle */

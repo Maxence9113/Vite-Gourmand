@@ -3,10 +3,10 @@
 {% block title %}Créer un compte employé{% endblock %}
 
 {% block content %}
-<div class="container my-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <h1 class="mb-4">Créer un compte employé</h1>
+<div style="margin: 30px 0;">
+    <div style="display: flex; flex-wrap: wrap; margin: 0 -0.75rem; justify-content: center;">
+        <div style="flex: 0 0 66.666%; max-width: 66.666%; padding: 0 0.75rem;">
+            <h1 style="margin-bottom: 1.5rem;">Créer un compte employé</h1>
 
             {% for message in app.flashes('error') %}
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -18,28 +18,28 @@
             <div class="card">
                 <div class="card-body">
                     <form method="post">
-                        <div class="mb-3">
+                        <div style="margin-bottom: 1rem;">
                             <label for="email" class="form-label">Email (identifiant)</label>
                             <input type="email" class="form-control" id="email" name="email" required>
                             <div class="form-text">Cet email sera utilisé comme identifiant de connexion.</div>
                         </div>
 
-                        <div class="mb-3">
+                        <div style="margin-bottom: 1rem;">
                             <label for="firstname" class="form-label">Prénom</label>
                             <input type="text" class="form-control" id="firstname" name="firstname" required>
                         </div>
 
-                        <div class="mb-3">
+                        <div style="margin-bottom: 1rem;">
                             <label for="lastname" class="form-label">Nom</label>
                             <input type="text" class="form-control" id="lastname" name="lastname" required>
                         </div>
 
-                        <div class="mb-3">
+                        <div style="margin-bottom: 1rem;">
                             <label for="password" class="form-label">Mot de passe</label>
-                            <div class="position-relative">
+                            <div style="position: relative;">
                                 <input type="password" class="form-control" id="password" name="password" required minlength="10">
                                 <button type="button"
-                                        class="btn btn-sm position-absolute end-0 top-50 translate-middle-y me-2"
+                                        class="btn btn-sm" style="position: absolute; right: 0; margin-right: 0.5rem;"
                                         style="border: none; background: none; z-index: 10;"
                                         onclick="togglePasswordVisibility('password', this)">
                                     <i data-feather="eye" width="20"></i>
@@ -47,7 +47,7 @@
                             </div>
                             <div class="form-text">
                                 Le mot de passe doit contenir au minimum 10 caractères avec au moins :
-                                <ul class="mb-0 mt-1">
+                                <ul style="margin-bottom: 0; margin-top: 0.25rem;">
                                     <li>Une majuscule</li>
                                     <li>Une minuscule</li>
                                     <li>Un chiffre</li>
@@ -62,7 +62,7 @@
                             séparément.
                         </div>
 
-                        <div class="d-flex justify-content-between">
+                        <div style="display: flex; justify-content: space-between;">
                             <a href="{{ path('admin_users_index') }}" class="btn btn-secondary">Annuler</a>
                             <button type="submit" class="btn btn-primary">Créer le compte employé</button>
                         </div>

@@ -3,10 +3,10 @@
 {% block title %}Éditer l'utilisateur - {{ user.firstname }} {{ user.lastname }}{% endblock %}
 
 {% block content %}
-<div class="container my-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <h1 class="mb-4">Éditer l'utilisateur</h1>
+<div style="margin: 30px 0;">
+    <div style="display: flex; flex-wrap: wrap; margin: 0 -0.75rem; justify-content: center;">
+        <div style="flex: 0 0 66.666%; max-width: 66.666%; padding: 0 0.75rem;">
+            <h1 style="margin-bottom: 1.5rem;">Éditer l'utilisateur</h1>
 
             {% for message in app.flashes('error') %}
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -18,33 +18,33 @@
             <div class="card">
                 <div class="card-body">
                     <form method="post">
-                        <div class="mb-4">
-                            <h5 class="card-subtitle mb-3 text-muted">Informations de l'utilisateur</h5>
+                        <div style="margin-bottom: 1.5rem;">
+                            <h5 style="margin-bottom: 1rem; color: #95a5a6;">Informations de l'utilisateur</h5>
 
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="firstname" class="form-label fw-bold">Prénom <span class="text-danger">*</span></label>
+                            <div style="margin-bottom: 20px;">
+                                <div style="flex: 0 0 50%; max-width: 50%; padding: 0 0.75rem;">
+                                    <label for="firstname" style="font-weight: 600;">Prénom <span style="color: #e74c3c;">*</span></label>
                                     <input type="text" class="form-control" id="firstname" name="firstname" value="{{ user.firstname }}" required>
                                 </div>
-                                <div class="col-md-6">
-                                    <label for="lastname" class="form-label fw-bold">Nom <span class="text-danger">*</span></label>
+                                <div style="flex: 0 0 50%; max-width: 50%; padding: 0 0.75rem;">
+                                    <label for="lastname" style="font-weight: 600;">Nom <span style="color: #e74c3c;">*</span></label>
                                     <input type="text" class="form-control" id="lastname" name="lastname" value="{{ user.lastname }}" required>
                                 </div>
                             </div>
 
-                            <div class="mb-3">
-                                <label for="email" class="form-label fw-bold">Email <span class="text-danger">*</span></label>
+                            <div style="margin-bottom: 1rem;">
+                                <label for="email" style="font-weight: 600;">Email <span style="color: #e74c3c;">*</span></label>
                                 <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
                                 <div class="form-text">L'email sert d'identifiant de connexion</div>
                             </div>
 
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Statut du compte</label>
-                                <div class="d-flex align-items-center">
+                            <div style="margin-bottom: 1rem;">
+                                <label style="font-weight: 600;">Statut du compte</label>
+                                <div style="display: flex; align-items: center; gap: 1rem;">
                                     {% if user.isEnabled %}
-                                        <span class="badge bg-success me-3">Actif</span>
+                                        <span class="badge badge-success">Actif</span>
                                     {% else %}
-                                        <span class="badge bg-secondary me-3">Désactivé</span>
+                                        <span class="badge bg-secondary">Désactivé</span>
                                     {% endif %}
                                     <a href="{{ path('admin_users_toggle_status', {id: user.id}) }}"
                                        class="btn btn-sm btn-{{ user.isEnabled ? 'warning' : 'success' }}"
@@ -63,13 +63,13 @@
                         </div>
 
                         {% if is_granted('ROLE_ADMIN') %}
-                        <hr class="my-4">
+                        <hr style="margin: 1.5rem 0;">
 
-                        <div class="mb-4">
-                            <h5 class="card-subtitle mb-3 text-muted">Gestion du rôle</h5>
+                        <div style="margin-bottom: 1.5rem;">
+                            <h5 style="margin-bottom: 1rem; color: #95a5a6;">Gestion du rôle</h5>
 
-                            <div class="mb-3">
-                                <label for="role" class="form-label fw-bold">Rôle de l'utilisateur <span class="text-danger">*</span></label>
+                            <div style="margin-bottom: 1rem;">
+                                <label for="role" style="font-weight: 600;">Rôle de l'utilisateur <span style="color: #e74c3c;">*</span></label>
                                 <select class="form-select" id="role" name="role" required>
                                     <option value="ROLE_USER" {% if 'ROLE_EMPLOYEE' not in user.roles %}selected{% endif %}>
                                         Utilisateur
@@ -86,7 +86,7 @@
                         </div>
                         {% endif %}
 
-                        <div class="d-flex justify-content-between">
+                        <div style="display: flex; justify-content: space-between;">
                             <a href="{{ path('admin_users_index') }}" class="btn btn-secondary">
                                 <i class="bi bi-arrow-left"></i> Annuler
                             </a>
@@ -99,15 +99,15 @@
             </div>
 
             {# Section Adresses de l'utilisateur #}
-            <div class="card mt-4">
+            <div style="margin-top: 25px;">
                 <div class="card-body">
-                    <h5 class="card-subtitle mb-3 text-muted">
+                    <h5 style="margin-bottom: 1rem; color: #95a5a6;">
                         <i class="bi bi-geo-alt"></i> Adresses de livraison
                     </h5>
 
                     {% if user.addresses is empty %}
                         <div class="alert alert-info" role="alert">
-                            <i class="bi bi-info-circle me-2"></i>
+                            <i style="margin-right: 0.5rem;"></i>
                             Cet utilisateur n'a pas encore enregistré d'adresse.
                         </div>
                     {% else %}
@@ -129,7 +129,7 @@
                                                 {% if address.label %}
                                                     <span class="badge bg-secondary">{{ address.label }}</span>
                                                 {% else %}
-                                                    <span class="text-muted">-</span>
+                                                    <span style="color: #95a5a6;">-</span>
                                                 {% endif %}
                                             </td>
                                             <td>{{ address.street }}</td>
@@ -137,11 +137,11 @@
                                             <td>{{ address.phone }}</td>
                                             <td>
                                                 {% if address.isDefault %}
-                                                    <span class="badge bg-primary">
+                                                    <span class="badge badge-primary">
                                                         <i class="bi bi-star-fill"></i> Oui
                                                     </span>
                                                 {% else %}
-                                                    <span class="text-muted">Non</span>
+                                                    <span style="color: #95a5a6;">Non</span>
                                                 {% endif %}
                                             </td>
                                         </tr>

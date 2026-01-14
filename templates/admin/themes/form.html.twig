@@ -3,10 +3,10 @@
 {% block title %}{{ isEdit ? 'Modifier' : 'Ajouter' }} un thème{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-8 offset-md-2">
-            <div class="d-flex justify-content-between align-items-center mb-4">
+<div style="margin-top: 30px;">
+    <div style="display: flex; flex-wrap: wrap; margin: 0 -0.75rem;">
+        <div style="flex: 0 0 66.666%; max-width: 66.666%; padding: 0 0.75rem; margin-left: 16.666%;">
+            <div style="margin-bottom: 25px;">
                 <h1>{{ isEdit ? 'Modifier le thème' : 'Ajouter un nouveau thème' }}</h1>
                 <a href="{{ path('app_admin_themes') }}" class="btn btn-secondary">
                     Retour à la liste
@@ -25,15 +25,15 @@
                 <div class="card-body">
                     {{ form_start(form) }}
 
-                    <div class="mb-3">
+                    <div style="margin-bottom: 1rem;">
                         {{ form_row(form.name) }}
                     </div>
 
-                    <div class="mb-3">
+                    <div style="margin-bottom: 1rem;">
                         {{ form_row(form.description) }}
                     </div>
 
-                    <div class="d-flex justify-content-between mt-4">
+                    <div style="margin-top: 25px;">
                         <a href="{{ path('app_admin_themes') }}" class="btn btn-secondary">
                             Annuler
                         </a>
@@ -47,8 +47,8 @@
             </div>
 
             {% if isEdit %}
-            <div class="mt-3 text-end">
-                <small class="text-muted">
+            <div style="margin-top: 1rem; text-align: right;">
+                <small style="color: #95a5a6;">
                     ID du thème : {{ theme.id }}
                 </small>
             </div>

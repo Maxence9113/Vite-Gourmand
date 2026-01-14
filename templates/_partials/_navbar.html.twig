@@ -31,22 +31,22 @@
         {# User Actions - Desktop #}
         <div class="header-actions">
             {% if app.user %}
-                <button type="button" class="btn btn-user" id="userMenuToggle">
-                    <span data-icon="user" data-icon-width="20" data-icon-height="20"></span>
-                    Mon compte
-                </button>
-
-                {# Dropdown menu #}
-                <div id="userDropdown" class="user-dropdown">
-                    <a href="{{ path('app_account') }}" class="dropdown-item">Mon compte</a>
-                    <a href="#" class="dropdown-item">Mes commandes</a>
-                    {% if is_granted('ROLE_EMPLOYEE') %}
-                        <div class="dropdown-divider"></div>
-                        <a href="{{ path('app_admin_dashboard') }}" class="dropdown-item">Administration</a>
-                    {% endif %}
-                    <div class="dropdown-divider"></div>
-                    <a href="{{ path('app_logout') }}" class="dropdown-item logout">Se déconnecter</a>
-                </div>
+                <a href="{{ path('app_account') }}" class="btn-account">
+                    <div class="account-avatar">
+                        <span data-icon="user" data-icon-width="16" data-icon-height="16"></span>
+                    </div>
+                    <span class="account-name">{{ app.user.firstname }} {{ app.user.lastname }}</span>
+                </a>
+                {% if is_granted('ROLE_EMPLOYEE') %}
+                    <a href="{{ path('app_admin_dashboard') }}" class="btn btn-admin">
+                        <span data-icon="shield" data-icon-width="16" data-icon-height="16"></span>
+                        Admin
+                    </a>
+                {% endif %}
+                <a href="{{ path('app_logout') }}" class="btn btn-outline">
+                    <span data-icon="log-out" data-icon-width="16" data-icon-height="16"></span>
+                    Déconnexion
+                </a>
             {% else %}
                 <a href="{{ path('app_login') }}" class="btn btn-user">
                     <span data-icon="log-in" data-icon-width="20" data-icon-height="20"></span>
@@ -81,16 +81,16 @@
                 Contact
             </a>
             {% if app.user %}
-                <a href="{{ path('app_account') }}" class="btn btn-user" style="width: 100%; margin-top: 1rem;">
+                <a href="{{ path('app_account') }}" style="width: 100%; margin-top: 1rem;">
                     <span data-icon="user" data-icon-width="20" data-icon-height="20"></span>
                     Mon compte
                 </a>
             {% else %}
-                <a href="{{ path('app_login') }}" class="btn btn-user" style="width: 100%; margin-top: 1rem;">
+                <a href="{{ path('app_login') }}" style="width: 100%; margin-top: 1rem;">
                     <span data-icon="log-in" data-icon-width="20" data-icon-height="20"></span>
                     Connexion
                 </a>
-                <a href="{{ path('app_register') }}" class="btn btn-outline" style="width: 100%; margin-top: 0.5rem;">
+                <a href="{{ path('app_register') }}" style="width: 100%; margin-top: 0.5rem;">
                     <span data-icon="user-plus" data-icon-width="20" data-icon-height="20"></span>
                     S'inscrire
                 </a>
@@ -101,21 +101,6 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // User dropdown
-    const userToggle = document.getElementById('userMenuToggle');
-    const userDropdown = document.getElementById('userDropdown');
-
-    if (userToggle && userDropdown) {
-        userToggle.addEventListener('click', function(e) {
-            e.stopPropagation();
-            userDropdown.classList.toggle('show');
-        });
-
-        document.addEventListener('click', function() {
-            userDropdown.classList.remove('show');
-        });
-    }
-
     // Mobile menu
     const mobileToggle = document.getElementById('mobileMenuToggle');
     const mobileMenu = document.getElementById('mobileMenu');

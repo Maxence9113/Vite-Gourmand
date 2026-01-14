@@ -4,19 +4,19 @@
 
 {% block body %}
 
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
+<div style="padding: 3rem 0;">
+    <div style="display: flex; justify-content: center;">
+        <div style="max-width: 800px; width: 100%;">
             {# En-tête #}
-            <div class="mb-4">
-                <a href="{{ path('app_account_addresses') }}" class="text-decoration-none text-muted mb-2 d-inline-block">
+            <div style="margin-bottom: 2rem;">
+                <a href="{{ path('app_account_addresses') }}" style="text-decoration: none; color: #6c757d; margin-bottom: 0.5rem; display: inline-block;">
                     <i data-feather="arrow-left" width="16"></i> Retour à mes adresses
                 </a>
-                <h1 class="h2 fw-bold mb-1" style="color: var(--primary);">
-                    <i data-feather="{% if isEdit %}edit-2{% else %}plus{% endif %}" width="32" class="me-2"></i>
+                <h1 style="color: var(--primary); font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem;">
+                    <i data-feather="{% if isEdit %}edit-2{% else %}plus{% endif %}" width="32" style="margin-right: 0.5rem;"></i>
                     {{ isEdit ? 'Modifier l\'adresse' : 'Nouvelle adresse' }}
                 </h1>
-                <p class="text-muted mb-0">
+                <p style="color: #6c757d; margin: 0;">
                     {% if isEdit %}
                         Modifiez les informations de votre adresse
                     {% else %}
@@ -27,77 +27,69 @@
 
             {# Formulaire #}
             <div class="account-card">
-                <div class="card-body">
+                <div style="padding: 1.5rem;">
                     {{ form_start(form) }}
 
-                    <div class="row g-3">
+                    <div style="display: grid; gap: 1rem;">
                         {# Label (optionnel) #}
-                        <div class="col-12">
-                            <div class="mb-3">
-                                {{ form_label(form.label, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
-                                {{ form_widget(form.label) }}
-                                {{ form_help(form.label) }}
-                                {{ form_errors(form.label) }}
-                            </div>
+                        <div class="form-group">
+                            {{ form_label(form.label, null, {'label_attr': {'class': 'form-label', 'style': 'font-weight: 600;'}}) }}
+                            {{ form_widget(form.label) }}
+                            {{ form_help(form.label) }}
+                            {{ form_errors(form.label) }}
                         </div>
 
                         {# Adresse #}
-                        <div class="col-12">
-                            <div class="mb-3">
-                                {{ form_label(form.street, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
-                                <span class="text-danger">*</span>
-                                {{ form_widget(form.street) }}
-                                {{ form_errors(form.street) }}
-                            </div>
+                        <div class="form-group">
+                            {{ form_label(form.street, null, {'label_attr': {'class': 'form-label', 'style': 'font-weight: 600;'}}) }}
+                            <span style="color: #dc3545;">*</span>
+                            {{ form_widget(form.street) }}
+                            {{ form_errors(form.street) }}
                         </div>
 
                         {# Code postal et Ville #}
-                        <div class="col-md-4">
-                            <div class="mb-3">
-                                {{ form_label(form.postalCode, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
-                                <span class="text-danger">*</span>
+                        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem;">
+                            <div class="form-group">
+                                {{ form_label(form.postalCode, null, {'label_attr': {'class': 'form-label', 'style': 'font-weight: 600;'}}) }}
+                                <span style="color: #dc3545;">*</span>
                                 {{ form_widget(form.postalCode) }}
                                 {{ form_errors(form.postalCode) }}
                             </div>
-                        </div>
 
-                        <div class="col-md-8">
-                            <div class="mb-3">
-                                {{ form_label(form.city, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
-                                <span class="text-danger">*</span>
+                            <div class="form-group">
+                                {{ form_label(form.city, null, {'label_attr': {'class': 'form-label', 'style': 'font-weight: 600;'}}) }}
+                                <span style="color: #dc3545;">*</span>
                                 {{ form_widget(form.city) }}
                                 {{ form_errors(form.city) }}
                             </div>
                         </div>
 
                         {# Téléphone #}
-                        <div class="col-12">
-                            <div class="mb-3">
-                                {{ form_label(form.phone, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
-                                <span class="text-danger">*</span>
-                                {{ form_widget(form.phone) }}
-                                {{ form_help(form.phone) }}
-                                {{ form_errors(form.phone) }}
-                            </div>
+                        <div class="form-group">
+                            {{ form_label(form.phone, null, {'label_attr': {'class': 'form-label', 'style': 'font-weight: 600;'}}) }}
+                            <span style="color: #dc3545;">*</span>
+                            {{ form_widget(form.phone) }}
+                            {{ form_help(form.phone) }}
+                            {{ form_errors(form.phone) }}
                         </div>
 
                         {# Adresse par défaut #}
-                        <div class="col-12">
-                            <div class="form-check mb-3">
+                        <div style="margin-bottom: 1rem;">
+                            <div class="form-check">
                                 {{ form_widget(form.isDefault, {'attr': {'class': 'form-check-input'}}) }}
                                 {{ form_label(form.isDefault, null, {'label_attr': {'class': 'form-check-label'}}) }}
-                                <div class="form-text">{{ form_help(form.isDefault) }}</div>
+                                <div style="font-size: 0.875rem; color: #6c757d; margin-top: 0.25rem;">{{ form_help(form.isDefault) }}</div>
                                 {{ form_errors(form.isDefault) }}
                             </div>
                         </div>
                     </div>
 
                     {# Info Bordeaux #}
-                    <div class="alert alert-info d-flex align-items-start" role="alert">
-                        <i data-feather="info" width="20" class="me-2 mt-1"></i>
+                    <div class="alert alert-info" role="alert" style="display: flex; align-items: flex-start;">
+                        <i data-feather="info" width="20" style="margin-right: 0.5rem; margin-top: 0.25rem;"></i>
                         <div>
                             <strong>Frais de livraison :</strong>
-                            <ul class="mb-0 mt-2">
+                            <ul style="margin-bottom: 0; margin-top: 0.5rem;">
                                 <li>Bordeaux : 5€</li>
                                 <li>Hors Bordeaux : 5€ + 0,59€/km parcouru</li>
                             </ul>
@@ -105,13 +97,13 @@
                     </div>
 
                     {# Boutons d'action #}
-                    <div class="d-flex justify-content-between align-items-center mt-4">
-                        <a href="{{ path('app_account_addresses') }}" class="btn btn-outline-secondary">
-                            <i data-feather="x" width="18" class="me-2"></i>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem;">
+                        <a href="{{ path('app_account_addresses') }}" class="btn btn-outline">
+                            <i data-feather="x" width="18" style="margin-right: 0.5rem;"></i>
                             Annuler
                         </a>
                         <button type="submit" class="btn btn-primary">
-                            <i data-feather="{% if isEdit %}save{% else %}plus{% endif %}" width="18" class="me-2"></i>
+                            <i data-feather="{% if isEdit %}save{% else %}plus{% endif %}" width="18" style="margin-right: 0.5rem;"></i>
                             {{ isEdit ? 'Enregistrer les modifications' : 'Ajouter l\'adresse' }}
                         </button>
                     </div>
@@ -121,9 +113,9 @@
             </div>
 
             {# Note sur les champs obligatoires #}
-            <div class="mt-3">
-                <small class="text-muted">
-                    <span class="text-danger">*</span> Champs obligatoires
+            <div style="margin-top: 1rem;">
+                <small style="color: #6c757d;">
+                    <span style="color: #dc3545;">*</span> Champs obligatoires
                 </small>
             </div>
         </div>

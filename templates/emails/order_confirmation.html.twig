@@ -159,14 +159,14 @@
                 </div>
 
                 {% if discountAmount %}
-                <div class="detail-row" style="color: #198754;">
+                <div style="color: #198754;">
                     <span class="detail-label">Réduction (10%) :</span>
                     <span class="detail-value">- {{ discountAmount|number_format(2, ',', ' ') }} €</span>
                 </div>
                 {% endif %}
 
                 <div class="total-row">
-                    <div class="detail-row" style="border: none;">
+                    <div style="border: none;">
                         <span>Total :</span>
                         <span>{{ totalPrice|number_format(2, ',', ' ') }} €</span>
                     </div>

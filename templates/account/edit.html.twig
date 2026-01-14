@@ -4,45 +4,43 @@
 
 {% block body %}
 
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="d-flex align-items-center mb-4">
-                <a href="{{ path('app_account') }}" class="btn btn-outline-secondary me-3">
+<div style="padding: 3rem 0;">
+    <div style="display: flex; justify-content: center;">
+        <div style="max-width: 800px; width: 100%;">
+            <div style="display: flex; align-items: center; margin-bottom: 2rem;">
+                <a href="{{ path('app_account') }}" style="margin-right: 1rem;">
                     <i data-feather="arrow-left" width="18"></i>
                 </a>
-                <h1 class="h2 fw-bold mb-0" style="color: var(--primary);">
+                <h1 style="color: var(--primary); font-size: 1.75rem; font-weight: 700; margin: 0;">
                     Modifier mon profil
                 </h1>
             </div>
 
             {% for message in app.flashes('success') %}
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <div class="alert alert-success" role="alert">
                     {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             {% endfor %}
 
             {% for message in app.flashes('error') %}
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <div class="alert alert-danger" role="alert">
                     {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             {% endfor %}
 
             <div class="account-card">
                 <div class="card-header-custom">
-                    <h5 class="mb-0">
-                        <i data-feather="edit-3" width="20" class="me-2"></i>
+                    <h5 style="margin: 0;">
+                        <i data-feather="edit-3" width="20" style="margin-right: 0.5rem;"></i>
                         Informations personnelles
                     </h5>
                 </div>
-                <div class="card-body">
+                <div style="padding: 1.5rem;">
                     <form method="post">
-                        <div class="row g-3 mb-4">
-                            <div class="col-md-6">
-                                <label for="firstname" class="form-label fw-bold">
-                                    Prénom <span class="text-danger">*</span>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                            <div class="form-group">
+                                <label for="firstname" style="font-weight: 600;">
+                                    Prénom <span style="color: #dc3545;">*</span>
                                 </label>
                                 <input type="text"
                                        class="form-control"
@@ -51,9 +49,9 @@
                                        value="{{ app.user.firstname }}"
                                        required>
                             </div>
-                            <div class="col-md-6">
-                                <label for="lastname" class="form-label fw-bold">
-                                    Nom <span class="text-danger">*</span>
+                            <div class="form-group">
+                                <label for="lastname" style="font-weight: 600;">
+                                    Nom <span style="color: #dc3545;">*</span>
                                 </label>
                                 <input type="text"
                                        class="form-control"
@@ -64,25 +62,25 @@
                             </div>
                         </div>
 
-                        <div class="mb-4">
-                            <label class="form-label fw-bold">Email</label>
-                            <div class="info-field bg-light">
-                                <i data-feather="mail" width="18" class="me-2"></i>
+                        <div style="margin-bottom: 1.5rem;">
+                            <label style="font-weight: 600;">Email</label>
+                            <div style="background: #f8f9fa;">
+                                <i data-feather="mail" width="18" style="margin-right: 0.5rem;"></i>
                                 {{ app.user.email }}
-                                <span class="badge bg-secondary ms-2">Non modifiable</span>
+                                <span style="background: #6c757d; margin-left: 0.5rem;">Non modifiable</span>
                             </div>
-                            <div class="form-text">
+                            <div style="font-size: 0.875rem; color: #6c757d; margin-top: 0.5rem;">
                                 L'email sert d'identifiant de connexion et ne peut pas être modifié ici.
                             </div>
                         </div>
 
-                        <div class="d-flex justify-content-between">
+                        <div style="display: flex; justify-content: space-between;">
                             <a href="{{ path('app_account') }}" class="btn btn-secondary">
-                                <i data-feather="x" width="18" class="me-2"></i>
+                                <i data-feather="x" width="18" style="margin-right: 0.5rem;"></i>
                                 Annuler
                             </a>
                             <button type="submit" class="btn btn-primary">
-                                <i data-feather="check" width="18" class="me-2"></i>
+                                <i data-feather="check" width="18" style="margin-right: 0.5rem;"></i>
                                 Enregistrer les modifications
                             </button>
                         </div>

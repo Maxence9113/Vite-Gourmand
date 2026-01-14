@@ -200,7 +200,7 @@
                         {% if item.isOpen %}
                             <span class="badge badge-success">Ouvert</span>
                             {% if item.openingTime and item.closingTime %}
-                                <span class="ms-2">{{ item.openingTime }} - {{ item.closingTime }}</span>
+                                <span style="margin-left: 0.5rem;">{{ item.openingTime }} - {{ item.closingTime }}</span>
                             {% endif %}
                         {% else %}
                             <span class="badge badge-secondary">Fermé</span>

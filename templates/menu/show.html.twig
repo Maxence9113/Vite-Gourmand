@@ -185,7 +185,7 @@
                             Commander ce menu
                         </button>
                     {% endif %}
-                    <a href="{{ path('app_menu_catalog') }}" class="btn btn-outline" style="width: 100%;">
+                    <a href="{{ path('app_menu_catalog') }}" style="width: 100%;">
                         Retour au catalogue
                     </a>
                 </div>
@@ -274,7 +274,7 @@
                 <span data-icon="x" data-icon-width="24" data-icon-height="24"></span>
             </button>
         </div>
-        <div class="modal-body" style="text-align: center; padding: var(--spacing-xl);">
+        <div style="text-align: center; padding: var(--spacing-xl);">
             <span data-icon="user-check" data-icon-width="64" data-icon-height="64" style="display: block; margin: 0 auto var(--spacing-md); color: var(--bordeaux);"></span>
             <p style="font-size: 1.125rem; margin-bottom: var(--spacing-md); color: var(--dark-text);">
                 Pour commander ce menu, vous devez être connecté à votre compte.
@@ -283,7 +283,7 @@
                 Vous n'avez pas encore de compte ? C'est rapide et gratuit !
             </p>
         </div>
-        <div class="modal-footer" style="justify-content: center; padding-bottom: var(--spacing-xl);">
+        <div style="justify-content: center; padding-bottom: var(--spacing-xl);">
             <a href="{{ path('app_login') }}?redirect={{ path('app_menu_show', {id: menu.id}) }}" class="btn btn-primary btn-lg">
                 <span data-icon="log-in" data-icon-width="18" data-icon-height="18"></span>
                 Se connecter

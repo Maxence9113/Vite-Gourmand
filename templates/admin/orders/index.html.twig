@@ -3,73 +3,106 @@
 {% block title %}Gestion des Commandes - Admin{% endblock %}
 
 {% block content %}
-<div class="container-fluid mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>Gestion des Commandes</h1>
-        <a href="{{ path('app_admin_dashboard') }}" class="btn btn-outline-secondary">
-            <i data-feather="arrow-left"></i> Retour au Dashboard
-        </a>
-    </div>
+<style>
+    .order-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
 
-    {# Statistiques rapides #}
-    <div class="row mb-4">
-        <div class="col-md-2">
-            <div class="card text-center">
-                <div class="card-body">
-                    <h6 class="text-muted">Total</h6>
-                    <h3 class="mb-0">{{ stats.total }}</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="card text-center border-warning">
-                <div class="card-body">
-                    <h6 class="text-muted">En attente</h6>
-                    <h3 class="mb-0 text-warning">{{ stats.pending }}</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="card text-center border-info">
-                <div class="card-body">
-                    <h6 class="text-muted">Validées</h6>
-                    <h3 class="mb-0 text-info">{{ stats.validated }}</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="card text-center border-primary">
-                <div class="card-body">
-                    <h6 class="text-muted">En préparation</h6>
-                    <h3 class="mb-0 text-primary">{{ stats.preparing }}</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="card text-center border-info">
-                <div class="card-body">
-                    <h6 class="text-muted">En livraison</h6>
-                    <h3 class="mb-0 text-info">{{ stats.delivering }}</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="card text-center border-warning">
-                <div class="card-body">
-                    <h6 class="text-muted">Attente matériel</h6>
-                    <h3 class="mb-0 text-warning">{{ stats.waitingMaterial }}</h3>
-                </div>
-            </div>
-        </div>
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .stat-card {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    }
+
+    .stat-card.warning {
+        border-left: 4px solid #f39c12;
+    }
+
+    .stat-card.info {
+        border-left: 4px solid #3498db;
+    }
+
+    .stat-card.primary {
+        border-left: 4px solid #9b59b6;
+    }
+
+    .stat-card h6 {
+        color: #7f8c8d;
+        font-size: 0.85rem;
+        margin-bottom: 8px;
+    }
+
+    .stat-card h3 {
+        font-size: 1.8rem;
+        margin: 0;
+    }
+
+    .stat-card.warning h3 {
+        color: #f39c12;
+    }
+
+    .stat-card.info h3 {
+        color: #3498db;
+    }
+
+    .stat-card.primary h3 {
+        color: #9b59b6;
+    }
+</style>
+
+<div class="order-header">
+    <h1>Gestion des Commandes</h1>
+    <a href="{{ path('app_admin_dashboard') }}" class="btn btn-outline-secondary">
+        <i data-feather="arrow-left"></i> Retour au Dashboard
+    </a>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <h6>Total</h6>
+        <h3>{{ stats.total }}</h3>
     </div>
+    <div class="stat-card warning">
+        <h6>En attente</h6>
+        <h3>{{ stats.pending }}</h3>
+    </div>
+    <div class="stat-card info">
+        <h6>Validées</h6>
+        <h3>{{ stats.validated }}</h3>
+    </div>
+    <div class="stat-card primary">
+        <h6>En préparation</h6>
+        <h3>{{ stats.preparing }}</h3>
+    </div>
+    <div class="stat-card info">
+        <h6>En livraison</h6>
+        <h3>{{ stats.delivering }}</h3>
+    </div>
+    <div class="stat-card warning">
+        <h6>Attente matériel</h6>
+        <h3>{{ stats.waitingMaterial }}</h3>
+    </div>
+</div>
 
     {# Filtres #}
-    <div class="card mb-4">
+    <div style="margin-bottom: 25px;">
         <div class="card-body">
-            <form method="get" class="row g-3">
-                <div class="col-md-3">
+            <form method="get" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                <div>
                     <label for="status" class="form-label">Statut</label>
-                    <select name="status" id="status" class="form-select">
+                    <select name="status" id="status" class="form-control">
                         <option value="all" {% if currentStatus == 'all' or not currentStatus %}selected{% endif %}>Tous les statuts</option>
                         <option value="pending" {% if currentStatus == 'pending' %}selected{% endif %}>En attente</option>
                         <option value="validated" {% if currentStatus == 'validated' %}selected{% endif %}>Validée</option>
@@ -82,23 +115,23 @@
                         <option value="cancelled" {% if currentStatus == 'cancelled' %}selected{% endif %}>Annulée</option>
                     </select>
                 </div>
-                <div class="col-md-3">
+                <div>
                     <label for="date" class="form-label">Période</label>
-                    <select name="date" id="date" class="form-select">
+                    <select name="date" id="date" class="form-control">
                         <option value="" {% if not currentDate %}selected{% endif %}>Toutes les dates</option>
                         <option value="today" {% if currentDate == 'today' %}selected{% endif %}>Aujourd'hui</option>
                         <option value="week" {% if currentDate == 'week' %}selected{% endif %}>7 derniers jours</option>
                         <option value="month" {% if currentDate == 'month' %}selected{% endif %}>30 derniers jours</option>
                     </select>
                 </div>
-                <div class="col-md-4">
+                <div>
                     <label for="search" class="form-label">Recherche</label>
                     <input type="text" name="search" id="search" class="form-control"
                            placeholder="N° commande, nom, email..."
                            value="{{ currentSearch }}">
                 </div>
-                <div class="col-md-2 d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary me-2">
+                <div style="display: flex; align-items: flex-end; gap: 10px;">
+                    <button type="submit" class="btn btn-primary">
                         <i data-feather="filter"></i> Filtrer
                     </button>
                     <a href="{{ path('app_admin_orders') }}" class="btn btn-outline-secondary">
@@ -111,33 +144,33 @@
 
     {# Liste des commandes #}
     <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">Liste des Commandes ({{ orders|length }})</h5>
-            <div class="btn-group btn-group-sm">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h5 style="margin: 0;">Liste des Commandes ({{ orders|length }})</h5>
+            <div style="display: flex; gap: 5px;">
                 <a href="{{ path('app_admin_orders', {sort: 'createdAt', order: currentOrder == 'DESC' ? 'ASC' : 'DESC'}) }}"
-                   class="btn btn-outline-secondary">
+                   style="font-size: 0.85rem; padding: 5px 10px;">
                     <i data-feather="calendar"></i> Date
                 </a>
                 <a href="{{ path('app_admin_orders', {sort: 'deliveryDateTime', order: currentOrder == 'DESC' ? 'ASC' : 'DESC'}) }}"
-                   class="btn btn-outline-secondary">
+                   style="font-size: 0.85rem; padding: 5px 10px;">
                     <i data-feather="truck"></i> Livraison
                 </a>
                 <a href="{{ path('app_admin_orders', {sort: 'totalPrice', order: currentOrder == 'DESC' ? 'ASC' : 'DESC'}) }}"
-                   class="btn btn-outline-secondary">
+                   style="font-size: 0.85rem; padding: 5px 10px;">
                     <i data-feather="dollar-sign"></i> Montant
                 </a>
             </div>
         </div>
-        <div class="card-body p-0">
+        <div style="padding: 0;">
             {% if orders is empty %}
-                <div class="text-center py-5">
-                    <i data-feather="inbox" class="mb-3" style="width: 48px; height: 48px;"></i>
-                    <p class="text-muted">Aucune commande trouvée avec ces filtres.</p>
+                <div style="text-align: center; padding: 50px 20px;">
+                    <i data-feather="inbox" style="width: 48px; height: 48px; margin-bottom: 15px;"></i>
+                    <p style="color: #95a5a6;">Aucune commande trouvée avec ces filtres.</p>
                 </div>
             {% else %}
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0">
-                        <thead class="table-light">
+                <div style="overflow-x: auto;">
+                    <table style="margin: 0;">
+                        <thead style="background: #f8f9fa;">
                             <tr>
                                 <th>N° Commande</th>
                                 <th>Client</th>
@@ -145,8 +178,8 @@
                                 <th>Date de livraison</th>
                                 <th>Montant</th>
                                 <th>Statut</th>
-                                <th class="text-center">Matériel</th>
-                                <th class="text-end">Actions</th>
+                                <th style="text-align: center;">Matériel</th>
+                                <th style="text-align: right;">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -154,20 +187,20 @@
                             <tr>
                                 <td>
                                     <strong>{{ order.orderNumber }}</strong><br>
-                                    <small class="text-muted">{{ order.createdAt|date('d/m/Y H:i') }}</small>
+                                    <small style="color: #95a5a6;">{{ order.createdAt|date('d/m/Y H:i') }}</small>
                                 </td>
                                 <td>
                                     {{ order.customerFirstname }} {{ order.customerLastname }}<br>
-                                    <small class="text-muted">{{ order.customerEmail }}</small>
+                                    <small style="color: #95a5a6;">{{ order.customerEmail }}</small>
                                 </td>
                                 <td>
                                     {{ order.menuName }}<br>
-                                    <small class="text-muted">{{ order.numberOfPersons }} personne(s)</small>
+                                    <small style="color: #95a5a6;">{{ order.numberOfPersons }} personne(s)</small>
                                 </td>
                                 <td>
                                     <i data-feather="calendar" style="width: 16px; height: 16px;"></i>
                                     {{ order.deliveryDateTime|date('d/m/Y') }}<br>
-                                    <small class="text-muted">
+                                    <small style="color: #95a5a6;">
                                         <i data-feather="clock" style="width: 14px; height: 14px;"></i>
                                         {{ order.deliveryDateTime|date('H:i') }}
                                     </small>
@@ -178,28 +211,28 @@
                                 <td>
                                     {% include 'admin/orders/_status_badge.html.twig' with {'status': order.status} %}
                                 </td>
-                                <td class="text-center">
+                                <td style="text-align: center;">
                                     {% if order.hasMaterialLoan %}
                                         {% if order.materialReturned %}
-                                            <span class="badge bg-success" title="Matériel retourné">
+                                            <span class="badge badge-success" title="Matériel retourné">
                                                 <i data-feather="check-circle" style="width: 14px; height: 14px;"></i>
                                             </span>
                                         {% elseif order.status.value == 'waiting_material_return' %}
-                                            <span class="badge bg-warning" title="En attente de retour">
+                                            <span class="badge badge-warning" title="En attente de retour">
                                                 <i data-feather="rotate-ccw" style="width: 14px; height: 14px;"></i>
                                             </span>
                                         {% else %}
-                                            <span class="badge bg-info" title="Avec matériel">
+                                            <span class="badge badge-info" title="Avec matériel">
                                                 <i data-feather="box" style="width: 14px; height: 14px;"></i>
                                             </span>
                                         {% endif %}
                                     {% else %}
-                                        <span class="text-muted">-</span>
+                                        <span style="color: #95a5a6;">-</span>
                                     {% endif %}
                                 </td>
-                                <td class="text-end">
+                                <td style="text-align: right;">
                                     <a href="{{ path('app_admin_orders_show', {id: order.id}) }}"
-                                       class="btn btn-sm btn-outline-primary">
+                                       style="font-size: 0.85rem; padding: 5px 10px;">
                                         <i data-feather="eye" style="width: 14px; height: 14px;"></i> Voir
                                     </a>
                                 </td>

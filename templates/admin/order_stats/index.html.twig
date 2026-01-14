@@ -3,53 +3,53 @@
 {% block title %}Statistiques des commandes{% endblock %}
 
 {% block content %}
-<div class="container-fluid mt-4">
-    <div class="row mb-4">
-        <div class="col-12">
-            <h1 class="mb-0">Statistiques des commandes</h1>
-            <p class="text-muted">Analyse des performances par thème et par menu</p>
+<div style="margin-top: 25px;">
+    <div style="margin-bottom: 25px;">
+        <div style="flex: 0 0 100%; max-width: 100%; padding: 0 0.75rem;">
+            <h1 style="margin-bottom: 0;">Statistiques des commandes</h1>
+            <p style="color: #95a5a6;">Analyse des performances par thème et par menu</p>
         </div>
     </div>
 
     {# KPIs - Indicateurs clés #}
-    <div class="row mb-4">
-        <div class="col-md-3">
-            <div class="card text-center border-primary">
+    <div style="margin-bottom: 25px;">
+        <div style="flex: 0 0 25%; max-width: 25%; padding: 0 0.75rem;">
+            <div style="text-align: center; border: 1px solid var(--primary);">
                 <div class="card-body">
-                    <h6 class="card-subtitle mb-2 text-muted">Total commandes</h6>
-                    <h2 class="card-title mb-0 text-primary">{{ globalStats.totalOrders }}</h2>
+                    <h6 style="margin-bottom: 0.5rem; color: #95a5a6;">Total commandes</h6>
+                    <h2 style="margin-bottom: 0; color: var(--primary);">{{ globalStats.totalOrders }}</h2>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card text-center border-success">
+        <div style="flex: 0 0 25%; max-width: 25%; padding: 0 0.75rem;">
+            <div style="text-align: center; border: 1px solid #27ae60;">
                 <div class="card-body">
-                    <h6 class="card-subtitle mb-2 text-muted">Chiffre d'affaires</h6>
-                    <h2 class="card-title mb-0 text-success">{{ globalStats.totalRevenue|number_format(0, ',', ' ') }} €</h2>
+                    <h6 style="margin-bottom: 0.5rem; color: #95a5a6;">Chiffre d'affaires</h6>
+                    <h2 style="margin-bottom: 0; color: #27ae60;">{{ globalStats.totalRevenue|number_format(0, ',', ' ') }} €</h2>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card text-center border-info">
+        <div style="flex: 0 0 25%; max-width: 25%; padding: 0 0.75rem;">
+            <div style="text-align: center; border: 1px solid #3498db;">
                 <div class="card-body">
-                    <h6 class="card-subtitle mb-2 text-muted">Moy. personnes</h6>
-                    <h2 class="card-title mb-0 text-info">{{ globalStats.avgPeoplePerOrder|number_format(1, ',', ' ') }}</h2>
+                    <h6 style="margin-bottom: 0.5rem; color: #95a5a6;">Moy. personnes</h6>
+                    <h2 style="margin-bottom: 0; color: #3498db;">{{ globalStats.avgPeoplePerOrder|number_format(1, ',', ' ') }}</h2>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card text-center border-warning">
+        <div style="flex: 0 0 25%; max-width: 25%; padding: 0 0.75rem;">
+            <div style="text-align: center; border: 1px solid #f39c12;">
                 <div class="card-body">
-                    <h6 class="card-subtitle mb-2 text-muted">
+                    <h6 style="margin-bottom: 0.5rem; color: #95a5a6;">
                         {% if viewType == 'theme' %}Top thème{% else %}Top menu{% endif %}
                     </h6>
-                    <h6 class="card-title mb-0 text-warning">
+                    <h6 style="margin-bottom: 0; color: #f39c12;">
                         {% if viewType == 'theme' and topTheme %}
                             {{ topTheme.themeName }}
-                            <small class="text-muted d-block">({{ topTheme.count }} cmd)</small>
+                            <small style="color: #95a5a6; display: block;">({{ topTheme.count }} cmd)</small>
                         {% elseif viewType == 'menu' and topMenu %}
                             {{ topMenu.menuName }}
-                            <small class="text-muted d-block">({{ topMenu.count }} cmd)</small>
+                            <small style="color: #95a5a6; display: block;">({{ topMenu.count }} cmd)</small>
                         {% else %}
                             -
                         {% endif %}
@@ -60,17 +60,17 @@
     </div>
 
     {# Filtres #}
-    <div class="card mb-4">
+    <div style="margin-bottom: 25px;">
         <div class="card-header">
-            <h5 class="mb-0">Filtres et options d'affichage</h5>
+            <h5 style="margin-bottom: 0;">Filtres et options d'affichage</h5>
         </div>
         <div class="card-body">
             <form method="get" action="{{ path('app_admin_order_stats') }}" id="filterForm">
                 {# Boutons de sélection de vue #}
-                <div class="row mb-3">
-                    <div class="col-12">
-                        <label class="form-label fw-bold">Vue</label>
-                        <div class="btn-group w-100" role="group">
+                <div style="margin-bottom: 20px;">
+                    <div style="flex: 0 0 100%; max-width: 100%; padding: 0 0.75rem;">
+                        <label style="font-weight: 600;">Vue</label>
+                        <div style="width: 100%;" role="group">
                             <input type="radio" class="btn-check" name="view" value="theme" id="viewTheme"
                                    {{ viewType == 'theme' ? 'checked' : '' }} onchange="this.form.submit()">
                             <label class="btn btn-outline-primary" for="viewTheme">Par thème</label>
@@ -82,10 +82,10 @@
                     </div>
                 </div>
 
-                <div class="row">
+                <div style="display: flex; flex-wrap: wrap; margin: 0 -0.75rem;">
                     {# Filtre par période #}
-                    <div class="col-md-4 mb-3">
-                        <label for="period" class="form-label fw-bold">Période</label>
+                    <div style="margin-bottom: 20px;">
+                        <label for="period" style="font-weight: 600;">Période</label>
                         <select name="period" id="period" class="form-select" onchange="toggleCustomDates()">
                             <option value="all" {{ currentPeriod == 'all' ? 'selected' : '' }}>Toutes les données</option>
                             <option value="week" {{ currentPeriod == 'week' ? 'selected' : '' }}>7 derniers jours</option>
@@ -97,18 +97,18 @@
                     </div>
 
                     {# Dates personnalisées (visibles seulement si "custom" est sélectionné) #}
-                    <div class="col-md-3 mb-3" id="customDatesStart" style="display: {{ currentPeriod == 'custom' ? 'block' : 'none' }}">
+                    <div style="margin-bottom: 20px;" id="customDatesStart" style="display: {{ currentPeriod == 'custom' ? 'block' : 'none' }}">
                         <label for="start_date" class="form-label">Date de début</label>
                         <input type="date" name="start_date" id="start_date" class="form-control" value="{{ currentStartDate }}">
                     </div>
-                    <div class="col-md-3 mb-3" id="customDatesEnd" style="display: {{ currentPeriod == 'custom' ? 'block' : 'none' }}">
+                    <div style="margin-bottom: 20px;" id="customDatesEnd" style="display: {{ currentPeriod == 'custom' ? 'block' : 'none' }}">
                         <label for="end_date" class="form-label">Date de fin</label>
                         <input type="date" name="end_date" id="end_date" class="form-control" value="{{ currentEndDate }}">
                     </div>
 
                     {# Filtre par thème (visible seulement en vue "menu" ou si filtré) #}
-                    <div class="col-md-2 mb-3">
-                        <label for="theme" class="form-label fw-bold">Thème</label>
+                    <div style="margin-bottom: 20px;">
+                        <label for="theme" style="font-weight: 600;">Thème</label>
                         <select name="theme" id="theme" class="form-select">
                             <option value="">Tous</option>
                             {% for themeName in availableThemes %}
@@ -120,8 +120,8 @@
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-12">
+                <div style="display: flex; flex-wrap: wrap; margin: 0 -0.75rem;">
+                    <div style="flex: 0 0 100%; max-width: 100%; padding: 0 0.75rem;">
                         <button type="submit" class="btn btn-primary">
                             <i class="bi bi-funnel"></i> Appliquer les filtres
                         </button>
@@ -135,11 +135,11 @@
     </div>
 
     {# Graphique #}
-    <div class="row mb-4">
-        <div class="col-12">
+    <div style="margin-bottom: 25px;">
+        <div style="flex: 0 0 100%; max-width: 100%; padding: 0 0.75rem;">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-0">
+                    <h5 style="margin-bottom: 0;">
                         {% if viewType == 'theme' %}
                             Nombre de commandes par thème
                         {% else %}
@@ -163,11 +163,11 @@
     </div>
 
     {# Tableau détaillé #}
-    <div class="row mb-4">
-        <div class="col-12">
+    <div style="margin-bottom: 25px;">
+        <div style="flex: 0 0 100%; max-width: 100%; padding: 0 0.75rem;">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-0">Détail du chiffre d'affaires</h5>
+                    <h5 style="margin-bottom: 0;">Détail du chiffre d'affaires</h5>
                 </div>
                 <div class="card-body">
                     {% if revenueData is not empty %}
@@ -182,9 +182,9 @@
                                         {% if viewType == 'menu' %}
                                             <th>Thème</th>
                                         {% endif %}
-                                        <th class="text-center">Nombre de commandes</th>
-                                        <th class="text-end">Chiffre d'affaires</th>
-                                        <th class="text-end">CA moyen / commande</th>
+                                        <th style="text-align: center;">Nombre de commandes</th>
+                                        <th style="text-align: right;">Chiffre d'affaires</th>
+                                        <th style="text-align: right;">CA moyen / commande</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -201,27 +201,27 @@
                                             </td>
                                             {% if viewType == 'menu' %}
                                                 <td>
-                                                    <span class="badge" style="background-color: {{ chartBorderColorsArray[key] }}; color: white;">
+                                                    <span style="background-color: {{ chartBorderColorsArray[key] }}; color: white;">
                                                         {{ item.themeName }}
                                                     </span>
                                                 </td>
                                             {% endif %}
-                                            <td class="text-center">
-                                                <span class="badge bg-primary">{{ orderCount.count }}</span>
+                                            <td style="text-align: center;">
+                                                <span class="badge badge-primary">{{ orderCount.count }}</span>
                                             </td>
-                                            <td class="text-end">{{ item.totalRevenue|number_format(2, ',', ' ') }} €</td>
-                                            <td class="text-end text-muted">
+                                            <td style="text-align: right;">{{ item.totalRevenue|number_format(2, ',', ' ') }} €</td>
+                                            <td style="text-align: right; color: #95a5a6;">
                                                 {{ (item.totalRevenue / orderCount.count)|number_format(2, ',', ' ') }} €
                                             </td>
                                         </tr>
                                     {% endfor %}
                                 </tbody>
                                 <tfoot class="table-secondary">
-                                    <tr class="fw-bold">
+                                    <tr style="font-weight: bold;">
                                         <td colspan="{% if viewType == 'menu' %}3{% else %}2{% endif %}">TOTAL</td>
-                                        <td class="text-center">{{ globalStats.totalOrders }}</td>
-                                        <td class="text-end">{{ globalStats.totalRevenue|number_format(2, ',', ' ') }} €</td>
-                                        <td class="text-end">{{ (globalStats.totalRevenue / globalStats.totalOrders)|number_format(2, ',', ' ') }} €</td>
+                                        <td style="text-align: center;">{{ globalStats.totalOrders }}</td>
+                                        <td style="text-align: right;">{{ globalStats.totalRevenue|number_format(2, ',', ' ') }} €</td>
+                                        <td style="text-align: right;">{{ (globalStats.totalRevenue / globalStats.totalOrders)|number_format(2, ',', ' ') }} €</td>
                                     </tr>
                                 </tfoot>
                             </table>

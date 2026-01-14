@@ -3,8 +3,8 @@
 {% block title %}Commande {{ order.orderNumber }}{% endblock %}
 
 {% block body %}
-<div class="container my-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+<div style="margin: 30px 0;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
         <h1>Commande {{ order.orderNumber }}</h1>
         <a href="{{ path('app_account_orders') }}" class="btn btn-secondary">
             <i data-feather="arrow-left"></i> Retour à mes commandes
@@ -12,31 +12,31 @@
     </div>
 
     {% for message in app.flashes('success') %}
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <div class="alert alert-success" role="alert">
             {{ message }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     {% endfor %}
 
     {% for message in app.flashes('error') %}
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <div class="alert alert-danger" role="alert">
             {{ message }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     {% endfor %}
 
-    <div class="row">
-        <div class="col-lg-8">
-            <div class="card mb-4">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Statut de la commande</h5>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+        <div style="grid-column: span 2;">
+            <div style="margin-bottom: 25px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h5 style="margin: 0;">Statut de la commande</h5>
                     <span class="badge bg-{{ order.status.badgeClass }} fs-6">
                         <i data-feather="{{ order.status.icon }}"></i>
                         {{ order.status.label }}
                     </span>
                 </div>
                 <div class="card-body">
-                    <p class="text-muted mb-2">
+                    <p style="margin-bottom: 10px;">
                         Commande passée le {{ order.createdAt|date('d/m/Y à H:i') }}
                     </p>
 
@@ -55,21 +55,21 @@
                 </div>
             </div>
 
-            <div class="card mb-4">
+            <div style="margin-bottom: 25px;">
                 <div class="card-header">
-                    <h5 class="mb-0">Détails du menu</h5>
+                    <h5 style="margin: 0;">Détails du menu</h5>
                 </div>
                 <div class="card-body">
                     <h4>{{ order.menuName }}</h4>
-                    <div class="row mt-3">
-                        <div class="col-md-6">
-                            <ul class="list-unstyled">
-                                <li class="mb-2">
-                                    <i data-feather="users" class="text-muted"></i>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;">
+                        <div style="grid-column: span 1;">
+                            <ul style="list-style: none; padding: 0;">
+                                <li style="margin-bottom: 10px;">
+                                    <i data-feather="users" style="color: #95a5a6;"></i>
                                     <strong>Nombre de personnes:</strong> {{ order.numberOfPersons }}
                                 </li>
-                                <li class="mb-2">
-                                    <i data-feather="dollar-sign" class="text-muted"></i>
+                                <li style="margin-bottom: 10px;">
+                                    <i data-feather="dollar-sign" style="color: #95a5a6;"></i>
                                     <strong>Prix par personne:</strong> {{ (order.menuPricePerPerson / 100)|number_format(2, ',', ' ') }}€
                                 </li>
                             </ul>
@@ -78,32 +78,32 @@
                 </div>
             </div>
 
-            <div class="card mb-4">
+            <div style="margin-bottom: 25px;">
                 <div class="card-header">
-                    <h5 class="mb-0">Informations de livraison</h5>
+                    <h5 style="margin: 0;">Informations de livraison</h5>
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <p class="mb-2"><strong>Date et heure:</strong></p>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                        <div style="grid-column: span 1;">
+                            <p style="margin-bottom: 10px;"><strong>Date et heure:</strong></p>
                             <p>{{ order.deliveryDateTime|date('d/m/Y à H:i') }}</p>
                         </div>
-                        <div class="col-md-6">
-                            <p class="mb-2"><strong>Adresse:</strong></p>
+                        <div style="grid-column: span 1;">
+                            <p style="margin-bottom: 10px;"><strong>Adresse:</strong></p>
                             <p>{{ order.deliveryAddress }}</p>
                         </div>
                     </div>
 
                     {% if order.hasMaterialLoan %}
-                        <div class="alert alert-info mt-3">
+                        <div style="margin-top: 20px;">
                             <i data-feather="package"></i>
                             <strong>Emprunt de matériel</strong>
-                            <p class="mb-0">
+                            <p style="margin: 0;">
                                 Date limite de retour: {{ order.materialReturnDeadline|date('d/m/Y') }}
                                 {% if order.materialReturned %}
-                                    <span class="badge bg-success">Matériel retourné</span>
+                                    <span class="badge badge-success">Matériel retourné</span>
                                 {% else %}
-                                    <span class="badge bg-warning">En attente de retour</span>
+                                    <span class="badge badge-warning">En attente de retour</span>
                                 {% endif %}
                             </p>
                         </div>
@@ -112,9 +112,9 @@
             </div>
 
             {% if order.canReceiveReview %}
-                <div class="card mb-4">
+                <div style="margin-bottom: 25px;">
                     <div class="card-header">
-                        <h5 class="mb-0">Laisser un avis</h5>
+                        <h5 style="margin: 0;">Laisser un avis</h5>
                     </div>
                     <div class="card-body">
                         <p>Votre commande a été livrée. Qu'en avez-vous pensé ?</p>
@@ -126,55 +126,55 @@
             {% endif %}
         </div>
 
-        <div class="col-lg-4">
+        <div style="grid-column: span 1;">
             <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Récapitulatif financier</h5>
+                <div class="card-header badge-primary text-white">
+                    <h5 style="margin: 0;">Récapitulatif financier</h5>
                 </div>
                 <div class="card-body">
-                    <div class="d-flex justify-content-between mb-2">
+                    <div style="margin-bottom: 10px;">
                         <span>Sous-total menu:</span>
                         <strong>{{ (order.menuSubtotal / 100)|number_format(2, ',', ' ') }}€</strong>
                     </div>
 
                     {% if order.discountAmount %}
-                        <div class="d-flex justify-content-between mb-2 text-success">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; color: #27ae60;">
                             <span>Réduction (10%):</span>
                             <strong>- {{ (order.discountAmount / 100)|number_format(2, ',', ' ') }}€</strong>
                         </div>
                     {% endif %}
 
-                    <div class="d-flex justify-content-between mb-2">
+                    <div style="margin-bottom: 10px;">
                         <span>Frais de livraison:</span>
                         <strong>{{ (order.deliveryCost / 100)|number_format(2, ',', ' ') }}€</strong>
                     </div>
 
                     {% if order.deliveryDistanceKm %}
-                        <small class="text-muted d-block mb-2">
+                        <small style="margin-bottom: 10px;">
                             Distance: {{ order.deliveryDistanceKm }} km
                         </small>
                     {% endif %}
 
                     <hr>
 
-                    <div class="d-flex justify-content-between">
-                        <span class="h5">Total:</span>
-                        <strong class="h5 text-primary">{{ (order.totalPrice / 100)|number_format(2, ',', ' ') }}€</strong>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="font-size: 1.1rem;">Total:</span>
+                        <strong style="font-size: 1.25rem; color: var(--bordeaux);">{{ (order.totalPrice / 100)|number_format(2, ',', ' ') }}€</strong>
                     </div>
                 </div>
             </div>
 
-            <div class="card mt-4">
+            <div style="margin-top: 25px;">
                 <div class="card-header">
-                    <h5 class="mb-0">Historique</h5>
+                    <h5 style="margin: 0;">Historique</h5>
                 </div>
                 <div class="card-body">
-                    <ul class="list-unstyled">
+                    <ul style="list-style: none; padding: 0;">
                         {% for entry in order.statusHistory %}
-                            <li class="mb-2">
-                                <small class="text-muted">{{ entry.changed_at }}</small>
+                            <li style="margin-bottom: 10px;">
+                                <small style="color: #95a5a6;">{{ entry.changed_at }}</small>
                                 <div>
-                                    <span class="badge bg-secondary">{{ entry.label }}</span>
+                                    <span style="background: #95a5a6; color: white;">{{ entry.label }}</span>
                                 </div>
                             </li>
                         {% endfor %}
@@ -196,7 +196,7 @@
             <form method="post" action="{{ path('app_order_cancel', {id: order.id}) }}">
                 <div class="modal-body">
                     <p>Êtes-vous sûr de vouloir annuler cette commande ?</p>
-                    <div class="mb-3">
+                    <div style="margin-bottom: 20px;">
                         <label for="reason" class="form-label">Raison (optionnel)</label>
                         <textarea class="form-control" id="reason" name="reason" rows="3"></textarea>
                     </div>

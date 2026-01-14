@@ -3,10 +3,10 @@
 {% block title %}{{ isEdit ? 'Modifier' : 'Ajouter' }} une recette{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-8 offset-md-2">
-            <div class="d-flex justify-content-between align-items-center mb-4">
+<div style="margin-top: 30px;">
+    <div style="display: flex; flex-wrap: wrap; margin: 0 -0.75rem;">
+        <div style="flex: 0 0 66.666%; max-width: 66.666%; padding: 0 0.75rem; margin-left: 16.666%;">
+            <div style="margin-bottom: 25px;">
                 <h1>{{ isEdit ? 'Modifier la recette' : 'Ajouter une nouvelle recette' }}</h1>
                 <a href="{{ path('app_admin_recipes') }}" class="btn btn-secondary">
                     Retour à la liste
@@ -25,23 +25,23 @@
                 <div class="card-body">
                     {{ form_start(form) }}
 
-                    <div class="mb-3">
+                    <div style="margin-bottom: 1rem;">
                         {{ form_row(form.title) }}
                     </div>
 
-                    <div class="mb-3">
+                    <div style="margin-bottom: 1rem;">
                         {{ form_row(form.description) }}
                     </div>
 
-                    <div class="mb-3">
+                    <div style="margin-bottom: 1rem;">
                         {{ form_row(form.category) }}
                     </div>
 
-                    <div class="mb-3">
+                    <div style="margin-bottom: 1rem;">
                         {{ form_label(form.allergen) }}
-                        <div class="row">
+                        <div style="display: flex; flex-wrap: wrap; margin: 0 -0.75rem;">
                             {% for allergen in form.allergen %}
-                                <div class="col-md-6">
+                                <div style="flex: 0 0 50%; max-width: 50%; padding: 0 0.75rem;">
                                     <div class="form-check">
                                         {{ form_widget(allergen) }}
                                         {{ form_label(allergen) }}
@@ -53,7 +53,7 @@
                     </div>
 
                     {# Section pour gérer les illustrations #}
-                    <div class="mb-3">
+                    <div style="margin-bottom: 1rem;">
                         <label class="form-label">Illustrations du plat</label>
 
                         {# Conteneur pour la liste des illustrations #}
@@ -63,20 +63,20 @@
 
                             {# Si la recette a déjà des illustrations, on les affiche #}
                             {% for illustration in form.recipeIllustrations %}
-                                <div class="card mb-3 illustration-item">
+                                <div style="margin-bottom: 1rem;">
                                     <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-md-6">
+                                        <div style="display: flex; flex-wrap: wrap; margin: 0 -0.75rem;">
+                                            <div style="flex: 0 0 50%; max-width: 50%; padding: 0 0.75rem;">
                                                 {{ form_row(illustration.imageFile) }}
                                             </div>
-                                            <div class="col-md-6">
+                                            <div style="flex: 0 0 50%; max-width: 50%; padding: 0 0.75rem;">
                                                 {{ form_row(illustration.alt_text) }}
                                             </div>
                                         </div>
 
                                         {# Si on est en édition et qu'il y a déjà une image, l'afficher #}
                                         {% if isEdit and illustration.vars.data.url %}
-                                            <div class="mt-2">
+                                            <div style="margin-top: 0.5rem;">
                                                 <img src="{{ illustration.vars.data.url }}"
                                                      alt="{{ illustration.vars.data.altText }}"
                                                      class="img-thumbnail"
@@ -85,7 +85,7 @@
                                         {% endif %}
 
                                         {# Bouton pour supprimer une illustration #}
-                                        <button type="button" class="btn btn-danger btn-sm mt-2 remove-illustration">
+                                        <button type="button" style="margin-top: 0.5rem;">
                                             Supprimer cette illustration
                                         </button>
                                     </div>
@@ -94,12 +94,12 @@
                         </div>
 
                         {# Bouton pour ajouter une nouvelle illustration #}
-                        <button type="button" class="btn btn-success btn-sm mt-2" id="add-illustration">
+                        <button type="button" style="margin-top: 10px;" id="add-illustration">
                             + Ajouter une illustration
                         </button>
                     </div>
 
-                    <div class="d-flex justify-content-between mt-4">
+                    <div style="margin-top: 25px;">
                         <a href="{{ path('app_admin_recipes') }}" class="btn btn-secondary">
                             Annuler
                         </a>
@@ -113,8 +113,8 @@
             </div>
 
             {% if isEdit %}
-            <div class="mt-3 text-end">
-                <small class="text-muted">
+            <div style="margin-top: 1rem; text-align: right;">
+                <small style="color: #95a5a6;">
                     ID de la recette : {{ recipe.id }}
                 </small>
             </div>
