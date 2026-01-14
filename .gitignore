@@ -46,4 +46,4 @@ Charte-Graphique.md
 
 ###> heroku ###
 # Ne pas ignorer le composer.lock pour Heroku
-###< heroku ###
+###< heroku ###/public/assets/*.json
