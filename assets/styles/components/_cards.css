@@ -249,40 +249,4 @@
     background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
 }
 
-/* Card Témoignage */
-.testimonial-card {
-    background-color: var(--white);
-    padding: var(--spacing-lg);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg);
-    position: relative;
-}
-
-.testimonial-stars {
-    display: flex;
-    gap: 0.25rem;
-    margin-bottom: var(--spacing-sm);
-}
-
-.star-icon {
-    color: var(--gold);
-    width: 20px;
-    height: 20px;
-}
-
-.testimonial-text {
-    font-style: italic;
-    margin-bottom: var(--spacing-md);
-    line-height: 1.7;
-}
-
-.testimonial-author {
-    font-family: var(--font-heading);
-    color: var(--bordeaux);
-    font-size: var(--text-lg);
-}
-
-.testimonial-event {
-    color: var(--gold);
-    font-size: var(--text-sm);
-}
+/* Card Témoignage - Styles définis dans layout/_sections.css */

@@ -1,4 +1,4 @@
-# Bordeaux Gourmant
+# Vite & Gourmand
 
 Application web de gestion de restaurant développée avec Symfony.
 

@@ -1,0 +1,438 @@
+/* ========================================
+   LAYOUT - SECTIONS
+   Sections de la homepage (Hero, About, Team, etc.)
+   ======================================== */
+
+/* ========================================
+   HERO SECTION - Maquette Figma
+   ======================================== */
+.hero-section {
+    position: relative;
+    height: 600px;
+    overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    .hero-section {
+        height: 400px;
+    }
+}
+
+.hero-background {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(139, 0, 0, 0.75) 0%, rgba(139, 0, 0, 0.3) 50%, rgba(255, 215, 0, 0.2) 100%);
+}
+
+.hero-content {
+    position: relative;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    z-index: 2;
+}
+
+.hero-content-inner {
+    max-width: 700px;
+    color: var(--white);
+}
+
+.hero-content h1 {
+    color: var(--white);
+    font-family: var(--font-heading);
+    font-size: clamp(1.875rem, 5vw, 3.75rem);
+    margin-bottom: var(--spacing-md);
+    line-height: 1.15;
+}
+
+@media (max-width: 768px) {
+    .hero-content h1 {
+        margin-bottom: var(--spacing-sm);
+    }
+}
+
+.hero-content p {
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    margin-bottom: var(--spacing-lg);
+    opacity: 0.9;
+    line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+    .hero-content p {
+        margin-bottom: var(--spacing-md);
+    }
+}
+
+.hero-content .btn {
+    width: 100%;
+    justify-content: center;
+}
+
+@media (min-width: 768px) {
+    .hero-content .btn {
+        width: auto;
+        justify-content: flex-start;
+    }
+}
+
+/* ========================================
+   ABOUT SECTION - Maquette Figma
+   ======================================== */
+.about-section {
+    padding: var(--spacing-2xl) 0;
+    background-color: var(--beige);
+}
+
+@media (max-width: 768px) {
+    .about-section {
+        padding: var(--spacing-xl) 0;
+    }
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: var(--spacing-2xl);
+}
+
+@media (max-width: 768px) {
+    .section-header {
+        margin-bottom: var(--spacing-xl);
+    }
+}
+
+.section-header h2 {
+    margin-bottom: 1rem;
+}
+
+.section-header p {
+    margin-top: var(--spacing-md);
+    font-size: var(--text-lg);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-2xl);
+    align-items: start;
+}
+
+@media (max-width: 1024px) {
+    .about-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-xl);
+    }
+}
+
+.about-text h3 {
+    color: var(--dark-text);
+    margin-bottom: var(--spacing-md);
+    font-size: var(--text-2xl);
+}
+
+.about-text p {
+    margin-bottom: var(--spacing-md);
+    line-height: 1.8;
+}
+
+.about-text p:last-child {
+    margin-bottom: 0;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+}
+
+.stats-grid .stat-card:last-child {
+    grid-column: span 2;
+}
+
+@media (max-width: 640px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-grid .stat-card:last-child {
+        grid-column: span 1;
+    }
+}
+
+.stat-card p {
+    margin: 0;
+    font-size: var(--text-sm);
+}
+
+/* ========================================
+   TEAM SECTION - Maquette Figma
+   ======================================== */
+.team-section {
+    padding: var(--spacing-2xl) 0;
+    background-color: var(--white);
+}
+
+@media (max-width: 768px) {
+    .team-section {
+        padding: var(--spacing-xl) 0;
+    }
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-lg);
+}
+
+@media (max-width: 1024px) {
+    .team-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+}
+
+.team-card {
+    display: block;
+}
+
+.team-card-image-wrapper {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-md);
+    height: 320px;
+}
+
+@media (max-width: 1024px) {
+    .team-card-image-wrapper {
+        height: 400px;
+    }
+}
+
+.team-card-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-base);
+}
+
+.team-card:hover .team-card-image-wrapper img {
+    transform: scale(1.1);
+}
+
+.team-image-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+}
+
+.team-card-content h3 {
+    color: var(--dark-text);
+    margin-bottom: 0.5rem;
+    font-size: var(--text-xl);
+}
+
+.team-card-content .team-role {
+    color: var(--gold);
+    margin-bottom: 0.75rem;
+    font-size: var(--text-sm);
+    font-weight: 600;
+}
+
+.team-card-content p {
+    font-size: var(--text-sm);
+    margin: 0;
+    line-height: 1.6;
+    color: var(--dark-text);
+}
+
+@media (max-width: 1024px) {
+    .team-card-content h3 {
+        font-size: var(--text-2xl);
+    }
+}
+
+/* ========================================
+   TESTIMONIALS SECTION - Maquette Figma
+   ======================================== */
+.testimonials-section {
+    padding: var(--spacing-2xl) 0;
+    background-color: var(--beige);
+}
+
+@media (max-width: 768px) {
+    .testimonials-section {
+        padding: var(--spacing-xl) 0;
+    }
+}
+
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+}
+
+@media (min-width: 768px) {
+    .testimonials-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-lg);
+    }
+}
+
+@media (min-width: 1024px) {
+    .testimonials-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--spacing-lg);
+    }
+}
+
+.testimonial-card {
+    background: var(--white);
+    padding: 20px 24px;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    position: relative;
+}
+
+@media (min-width: 768px) {
+    .testimonial-card {
+        padding: 24px;
+    }
+}
+
+.testimonial-quote-icon {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    opacity: 0.2;
+    color: var(--gold);
+    width: 24px;
+    height: 24px;
+}
+
+@media (min-width: 768px) {
+    .testimonial-quote-icon {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+.testimonial-stars {
+    display: flex;
+    gap: 0.25rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.testimonial-stars .star-icon {
+    color: var(--gold);
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
+
+@media (min-width: 768px) {
+    .testimonial-stars .star-icon {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+.testimonial-text {
+    font-size: var(--text-sm);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-md);
+    color: var(--dark-text);
+}
+
+.testimonial-footer {
+    border-top: 1px solid var(--beige);
+    padding-top: var(--spacing-md);
+}
+
+.testimonial-footer .customer-name {
+    margin-bottom: 0.25rem;
+    font-family: var(--font-heading);
+    font-size: var(--text-base);
+    color: var(--bordeaux);
+    font-weight: 400;
+}
+
+@media (min-width: 768px) {
+    .testimonial-footer .customer-name {
+        font-size: var(--text-lg);
+    }
+}
+
+.testimonial-footer .event-info {
+    margin: 0;
+    font-size: 0.75rem;
+    color: var(--gold);
+}
+
+@media (min-width: 768px) {
+    .testimonial-footer .event-info {
+        font-size: var(--text-sm);
+    }
+}
+
+.testimonials-cta {
+    text-align: center;
+    margin-top: var(--spacing-xl);
+}
+
+/* ========================================
+   MENUS PREVIEW SECTION (optionnel)
+   ======================================== */
+.menus-section {
+    padding: var(--spacing-2xl) 0;
+    background-color: var(--white);
+}
+
+@media (max-width: 768px) {
+    .menus-section {
+        padding: var(--spacing-xl) 0;
+    }
+}
+
+/* ========================================
+   CTA SECTION
+   ======================================== */
+.cta-section {
+    padding: var(--spacing-2xl) 0;
+    background: linear-gradient(135deg, var(--bordeaux) 0%, #6B0000 100%);
+    color: var(--white);
+    text-align: center;
+}
+
+.cta-section h2 {
+    color: var(--white);
+    margin-bottom: var(--spacing-md);
+}
+
+.cta-section p {
+    font-size: var(--text-lg);
+    margin-bottom: var(--spacing-lg);
+    opacity: 0.95;
+}
+
+/* ========================================
+   RESPONSIVE ADJUSTMENTS
+   ======================================== */
+@media (max-width: 768px) {
+    .about-grid,
+    .team-grid,
+    .testimonials-grid {
+        grid-template-columns: 1fr;
+    }
+}

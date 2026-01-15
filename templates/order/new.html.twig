@@ -3,182 +3,272 @@
 {% block title %}Nouvelle commande - {{ menu.name }}{% endblock %}
 
 {% block body %}
-<div style="margin: 30px 0;" data-turbo="false">
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
-        <div style="grid-column: span 2;">
-            <h1 style="margin-bottom: 25px;">Passer une commande</h1>
 
-            {% for message in app.flashes('error') %}
-                <div class="alert alert-danger" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            {% endfor %}
+{# ========================================
+   NOUVELLE COMMANDE - Design sans Bootstrap
+   ======================================== #}
+<section style="background-color: var(--beige); padding: 3rem 0;">
+    <div style="max-width: 80rem; margin: 0 auto; padding: 0 1.5rem;">
 
-            <div style="margin-bottom: 25px;">
-                <div class="card-body">
-                    <h5 class="card-title">Menu sélectionné</h5>
-                    <h3 style="color: #3498db;">{{ menu.name }}</h3>
-                    <p style="color: #95a5a6;">{{ menu.description }}</p>
-                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                        <span class="badge badge-info">{{ (menu.pricePerPerson / 100)|number_format(2, ',', ' ') }}€ / personne</span>
-                        <span style="background: #95a5a6; color: white;">Minimum {{ menu.nbPersonMin }} personnes</span>
+        {# Titre de la page #}
+        <h1 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 2.25rem; margin-bottom: 1rem; font-weight: 400;">
+            Passer une commande
+        </h1>
+        <div style="width: 5rem; height: 4px; background-color: var(--gold); border-radius: var(--radius-sm); margin-bottom: 2rem;"></div>
+
+        {# Messages d'erreur #}
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger" style="margin-bottom: 1.5rem;">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        {# Layout 2 colonnes #}
+        <div style="display: grid; grid-template-columns: 1fr; gap: 2rem;">
+
+            {# COLONNE PRINCIPALE - Formulaire #}
+            <div>
+                {# Menu sélectionné #}
+                <div style="background: white; border-radius: var(--radius-lg); padding: 2rem; box-shadow: var(--shadow-md); margin-bottom: 2rem;">
+                    <h2 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.5rem; margin-bottom: 1rem; font-weight: 400;">
+                        Menu sélectionné
+                    </h2>
+                    <h3 style="font-family: var(--font-heading); color: var(--gold); font-size: 1.75rem; margin-bottom: 0.75rem; font-weight: 400;">
+                        {{ menu.name }}
+                    </h3>
+                    <p style="color: var(--dark-text); margin-bottom: 1.5rem; line-height: 1.6;">
+                        {{ menu.description }}
+                    </p>
+
+                    {# Badges #}
+                    <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                        <span style="padding: 0.5rem 1rem; border-radius: var(--radius-full); background-color: var(--gold); color: white; font-family: var(--font-body); font-size: var(--text-sm);">
+                            {{ (menu.pricePerPerson / 100)|number_format(2, ',', ' ') }}€ / personne
+                        </span>
+                        <span style="padding: 0.5rem 1rem; border-radius: var(--radius-full); background-color: var(--bordeaux); color: white; font-family: var(--font-body); font-size: var(--text-sm);">
+                            Minimum {{ menu.nbPersonMin }} personnes
+                        </span>
                         {% if menu.stock is not null %}
                             {% if menu.stock > 0 %}
                                 {% if menu.stock <= 5 %}
-                                    <span class="badge badge-warning">
-                                        <i data-feather="alert-triangle" width="14"></i>
+                                    <span style="padding: 0.5rem 1rem; border-radius: var(--radius-full); background-color: #E8B563; color: var(--dark-text); font-family: var(--font-body); font-size: var(--text-sm); display: flex; align-items: center; gap: 0.5rem;">
+                                        <span data-icon="alert-triangle" data-icon-width="16" data-icon-height="16"></span>
                                         Stock limité : {{ menu.stock }} disponible{{ menu.stock > 1 ? 's' : '' }}
                                     </span>
                                 {% else %}
-                                    <span class="badge badge-success">
-                                        <i data-feather="check-circle" width="14"></i>
+                                    <span style="padding: 0.5rem 1rem; border-radius: var(--radius-full); background-color: var(--green); color: white; font-family: var(--font-body); font-size: var(--text-sm); display: flex; align-items: center; gap: 0.5rem;">
+                                        <span data-icon="check-circle" data-icon-width="16" data-icon-height="16"></span>
                                         En stock : {{ menu.stock }} disponible{{ menu.stock > 1 ? 's' : '' }}
                                     </span>
                                 {% endif %}
                             {% endif %}
                         {% else %}
-                            <span style="background: #f8f9fa; color: #333;">
-                                <i data-feather="infinity" width="14"></i>
+                            <span style="padding: 0.5rem 1rem; border-radius: var(--radius-full); background-color: #f0f0f0; color: var(--dark-text); font-family: var(--font-body); font-size: var(--text-sm);">
                                 Stock illimité
                             </span>
                         {% endif %}
                     </div>
                 </div>
-            </div>
 
-            {{ form_start(form, {'attr': {'data-controller': 'order-calculator'}}) }}
+                {# Formulaire #}
+                {{ form_start(form, {'attr': {'data-turbo': 'false'}}) }}
 
-            <div style="margin-bottom: 25px;">
-                <div class="card-header">
-                    <h5 style="margin: 0;">Détails de la commande</h5>
-                </div>
-                <div class="card-body">
-                    <div style="margin-bottom: 20px;; display: none;">
+                {# Détails de la commande #}
+                <div style="background: white; border-radius: var(--radius-lg); padding: 2rem; box-shadow: var(--shadow-md); margin-bottom: 2rem;">
+                    <h2 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.5rem; margin-bottom: 1.5rem; font-weight: 400;">
+                        Détails de la commande
+                    </h2>
+
+                    {# Menu ID (caché) #}
+                    <div style="display: none;">
                         {{ form_row(form.menu, {
                             'value': menu.id,
                             'attr': {'data-menu-id': menu.id, 'data-menu-price': menu.pricePerPerson, 'data-menu-min': menu.nbPersonMin}
                         }) }}
                     </div>
 
-                    <div style="margin-bottom: 20px;">
+                    {# Nombre de personnes #}
+                    <div style="margin-bottom: 1.5rem;">
                         {{ form_row(form.numberOfPersons) }}
-                        <small style="color: #95a5a6;">
+                        <small style="color: var(--dark-text); opacity: 0.7; display: block; margin-top: 0.5rem;">
                             Minimum pour ce menu: {{ menu.nbPersonMin }} personnes
                         </small>
                     </div>
 
-                    <div style="margin-bottom: 20px;">
-                        {{ form_row(form.deliveryDateTime, {
-                            'help': 'Minimum 48h à l\'avance - Uniquement pendant nos horaires d\'ouverture'
-                        }) }}
-                        <div style="margin: 10px 0 0 0;">
-                            <small>
-                                <i data-feather="clock" width="16"></i>
-                                <strong>Horaires d'ouverture :</strong><br>
+                    {# Date et heure de livraison #}
+                    <div style="margin-bottom: 1.5rem;">
+                        {{ form_row(form.deliveryDateTime) }}
+                        <small style="color: var(--dark-text); opacity: 0.7; display: block; margin-top: 0.5rem;">
+                            Minimum 48h à l'avance - Uniquement pendant nos horaires d'ouverture
+                        </small>
+                        <div style="background: #f9f9f9; padding: 1rem; border-radius: var(--radius-sm); margin-top: 1rem; border-left: 3px solid var(--gold);">
+                            <div style="display: flex; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                <span data-icon="clock" data-icon-width="20" data-icon-height="20" style="color: var(--gold); flex-shrink: 0;"></span>
+                                <strong style="font-family: var(--font-body); color: var(--dark-text);">Horaires d'ouverture :</strong>
+                            </div>
+                            <div style="font-size: 0.875rem; color: var(--dark-text); padding-left: 1.75rem;">
                                 {% for schedule in opening_schedules %}
-                                    {% if schedule.isOpen %}
-                                        {{ schedule.label }}: {{ schedule.openingTime }} - {{ schedule.closingTime }}<br>
-                                    {% else %}
-                                        {{ schedule.label }}: <span style="color: #e74c3c;">Fermé</span><br>
-                                    {% endif %}
+                                    <div style="margin-bottom: 0.25rem;">
+                                        {{ schedule.label }} :
+                                        {% if schedule.isOpen %}
+                                            {{ schedule.openingTime }} - {{ schedule.closingTime }}
+                                        {% else %}
+                                            <span style="color: #D97076; font-weight: 600;">Fermé</span>
+                                        {% endif %}
+                                    </div>
                                 {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Adresse de livraison #}
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark-text); font-family: var(--font-body);">
+                            Adresse de livraison
+                        </label>
+                        {{ form_widget(form.deliveryAddress, {'attr': {'style': 'width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: var(--radius-sm); font-family: var(--font-body);'}}) }}
+                        {{ form_errors(form.deliveryAddress) }}
+                        <div style="margin-top: 0.75rem; padding: 0.75rem; background: #f9f9f9; border-radius: var(--radius-sm); border-left: 3px solid var(--gold);">
+                            <small style="color: var(--dark-text); display: block; margin-bottom: 0.5rem;">
+                                💡 Vous pouvez gérer vos adresses dans votre compte
                             </small>
+                            <a href="{{ path('app_account_address_new') }}" target="_blank" style="color: var(--bordeaux); text-decoration: none; font-weight: 600; font-size: 0.875rem; display: inline-flex; align-items: center; gap: 0.25rem;">
+                                <span data-icon="plus" data-icon-width="16" data-icon-height="16"></span>
+                                Ajouter une nouvelle adresse
+                            </a>
                         </div>
                     </div>
 
-                    <div style="margin-bottom: 20px;">
-                        {{ form_row(form.deliveryAddress) }}
-                        <small style="color: #95a5a6;">
-                            <a href="{{ path('app_account_address_new') }}" target="_blank">Ajouter une nouvelle adresse</a>
-                        </small>
-                    </div>
-
-                    <div style="margin-bottom: 20px;">
-                        {{ form_row(form.hasMaterialLoan) }}
+                    {# Prêt de matériel #}
+                    <div style="margin-bottom: 0;">
+                        <div style="background: #f9f9f9; padding: 1.5rem; border-radius: var(--radius-sm); border: 1px solid #e5e5e5;">
+                            <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                                <div style="flex-shrink: 0; margin-top: 0.25rem;">
+                                    {{ form_widget(form.hasMaterialLoan, {'attr': {'style': 'width: 20px; height: 20px; cursor: pointer;'}}) }}
+                                </div>
+                                <div style="flex: 1;">
+                                    <label for="{{ form.hasMaterialLoan.vars.id }}" style="font-weight: 600; color: var(--dark-text); display: block; margin-bottom: 0.5rem; cursor: pointer; font-family: var(--font-body);">
+                                        Je souhaite emprunter du matériel (vaisselle, couverts, etc.)
+                                    </label>
+                                    <small style="color: var(--dark-text); opacity: 0.8; display: flex; align-items: center; gap: 0.5rem;">
+                                        <span data-icon="info" data-icon-width="16" data-icon-height="16" style="color: var(--gold);"></span>
+                                        Le matériel devra être retourné dans un délai de 10 jours
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        {{ form_errors(form.hasMaterialLoan) }}
                     </div>
                 </div>
-            </div>
 
-            <div style="display: flex; justify-content: space-between;">
-                <a href="{{ path('app_menu_catalog') }}" class="btn btn-secondary">
-                    <i data-feather="arrow-left"></i> Retour aux menus
-                </a>
-                <button type="submit" class="btn btn-primary btn-lg">
-                    <i data-feather="check-circle"></i> Confirmer la commande
-                </button>
-            </div>
-
-            {{ form_end(form) }}
-        </div>
-
-        <div style="grid-column: span 1;">
-            <div style="top: 20px;">
-                <div class="card-header badge-primary text-white">
-                    <h5 style="margin: 0;">Récapitulatif</h5>
+                {# Boutons d'action #}
+                <div style="display: flex; gap: 1rem; justify-content: space-between; flex-wrap: wrap;">
+                    <a href="{{ path('app_menu_catalog') }}" class="btn btn-outline">
+                        <span data-icon="arrow-left" data-icon-width="20" data-icon-height="20"></span>
+                        Retour aux menus
+                    </a>
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <span data-icon="check-circle" data-icon-width="20" data-icon-height="20"></span>
+                        Confirmer la commande
+                    </button>
                 </div>
-                <div class="card-body">
-                    <div id="order-summary">
-                        <div style="margin-bottom: 10px;">
-                            <span>Menu:</span>
-                            <strong>{{ menu.name }}</strong>
-                        </div>
-                        <div style="margin-bottom: 10px;">
-                            <span>Prix par personne:</span>
-                            <strong>{{ (menu.pricePerPerson / 100)|number_format(2, ',', ' ') }}€</strong>
-                        </div>
-                        <div style="margin-bottom: 10px;">
-                            <span>Nombre de personnes:</span>
-                            <strong><span id="persons-display">{{ menu.nbPersonMin }}</span></strong>
+
+                {{ form_end(form) }}
+            </div>
+
+            {# COLONNE RÉCAPITULATIF - Sticky #}
+            <div style="display: none;" class="order-summary-column">
+                <div style="position: sticky; top: 2rem;">
+                    <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); overflow: hidden;">
+                        {# Header #}
+                        <div style="background: var(--bordeaux); padding: 1.5rem;">
+                            <h2 style="font-family: var(--font-heading); font-size: 1.5rem; margin: 0; font-weight: 400; color: white;">
+                                Récapitulatif
+                            </h2>
                         </div>
 
-                        <hr>
+                        {# Body #}
+                        <div style="padding: 1.5rem;" id="order-summary">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--beige);">
+                                <span style="color: var(--dark-text);">Menu :</span>
+                                <strong style="color: var(--dark-text); text-align: right; max-width: 60%;">{{ menu.name }}</strong>
+                            </div>
 
-                        <div style="margin-bottom: 10px;">
-                            <span>Sous-total menu:</span>
-                            <strong><span id="subtotal-display">{{ (menu.pricePerPerson * menu.nbPersonMin / 100)|number_format(2, ',', ' ') }}</span>€</strong>
-                        </div>
-                        <div style="margin-bottom: 10px;">
-                            <span>Frais de livraison:</span>
-                            <strong><span id="delivery-display">5,00</span>€</strong>
-                        </div>
-                        <div class="discount-row" style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; color: #27ae60;" style="display: none !important;">
-                            <span>Réduction (10%):</span>
-                            <strong>- <span id="discount-display">0,00</span>€</strong>
-                        </div>
-                        <div id="discount-message" style="margin-bottom: 10px;; display: none !important; font-size: 0.85rem;">
-                            <i data-feather="info" width="16"></i>
-                            <span id="discount-message-text">Ajoutez des personnes pour bénéficier de la réduction !</span>
-                        </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem;">
+                                <span style="color: var(--dark-text);">Prix par personne :</span>
+                                <strong style="color: var(--dark-text);">{{ (menu.pricePerPerson / 100)|number_format(2, ',', ' ') }}€</strong>
+                            </div>
 
-                        <hr>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--beige);">
+                                <span style="color: var(--dark-text);">Nombre de personnes :</span>
+                                <strong style="color: var(--dark-text);"><span id="persons-display">{{ menu.nbPersonMin }}</span></strong>
+                            </div>
 
-                        <div style="margin-bottom: 10px;">
-                            <span style="font-size: 1.1rem;">Total:</span>
-                            <strong style="font-size: 1.25rem; color: var(--bordeaux);"><span id="total-display">{{ ((menu.pricePerPerson * menu.nbPersonMin + 500) / 100)|number_format(2, ',', ' ') }}</span>€</strong>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem;">
+                                <span style="color: var(--dark-text);">Sous-total menu :</span>
+                                <strong style="color: var(--dark-text);"><span id="subtotal-display">{{ (menu.pricePerPerson * menu.nbPersonMin / 100)|number_format(2, ',', ' ') }}</span>€</strong>
+                            </div>
+
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem;">
+                                <span style="color: var(--dark-text);">Frais de livraison :</span>
+                                <strong style="color: var(--dark-text);"><span id="delivery-display">5,00</span>€</strong>
+                            </div>
+
+                            <div id="discount-row" style="display: none; justify-content: space-between; margin-bottom: 0.75rem; color: var(--green);">
+                                <span>Réduction (10%) :</span>
+                                <strong>- <span id="discount-display">0,00</span>€</strong>
+                            </div>
+
+                            <div id="discount-message" style="display: none; margin-top: 1rem; padding: 0.75rem; border-radius: var(--radius-sm); font-size: 0.875rem;"></div>
+
+                            <div style="margin: 1rem 0; padding: 1rem 0; border-top: 2px solid var(--bordeaux); border-bottom: 2px solid var(--bordeaux);">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 1.125rem; font-family: var(--font-heading); color: var(--dark-text);">Total :</span>
+                                    <strong style="font-size: 1.75rem; font-family: var(--font-heading); color: var(--bordeaux); font-weight: 400;">
+                                        <span id="total-display">{{ ((menu.pricePerPerson * menu.nbPersonMin + 500) / 100)|number_format(2, ',', ' ') }}</span>€
+                                    </strong>
+                                </div>
+                            </div>
+
+                            <div style="background: #f9f9f9; padding: 1rem; border-radius: var(--radius-sm); margin-top: 1rem;">
+                                <small style="color: var(--dark-text); display: flex; align-items: flex-start; gap: 0.5rem;">
+                                    <span data-icon="info" data-icon-width="16" data-icon-height="16" style="flex-shrink: 0; margin-top: 2px; color: var(--gold);"></span>
+                                    <span>Les frais de livraison définitifs seront calculés selon votre adresse.</span>
+                                </small>
+                            </div>
                         </div>
-                    </div>
-
-                    <div style="margin: 0;">
-                        <small>
-                            <i data-feather="info"></i>
-                            Les frais de livraison définitifs seront calculés selon votre adresse.
-                        </small>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
+
+{# Media query pour afficher le récapitulatif en sidebar sur desktop #}
+<style>
+    @media (min-width: 1024px) {
+        .order-new-grid {
+            grid-template-columns: 2fr 1fr !important;
+        }
+        .order-summary-column {
+            display: block !important;
+        }
+    }
+</style>
 
 <script>
+// Ajouter la classe pour le responsive
 document.addEventListener('DOMContentLoaded', function() {
+    const grid = document.querySelector('section [style*="grid-template-columns: 1fr"]');
+    if (grid) {
+        grid.classList.add('order-new-grid');
+    }
+
     const personsInput = document.querySelector('#order_numberOfPersons');
     const addressSelect = document.querySelector('#order_deliveryAddress');
     const menuPrice = {{ menu.pricePerPerson }};
     const menuMin = {{ menu.nbPersonMin }};
 
-    // Variable pour stocker les frais de livraison actuels
     let currentDeliveryCost = 500; // 5€ par défaut
     let isCalculatingDelivery = false;
 
@@ -202,24 +292,10 @@ document.addEventListener('DOMContentLoaded', function() {
             if (data.success) {
                 currentDeliveryCost = data.deliveryCost;
                 updateSummary();
-
-                // Afficher un message informatif sur la distance
-                const deliveryInfo = document.querySelector('.alert.alert-info');
-                if (deliveryInfo) {
-                    if (data.isInBordeaux) {
-                        deliveryInfo.innerHTML = '<small><i data-feather="info"></i> Livraison à Bordeaux : frais fixes de 5,00€</small>';
-                    } else if (data.distanceKm) {
-                        deliveryInfo.innerHTML = `<small><i data-feather="info"></i> Distance estimée : ${data.distanceKm} km - Frais de livraison : ${data.deliveryCostFormatted}</small>`;
-                    }
-                    if (typeof feather !== 'undefined') {
-                        feather.replace();
-                    }
-                }
             }
         } catch (error) {
             console.error('Erreur:', error);
             deliveryDisplay.textContent = originalText;
-            // En cas d'erreur, on garde les frais par défaut
         } finally {
             isCalculatingDelivery = false;
         }
@@ -237,21 +313,20 @@ document.addEventListener('DOMContentLoaded', function() {
         let discount = 0;
         const discountRow = document.getElementById('discount-row');
 
-        // Réduction appliquée UNE SEULE FOIS dès qu'on atteint minimum + 5 personnes
         if (extraPersons >= 5) {
-            discount = subtotal * 0.10; // 10% du sous-total
+            discount = subtotal * 0.10;
             if (discountRow) {
-                discountRow.style.setProperty('display', 'flex', 'important');
+                discountRow.style.display = 'flex';
             }
             document.getElementById('discount-display').textContent = (discount / 100).toFixed(2).replace('.', ',');
         } else {
             if (discountRow) {
-                discountRow.style.setProperty('display', 'none', 'important');
+                discountRow.style.display = 'none';
             }
             document.getElementById('discount-display').textContent = '0,00';
         }
 
-        // Livraison (utilise la valeur calculée via l'API)
+        // Livraison
         document.getElementById('delivery-display').textContent = (currentDeliveryCost / 100).toFixed(2).replace('.', ',');
 
         // Total
@@ -261,46 +336,37 @@ document.addEventListener('DOMContentLoaded', function() {
         // Nombre de personnes
         document.getElementById('persons-display').textContent = persons;
 
-        // Afficher/masquer le message de réduction
+        // Message de réduction
         const discountMessage = document.getElementById('discount-message');
         if (discountMessage) {
             if (extraPersons >= 5) {
-                discountMessage.className = 'alert alert-success py-2 px-3 mt-2 mb-2';
-                discountMessage.style.fontSize = '0.85rem';
-                discountMessage.style.setProperty('display', 'block', 'important');
-                discountMessage.innerHTML = '<i data-feather="gift" width="16"></i> <strong>Réduction de 10% appliquée !</strong>';
-                if (typeof feather !== 'undefined') {
-                    feather.replace();
-                }
+                discountMessage.style.display = 'block';
+                discountMessage.style.backgroundColor = 'rgba(34, 139, 34, 0.1)';
+                discountMessage.style.borderLeft = '3px solid var(--green)';
+                discountMessage.style.color = 'var(--dark-text)';
+                discountMessage.innerHTML = '<strong style="color: var(--green);">✓ Réduction de 10% appliquée !</strong>';
             } else {
                 const remaining = 5 - extraPersons;
                 if (remaining > 0 && persons >= menuMin) {
-                    discountMessage.className = 'alert alert-info py-2 px-3 mt-2 mb-2';
-                    discountMessage.style.fontSize = '0.85rem';
-                    discountMessage.style.setProperty('display', 'block', 'important');
-                    discountMessage.innerHTML = '<i data-feather="info" width="16"></i> Ajoutez encore <strong>' + remaining + ' personne' + (remaining > 1 ? 's' : '') + '</strong> pour bénéficier de 10% de réduction !';
-                    if (typeof feather !== 'undefined') {
-                        feather.replace();
-                    }
+                    discountMessage.style.display = 'block';
+                    discountMessage.style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
+                    discountMessage.style.borderLeft = '3px solid var(--gold)';
+                    discountMessage.style.color = 'var(--dark-text)';
+                    discountMessage.innerHTML = 'Ajoutez encore <strong>' + remaining + ' personne' + (remaining > 1 ? 's' : '') + '</strong> pour bénéficier de 10% de réduction !';
                 } else {
-                    discountMessage.style.setProperty('display', 'none', 'important');
+                    discountMessage.style.display = 'none';
                 }
             }
         }
     }
 
-    // S'assurer que l'input existe avant d'ajouter les listeners
     if (personsInput) {
-        // Écouter les événements input et change pour plus de fiabilité
         personsInput.addEventListener('input', updateSummary);
         personsInput.addEventListener('change', updateSummary);
-
-        // Mise à jour initiale
         updateSummary();
     }
 
     if (addressSelect) {
-        // Calculer les frais de livraison quand l'adresse change
         addressSelect.addEventListener('change', async function() {
             const addressId = this.value;
             if (addressId) {
@@ -308,15 +374,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // Calculer les frais au chargement si une adresse est déjà sélectionnée
         if (addressSelect.value) {
             fetchDeliveryCost(addressSelect.value);
         }
-    }
-
-    // Initialiser feather icons
-    if (typeof feather !== 'undefined') {
-        feather.replace();
     }
 });
 </script>

@@ -3,211 +3,344 @@
 {% block title %}Commande {{ order.orderNumber }}{% endblock %}
 
 {% block body %}
-<div style="margin: 30px 0;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-        <h1>Commande {{ order.orderNumber }}</h1>
-        <a href="{{ path('app_account_orders') }}" class="btn btn-secondary">
-            <i data-feather="arrow-left"></i> Retour à mes commandes
-        </a>
-    </div>
+{# ========================================
+   HEADER SECTION - Figma Design
+   ======================================== #}
+<section style="background-color: var(--beige); padding: 2rem 0 3rem;">
+    <div style="max-width: 80rem; margin: 0 auto; padding: 0 1rem;">
+        {# Fil d'ariane #}
+        <nav aria-label="Fil d'ariane" style="margin-bottom: 1.5rem;">
+            <ol style="display: flex; align-items: center; gap: 0.5rem; list-style: none; padding: 0; margin: 0; font-size: 0.875rem;">
+                <li>
+                    <a href="{{ path('app_home') }}" style="color: var(--dark-text); text-decoration: none; transition: color var(--transition-base);"
+                       onmouseover="this.style.color='var(--bordeaux)'"
+                       onmouseout="this.style.color='var(--dark-text)'">
+                        Accueil
+                    </a>
+                </li>
+                <li style="color: var(--dark-text); opacity: 0.5;">
+                    <span data-icon="chevron-right" data-icon-width="16" data-icon-height="16"></span>
+                </li>
+                <li>
+                    <a href="{{ path('app_account_orders') }}" style="color: var(--dark-text); text-decoration: none; transition: color var(--transition-base);"
+                       onmouseover="this.style.color='var(--bordeaux)'"
+                       onmouseout="this.style.color='var(--dark-text)'">
+                        Mes commandes
+                    </a>
+                </li>
+                <li style="color: var(--dark-text); opacity: 0.5;">
+                    <span data-icon="chevron-right" data-icon-width="16" data-icon-height="16"></span>
+                </li>
+                <li style="color: var(--bordeaux); font-weight: 600;">
+                    {{ order.orderNumber }}
+                </li>
+            </ol>
+        </nav>
 
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        {# Titre #}
+        <div style="margin-bottom: 2rem;">
+            <h1 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 2.25rem; margin-bottom: 0.5rem; font-weight: 400;">
+                Commande {{ order.orderNumber }}
+            </h1>
+            <div style="width: 5rem; height: 4px; background-color: var(--gold); border-radius: var(--radius-sm);"></div>
         </div>
-    {% endfor %}
 
-    {% for message in app.flashes('error') %}
-        <div class="alert alert-danger" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        {# Flash messages #}
+        {% for message in app.flashes('success') %}
+            <div style="background: #d4edda; border-left: 4px solid #28a745; color: #155724; padding: 1rem 1.5rem; border-radius: var(--radius-sm); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
+                <span data-icon="check" data-icon-width="20" data-icon-height="20" style="color: #28a745;"></span>
+                <span>{{ message }}</span>
+            </div>
+        {% endfor %}
+
+        {% for message in app.flashes('error') %}
+            <div style="background: #f8d7da; border-left: 4px solid #dc3545; color: #721c24; padding: 1rem 1.5rem; border-radius: var(--radius-sm); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
+                <span data-icon="alert-circle" data-icon-width="20" data-icon-height="20" style="color: #dc3545;"></span>
+                <span>{{ message }}</span>
+            </div>
+        {% endfor %}
+
+        {# Layout responsive - 2 colonnes desktop, 1 colonne mobile #}
+        <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem;">
+            @media (min-width: 768px) {
+                <style>
+                    .order-detail-grid {
+                        grid-template-columns: 2fr 1fr;
+                    }
+                </style>
+            }
         </div>
-    {% endfor %}
+        <div class="order-detail-grid" style="display: grid; grid-template-columns: 1fr; gap: 1.5rem;">
+            {# ========== COLONNE GAUCHE - Détails commande ========== #}
+            <div>
+                {# Statut de la commande #}
+                <div style="background: white; border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: var(--shadow-md); margin-bottom: 1.5rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
+                        <h2 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.5rem; margin: 0; font-weight: 400;">
+                            Statut de la commande
+                        </h2>
+                        <span style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border-radius: var(--radius-sm); font-weight: 600; font-size: 0.875rem; background: #{{ order.status.badgeClass == 'success' ? 'd4edda' : (order.status.badgeClass == 'warning' ? 'fff3cd' : (order.status.badgeClass == 'danger' ? 'f8d7da' : 'e7f1ff')) }}; color: #{{ order.status.badgeClass == 'success' ? '155724' : (order.status.badgeClass == 'warning' ? '856404' : (order.status.badgeClass == 'danger' ? '721c24' : '004085')) }};">
+                            <span data-icon="{{ order.status.icon }}" data-icon-width="16" data-icon-height="16"></span>
+                            {{ order.status.label }}
+                        </span>
+                    </div>
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
-        <div style="grid-column: span 2;">
-            <div style="margin-bottom: 25px;">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <h5 style="margin: 0;">Statut de la commande</h5>
-                    <span class="badge bg-{{ order.status.badgeClass }} fs-6">
-                        <i data-feather="{{ order.status.icon }}"></i>
-                        {{ order.status.label }}
-                    </span>
-                </div>
-                <div class="card-body">
-                    <p style="margin-bottom: 10px;">
-                        Commande passée le {{ order.createdAt|date('d/m/Y à H:i') }}
+                    <p style="color: var(--dark-text); margin-bottom: 1rem;">
+                        Commande passée le <strong>{{ order.createdAt|date('d/m/Y à H:i') }}</strong>
                     </p>
 
                     {% if order.status.label == 'Annulée' %}
-                        <div class="alert alert-warning">
-                            <strong>Raison de l'annulation:</strong>
-                            {{ order.cancellationReason ?? 'Non spécifiée' }}
+                        <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 1rem; border-radius: var(--radius-sm); margin-bottom: 1rem;">
+                            <p style="font-weight: 600; margin-bottom: 0.5rem; color: #856404;">Raison de l'annulation</p>
+                            <p style="margin: 0; color: #856404;">{{ order.cancellationReason ?? 'Non spécifiée' }}</p>
                         </div>
                     {% endif %}
 
                     {% if order.canBeCancelled %}
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancelModal">
-                            <i data-feather="x-circle"></i> Annuler la commande
+                        <button type="button" onclick="document.getElementById('cancelModal').style.display='block'" style="display: inline-flex; align-items: center; gap: 0.5rem; background: #dc3545; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; transition: background-color var(--transition-base);"
+                                onmouseover="this.style.backgroundColor='#c82333'"
+                                onmouseout="this.style.backgroundColor='#dc3545'">
+                            <span data-icon="x-circle" data-icon-width="20" data-icon-height="20"></span>
+                            Annuler la commande
                         </button>
                     {% endif %}
                 </div>
-            </div>
 
-            <div style="margin-bottom: 25px;">
-                <div class="card-header">
-                    <h5 style="margin: 0;">Détails du menu</h5>
-                </div>
-                <div class="card-body">
-                    <h4>{{ order.menuName }}</h4>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;">
-                        <div style="grid-column: span 1;">
-                            <ul style="list-style: none; padding: 0;">
-                                <li style="margin-bottom: 10px;">
-                                    <i data-feather="users" style="color: #95a5a6;"></i>
-                                    <strong>Nombre de personnes:</strong> {{ order.numberOfPersons }}
-                                </li>
-                                <li style="margin-bottom: 10px;">
-                                    <i data-feather="dollar-sign" style="color: #95a5a6;"></i>
-                                    <strong>Prix par personne:</strong> {{ (order.menuPricePerPerson / 100)|number_format(2, ',', ' ') }}€
-                                </li>
-                            </ul>
+                {# Détails du menu #}
+                <div style="background: white; border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: var(--shadow-md); margin-bottom: 1.5rem;">
+                    <h2 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.5rem; margin-bottom: 1rem; font-weight: 400;">
+                        Détails du menu
+                    </h2>
+                    <h3 style="font-family: var(--font-heading); color: var(--dark-text); font-size: 1.25rem; margin-bottom: 1.5rem; font-weight: 400;">
+                        {{ order.menuName }}
+                    </h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: #f9f9f9; border-radius: var(--radius-sm);">
+                            <span data-icon="users" data-icon-width="24" data-icon-height="24" style="color: var(--gold);"></span>
+                            <div>
+                                <p style="font-size: 0.875rem; color: var(--dark-text); opacity: 0.8; margin: 0 0 0.25rem;">Nombre de personnes</p>
+                                <p style="font-weight: 600; font-size: 1.125rem; color: var(--dark-text); margin: 0;">{{ order.numberOfPersons }}</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: #f9f9f9; border-radius: var(--radius-sm);">
+                            <span data-icon="dollar-sign" data-icon-width="24" data-icon-height="24" style="color: var(--gold);"></span>
+                            <div>
+                                <p style="font-size: 0.875rem; color: var(--dark-text); opacity: 0.8; margin: 0 0 0.25rem;">Prix par personne</p>
+                                <p style="font-weight: 600; font-size: 1.125rem; color: var(--dark-text); margin: 0;">{{ (order.menuPricePerPerson / 100)|number_format(2, ',', ' ') }}€</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div style="margin-bottom: 25px;">
-                <div class="card-header">
-                    <h5 style="margin: 0;">Informations de livraison</h5>
-                </div>
-                <div class="card-body">
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
-                        <div style="grid-column: span 1;">
-                            <p style="margin-bottom: 10px;"><strong>Date et heure:</strong></p>
-                            <p>{{ order.deliveryDateTime|date('d/m/Y à H:i') }}</p>
+                {# Informations de livraison #}
+                <div style="background: white; border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: var(--shadow-md); margin-bottom: 1.5rem;">
+                    <h2 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.5rem; margin-bottom: 1rem; font-weight: 400;">
+                        Informations de livraison
+                    </h2>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                        <div>
+                            <p style="font-weight: 600; color: var(--dark-text); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                                <span data-icon="calendar" data-icon-width="20" data-icon-height="20" style="color: var(--gold);"></span>
+                                Date et heure
+                            </p>
+                            <p style="color: var(--dark-text); margin: 0; padding-left: 1.75rem;">{{ order.deliveryDateTime|date('d/m/Y à H:i') }}</p>
                         </div>
-                        <div style="grid-column: span 1;">
-                            <p style="margin-bottom: 10px;"><strong>Adresse:</strong></p>
-                            <p>{{ order.deliveryAddress }}</p>
+                        <div>
+                            <p style="font-weight: 600; color: var(--dark-text); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                                <span data-icon="map-pin" data-icon-width="20" data-icon-height="20" style="color: var(--gold);"></span>
+                                Adresse
+                            </p>
+                            <p style="color: var(--dark-text); margin: 0; padding-left: 1.75rem;">{{ order.deliveryAddress }}</p>
                         </div>
                     </div>
 
                     {% if order.hasMaterialLoan %}
-                        <div style="margin-top: 20px;">
-                            <i data-feather="package"></i>
-                            <strong>Emprunt de matériel</strong>
-                            <p style="margin: 0;">
-                                Date limite de retour: {{ order.materialReturnDeadline|date('d/m/Y') }}
+                        <div style="margin-top: 1.5rem; padding: 1rem; background: #f9f9f9; border-radius: var(--radius-sm); border-left: 3px solid var(--gold);">
+                            <p style="font-weight: 600; color: var(--dark-text); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                                <span data-icon="package" data-icon-width="20" data-icon-height="20" style="color: var(--gold);"></span>
+                                Emprunt de matériel
+                            </p>
+                            <p style="color: var(--dark-text); margin-bottom: 0.5rem; padding-left: 1.75rem;">
+                                Date limite de retour: <strong>{{ order.materialReturnDeadline|date('d/m/Y') }}</strong>
+                            </p>
+                            <p style="margin: 0; padding-left: 1.75rem;">
                                 {% if order.materialReturned %}
-                                    <span class="badge badge-success">Matériel retourné</span>
+                                    <span style="display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.25rem 0.75rem; border-radius: var(--radius-sm); font-weight: 600; font-size: 0.875rem; background: #d4edda; color: #155724;">
+                                        <span data-icon="check" data-icon-width="14" data-icon-height="14"></span>
+                                        Matériel retourné
+                                    </span>
                                 {% else %}
-                                    <span class="badge badge-warning">En attente de retour</span>
+                                    <span style="display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.25rem 0.75rem; border-radius: var(--radius-sm); font-weight: 600; font-size: 0.875rem; background: #fff3cd; color: #856404;">
+                                        <span data-icon="clock" data-icon-width="14" data-icon-height="14"></span>
+                                        En attente de retour
+                                    </span>
                                 {% endif %}
                             </p>
                         </div>
                     {% endif %}
                 </div>
-            </div>
 
-            {% if order.canReceiveReview %}
-                <div style="margin-bottom: 25px;">
-                    <div class="card-header">
-                        <h5 style="margin: 0;">Laisser un avis</h5>
-                    </div>
-                    <div class="card-body">
-                        <p>Votre commande a été livrée. Qu'en avez-vous pensé ?</p>
-                        <a href="#" class="btn btn-primary">
-                            <i data-feather="star"></i> Écrire un avis
+                {% if order.canReceiveReview %}
+                    {# Section avis #}
+                    <div style="background: linear-gradient(135deg, var(--bordeaux) 0%, #8B0000 100%); border-radius: var(--radius-lg); padding: 2rem; box-shadow: var(--shadow-md); text-align: center;">
+                        <span data-icon="star" data-icon-width="48" data-icon-height="48" style="display: block; margin: 0 auto 1rem; color: var(--gold);"></span>
+                        <h2 style="font-family: var(--font-heading); color: white; font-size: 1.5rem; margin-bottom: 0.75rem; font-weight: 400;">
+                            Laisser un avis
+                        </h2>
+                        <p style="color: white; opacity: 0.9; margin-bottom: 1.5rem;">
+                            Votre commande a été livrée. Qu'en avez-vous pensé ?
+                        </p>
+                        <a href="#" style="display: inline-flex; align-items: center; gap: 0.5rem; background: var(--gold); color: var(--dark-text); border: none; padding: 0.875rem 2rem; border-radius: var(--radius-sm); font-weight: 600; text-decoration: none; transition: transform var(--transition-base), box-shadow var(--transition-base);"
+                           onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-lg)'"
+                           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                            <span data-icon="star" data-icon-width="20" data-icon-height="20"></span>
+                            Écrire un avis
                         </a>
                     </div>
-                </div>
-            {% endif %}
-        </div>
+                {% endif %}
+            </div>
 
-        <div style="grid-column: span 1;">
-            <div class="card">
-                <div class="card-header badge-primary text-white">
-                    <h5 style="margin: 0;">Récapitulatif financier</h5>
-                </div>
-                <div class="card-body">
-                    <div style="margin-bottom: 10px;">
-                        <span>Sous-total menu:</span>
-                        <strong>{{ (order.menuSubtotal / 100)|number_format(2, ',', ' ') }}€</strong>
+            {# ========== COLONNE DROITE - Récapitulatif et historique ========== #}
+            <div>
+                {# Récapitulatif financier #}
+                <div style="background: white; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md); margin-bottom: 1.5rem;">
+                    <div style="background: var(--bordeaux); padding: 1.5rem;">
+                        <h2 style="font-family: var(--font-heading); font-size: 1.5rem; margin: 0; font-weight: 400; color: white;">
+                            Récapitulatif financier
+                        </h2>
                     </div>
-
-                    {% if order.discountAmount %}
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; color: #27ae60;">
-                            <span>Réduction (10%):</span>
-                            <strong>- {{ (order.discountAmount / 100)|number_format(2, ',', ' ') }}€</strong>
+                    <div style="padding: 1.5rem;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; color: var(--dark-text);">
+                            <span>Sous-total menu</span>
+                            <strong>{{ (order.menuSubtotal / 100)|number_format(2, ',', ' ') }}€</strong>
                         </div>
-                    {% endif %}
 
-                    <div style="margin-bottom: 10px;">
-                        <span>Frais de livraison:</span>
-                        <strong>{{ (order.deliveryCost / 100)|number_format(2, ',', ' ') }}€</strong>
-                    </div>
+                        {% if order.discountAmount %}
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; color: #27ae60;">
+                                <span>Réduction (10%)</span>
+                                <strong>- {{ (order.discountAmount / 100)|number_format(2, ',', ' ') }}€</strong>
+                            </div>
+                        {% endif %}
 
-                    {% if order.deliveryDistanceKm %}
-                        <small style="margin-bottom: 10px;">
-                            Distance: {{ order.deliveryDistanceKm }} km
-                        </small>
-                    {% endif %}
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; color: var(--dark-text);">
+                            <span>Frais de livraison</span>
+                            <strong>{{ (order.deliveryCost / 100)|number_format(2, ',', ' ') }}€</strong>
+                        </div>
 
-                    <hr>
+                        {% if order.deliveryDistanceKm %}
+                            <div style="margin-bottom: 1rem; padding-left: 0.5rem;">
+                                <small style="color: var(--dark-text); opacity: 0.7;">
+                                    <span data-icon="map-pin" data-icon-width="14" data-icon-height="14" style="display: inline-block; vertical-align: middle;"></span>
+                                    Distance: {{ order.deliveryDistanceKm }} km
+                                </small>
+                            </div>
+                        {% endif %}
 
-                    <div style="display: flex; justify-content: space-between;">
-                        <span style="font-size: 1.1rem;">Total:</span>
-                        <strong style="font-size: 1.25rem; color: var(--bordeaux);">{{ (order.totalPrice / 100)|number_format(2, ',', ' ') }}€</strong>
+                        <hr style="border: none; border-top: 2px solid var(--beige); margin: 1.5rem 0;">
+
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-size: 1.125rem; color: var(--dark-text); font-weight: 600;">Total</span>
+                            <strong style="font-size: 1.75rem; color: var(--bordeaux); font-family: var(--font-heading); font-weight: 400;">{{ (order.totalPrice / 100)|number_format(2, ',', ' ') }}€</strong>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div style="margin-top: 25px;">
-                <div class="card-header">
-                    <h5 style="margin: 0;">Historique</h5>
-                </div>
-                <div class="card-body">
-                    <ul style="list-style: none; padding: 0;">
-                        {% for entry in order.statusHistory %}
-                            <li style="margin-bottom: 10px;">
-                                <small style="color: #95a5a6;">{{ entry.changed_at }}</small>
-                                <div>
-                                    <span style="background: #95a5a6; color: white;">{{ entry.label }}</span>
-                                </div>
-                            </li>
-                        {% endfor %}
-                    </ul>
+                {# Historique des statuts #}
+                <div style="background: white; border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: var(--shadow-md);">
+                    <h2 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.5rem; margin-bottom: 1rem; font-weight: 400;">
+                        Historique
+                    </h2>
+                    <div style="position: relative; padding-left: 2rem;">
+                        {# Ligne verticale #}
+                        <div style="position: absolute; left: 0.5rem; top: 0; bottom: 0; width: 2px; background: var(--beige);"></div>
+
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            {% for entry in order.statusHistory %}
+                                <li style="position: relative; margin-bottom: 1.5rem; padding-bottom: 1.5rem; {% if not loop.last %}border-bottom: 1px solid var(--beige);{% endif %}">
+                                    {# Point sur la timeline #}
+                                    <div style="position: absolute; left: -1.55rem; top: 0.25rem; width: 0.75rem; height: 0.75rem; background: var(--gold); border: 2px solid white; border-radius: 50%; box-shadow: 0 0 0 2px var(--beige);"></div>
+
+                                    <div>
+                                        <small style="color: var(--dark-text); opacity: 0.7; display: block; margin-bottom: 0.25rem;">
+                                            {{ entry.changed_at }}
+                                        </small>
+                                        <span style="display: inline-block; padding: 0.25rem 0.75rem; border-radius: var(--radius-sm); font-weight: 600; font-size: 0.875rem; background: var(--beige); color: var(--dark-text);">
+                                            {{ entry.label }}
+                                        </span>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
 
-{# Modal d'annulation #}
-<div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="cancelModalLabel">Annuler la commande</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form method="post" action="{{ path('app_order_cancel', {id: order.id}) }}">
-                <div class="modal-body">
-                    <p>Êtes-vous sûr de vouloir annuler cette commande ?</p>
-                    <div style="margin-bottom: 20px;">
-                        <label for="reason" class="form-label">Raison (optionnel)</label>
-                        <textarea class="form-control" id="reason" name="reason" rows="3"></textarea>
-                    </div>
-                    <input type="hidden" name="_token" value="{{ csrf_token('cancel-order-' ~ order.id) }}">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                    <button type="submit" class="btn btn-danger">Confirmer l'annulation</button>
-                </div>
-            </form>
+
+{# ========================================
+   MODAL D'ANNULATION - Sans Bootstrap
+   ======================================== #}
+<div id="cancelModal" style="display: none; position: fixed; inset: 0; z-index: 1050; background: rgba(0, 0, 0, 0.5); padding: 1rem; overflow-y: auto;">
+    <div style="max-width: 32rem; margin: 3rem auto; background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-xl); overflow: hidden;">
+        {# Header #}
+        <div style="background: var(--bordeaux); padding: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+            <h2 style="font-family: var(--font-heading); font-size: 1.5rem; margin: 0; font-weight: 400; color: white;">
+                Annuler la commande
+            </h2>
+            <button type="button" onclick="document.getElementById('cancelModal').style.display='none'" style="background: transparent; border: none; color: white; cursor: pointer; padding: 0.5rem; display: flex; align-items: center; justify-content: center; border-radius: var(--radius-sm); transition: background-color var(--transition-base);"
+                    onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.1)'"
+                    onmouseout="this.style.backgroundColor='transparent'">
+                <span data-icon="x" data-icon-width="24" data-icon-height="24"></span>
+            </button>
         </div>
+
+        {# Body #}
+        <form method="post" action="{{ path('app_order_cancel', {id: order.id}) }}">
+            <div style="padding: 1.5rem;">
+                <p style="color: var(--dark-text); margin-bottom: 1.5rem;">
+                    Êtes-vous sûr de vouloir annuler cette commande ?
+                </p>
+                <div style="margin-bottom: 1.5rem;">
+                    <label for="reason" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark-text); font-family: var(--font-body);">
+                        Raison (optionnel)
+                    </label>
+                    <textarea id="reason" name="reason" rows="3" style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: var(--radius-sm); font-family: var(--font-body); resize: vertical;" placeholder="Indiquez la raison de l'annulation..."></textarea>
+                </div>
+                <input type="hidden" name="_token" value="{{ csrf_token('cancel-order-' ~ order.id) }}">
+            </div>
+
+            {# Footer #}
+            <div style="padding: 1rem 1.5rem; background: #f9f9f9; display: flex; justify-content: flex-end; gap: 1rem; border-top: 1px solid #e5e5e5;">
+                <button type="button" onclick="document.getElementById('cancelModal').style.display='none'" style="padding: 0.75rem 1.5rem; border: 1px solid #ddd; background: white; color: var(--dark-text); border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; transition: background-color var(--transition-base);"
+                        onmouseover="this.style.backgroundColor='#f9f9f9'"
+                        onmouseout="this.style.backgroundColor='white'">
+                    Fermer
+                </button>
+                <button type="submit" style="padding: 0.75rem 1.5rem; border: none; background: #dc3545; color: white; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; transition: background-color var(--transition-base);"
+                        onmouseover="this.style.backgroundColor='#c82333'"
+                        onmouseout="this.style.backgroundColor='#dc3545'">
+                    Confirmer l'annulation
+                </button>
+            </div>
+        </form>
     </div>
 </div>
+
+<script>
+// Fermer le modal en cliquant en dehors
+document.getElementById('cancelModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        this.style.display = 'none';
+    }
+});
+
+// Fermer avec la touche Escape
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        document.getElementById('cancelModal').style.display = 'none';
+    }
+});
+</script>
 {% endblock %}

@@ -1,70 +1,96 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mon Compte - Vite & Gourmand{% endblock %}
+{% block title %}Mon Compte{% endblock %}
 
 {% block body %}
-
 {# ========================================
-   USER ACCOUNT PAGE - Figma Design
+   HEADER SECTION - Figma Design
    ======================================== #}
-<section style="background-color: var(--beige); padding: 1.5rem 0 3rem;">
+<section style="background-color: var(--beige); padding: 2rem 0 3rem;">
     <div style="max-width: 80rem; margin: 0 auto; padding: 0 1rem;">
 
-        {# ========== Header avec info utilisateur ========== #}
+        {# Fil d'ariane #}
+        <nav aria-label="Fil d'ariane" style="margin-bottom: 1.5rem;">
+            <ol style="display: flex; align-items: center; gap: 0.5rem; list-style: none; padding: 0; margin: 0; font-size: 0.875rem;">
+                <li>
+                    <a href="{{ path('app_home') }}" style="color: var(--dark-text); text-decoration: none; transition: color var(--transition-base);"
+                       onmouseover="this.style.color='var(--bordeaux)'"
+                       onmouseout="this.style.color='var(--dark-text)'">
+                        Accueil
+                    </a>
+                </li>
+                <li style="color: var(--dark-text); opacity: 0.5;">
+                    <span data-icon="chevron-right" data-icon-width="16" data-icon-height="16"></span>
+                </li>
+                <li style="color: var(--bordeaux); font-weight: 600;">
+                    Mon compte
+                </li>
+            </ol>
+        </nav>
+
+        {# Titre #}
+        <div style="margin-bottom: 2rem;">
+            <h1 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 2.25rem; margin-bottom: 0.5rem; font-weight: 400;">
+                Mon compte
+            </h1>
+            <div style="width: 5rem; height: 4px; background-color: var(--gold); border-radius: var(--radius-sm);"></div>
+        </div>
+
+        {# Header utilisateur #}
         <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 1.5rem; margin-bottom: 1.5rem;">
-            <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <div class="account-header-layout" style="display: flex; flex-direction: column; gap: 1rem;">
                 <div style="display: flex; align-items: center; gap: 1rem; flex: 1; min-width: 0;">
                     <div style="width: 4rem; height: 4rem; border-radius: 50%; background-color: var(--bordeaux); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                        <span data-icon="user" data-icon-width="32" data-icon-height="32" style="color: white;"></span>
+                        <span data-icon="user" data-icon-width="28" data-icon-height="28" style="color: white;"></span>
                     </div>
                     <div style="min-width: 0; flex: 1;">
-                        <h1 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.5rem; margin: 0 0 0.25rem; font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                        <h2 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.5rem; margin: 0 0 0.25rem; font-weight: 400;">
                             {{ app.user.firstname }} {{ app.user.lastname }}
-                        </h1>
-                        <p style="font-family: var(--font-body); color: var(--dark-text); font-size: 0.875rem; margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                        </h2>
+                        <p style="color: var(--dark-text); font-size: 0.875rem; margin: 0;">
                             {{ app.user.email }}
                         </p>
                     </div>
                 </div>
-                <a href="{{ path('app_logout') }}" style="width: 100%; padding: 0.625rem 1rem; border-radius: var(--radius-sm); border: 2px solid var(--bordeaux); color: var(--bordeaux); background: white; font-family: var(--font-body); text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.3s ease; font-size: 0.875rem;">
-                    <span data-icon="log-out" data-icon-width="16" data-icon-height="16"></span>
+                <a href="{{ path('app_logout') }}" style="width: 100%; padding: 0.75rem 1rem; border-radius: var(--radius-sm); border: 2px solid var(--bordeaux); color: var(--bordeaux); background: white; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: background-color var(--transition-base), color var(--transition-base); font-weight: 600;"
+                   onmouseover="this.style.backgroundColor='var(--bordeaux)'; this.style.color='white'"
+                   onmouseout="this.style.backgroundColor='white'; this.style.color='var(--bordeaux)'">
+                    <span data-icon="log-out" data-icon-width="18" data-icon-height="18"></span>
                     Déconnexion
                 </a>
             </div>
         </div>
 
-        {# ========== Grille principale: Mobile (1 col) / Desktop (sidebar gauche + contenu) ========== #}
-        <div class="account-layout">
+        {# Layout 2 colonnes responsive #}
+        <div class="account-layout" style="display: grid; grid-template-columns: 1fr; gap: 1.5rem;">
 
-            {# ========== Sidebar Navigation (gauche sur desktop) ========== #}
+            {# Sidebar Navigation #}
             <div class="account-sidebar">
                 <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 0.75rem;">
-                    <div id="accountTabs" class="account-tabs-grid">
+                    {# Grille 2 colonnes sur mobile, colonne unique sur desktop #}
+                    <div class="account-tabs-container" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem;">
                         {% if is_granted('ROLE_EMPLOYEE') %}
-                        <a href="{{ path('app_admin_dashboard') }}" style="text-decoration: none; background: var(--gold); color: var(--dark-text); font-weight: 600;">
-                            <span data-icon="shield" data-icon-width="16" data-icon-height="16"></span>
+                        <a href="{{ path('app_admin_dashboard') }}" class="account-tab-link" style="padding: 0.875rem 1rem; border-radius: var(--radius-sm); background: var(--gold); color: var(--dark-text); text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-weight: 600; transition: opacity var(--transition-base);"
+                           onmouseover="this.style.opacity='0.9'"
+                           onmouseout="this.style.opacity='1'">
+                            <span data-icon="shield" data-icon-width="18" data-icon-height="18"></span>
                             <span class="tab-text">Administration</span>
                         </a>
                         {% endif %}
 
-                        <button class="account-tab active" data-tab="orders">
-                            <span data-icon="shopping-bag" data-icon-width="16" data-icon-height="16"></span>
+                        <button class="account-tab active" data-tab="orders" style="padding: 0.875rem 1rem; border-radius: var(--radius-sm); border: none; background: var(--bordeaux); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: background-color var(--transition-base); font-weight: 600;">
+                            <span data-icon="shopping-bag" data-icon-width="18" data-icon-height="18"></span>
                             <span class="tab-text">Mes commandes</span>
                         </button>
 
-                        <button class="account-tab" data-tab="addresses">
-                            <span data-icon="map-pin" data-icon-width="16" data-icon-height="16"></span>
+                        <button class="account-tab" data-tab="addresses" style="padding: 0.875rem 1rem; border-radius: var(--radius-sm); border: none; background: transparent; color: var(--dark-text); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: background-color var(--transition-base); font-weight: 600;">
+                            <span data-icon="map-pin" data-icon-width="18" data-icon-height="18"></span>
                             <span class="tab-text">Mes adresses</span>
                         </button>
 
-                        <button class="account-tab" data-tab="profile">
-                            <span data-icon="user" data-icon-width="16" data-icon-height="16"></span>
+                        <button class="account-tab" data-tab="profile" style="padding: 0.875rem 1rem; border-radius: var(--radius-sm); border: none; background: transparent; color: var(--dark-text); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: background-color var(--transition-base); font-weight: 600;">
+                            <span data-icon="user" data-icon-width="18" data-icon-height="18"></span>
                             <span class="tab-text">Mes informations</span>
-                        </button>
-
-                        <button class="account-tab" data-tab="settings">
-                            <span data-icon="settings" data-icon-width="16" data-icon-height="16"></span>
-                            <span class="tab-text">Paramètres</span>
                         </button>
                     </div>
                 </div>
@@ -75,87 +101,90 @@
 
                 {# ========== Onglet Commandes ========== #}
                 <div id="tab-orders" class="tab-content active">
-                    <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 1rem;">
-                        <h2 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.5rem; margin: 0 0 1.5rem; font-weight: 400;">
-                            Mes commandes
+                    <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 1.5rem;">
+                        <h2 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.75rem; margin-bottom: 0.5rem; font-weight: 400;">
+                            Mes commandes récentes
                         </h2>
+                        <div style="width: 4rem; height: 3px; background-color: var(--gold); border-radius: var(--radius-sm); margin-bottom: 1.5rem;"></div>
 
                         {% if recentOrders is empty %}
                             <div style="text-align: center; padding: 3rem 1rem;">
-                                <span data-icon="shopping-bag" data-icon-width="48" data-icon-height="48" style="display: block; margin: 0 auto 1rem; color: var(--gold); opacity: 0.3;"></span>
-                                <h5 style="margin-bottom: 0.5rem; font-family: var(--font-heading); color: var(--bordeaux);">Aucune commande</h5>
-                                <p style="margin: 0 0 1rem; color: var(--dark-text);">Vous n'avez pas encore passé de commande</p>
-                                <a href="{{ path('app_menu_catalog') }}" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; background: var(--bordeaux); color: white; border-radius: var(--radius-sm); text-decoration: none; font-family: var(--font-body); transition: all 0.3s ease;">
-                                    <span data-icon="book-open" data-icon-width="16" data-icon-height="16"></span>
+                                <span data-icon="shopping-bag" data-icon-width="64" data-icon-height="64" style="display: block; margin: 0 auto 1.5rem; color: var(--gold);"></span>
+                                <h3 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.5rem; margin-bottom: 0.75rem; font-weight: 400;">
+                                    Aucune commande
+                                </h3>
+                                <p style="color: var(--dark-text); opacity: 0.8; margin-bottom: 2rem;">
+                                    Vous n'avez pas encore passé de commande
+                                </p>
+                                <a href="{{ path('app_menu_catalog') }}" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.875rem 2rem; background: var(--bordeaux); color: white; border-radius: var(--radius-sm); text-decoration: none; font-weight: 600; transition: background-color var(--transition-base);"
+                                   onmouseover="this.style.backgroundColor='#8B0000'"
+                                   onmouseout="this.style.backgroundColor='var(--bordeaux)'">
+                                    <span data-icon="arrow-right" data-icon-width="20" data-icon-height="20"></span>
                                     Découvrir nos menus
                                 </a>
                             </div>
                         {% else %}
                             <div style="display: flex; flex-direction: column; gap: 1rem;">
                                 {% for order in recentOrders %}
-                                    <div style="border: 1px solid var(--beige); border-radius: var(--radius-lg); padding: 1rem; transition: box-shadow 0.3s ease;" onmouseover="this.style.boxShadow='var(--shadow-md)'" onmouseout="this.style.boxShadow='none'">
-                                        <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1rem;">
-                                            <div style="flex: 1; min-width: 0;">
-                                                <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 0.5rem;">
-                                                    <h3 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.25rem; margin: 0; font-weight: 400; overflow: hidden; text-overflow: ellipsis;">
-                                                        {{ order.menuName }}
-                                                    </h3>
-                                                    <span style="padding: 0.25rem 0.75rem; border-radius: var(--radius-full); font-size: 0.75rem; color: white; background-color: {{ order.status.badgeClass == 'success' ? 'var(--green)' : (order.status.badgeClass == 'warning' ? '#FFD700' : 'var(--bordeaux)') }}; align-self: flex-start;">
-                                                        {{ order.status.label }}
-                                                    </span>
+                                    <div style="border: 1px solid var(--beige); border-radius: var(--radius-lg); padding: 1rem; transition: transform var(--transition-base), box-shadow var(--transition-base);"
+                                         onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-lg)'"
+                                         onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+
+                                        {# Layout 2 colonnes : Info à gauche, Recap à droite #}
+                                        <div style="display: grid; grid-template-columns: 1fr auto; gap: 1.5rem; align-items: start;">
+
+                                            {# Colonne gauche - Informations principales #}
+                                            <div style="min-width: 0;">
+                                                <h3 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.125rem; margin: 0 0 0.375rem; font-weight: 400;">
+                                                    {{ order.menuName }}
+                                                </h3>
+                                                <p style="font-size: 0.8125rem; color: var(--dark-text); opacity: 0.7; margin: 0 0 0.75rem;">
+                                                    #{{ order.orderNumber }} · {{ order.createdAt|date('d/m/Y') }}
+                                                </p>
+
+                                                {# Détails compacts #}
+                                                <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; font-size: 0.8125rem;">
+                                                    <div style="display: flex; align-items: center; gap: 0.375rem; color: var(--dark-text);">
+                                                        <span data-icon="calendar" data-icon-width="14" data-icon-height="14" style="color: var(--gold);"></span>
+                                                        {{ order.deliveryDateTime|date('d/m/Y H:i') }}
+                                                    </div>
+                                                    <div style="display: flex; align-items: center; gap: 0.375rem; color: var(--dark-text);">
+                                                        <span data-icon="users" data-icon-width="14" data-icon-height="14" style="color: var(--gold);"></span>
+                                                        {{ order.numberOfPersons }} pers.
+                                                    </div>
                                                 </div>
-                                                <p style="font-size: 0.75rem; margin-bottom: 0.25rem; color: var(--dark-text);">
-                                                    Commande #{{ order.orderNumber }} - Passée le {{ order.createdAt|date('d M Y') }}
-                                                </p>
                                             </div>
-                                            <div style="text-align: left;">
-                                                <p style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.875rem; margin: 0;">
-                                                    {{ (order.totalPrice / 100)|number_format(0, ',', ' ') }}€
-                                                </p>
-                                            </div>
-                                        </div>
 
-                                        <div style="background: var(--beige); border-radius: var(--radius-sm); padding: 1rem; margin-bottom: 1rem; display: grid; grid-template-columns: 1fr; gap: 0.75rem;">
-                                            <div>
-                                                <p style="font-size: 0.75rem; margin-bottom: 0.25rem; color: var(--dark-text);">
-                                                    <strong>Date de livraison:</strong>
-                                                </p>
-                                                <p style="font-size: 0.875rem; color: var(--dark-text); margin: 0;">
-                                                    {{ order.deliveryDateTime|date('d/m/Y à H:i') }}
-                                                </p>
-                                            </div>
-                                            <div>
-                                                <p style="font-size: 0.75rem; margin-bottom: 0.25rem; color: var(--dark-text);">
-                                                    <strong>Nombre de personnes:</strong>
-                                                </p>
-                                                <p style="font-size: 0.875rem; color: var(--dark-text); margin: 0;">
-                                                    {{ order.numberOfPersons }} personnes
-                                                </p>
-                                            </div>
-                                            <div>
-                                                <p style="font-size: 0.75rem; margin-bottom: 0.25rem; color: var(--dark-text);">
-                                                    <strong>Adresse de livraison:</strong>
-                                                </p>
-                                                <p style="font-size: 0.875rem; color: var(--dark-text); margin: 0;">
-                                                    {{ order.deliveryAddress }}
-                                                </p>
-                                            </div>
-                                        </div>
+                                            {# Colonne droite - Status, Prix et Action #}
+                                            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem; min-width: 180px;">
+                                                <span style="display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.25rem 0.625rem; border-radius: var(--radius-sm); font-weight: 600; font-size: 0.75rem; background: #{{ order.status.badgeClass == 'success' ? 'd4edda' : (order.status.badgeClass == 'warning' ? 'fff3cd' : (order.status.badgeClass == 'danger' ? 'f8d7da' : 'e7f1ff')) }}; color: #{{ order.status.badgeClass == 'success' ? '155724' : (order.status.badgeClass == 'warning' ? '856404' : (order.status.badgeClass == 'danger' ? '721c24' : '004085')) }};">
+                                                    <span data-icon="{{ order.status.icon }}" data-icon-width="12" data-icon-height="12"></span>
+                                                    {{ order.status.label }}
+                                                </span>
 
-                                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                                            <a href="{{ path('app_order_show', {id: order.id}) }}" style="padding: 0.5rem 1rem; border-radius: var(--radius-sm); background: var(--bordeaux); color: white; text-decoration: none; font-family: var(--font-body); transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-size: 0.875rem;">
-                                                <span data-icon="eye" data-icon-width="16" data-icon-height="16"></span>
-                                                Voir le détail
-                                            </a>
+                                                <p style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.375rem; margin: 0; font-weight: 400;">
+                                                    {{ (order.totalPrice / 100)|number_format(2, ',', ' ') }}€
+                                                </p>
+
+                                                <a href="{{ path('app_order_show', {id: order.id}) }}" style="display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.5rem 1rem; border-radius: var(--radius-sm); background: var(--bordeaux); color: white; text-decoration: none; font-weight: 600; font-size: 0.8125rem; transition: background-color var(--transition-base); margin-top: 0.25rem;"
+                                                   onmouseover="this.style.backgroundColor='#8B0000'"
+                                                   onmouseout="this.style.backgroundColor='var(--bordeaux)'">
+                                                    <span data-icon="eye" data-icon-width="14" data-icon-height="14"></span>
+                                                    Détails
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
                                 {% endfor %}
                             </div>
 
                             {% if totalOrders > recentOrders|length %}
-                                <div style="margin-top: 1rem; text-align: center;">
-                                    <a href="{{ path('app_account_orders') }}" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border: 2px solid var(--bordeaux); color: var(--bordeaux); background: white; border-radius: var(--radius-sm); text-decoration: none; font-family: var(--font-body); transition: all 0.3s ease;">
+                                <div style="margin-top: 1.5rem; text-align: center; padding-top: 1.5rem; border-top: 1px solid var(--beige);">
+                                    <a href="{{ path('app_account_orders') }}" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.875rem 2rem; border: 2px solid var(--bordeaux); color: var(--bordeaux); background: white; border-radius: var(--radius-sm); text-decoration: none; font-weight: 600; transition: background-color var(--transition-base), color var(--transition-base);"
+                                       onmouseover="this.style.backgroundColor='var(--bordeaux)'; this.style.color='white'"
+                                       onmouseout="this.style.backgroundColor='white'; this.style.color='var(--bordeaux)'">
                                         Voir toutes mes commandes ({{ totalOrders }})
+                                        <span data-icon="arrow-right" data-icon-width="18" data-icon-height="18"></span>
                                     </a>
                                 </div>
                             {% endif %}
@@ -164,7 +193,7 @@
                 </div>
 
                 {# ========== Onglet Adresses ========== #}
-                <div id="tab-addresses" style="display: none;">
+                <div id="tab-addresses" class="tab-content" style="display: none;">
                     <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 1.5rem;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
                             <h2 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.5rem; margin: 0; font-weight: 400;">
@@ -183,32 +212,34 @@
                                 <p style="margin: 0; color: var(--dark-text);">Vous n'avez pas encore enregistré d'adresse</p>
                             </div>
                         {% else %}
-                            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem;">
                                 {% for address in app.user.addresses %}
-                                    <div style="border: {{ address.isDefault ? '2px solid var(--gold)' : '1px solid var(--beige)' }}; border-radius: var(--radius-lg); padding: 1.5rem; position: relative;">
+                                    <div style="border: {{ address.isDefault ? '2px solid var(--gold)' : '1px solid var(--beige)' }}; border-radius: var(--radius-lg); padding: 1rem; position: relative; display: flex; flex-direction: column;">
                                         {% if address.isDefault %}
-                                            <div style="position: absolute; top: 1rem; right: 1rem; padding: 0.25rem 0.75rem; border-radius: var(--radius-full); font-size: 0.625rem; color: white; background: var(--gold); display: flex; align-items: center; gap: 0.25rem;">
-                                                <span data-icon="check-circle" data-icon-width="12" data-icon-height="12"></span>
-                                                Adresse par défaut
+                                            <div style="position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.25rem 0.5rem; border-radius: var(--radius-full); font-size: 0.625rem; color: white; background: var(--gold); display: flex; align-items: center; gap: 0.25rem;">
+                                                <span data-icon="check-circle" data-icon-width="10" data-icon-height="10"></span>
+                                                Défaut
                                             </div>
                                         {% endif %}
 
-                                        <h3 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.25rem; margin: 0 0 0.75rem; font-weight: 400;">
+                                        <h3 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1rem; margin: 0 0 0.625rem; font-weight: 400; padding-right: {{ address.isDefault ? '4rem' : '0' }};">
                                             {{ address.label }}
                                         </h3>
 
-                                        <div style="margin-bottom: 1rem; color: var(--dark-text); font-size: 0.875rem;">
+                                        <div style="margin-bottom: 0.875rem; color: var(--dark-text); font-size: 0.8125rem; flex: 1;">
                                             <p style="margin: 0 0 0.25rem;">{{ address.street }}</p>
                                             <p style="margin: 0 0 0.5rem;">{{ address.postalCode }} {{ address.city }}</p>
-                                            <p style="margin: 0; display: flex; align-items: center; gap: 0.5rem;">
-                                                <span data-icon="phone" data-icon-width="14" data-icon-height="14" style="color: var(--gold);"></span>
+                                            <p style="margin: 0; display: flex; align-items: center; gap: 0.375rem; font-size: 0.75rem;">
+                                                <span data-icon="phone" data-icon-width="12" data-icon-height="12" style="color: var(--gold);"></span>
                                                 {{ address.phone }}
                                             </p>
                                         </div>
 
                                         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                                            <a href="{{ path('app_account_address_edit', {id: address.id}) }}" style="padding: 0.5rem 1rem; border-radius: var(--radius-sm); border: 2px solid var(--bordeaux); color: var(--bordeaux); background: white; text-decoration: none; font-family: var(--font-body); display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem;">
-                                                <span data-icon="edit" data-icon-width="14" data-icon-height="14"></span>
+                                            <a href="{{ path('app_account_address_edit', {id: address.id}) }}" style="padding: 0.5rem 0.875rem; border-radius: var(--radius-sm); border: 2px solid var(--bordeaux); color: var(--bordeaux); background: white; text-decoration: none; font-family: var(--font-body); display: flex; align-items: center; gap: 0.375rem; font-size: 0.75rem; transition: background-color var(--transition-base), color var(--transition-base);"
+                                               onmouseover="this.style.backgroundColor='var(--bordeaux)'; this.style.color='white'"
+                                               onmouseout="this.style.backgroundColor='white'; this.style.color='var(--bordeaux)'">
+                                                <span data-icon="edit" data-icon-width="12" data-icon-height="12"></span>
                                                 Modifier
                                             </a>
                                         </div>
@@ -220,104 +251,84 @@
                 </div>
 
                 {# ========== Onglet Profil ========== #}
-                <div id="tab-profile" style="display: none;">
+                <div id="tab-profile" class="tab-content" style="display: none;">
                     <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 1.5rem;">
-                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
-                            <div>
-                                <h2 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.5rem; margin: 0 0 0.5rem; font-weight: 400;">
-                                    Mes informations personnelles
-                                </h2>
-                                <p style="margin: 0; color: var(--dark-text); font-size: 0.875rem;">
-                                    Gérez vos informations de compte
-                                </p>
-                            </div>
-                            <a href="{{ path('app_account_edit') }}" style="padding: 0.5rem 1rem; border-radius: var(--radius-sm); background: var(--bordeaux); color: white; text-decoration: none; font-family: var(--font-body); display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem;">
-                                <span data-icon="edit" data-icon-width="16" data-icon-height="16"></span>
-                                Modifier
-                            </a>
+                        <div style="margin-bottom: 2rem;">
+                            <h2 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.75rem; margin-bottom: 0.5rem; font-weight: 400;">
+                                Mes informations personnelles
+                            </h2>
+                            <div style="width: 4rem; height: 3px; background-color: var(--gold); border-radius: var(--radius-sm);"></div>
                         </div>
 
-                        <div style="display: grid; gap: 1.5rem;">
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
-                                <div>
-                                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark-text); font-size: 0.875rem;">
-                                        Prénom
-                                    </label>
-                                    <div style="padding: 0.75rem 1rem; border-radius: var(--radius-sm); border: 2px solid var(--bordeaux); background: var(--beige); color: var(--dark-text); font-family: var(--font-body); font-size: 0.875rem;">
-                                        {{ app.user.firstname }}
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark-text); font-size: 0.875rem;">
-                                        Nom
-                                    </label>
-                                    <div style="padding: 0.75rem 1rem; border-radius: var(--radius-sm); border: 2px solid var(--bordeaux); background: var(--beige); color: var(--dark-text); font-family: var(--font-body); font-size: 0.875rem;">
-                                        {{ app.user.lastname }}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div>
-                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark-text); font-size: 0.875rem;">
-                                    Email
-                                </label>
-                                <div style="padding: 0.75rem 1rem; border-radius: var(--radius-sm); border: 2px solid var(--bordeaux); background: var(--beige); color: var(--dark-text); font-family: var(--font-body); font-size: 0.875rem;">
-                                    {{ app.user.email }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {# ========== Onglet Paramètres ========== #}
-                <div id="tab-settings" style="display: none;">
-                    <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 1rem;">
-                        <h2 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.5rem; margin: 0 0 1.5rem; font-weight: 400;">
-                            Paramètres du compte
-                        </h2>
-
-                        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-                            {# Mot de passe #}
-                            <div style="padding-bottom: 1.5rem; border-bottom: 1px solid var(--beige);">
-                                <h3 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.125rem; margin: 0 0 1rem; font-weight: 400;">
-                                    Mot de passe
+                        <div style="display: flex; flex-direction: column; gap: 2rem;">
+                            {# Informations principales #}
+                            <div style="padding: 1.5rem; background: var(--beige); border-radius: var(--radius-lg); border-left: 4px solid var(--gold);">
+                                <h3 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.25rem; margin-bottom: 1.5rem; font-weight: 400; display: flex; align-items: center; gap: 0.5rem;">
+                                    <span data-icon="user" data-icon-width="20" data-icon-height="20"></span>
+                                    Informations de base
                                 </h3>
-                                <p style="margin: 0 0 1rem; color: var(--dark-text); font-size: 0.875rem;">
-                                    Sécurisez votre compte en modifiant régulièrement votre mot de passe
-                                </p>
-                                <a href="{{ path('app_account_pwd_modify') }}" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; background: var(--bordeaux); color: white; border-radius: var(--radius-sm); text-decoration: none; font-family: var(--font-body); font-size: 0.875rem; transition: all 0.3s ease;">
-                                    Modifier le mot de passe
+
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+                                    <div>
+                                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark-text); font-size: 0.875rem;">
+                                            Prénom
+                                        </label>
+                                        <div style="padding: 0.75rem 1rem; border-radius: var(--radius-sm); background: white; border: 1px solid rgba(139, 0, 0, 0.2); color: var(--dark-text); font-family: var(--font-body);">
+                                            {{ app.user.firstname }}
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark-text); font-size: 0.875rem;">
+                                            Nom
+                                        </label>
+                                        <div style="padding: 0.75rem 1rem; border-radius: var(--radius-sm); background: white; border: 1px solid rgba(139, 0, 0, 0.2); color: var(--dark-text); font-family: var(--font-body);">
+                                            {{ app.user.lastname }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style="margin-bottom: 1.5rem;">
+                                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark-text); font-size: 0.875rem;">
+                                        Adresse email
+                                    </label>
+                                    <div style="padding: 0.75rem 1rem; border-radius: var(--radius-sm); background: white; border: 1px solid rgba(139, 0, 0, 0.2); color: var(--dark-text); font-family: var(--font-body); display: flex; align-items: center; gap: 0.5rem;">
+                                        <span data-icon="mail" data-icon-width="16" data-icon-height="16" style="color: var(--gold);"></span>
+                                        {{ app.user.email }}
+                                    </div>
+                                </div>
+
+                                <a href="{{ path('app_account_edit') }}" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; background: var(--bordeaux); color: white; border-radius: var(--radius-sm); text-decoration: none; font-weight: 600; transition: background-color var(--transition-base);"
+                                   onmouseover="this.style.backgroundColor='#8B0000'"
+                                   onmouseout="this.style.backgroundColor='var(--bordeaux)'">
+                                    <span data-icon="edit" data-icon-width="18" data-icon-height="18"></span>
+                                    Modifier mes informations
                                 </a>
                             </div>
 
-
-                            {# Moyens de paiement #}
-                            <div style="padding-bottom: 1.5rem; border-bottom: 1px solid var(--beige);">
-                                <h3 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.125rem; margin: 0 0 1rem; font-weight: 400; display: flex; align-items: center; gap: 0.5rem;">
-                                    <span data-icon="credit-card" data-icon-width="20" data-icon-height="20"></span>
-                                    Moyens de paiement
+                            {# Sécurité #}
+                            <div style="padding: 1.5rem; background: white; border-radius: var(--radius-lg); border: 1px solid var(--beige);">
+                                <h3 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.25rem; margin-bottom: 1.5rem; font-weight: 400; display: flex; align-items: center; gap: 0.5rem;">
+                                    <span data-icon="lock" data-icon-width="20" data-icon-height="20"></span>
+                                    Sécurité
                                 </h3>
-                                <p style="margin: 0 0 1rem; color: var(--dark-text); font-size: 0.875rem;">
-                                    Aucun moyen de paiement enregistré
-                                </p>
-                                <button style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border: 2px solid var(--bordeaux); color: var(--bordeaux); background: white; border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 0.875rem; cursor: pointer; transition: all 0.3s ease;">
-                                    <span data-icon="plus" data-icon-width="16" data-icon-height="16"></span>
-                                    Ajouter une carte bancaire
-                                </button>
-                            </div>
 
-                            {# Zone de danger #}
-                            <div>
-                                <h3 style="font-family: var(--font-heading); color: #d4183d; font-size: 1.125rem; margin: 0 0 1rem; font-weight: 400;">
-                                    Zone de danger
-                                </h3>
-                                <p style="margin: 0 0 1rem; color: var(--dark-text); font-size: 0.875rem;">
-                                    La suppression de votre compte est irréversible. Toutes vos données seront définitivement supprimées.
-                                </p>
-                                <button style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border: 2px solid #d4183d; color: #d4183d; background: white; border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 0.875rem; cursor: pointer; transition: all 0.3s ease;">
-                                    Supprimer mon compte
-                                </button>
+                                <div style="display: flex; align-items: start; gap: 1rem; margin-bottom: 1.5rem; padding: 1rem; background: var(--beige); border-radius: var(--radius-sm);">
+                                    <span data-icon="shield" data-icon-width="24" data-icon-height="24" style="color: var(--gold); flex-shrink: 0;"></span>
+                                    <div style="flex: 1;">
+                                        <p style="font-weight: 600; color: var(--dark-text); margin: 0 0 0.5rem;">Mot de passe</p>
+                                        <p style="font-size: 0.875rem; color: var(--dark-text); margin: 0;">
+                                            Modifiez régulièrement votre mot de passe pour protéger votre compte
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <a href="{{ path('app_account_pwd_modify') }}" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border: 2px solid var(--bordeaux); color: var(--bordeaux); background: white; border-radius: var(--radius-sm); text-decoration: none; font-weight: 600; transition: background-color var(--transition-base), color var(--transition-base);"
+                                   onmouseover="this.style.backgroundColor='var(--bordeaux)'; this.style.color='white'"
+                                   onmouseout="this.style.backgroundColor='white'; this.style.color='var(--bordeaux)'">
+                                    <span data-icon="key" data-icon-width="18" data-icon-height="18"></span>
+                                    Modifier le mot de passe
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -473,6 +484,22 @@ document.addEventListener('DOMContentLoaded', function() {
         align-items: center !important;
     }
 
+    /* Texte visible sur tablette+ */
+    .tab-text {
+        display: inline;
+    }
+
+    /* Onglets en colonne sur desktop */
+    .account-tabs-container {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Tabs alignés à gauche */
+    .account-tab,
+    .account-tab-link {
+        justify-content: flex-start !important;
+    }
+
     section > div > div:first-of-type > div:first-of-type > a {
         width: auto !important;
     }
@@ -493,8 +520,7 @@ document.addEventListener('DOMContentLoaded', function() {
     /* Better padding for tab contents */
     #tab-orders > div,
     #tab-addresses > div,
-    #tab-profile > div,
-    #tab-settings > div {
+    #tab-profile > div {
         padding: 1.5rem !important;
     }
 }
@@ -503,31 +529,20 @@ document.addEventListener('DOMContentLoaded', function() {
    RESPONSIVE: Desktop (1024px+)
    ======================================== */
 @media (min-width: 1024px) {
-    /* Layout en 2 colonnes: sidebar (25%) + content (75%) */
+    /* Layout en 2 colonnes: sidebar (280px fixe) + content (reste) */
     .account-layout {
-        grid-template-columns: 1fr 3fr;
-        gap: 1.5rem;
+        grid-template-columns: 280px 1fr !important;
+        gap: 2rem !important;
     }
 
-    /* Onglets en colonne verticale sur desktop */
-    .account-tabs-grid {
-        grid-template-columns: 1fr;
+    /* Forcer la sidebar à rester en colonne */
+    .account-sidebar {
+        grid-column: 1;
     }
 
-    /* Boutons alignés à gauche avec texte */
-    .account-tab {
-        justify-content: flex-start;
-        padding: 0.75rem 1rem;
-    }
-
-    /* Afficher le texte des onglets sur desktop */
-    .tab-text {
-        display: inline;
-    }
-
-    /* Afficher les statistiques sur desktop */
-    .account-stats {
-        display: block;
+    /* Forcer le contenu à rester à droite */
+    .account-content {
+        grid-column: 2;
     }
 }
 
@@ -537,8 +552,7 @@ document.addEventListener('DOMContentLoaded', function() {
 @media (max-width: 767px) {
     #tab-orders > div,
     #tab-addresses > div,
-    #tab-profile > div,
-    #tab-settings > div {
+    #tab-profile > div {
         padding: 1rem !important;
     }
 }

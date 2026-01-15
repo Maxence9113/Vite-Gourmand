@@ -30,17 +30,6 @@
     <body>
         {% include "_partials/_navbar.html.twig" %}
 
-        <div class="container">
-            {# read and display all flash messages #}
-            {% for label, messages in app.flashes %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ label }}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endfor %}
-        </div>
-
         <main>
             {% block body %}{% endblock %}
         </main>

@@ -22,6 +22,8 @@
    Container, Grid, Sections
    ======================================== */
 @import './layout/_container.css';
+@import './layout/_sections.css';
+@import './layout/_footer.css';
 
 /* ========================================
    4. COMPONENTS - Composants réutilisables
@@ -253,140 +255,9 @@
     }
 }
 
-/* Footer - Design Figma */
-.footer {
-    background-color: var(--dark-text);
-    color: var(--white);
-    margin-top: auto;
-    flex-shrink: 0;
-    font-family: var(--font-body);
-}
+/* Footer - Styles définis dans layout/_footer.css */
 
-.footer-container {
-    padding: var(--spacing-2xl) var(--spacing-md);
-}
-
-.footer-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--spacing-xl);
-    margin-bottom: var(--spacing-xl);
-}
-
-.footer-section {
-    display: flex;
-    flex-direction: column;
-}
-
-.footer-title {
-    font-family: var(--font-heading);
-    color: var(--gold);
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: var(--spacing-md);
-}
-
-.footer-content {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    font-size: var(--text-sm);
-}
-
-.footer-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.75rem;
-}
-
-.footer-icon {
-    color: var(--gold);
-    flex-shrink: 0;
-    margin-top: 0.125rem;
-}
-
-.footer-link {
-    color: var(--white);
-    text-decoration: none;
-    transition: opacity var(--transition-base);
-}
-
-.footer-link:hover {
-    opacity: 0.8;
-}
-
-.footer-copyright {
-    margin-top: var(--spacing-xl);
-    padding-top: var(--spacing-xl);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    text-align: center;
-}
-
-.footer-copyright p {
-    font-size: var(--text-xs);
-    color: #9a9a9a;
-    margin: 0;
-}
-
-@media (max-width: 768px) {
-    .footer-grid {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-lg);
-    }
-}
-
-/* Hero Section */
-.hero-section {
-    position: relative;
-    height: 600px;
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    display: flex;
-    align-items: center;
-}
-
-.hero-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, var(--bordeaux-overlay) 0%, rgba(139, 0, 0, 0.3) 50%, var(--gold-overlay) 100%);
-}
-
-.hero-content {
-    position: relative;
-    z-index: 2;
-    color: var(--white);
-    max-width: 700px;
-}
-
-.hero-content h1 {
-    color: var(--white);
-    font-family: var(--font-heading);
-    margin-bottom: var(--spacing-md);
-}
-
-.hero-content p {
-    font-size: var(--text-lg);
-    margin-bottom: var(--spacing-xl);
-    opacity: 0.95;
-}
-
-@media (max-width: 768px) {
-    .hero-section {
-        height: 400px;
-    }
-
-    .hero-content h1 {
-        font-size: 2rem;
-    }
-
-    .hero-content p {
-        font-size: var(--text-base);
-    }
-}
+/* Hero Section - Styles définis dans layout/_sections.css */
 
 /* Menu Filters - Figma Design */
 .menu-filters {

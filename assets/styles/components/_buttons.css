@@ -44,16 +44,23 @@
 /* Bouton secondaire (Doré) */
 .btn-secondary {
     background-color: var(--gold);
-    color: var(--white);
+    color: var(--dark-text);
     border: 2px solid var(--gold);
 }
 
 .btn-secondary:hover:not(:disabled) {
-    background-color: transparent;
-    color: var(--gold);
-    border: 2px solid var(--gold);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
+    gap: 1rem;
+    box-shadow: var(--shadow-xl);
+}
+
+/* Bouton secondaire avec bordure blanche (Hero section) */
+.btn-secondary.btn-hero {
+    border-color: var(--white);
+}
+
+.btn-secondary.btn-hero:hover:not(:disabled) {
+    gap: 1rem;
+    box-shadow: var(--shadow-xl);
 }
 
 /* Bouton outline (Bordure bordeaux) */
@@ -218,4 +225,23 @@
 
 .btn-view-details:hover {
     box-shadow: var(--shadow-lg);
+}
+
+/* Textes responsive dans le bouton */
+.btn-view-details .btn-text-short {
+    display: inline;
+}
+
+.btn-view-details .btn-text-full {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .btn-view-details .btn-text-short {
+        display: none;
+    }
+
+    .btn-view-details .btn-text-full {
+        display: inline;
+    }
 }
