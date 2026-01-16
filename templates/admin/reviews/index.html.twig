@@ -1,177 +1,147 @@
 {% extends 'admin/base_admin.html.twig' %}
 
-{% block title %}Gestion des Avis{% endblock %}
+{% block title %}Gestion des Avis - Admin{% endblock %}
 
 {% block content %}
-<div style="margin-top: 30px;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-        <h1>Gestion des Avis Clients</h1>
+<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
+    <h1 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 2.5rem; font-weight: 400;">
+        ⭐ Gestion des avis clients
+    </h1>
+</div>
+
+{# Afficher les messages flash #}
+{% for message in app.flashes('success') %}
+    <div style="background: #d4edda; color: #155724; padding: 1rem; border-radius: var(--radius-sm); margin-bottom: 1rem; border: 1px solid #c3e6cb;">
+        {{ message }}
+    </div>
+{% endfor %}
+
+{% for message in app.flashes('warning') %}
+    <div style="background: #fff3cd; color: #856404; padding: 1rem; border-radius: var(--radius-sm); margin-bottom: 1rem; border: 1px solid #ffeeba;">
+        {{ message }}
+    </div>
+{% endfor %}
+
+{% for message in app.flashes('error') %}
+    <div style="background: #f8d7da; color: #721c24; padding: 1rem; border-radius: var(--radius-sm); margin-bottom: 1rem; border: 1px solid #f5c6cb;">
+        {{ message }}
+    </div>
+{% endfor %}
+
+<!-- Stats Grid -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+    <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 1.25rem; text-align: center; border-left: 4px solid #27ae60;">
+        <h6 style="color: var(--dark-text); font-size: 0.875rem; margin-bottom: 0.5rem; font-weight: 400;">Validés</h6>
+        <h3 style="font-family: var(--font-heading); font-size: 1.8rem; margin: 0; color: #27ae60;">{{ reviews|filter(r => r.isValidated)|length }}</h3>
+    </div>
+    <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 1.25rem; text-align: center; border-left: 4px solid #f39c12;">
+        <h6 style="color: var(--dark-text); font-size: 0.875rem; margin-bottom: 0.5rem; font-weight: 400;">En attente</h6>
+        <h3 style="font-family: var(--font-heading); font-size: 1.8rem; margin: 0; color: #f39c12;">{{ reviews|filter(r => not r.isValidated)|length }}</h3>
+    </div>
+    <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 1.25rem; text-align: center;">
+        <h6 style="color: var(--dark-text); font-size: 0.875rem; margin-bottom: 0.5rem; font-weight: 400;">Total</h6>
+        <h3 style="font-family: var(--font-heading); font-size: 1.8rem; margin: 0; color: var(--dark-text);">{{ reviews|length }}</h3>
+    </div>
+</div>
+
+<!-- Filtres -->
+<div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 1rem; margin-bottom: 1.5rem;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
         <div>
-            <a href="{{ path('app_admin_dashboard') }}" class="btn btn-secondary">Retour au Dashboard</a>
+            <label for="searchInput" style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: var(--dark-text); font-weight: 600;">Recherche</label>
+            <input type="text" id="searchInput" placeholder="Rechercher par nom ou commentaire..." style="width: 100%; padding: 0.5rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-sm); font-family: var(--font-body);">
         </div>
-    </div>
-
-    {# Afficher les messages flash #}
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    {% endfor %}
-
-    {% for message in app.flashes('warning') %}
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    {% endfor %}
-
-    {% for message in app.flashes('error') %}
-        <div class="alert alert-danger" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    {% endfor %}
-
-    {# Statistiques rapides #}
-    <div style="margin-bottom: 25px;">
-        <div style="flex: 0 0 33.333%; max-width: 33.333%; padding: 0 0.75rem;">
-            <div style="text-align: center;">
-                <div class="card-body">
-                    <h3 style="color: var(--primary);">{{ reviews|filter(r => r.isValidated)|length }}</h3>
-                    <p style="margin-bottom: 0; color: #95a5a6;">Avis validés</p>
-                </div>
-            </div>
-        </div>
-        <div style="flex: 0 0 33.333%; max-width: 33.333%; padding: 0 0.75rem;">
-            <div style="text-align: center;">
-                <div class="card-body">
-                    <h3 style="color: #f39c12;">{{ reviews|filter(r => not r.isValidated)|length }}</h3>
-                    <p style="margin-bottom: 0; color: #95a5a6;">En attente de validation</p>
-                </div>
-            </div>
-        </div>
-        <div style="flex: 0 0 33.333%; max-width: 33.333%; padding: 0 0.75rem;">
-            <div style="text-align: center;">
-                <div class="card-body">
-                    <h3 style="color: #3498db;">{{ reviews|length }}</h3>
-                    <p style="margin-bottom: 0; color: #95a5a6;">Total des avis</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {# Filtres #}
-    <div style="margin-bottom: 20px;">
-        <div style="max-width: 500px;">
-            <input type="text" class="form-control" placeholder="Rechercher par nom ou commentaire..." id="searchInput">
-        </div>
-        <div style="max-width: 500px;">
-            <select class="form-select" id="filterStatus">
+        <div>
+            <label for="filterStatus" style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: var(--dark-text); font-weight: 600;">Statut</label>
+            <select id="filterStatus" style="width: 100%; padding: 0.5rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-sm); font-family: var(--font-body);">
                 <option value="all">Tous les avis</option>
                 <option value="pending">En attente de validation</option>
                 <option value="validated">Validés</option>
             </select>
         </div>
     </div>
+</div>
 
-    {# Table des avis #}
-    <div class="card">
-        <div class="card-body">
-            <table class="table table-striped table-sortable" id="reviewsTable">
-                <thead>
+<!-- Liste des avis -->
+<div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); overflow: hidden;">
+    {% if reviews is empty %}
+        <div style="text-align: center; padding: 3rem 1.25rem;">
+            <span data-icon="inbox" data-icon-width="48" data-icon-height="48" style="color: var(--dark-text); opacity: 0.3; margin-bottom: 1rem; display: inline-block;"></span>
+            <p style="color: var(--dark-text); opacity: 0.6; margin: 0;">Aucun avis pour le moment.</p>
+        </div>
+    {% else %}
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+                <colgroup>
+                    <col style="width: 12%;">
+                    <col style="width: 15%;">
+                    <col style="width: 12%;">
+                    <col style="width: 35%;">
+                    <col style="width: 13%;">
+                    <col style="width: 13%;">
+                </colgroup>
+                <thead style="background: var(--beige);">
                     <tr>
-                        <th>Date</th>
-                        <th>Client</th>
-                        <th>Note</th>
-                        <th>Commentaire</th>
-                        <th>Statut</th>
-                        <th style="text-align: right;">Actions</th>
+                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">Date</th>
+                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">Client</th>
+                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">Note</th>
+                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">Commentaire</th>
+                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">Statut</th>
+                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for review in reviews %}
-                    <tr class="review-row" data-status="{{ review.isValidated ? 'validated' : 'pending' }}">
-                        <td data-sort="{{ review.createdAt|date('Y-m-d H:i:s') }}">{{ review.createdAt|date('d/m/Y H:i') }}</td>
-                        <td style="font-weight: 600;">{{ review.customerName }}</td>
-                        <td data-sort="{{ review.rating }}">
-                            <div class="rating-stars">
+                    <tr class="review-row" data-status="{{ review.isValidated ? 'validated' : 'pending' }}" style="border-bottom: 1px solid var(--beige);" onmouseover="this.style.backgroundColor='#f8f9fa'" onmouseout="this.style.backgroundColor=''">
+                        <td style="padding: 1rem 1.5rem; color: var(--dark-text);" data-sort="{{ review.createdAt|date('Y-m-d H:i:s') }}">
+                            <small>{{ review.createdAt|date('d/m/Y H:i') }}</small>
+                        </td>
+                        <td style="padding: 1rem 1.5rem; color: var(--dark-text);"><strong>{{ review.customerName }}</strong></td>
+                        <td style="padding: 1rem 1.5rem; color: var(--dark-text);" data-sort="{{ review.rating }}">
+                            <div style="display: flex; gap: 0.125rem;">
                                 {% for i in 1..5 %}
                                     {% if i <= review.rating %}
-                                        <i data-feather="star" width="16" class="star-filled"></i>
+                                        <span data-icon="star" data-icon-width="16" data-icon-height="16" style="color: #ffc107; fill: #ffc107;"></span>
                                     {% else %}
-                                        <i data-feather="star" width="16" class="star-empty"></i>
+                                        <span data-icon="star" data-icon-width="16" data-icon-height="16" style="color: #e5e7eb;"></span>
                                     {% endif %}
                                 {% endfor %}
                             </div>
                         </td>
-                        <td>
+                        <td style="padding: 1rem 1.5rem; color: var(--dark-text); max-width: 400px; word-wrap: break-word; white-space: normal; line-height: 1.5;">
                             {% if review.comment %}
-                                {% if review.comment|length > 100 %}
-                                    <div class="comment-container">
-                                        <div class="comment-preview" id="preview-{{ review.id }}">
-                                            {{ review.comment|slice(0, 100) }}...
-                                            <button class="btn btn-link btn-sm p-0" onclick="toggleComment({{ review.id }})" id="btn-{{ review.id }}" style="margin-left: 0.25rem;">
-                                                <small>Voir plus</small>
-                                            </button>
-                                        </div>
-                                        <div class="comment-full d-none" id="full-{{ review.id }}">
-                                            {{ review.comment }}
-                                            <button class="btn btn-link btn-sm p-0" onclick="toggleComment({{ review.id }})" style="margin-left: 0.25rem;">
-                                                <small>Voir moins</small>
-                                            </button>
-                                        </div>
-                                    </div>
-                                {% else %}
-                                    {{ review.comment }}
-                                {% endif %}
+                                {{ review.comment }}
                             {% else %}
                                 <span style="color: #95a5a6; font-style: italic;">Aucun commentaire</span>
                             {% endif %}
                         </td>
-                        <td>
+                        <td style="padding: 1rem 1.5rem;">
                             {% if review.isValidated %}
-                                <span class="badge badge-success">Validé</span>
+                                <span style="padding: 0.25rem 0.75rem; border-radius: var(--radius-sm); background: #27ae60; color: white; font-size: 0.875rem;">Validé</span>
                             {% else %}
-                                <span class="badge badge-warning text-dark">En attente</span>
+                                <span style="padding: 0.25rem 0.75rem; border-radius: var(--radius-sm); background: #f39c12; color: white; font-size: 0.875rem;">En attente</span>
                             {% endif %}
                         </td>
-                        <td style="text-align: right;">
-                            <div style="display: inline-flex; gap: 5px;" role="group">
+                        <td style="padding: 1rem 1.5rem;">
+                            <div style="display: flex; gap: 0.5rem;">
                                 {% if not review.isValidated %}
-                                    <form method="post"
-                                          action="{{ path('app_admin_reviews_validate', {id: review.id}) }}"
-                                          style="display: inline;">
-                                        <button type="submit" class="btn btn-sm btn-success" title="Valider">
-                                            <i data-feather="check" width="16"></i>
+                                    <form method="post" action="{{ path('app_admin_reviews_validate', {id: review.id}) }}" style="display: inline;">
+                                        <button type="submit" style="padding: 0.5rem; border-radius: var(--radius-sm); border: none; background: none; cursor: pointer;" onmouseover="this.style.backgroundColor='#e9ecef'" onmouseout="this.style.backgroundColor=''" title="Valider">
+                                            <span data-icon="check" data-icon-width="16" data-icon-height="16" style="color: #27ae60;"></span>
                                         </button>
                                     </form>
                                 {% else %}
-                                    <form method="post"
-                                          action="{{ path('app_admin_reviews_reject', {id: review.id}) }}"
-                                          style="display: inline;">
-                                        <button type="submit" style="font-size: 0.85rem; padding: 5px 10px;" title="Rejeter">
-                                            <i data-feather="x" width="16"></i>
+                                    <form method="post" action="{{ path('app_admin_reviews_reject', {id: review.id}) }}" style="display: inline;">
+                                        <button type="submit" style="padding: 0.5rem; border-radius: var(--radius-sm); border: none; background: none; cursor: pointer;" onmouseover="this.style.backgroundColor='#e9ecef'" onmouseout="this.style.backgroundColor=''" title="Rejeter">
+                                            <span data-icon="x" data-icon-width="16" data-icon-height="16" style="color: #f39c12;"></span>
                                         </button>
                                     </form>
                                 {% endif %}
-
-                                <form method="post"
-                                      action="{{ path('app_admin_reviews_delete', {id: review.id}) }}"
-                                      style="display: inline;"
-                                      onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet avis ?')">
-                                    <button type="submit" style="font-size: 0.85rem; padding: 5px 10px;" title="Supprimer">
-                                        <i data-feather="trash-2" width="16"></i>
+                                <form method="post" action="{{ path('app_admin_reviews_delete', {id: review.id}) }}" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet avis ?')">
+                                    <button type="submit" style="padding: 0.5rem; border-radius: var(--radius-sm); border: none; background: none; cursor: pointer;" onmouseover="this.style.backgroundColor='#e9ecef'" onmouseout="this.style.backgroundColor=''" title="Supprimer">
+                                        <span data-icon="trash-2" data-icon-width="16" data-icon-height="16" style="color: #d4183d;"></span>
                                     </button>
                                 </form>
-                            </div>
-                        </td>
-                    </tr>
-                    {% else %}
-                    <tr>
-                        <td colspan="6" style="text-align: center;">
-                            <div style="margin: 0;">
-                                Aucun avis pour le moment.
                             </div>
                         </td>
                     </tr>
@@ -179,14 +149,7 @@
                 </tbody>
             </table>
         </div>
-    </div>
-
-    {# Informations sur le nombre d'avis #}
-    <div style="margin-top: 20px;">
-        <p style="color: #95a5a6;">
-            Total : <strong>{{ reviews|length }}</strong> avis
-        </p>
-    </div>
+    {% endif %}
 </div>
 
 {# Script pour la recherche, le filtrage et le tri #}
@@ -220,41 +183,5 @@
         searchInput?.addEventListener('input', filterRows);
         filterStatus?.addEventListener('change', filterRows);
     });
-
-    function toggleComment(id) {
-        const preview = document.getElementById('preview-' + id);
-        const full = document.getElementById('full-' + id);
-
-        preview.classList.toggle('d-none');
-        full.classList.toggle('d-none');
-    }
 </script>
-
-<style>
-    .rating-stars {
-        display: flex;
-        gap: 0.125rem;
-    }
-
-    .rating-stars .star-filled {
-        color: #ffc107;
-        fill: #ffc107;
-        stroke: #f59e0b;
-        stroke-width: 1.5;
-    }
-
-    .rating-stars .star-empty {
-        color: #e5e7eb;
-        fill: #f3f4f6;
-        stroke: #d1d5db;
-        stroke-width: 1.5;
-    }
-
-    .comment-preview {
-        max-width: 300px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-</style>
 {% endblock %}

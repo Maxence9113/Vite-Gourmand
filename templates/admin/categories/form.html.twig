@@ -1,61 +1,234 @@
 {% extends 'admin/base_admin.html.twig' %}
 
 {% block title %}{{ isEdit ? 'Modifier' : 'Ajouter' }} une catégorie{% endblock %}
+{% block page_title %}{{ isEdit ? 'Modifier la catégorie' : 'Nouvelle catégorie' }}{% endblock %}
 
 {% block content %}
-<div style="margin-top: 30px;">
-    <div style="display: flex; flex-wrap: wrap; margin: 0 -0.75rem;">
-        <div style="flex: 0 0 50%; max-width: 50%; padding: 0 0.75rem; margin-left: 25%;">
-            <div style="margin-bottom: 25px;">
-                <h1>{{ isEdit ? 'Modifier la catégorie' : 'Ajouter une nouvelle catégorie' }}</h1>
-                <a href="{{ path('app_admin_categories') }}" class="btn btn-secondary">
-                    Retour à la liste
-                </a>
-            </div>
+<style>
+    .form-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
+    }
 
-            {# Afficher les messages flash #}
-            {% for message in app.flashes('success') %}
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            {% endfor %}
+    .form-header h1 {
+        font-family: var(--font-heading);
+        color: var(--bordeaux);
+        font-size: 2.5rem;
+        font-weight: 400;
+        margin: 0;
+    }
 
-            <div class="card">
-                <div class="card-body">
-                    {{ form_start(form) }}
+    .btn-back {
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--radius-lg);
+        border: 2px solid var(--bordeaux);
+        background: transparent;
+        color: var(--bordeaux);
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all var(--transition-base);
+        font-family: var(--font-body);
+    }
 
-                    <div style="margin-bottom: 1rem;">
-                        {{ form_row(form.name) }}
+    .btn-back:hover {
+        background: var(--bordeaux);
+        color: white;
+    }
+
+    .form-card {
+        background: white;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-md);
+        overflow: hidden;
+    }
+
+    .form-section {
+        border-bottom: 1px solid var(--beige);
+    }
+
+    .section-header {
+        background: var(--beige);
+        padding: 1rem 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .section-title {
+        font-family: var(--font-heading);
+        font-size: 1.25rem;
+        font-weight: 400;
+        color: var(--dark-text);
+        margin: 0;
+    }
+
+    .section-body {
+        padding: 1.5rem;
+    }
+
+    .form-control, .form-select {
+        width: 100%;
+        border: 1px solid var(--bordeaux);
+        border-radius: var(--radius-sm);
+        padding: 0.75rem;
+        font-size: 0.95rem;
+        font-family: var(--font-body);
+        transition: all var(--transition-base);
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: var(--bordeaux);
+        box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.1);
+        outline: none;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: var(--dark-text);
+        margin-bottom: 0.5rem;
+        display: block;
+        font-size: 0.875rem;
+    }
+
+    .form-actions {
+        padding: 1.5rem;
+        background: var(--beige);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .btn-cancel {
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--radius-lg);
+        border: 2px solid #95a5a6;
+        background: transparent;
+        color: #95a5a6;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all var(--transition-base);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-cancel:hover {
+        background: #95a5a6;
+        color: white;
+    }
+
+    .btn-submit {
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--radius-lg);
+        border: none;
+        background: var(--bordeaux);
+        color: white;
+        font-weight: 600;
+        transition: all var(--transition-base);
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-submit:hover {
+        opacity: 0.9;
+        box-shadow: var(--shadow-md);
+    }
+
+    .info-box {
+        background: #e7f1ff;
+        border-left: 4px solid var(--bordeaux);
+        padding: 1rem 1.5rem;
+        border-radius: var(--radius-sm);
+        margin-top: 1.5rem;
+    }
+
+    .info-box strong {
+        color: var(--bordeaux);
+    }
+
+    .alert-info-custom {
+        background: #fff8f0;
+        border: 2px solid var(--gold);
+        border-radius: var(--radius-lg);
+        padding: 1rem 1.5rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .alert-info-custom strong {
+        color: var(--gold);
+    }
+</style>
+
+<div class="form-header">
+    <h1>
+        <span data-icon="folder-open" data-icon-width="32" data-icon-height="32" style="display: inline-block; vertical-align: middle;"></span>
+        {{ isEdit ? 'Modifier la catégorie' : 'Nouvelle catégorie' }}
+    </h1>
+    <a href="{{ path('app_admin_categories') }}" class="btn-back">
+        <span data-icon="arrow-left" data-icon-width="16" data-icon-height="16"></span>
+        Retour à la liste
+    </a>
+</div>
+
+{# Afficher les messages flash #}
+{% for message in app.flashes('success') %}
+    <div style="background: #d4edda; color: #155724; padding: 1rem; border-radius: var(--radius-sm); margin-bottom: 1rem; border: 1px solid #c3e6cb;">
+        {{ message }}
+    </div>
+{% endfor %}
+
+<div class="form-card">
+    {{ form_start(form) }}
+
+    <div class="form-section">
+        <div class="section-header">
+            <span data-icon="info" data-icon-width="20" data-icon-height="20" style="color: var(--bordeaux);"></span>
+            <h3 class="section-title">Informations de la catégorie</h3>
+        </div>
+        <div class="section-body">
+            {% if isEdit and category.recipes|length > 0 %}
+                <div class="alert-info-custom">
+                    <span data-icon="info" data-icon-width="20" data-icon-height="20" style="color: var(--gold); flex-shrink: 0;"></span>
+                    <div>
+                        <strong>Information :</strong> Cette catégorie est utilisée par {{ category.recipes|length }} recette(s).
                     </div>
-
-                    {% if isEdit and category.recipes|length > 0 %}
-                        <div class="alert alert-info">
-                            <strong>Information :</strong> Cette catégorie est utilisée par {{ category.recipes|length }} recette(s).
-                        </div>
-                    {% endif %}
-
-                    <div style="margin-top: 25px;">
-                        <a href="{{ path('app_admin_categories') }}" class="btn btn-secondary">
-                            Annuler
-                        </a>
-                        <button type="submit" class="btn btn-primary">
-                            {{ isEdit ? 'Modifier' : 'Créer' }} la catégorie
-                        </button>
-                    </div>
-
-                    {{ form_end(form) }}
                 </div>
-            </div>
-
-            {% if isEdit %}
-            <div style="margin-top: 1rem;">
-                <small style="color: #95a5a6;">
-                    ID de la catégorie : {{ category.id }}
-                </small>
-            </div>
             {% endif %}
+
+            <div>
+                {{ form_row(form.name) }}
+            </div>
         </div>
     </div>
+
+    <div class="form-actions">
+        <a href="{{ path('app_admin_categories') }}" class="btn-cancel">
+            <span data-icon="x" data-icon-width="16" data-icon-height="16"></span>
+            Annuler
+        </a>
+        <button type="submit" class="btn-submit">
+            <span data-icon="check" data-icon-width="16" data-icon-height="16"></span>
+            {{ isEdit ? 'Enregistrer les modifications' : 'Créer la catégorie' }}
+        </button>
+    </div>
+
+    {{ form_end(form) }}
 </div>
+
+{% if isEdit %}
+    <div class="info-box">
+        <strong>ID de la catégorie :</strong> {{ category.id }}
+    </div>
+{% endif %}
 {% endblock %}

@@ -7,240 +7,486 @@
 <style>
     .form-header {
         display: flex;
-        justify-content: flex-end;
-        margin-bottom: 25px;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-header h1 {
+        font-family: var(--font-heading);
+        color: var(--bordeaux);
+        font-size: 2.5rem;
+        font-weight: 400;
+        margin: 0;
     }
 
     .btn-back {
-        background: #95a5a6;
-        color: white;
-        padding: 10px 20px;
-        border-radius: 6px;
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--radius-lg);
+        border: 2px solid var(--bordeaux);
+        background: transparent;
+        color: var(--bordeaux);
+        cursor: pointer;
         text-decoration: none;
-        font-weight: 500;
-        transition: background 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all var(--transition-base);
+        font-family: var(--font-body);
     }
 
     .btn-back:hover {
-        background: #7f8c8d;
+        background: var(--bordeaux);
         color: white;
     }
 
     .form-card {
         background: white;
-        border-radius: 8px;
-        padding: 30px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-        max-width: 1000px;
-        margin: 0 auto;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-md);
+        overflow: hidden;
     }
 
     .form-section {
-        background: #f8f9fa;
-        border: 1px solid #e9ecef;
-        border-radius: 8px;
-        padding: 20px;
-        margin-bottom: 25px;
+        border-bottom: 1px solid var(--beige);
+    }
+
+    .section-header {
+        background: var(--beige);
+        padding: 1rem 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
     }
 
     .section-title {
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: #2c3e50;
-        margin-bottom: 15px;
-        padding-bottom: 10px;
-        border-bottom: 2px solid #3498db;
+        font-family: var(--font-heading);
+        font-size: 1.25rem;
+        font-weight: 400;
+        color: var(--dark-text);
+        margin: 0;
+    }
+
+    .section-body {
+        padding: 1.5rem;
     }
 
     .section-description {
-        font-size: 0.9rem;
-        color: #7f8c8d;
-        margin-bottom: 15px;
+        font-size: 0.875rem;
+        color: #95a5a6;
+        margin-bottom: 0.5rem;
     }
 
     .form-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
+        gap: 1.5rem;
     }
 
     .form-control, .form-select {
-        border: 1px solid #ddd;
-        border-radius: 6px;
-        padding: 10px 15px;
+        width: 100%;
+        border: 1px solid var(--bordeaux);
+        border-radius: var(--radius-sm);
+        padding: 0.75rem;
         font-size: 0.95rem;
-        transition: all 0.2s;
+        font-family: var(--font-body);
+        transition: all var(--transition-base);
     }
 
     .form-control:focus, .form-select:focus {
-        border-color: #3498db;
-        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        border-color: var(--bordeaux);
+        box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.1);
         outline: none;
     }
 
     .form-label {
-        font-weight: 500;
-        color: #2c3e50;
-        margin-bottom: 8px;
-    }
-
-    /* Accordéon des recettes */
-    .recipe-accordion .accordion-item {
-        border: 1px solid #e9ecef;
-        margin-bottom: 10px;
-        border-radius: 6px;
-        overflow: hidden;
-    }
-
-    .recipe-accordion .accordion-button {
         font-weight: 600;
-        background-color: #fff;
-        color: #2c3e50;
-        padding: 12px 20px;
+        color: var(--dark-text);
+        margin-bottom: 0.5rem;
+        display: block;
+        font-size: 0.875rem;
     }
 
-    .recipe-accordion .accordion-button:not(.collapsed) {
-        background-color: #3498db;
+    /* Accordéon personnalisé - Figma design */
+    .recipe-accordion {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .accordion-item {
+        border: 2px solid var(--beige);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        transition: all var(--transition-base);
+    }
+
+    .accordion-item.active {
+        border-color: var(--bordeaux);
+        box-shadow: var(--shadow-md);
+    }
+
+    .accordion-header {
+        background: white;
+        padding: 1rem 1.5rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: all var(--transition-base);
+        user-select: none;
+    }
+
+    .accordion-header:hover {
+        background: #f8f9fa;
+    }
+
+    .accordion-item.active .accordion-header {
+        background: var(--bordeaux);
         color: white;
     }
 
-    .recipe-accordion .accordion-button:focus {
-        box-shadow: none;
-        border-color: #3498db;
+    .accordion-title {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-weight: 600;
+        font-size: 1rem;
     }
 
     .accordion-badge {
-        background-color: #27ae60;
-        color: white;
-        padding: 3px 10px;
-        border-radius: 12px;
-        font-size: 0.8rem;
-        margin-left: 10px;
+        background: var(--gold);
+        color: var(--dark-text);
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.75rem;
         font-weight: 600;
+        min-width: 1.5rem;
+        text-align: center;
     }
 
-    .recipe-accordion .accordion-button.collapsed .accordion-badge {
-        background-color: #95a5a6;
+    .accordion-item.active .accordion-badge {
+        background: white;
+        color: var(--bordeaux);
+    }
+
+    .accordion-icon {
+        transition: transform var(--transition-base);
+    }
+
+    .accordion-item.active .accordion-icon {
+        transform: rotate(180deg);
+    }
+
+    .accordion-body {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+    }
+
+    .accordion-item.active .accordion-body {
+        max-height: 500px;
+        overflow-y: auto;
     }
 
     .recipe-checkboxes {
-        max-height: 300px;
-        overflow-y: auto;
-        padding: 10px;
+        padding: 1rem;
+        display: grid;
+        gap: 0.5rem;
     }
 
-    .recipe-checkboxes .form-check {
-        padding: 10px 15px;
-        margin-bottom: 8px;
-        background-color: #fff;
-        border: 1px solid #ddd;
-        border-radius: 6px;
-        transition: all 0.2s;
+    .recipe-checkbox-item {
+        padding: 0.875rem 1rem;
+        background: white;
+        border: 2px solid #e5e7eb;
+        border-radius: var(--radius-lg);
+        transition: all 0.2s ease;
         cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.875rem;
+        position: relative;
     }
 
-    .recipe-checkboxes .form-check:hover {
-        background-color: #e7f1ff;
-        border-color: #3498db;
+    .recipe-checkbox-item:hover {
+        background: #fef5f0;
+        border-color: var(--gold);
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     }
 
-    .recipe-checkboxes .form-check:has(input:checked) {
-        background-color: #d4edda;
-        border-color: #27ae60;
+    .recipe-checkbox-item.checked {
+        background: linear-gradient(135deg, #fff8f0 0%, #fef5eb 100%);
+        border-color: var(--bordeaux);
+        box-shadow: 0 2px 12px rgba(139, 0, 0, 0.15);
     }
 
-    .recipe-checkboxes .form-check-label {
+    .recipe-checkbox-item input[type="checkbox"] {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        width: 1.375rem;
+        height: 1.375rem;
+        min-width: 1.375rem;
+        border: 2.5px solid #d1d5db;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        position: relative;
+        transition: all 0.2s ease;
+        flex-shrink: 0;
+        background: white;
+        margin: 0;
+    }
+
+    .recipe-checkbox-item input[type="checkbox"]:hover {
+        border-color: var(--bordeaux);
+    }
+
+    .recipe-checkbox-item input[type="checkbox"]:checked {
+        background: var(--bordeaux);
+        border-color: var(--bordeaux);
+    }
+
+    .recipe-checkbox-item input[type="checkbox"]:checked::after {
+        content: '';
+        position: absolute;
+        left: 4px;
+        top: 0px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 2.5px 2.5px 0;
+        transform: rotate(45deg);
+    }
+
+    .recipe-checkbox-item label {
         cursor: pointer;
         font-weight: 500;
-        width: 100%;
+        color: var(--dark-text);
+        flex: 1;
+        margin: 0;
+        font-size: 0.9375rem;
+        line-height: 1.4;
     }
 
-    .dietary-choices .form-check {
-        padding: 10px 15px;
-        margin-bottom: 8px;
-        background-color: #fff;
-        border: 1px solid #ddd;
-        border-radius: 6px;
+    .recipe-checkbox-item.checked label {
+        color: var(--bordeaux);
+        font-weight: 600;
+    }
+
+    /* Régimes alimentaires - grille améliorée */
+    .dietary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 1rem;
+    }
+
+    .dietary-item {
+        padding: 1.125rem 1.25rem;
+        background: white;
+        border: 2px solid #e5e7eb;
+        border-radius: var(--radius-lg);
+        transition: all 0.2s ease;
         cursor: pointer;
-        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 0.875rem;
+        position: relative;
     }
 
-    .dietary-choices .form-check:hover {
-        background-color: #e7f1ff;
-        border-color: #3498db;
+    .dietary-item:hover {
+        background: #f0fdf4;
+        border-color: var(--green);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(39, 174, 96, 0.15);
     }
 
-    .dietary-choices .form-check:has(input:checked) {
-        background-color: #d4edda;
-        border-color: #27ae60;
+    .dietary-item.checked {
+        background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+        border-color: var(--green);
+        box-shadow: 0 4px 16px rgba(39, 174, 96, 0.25);
     }
 
-    .dietary-choices .form-check-label {
+    .dietary-item input[type="checkbox"] {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        width: 1.5rem;
+        height: 1.5rem;
+        min-width: 1.5rem;
+        border: 2.5px solid #d1d5db;
+        border-radius: 50%;
         cursor: pointer;
-        font-weight: 500;
+        position: relative;
+        transition: all 0.2s ease;
+        flex-shrink: 0;
+        background: white;
+        margin: 0;
+    }
+
+    .dietary-item input[type="checkbox"]:hover {
+        border-color: var(--green);
+    }
+
+    .dietary-item input[type="checkbox"]:checked {
+        background: var(--green);
+        border-color: var(--green);
+    }
+
+    .dietary-item input[type="checkbox"]:checked::after {
+        content: '';
+        position: absolute;
+        left: 4.5px;
+        top: 1px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 2.5px 2.5px 0;
+        transform: rotate(45deg);
+    }
+
+    .dietary-item label {
+        cursor: pointer;
+        font-weight: 600;
+        color: var(--dark-text);
+        flex: 1;
+        margin: 0;
+        font-size: 0.9375rem;
+    }
+
+    .dietary-item.checked label {
+        color: var(--green);
     }
 
     .current-image {
-        max-width: 300px;
-        border-radius: 8px;
-        border: 2px solid #e9ecef;
-        padding: 5px;
-        margin-bottom: 15px;
+        max-width: 100%;
+        border-radius: var(--radius-lg);
+        border: 2px solid var(--beige);
+        padding: 0.5rem;
     }
 
     .form-actions {
+        padding: 1.5rem;
+        background: var(--beige);
         display: flex;
         justify-content: space-between;
-        padding-top: 25px;
-        border-top: 2px solid #e9ecef;
+        align-items: center;
+        gap: 1rem;
     }
 
     .btn-cancel {
-        background: #95a5a6;
-        color: white;
-        padding: 10px 25px;
-        border-radius: 6px;
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--radius-lg);
+        border: 2px solid #95a5a6;
+        background: transparent;
+        color: #95a5a6;
         text-decoration: none;
         font-weight: 500;
-        transition: background 0.2s;
-        border: none;
+        transition: all var(--transition-base);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
     }
 
     .btn-cancel:hover {
-        background: #7f8c8d;
+        background: #95a5a6;
         color: white;
     }
 
     .btn-submit {
-        background: #3498db;
-        color: white;
-        padding: 10px 25px;
-        border-radius: 6px;
-        font-weight: 500;
-        transition: background 0.2s;
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--radius-lg);
         border: none;
+        background: var(--bordeaux);
+        color: white;
+        font-weight: 600;
+        transition: all var(--transition-base);
         cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
     }
 
     .btn-submit:hover {
-        background: #2980b9;
+        opacity: 0.9;
+        box-shadow: var(--shadow-md);
     }
 
     .info-box {
-        background: #e7f3ff;
-        border-left: 4px solid #3498db;
-        padding: 15px;
-        border-radius: 6px;
-        margin-bottom: 20px;
+        background: #e7f1ff;
+        border-left: 4px solid var(--bordeaux);
+        padding: 1rem 1.5rem;
+        border-radius: var(--radius-sm);
+        margin: 1.5rem;
     }
 
     .info-box strong {
-        color: #2c3e50;
+        color: var(--bordeaux);
+    }
+
+    /* Recherche dans les recettes */
+    .recipe-search {
+        padding: 0 1rem 1rem 1rem;
+        position: sticky;
+        top: 0;
+        background: white;
+        z-index: 10;
+    }
+
+    .recipe-search input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid var(--bordeaux);
+        border-radius: var(--radius-sm);
+        font-family: var(--font-body);
+    }
+
+    .recipe-search input:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.1);
+    }
+
+    .no-recipes {
+        padding: 2rem;
+        text-align: center;
+        color: #95a5a6;
+        font-style: italic;
+    }
+
+    /* Override des styles Symfony par défaut */
+    .form-check {
+        padding-left: 0;
+        margin-bottom: 0;
+    }
+
+    .form-check-input {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        float: none;
+        margin-left: 0;
+        margin-top: 0;
+    }
+
+    .form-check-input:focus {
+        border-color: var(--bordeaux);
+        box-shadow: none;
+    }
+
+    .form-check-label {
+        padding-left: 0;
     }
 </style>
 
 <div class="form-header">
-    <a href="{{ path('app_admin_menus') }}" class="btn-back">← Retour à la liste</a>
+    <h1>
+        <span data-icon="file-text" data-icon-width="32" data-icon-height="32" style="display: inline-block; vertical-align: middle;"></span>
+        {{ isEdit ? 'Modifier le menu' : 'Nouveau menu' }}
+    </h1>
+    <a href="{{ path('app_admin_menus') }}" class="btn-back">
+        <span data-icon="arrow-left" data-icon-width="16" data-icon-height="16"></span>
+        Retour à la liste
+    </a>
 </div>
 
 <div class="form-card">
@@ -248,109 +494,136 @@
 
     {# Section 1: Informations de base #}
     <div class="form-section">
-        <h3 class="section-title">📋 Informations de base</h3>
-        <div class="form-grid">
-            <div>
-                {{ form_row(form.name) }}
-            </div>
-            <div>
-                {{ form_row(form.theme) }}
-            </div>
+        <div class="section-header">
+            <span data-icon="info" data-icon-width="20" data-icon-height="20" style="color: var(--bordeaux);"></span>
+            <h3 class="section-title">Informations de base</h3>
         </div>
-        <div style="margin-top: 15px;">
-            {{ form_row(form.description) }}
+        <div class="section-body">
+            <div class="form-grid">
+                <div>
+                    {{ form_row(form.name) }}
+                </div>
+                <div>
+                    {{ form_row(form.theme) }}
+                </div>
+            </div>
+            <div style="margin-top: 1.5rem;">
+                {{ form_row(form.description) }}
+            </div>
         </div>
     </div>
 
     {# Section 2: Tarification #}
     <div class="form-section">
-        <h3 class="section-title">💰 Tarification</h3>
-        <div class="form-grid">
-            <div>
-                {{ form_row(form.nb_person_min) }}
-            </div>
-            <div>
-                {{ form_row(form.price_per_person) }}
-            </div>
+        <div class="section-header">
+            <span data-icon="credit-card" data-icon-width="20" data-icon-height="20" style="color: var(--gold);"></span>
+            <h3 class="section-title">Tarification</h3>
         </div>
-        <div style="margin-top: 15px;">
-            {{ form_row(form.stock) }}
+        <div class="section-body">
+            <div class="form-grid">
+                <div>
+                    {{ form_row(form.nb_person_min) }}
+                </div>
+                <div>
+                    {{ form_row(form.price_per_person) }}
+                </div>
+            </div>
+            <div style="margin-top: 1.5rem;">
+                {{ form_row(form.stock) }}
+            </div>
         </div>
     </div>
 
     {# Section 3: Sélection des recettes #}
     <div class="form-section">
-        <h3 class="section-title">🍽️ Composition du menu</h3>
-        <p class="section-description">
-            Sélectionnez les recettes pour chaque catégorie. Les badges indiquent le nombre de recettes sélectionnées.
-        </p>
+        <div class="section-header">
+            <span data-icon="utensils" data-icon-width="20" data-icon-height="20" style="color: var(--bordeaux);"></span>
+            <h3 class="section-title">Composition du menu</h3>
+        </div>
+        <div class="section-body">
+            <p class="section-description">
+                Sélectionnez les recettes pour chaque catégorie. Les badges indiquent le nombre de recettes sélectionnées.
+            </p>
 
-        <div class="accordion recipe-accordion" id="recipesAccordion">
-            {# Entrées #}
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEntrees">
-                        Entrées
-                        <span class="accordion-badge" id="badge-entrees">0</span>
-                    </button>
-                </h2>
-                <div id="collapseEntrees" class="accordion-collapse collapse" data-bs-parent="#recipesAccordion">
-                    <div class="accordion-body">
-                        <div class="recipe-checkboxes">
+            <div class="recipe-accordion">
+                {# Entrées #}
+                <div class="accordion-item" data-category="entrees">
+                    <div class="accordion-header" onclick="toggleAccordion('entrees')">
+                        <div class="accordion-title">
+                            <span data-icon="utensils" data-icon-width="18" data-icon-height="18"></span>
+                            <span>Entrées</span>
+                            <span class="accordion-badge" id="badge-entrees">0</span>
+                        </div>
+                        <span class="accordion-icon" data-icon="chevron-down" data-icon-width="20" data-icon-height="20"></span>
+                    </div>
+                    <div class="accordion-body" id="body-entrees">
+                        <div class="recipe-search">
+                            <input type="text" placeholder="Rechercher une entrée..." onkeyup="filterRecipes('entrees', this.value)">
+                        </div>
+                        <div class="recipe-checkboxes" id="recipes-entrees">
                             {{ form_widget(form.entrees) }}
                         </div>
                         {{ form_errors(form.entrees) }}
                     </div>
                 </div>
-            </div>
 
-            {# Plats #}
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePlats">
-                        Plats
-                        <span class="accordion-badge" id="badge-plats">0</span>
-                    </button>
-                </h2>
-                <div id="collapsePlats" class="accordion-collapse collapse" data-bs-parent="#recipesAccordion">
-                    <div class="accordion-body">
-                        <div class="recipe-checkboxes">
+                {# Plats #}
+                <div class="accordion-item" data-category="plats">
+                    <div class="accordion-header" onclick="toggleAccordion('plats')">
+                        <div class="accordion-title">
+                            <span data-icon="utensils-crossed" data-icon-width="18" data-icon-height="18"></span>
+                            <span>Plats</span>
+                            <span class="accordion-badge" id="badge-plats">0</span>
+                        </div>
+                        <span class="accordion-icon" data-icon="chevron-down" data-icon-width="20" data-icon-height="20"></span>
+                    </div>
+                    <div class="accordion-body" id="body-plats">
+                        <div class="recipe-search">
+                            <input type="text" placeholder="Rechercher un plat..." onkeyup="filterRecipes('plats', this.value)">
+                        </div>
+                        <div class="recipe-checkboxes" id="recipes-plats">
                             {{ form_widget(form.plats) }}
                         </div>
                         {{ form_errors(form.plats) }}
                     </div>
                 </div>
-            </div>
 
-            {# Fromages #}
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFromages">
-                        Fromages
-                        <span class="accordion-badge" id="badge-fromages">0</span>
-                    </button>
-                </h2>
-                <div id="collapseFromages" class="accordion-collapse collapse" data-bs-parent="#recipesAccordion">
-                    <div class="accordion-body">
-                        <div class="recipe-checkboxes">
+                {# Fromages #}
+                <div class="accordion-item" data-category="fromages">
+                    <div class="accordion-header" onclick="toggleAccordion('fromages')">
+                        <div class="accordion-title">
+                            <span data-icon="box" data-icon-width="18" data-icon-height="18"></span>
+                            <span>Fromages</span>
+                            <span class="accordion-badge" id="badge-fromages">0</span>
+                        </div>
+                        <span class="accordion-icon" data-icon="chevron-down" data-icon-width="20" data-icon-height="20"></span>
+                    </div>
+                    <div class="accordion-body" id="body-fromages">
+                        <div class="recipe-search">
+                            <input type="text" placeholder="Rechercher un fromage..." onkeyup="filterRecipes('fromages', this.value)">
+                        </div>
+                        <div class="recipe-checkboxes" id="recipes-fromages">
                             {{ form_widget(form.fromages) }}
                         </div>
                         {{ form_errors(form.fromages) }}
                     </div>
                 </div>
-            </div>
 
-            {# Desserts #}
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDesserts">
-                        Desserts
-                        <span class="accordion-badge" id="badge-desserts">0</span>
-                    </button>
-                </h2>
-                <div id="collapseDesserts" class="accordion-collapse collapse" data-bs-parent="#recipesAccordion">
-                    <div class="accordion-body">
-                        <div class="recipe-checkboxes">
+                {# Desserts #}
+                <div class="accordion-item" data-category="desserts">
+                    <div class="accordion-header" onclick="toggleAccordion('desserts')">
+                        <div class="accordion-title">
+                            <span data-icon="layers" data-icon-width="18" data-icon-height="18"></span>
+                            <span>Desserts</span>
+                            <span class="accordion-badge" id="badge-desserts">0</span>
+                        </div>
+                        <span class="accordion-icon" data-icon="chevron-down" data-icon-width="20" data-icon-height="20"></span>
+                    </div>
+                    <div class="accordion-body" id="body-desserts">
+                        <div class="recipe-search">
+                            <input type="text" placeholder="Rechercher un dessert..." onkeyup="filterRecipes('desserts', this.value)">
+                        </div>
+                        <div class="recipe-checkboxes" id="recipes-desserts">
                             {{ form_widget(form.desserts) }}
                         </div>
                         {{ form_errors(form.desserts) }}
@@ -362,38 +635,49 @@
 
     {# Section 4: Régimes alimentaires #}
     <div class="form-section">
-        <h3 class="section-title">🥗 Régimes alimentaires</h3>
-        <p class="section-description">
-            Sélectionnez les régimes alimentaires compatibles avec ce menu (optionnel).
-        </p>
-        <div class="dietary-choices">
-            {{ form_widget(form.dietetary) }}
+        <div class="section-header">
+            <span data-icon="salad" data-icon-width="20" data-icon-height="20" style="color: var(--green);"></span>
+            <h3 class="section-title">Régimes alimentaires</h3>
+        </div>
+        <div class="section-body">
+            <p class="section-description">
+                Sélectionnez les régimes alimentaires compatibles avec ce menu (optionnel).
+            </p>
+            <div class="dietary-grid">
+                {{ form_widget(form.dietetary) }}
+            </div>
             {{ form_errors(form.dietetary) }}
         </div>
     </div>
 
     {# Section 5: Image #}
     <div class="form-section">
-        <h3 class="section-title">🖼️ Illustration du menu</h3>
-        <div style="display: grid; grid-template-columns: 300px 1fr; gap: 30px; align-items: start;">
-            {% if isEdit and menu.illustration %}
+        <div class="section-header">
+            <span data-icon="image" data-icon-width="20" data-icon-height="20" style="color: var(--gold);"></span>
+            <h3 class="section-title">Illustration du menu</h3>
+        </div>
+        <div class="section-body">
+            <div style="display: grid; grid-template-columns: 300px 1fr; gap: 2rem; align-items: start;">
+                {% if isEdit and menu.illustration %}
+                    <div>
+                        <p class="form-label">Image actuelle :</p>
+                        <img src="{{ menu.illustration }}"
+                             alt="{{ menu.textAlt ?: menu.name }}"
+                             class="current-image">
+                    </div>
+                {% else %}
+                    <div style="background: var(--beige); border: 2px dashed var(--bordeaux); border-radius: var(--radius-lg); padding: 3rem; text-align: center; color: #95a5a6;">
+                        <span data-icon="image" data-icon-width="48" data-icon-height="48" style="opacity: 0.3; margin-bottom: 1rem; display: inline-block;"></span>
+                        <p style="margin: 0; font-size: 0.9rem;">Aucune image</p>
+                    </div>
+                {% endif %}
                 <div>
-                    <p class="form-label">Image actuelle :</p>
-                    <img src="{{ menu.illustration }}"
-                         alt="{{ menu.textAlt ?: menu.name }}"
-                         class="current-image">
-                </div>
-            {% else %}
-                <div style="background: #f8f9fa; border: 2px dashed #ddd; border-radius: 8px; padding: 40px; text-align: center; color: #95a5a6;">
-                    <p style="margin: 0; font-size: 0.9rem;">Aucune image</p>
-                </div>
-            {% endif %}
-            <div>
-                <div style="margin-bottom: 15px;">
-                    {{ form_row(form.imageFile) }}
-                </div>
-                <div>
-                    {{ form_row(form.textAlt) }}
+                    <div style="margin-bottom: 1.5rem;">
+                        {{ form_row(form.imageFile) }}
+                    </div>
+                    <div>
+                        {{ form_row(form.textAlt) }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -402,24 +686,35 @@
     {# Informations de modification #}
     {% if isEdit %}
         <div class="info-box">
-            <strong>Menu actuel :</strong><br>
-            Thème : {{ menu.theme.name }}<br>
-            Régimes : 
-            {% if menu.dietetary|length > 0 %}
-                {% for diet in menu.dietetary %}
-                    {{ diet.name }}{% if not loop.last %}, {% endif %}
-                {% endfor %}
-            {% else %}
-                Aucun
-            {% endif %}<br>
-            Recettes : {{ menu.recipes|length }}
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span data-icon="info" data-icon-width="20" data-icon-height="20" style="color: var(--bordeaux); flex-shrink: 0; margin-top: 0.25rem;"></span>
+                <div>
+                    <strong>Informations actuelles du menu</strong><br>
+                    <span style="color: var(--dark-text); font-size: 0.9rem;">
+                        Thème : {{ menu.theme.name }}<br>
+                        Régimes :
+                        {% if menu.dietetary|length > 0 %}
+                            {% for diet in menu.dietetary %}
+                                {{ diet.name }}{% if not loop.last %}, {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            Aucun
+                        {% endif %}<br>
+                        Recettes : {{ menu.recipes|length }}
+                    </span>
+                </div>
+            </div>
         </div>
     {% endif %}
 
     {# Actions du formulaire #}
     <div class="form-actions">
-        <a href="{{ path('app_admin_menus') }}" class="btn-cancel">Annuler</a>
+        <a href="{{ path('app_admin_menus') }}" class="btn-cancel">
+            <span data-icon="x" data-icon-width="16" data-icon-height="16"></span>
+            Annuler
+        </a>
         <button type="submit" class="btn-submit">
+            <span data-icon="check" data-icon-width="16" data-icon-height="16"></span>
             {{ isEdit ? 'Enregistrer les modifications' : 'Créer le menu' }}
         </button>
     </div>
@@ -428,32 +723,170 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        function updateBadge(containerId, badgeId) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
+    // Toggle accordéon
+    function toggleAccordion(category) {
+        const item = document.querySelector(`[data-category="${category}"]`);
+        const wasActive = item.classList.contains('active');
 
-            const checkboxes = container.querySelectorAll('input[type="checkbox"]:checked');
-            const badge = document.getElementById(badgeId);
-            if (badge) {
-                badge.textContent = checkboxes.length;
-            }
+        // Fermer tous les autres accordéons
+        document.querySelectorAll('.accordion-item').forEach(el => {
+            el.classList.remove('active');
+        });
+
+        // Toggle l'accordéon cliqué
+        if (!wasActive) {
+            item.classList.add('active');
         }
+    }
 
-        function updateAllBadges() {
-            updateBadge('collapseEntrees', 'badge-entrees');
-            updateBadge('collapsePlats', 'badge-plats');
-            updateBadge('collapseFromages', 'badge-fromages');
-            updateBadge('collapseDesserts', 'badge-desserts');
+    // Recherche dans les recettes
+    function filterRecipes(category, searchTerm) {
+        const container = document.getElementById(`recipes-${category}`);
+        const items = container.querySelectorAll('.form-check');
+        const term = searchTerm.toLowerCase();
+
+        items.forEach(item => {
+            const label = item.querySelector('label');
+            const text = label ? label.textContent.toLowerCase() : '';
+            item.style.display = text.includes(term) ? '' : 'none';
+        });
+    }
+
+    // Mettre à jour les badges de comptage
+    function updateBadge(category) {
+        const container = document.getElementById(`recipes-${category}`);
+        if (!container) return;
+
+        const checkedCount = container.querySelectorAll('input[type="checkbox"]:checked').length;
+        const badge = document.getElementById(`badge-${category}`);
+        if (badge) {
+            badge.textContent = checkedCount;
         }
+    }
 
-        setTimeout(function() {
-            updateAllBadges();
+    function updateAllBadges() {
+        updateBadge('entrees');
+        updateBadge('plats');
+        updateBadge('fromages');
+        updateBadge('desserts');
+    }
 
-            const allCheckboxes = document.querySelectorAll('.recipe-checkboxes input[type="checkbox"]');
-            allCheckboxes.forEach(function(checkbox) {
-                checkbox.addEventListener('change', updateAllBadges);
+    // Ajouter les classes aux checkboxes pour le style
+    function styleCheckboxes() {
+        // Recettes - wrapper chaque checkbox+label dans un div (comme les régimes)
+        document.querySelectorAll('.recipe-checkboxes > div').forEach(container => {
+            const checkboxes = Array.from(container.querySelectorAll('input[type="checkbox"]'));
+
+            checkboxes.forEach(checkbox => {
+                const label = container.querySelector(`label[for="${checkbox.id}"]`);
+                if (label) {
+                    // Créer un wrapper
+                    const wrapper = document.createElement('div');
+                    wrapper.classList.add('recipe-checkbox-item');
+                    if (checkbox.checked) {
+                        wrapper.classList.add('checked');
+                    }
+
+                    // Déplacer checkbox et label dans le wrapper
+                    checkbox.parentNode.insertBefore(wrapper, checkbox);
+                    wrapper.appendChild(checkbox);
+                    wrapper.appendChild(label);
+
+                    // Ajouter l'événement
+                    checkbox.addEventListener('change', function() {
+                        if (this.checked) {
+                            wrapper.classList.add('checked');
+                        } else {
+                            wrapper.classList.remove('checked');
+                        }
+                        updateAllBadges();
+                    });
+                }
             });
+        });
+
+        // Régimes alimentaires - wrapper chaque checkbox+label dans un div
+        const dietaryContainer = document.querySelector('.dietary-grid > div');
+        if (dietaryContainer) {
+            const checkboxes = Array.from(dietaryContainer.querySelectorAll('input[type="checkbox"]'));
+
+            checkboxes.forEach(checkbox => {
+                const label = dietaryContainer.querySelector(`label[for="${checkbox.id}"]`);
+                if (label) {
+                    // Créer un wrapper
+                    const wrapper = document.createElement('div');
+                    wrapper.classList.add('dietary-item');
+                    if (checkbox.checked) {
+                        wrapper.classList.add('checked');
+                    }
+
+                    // Déplacer checkbox et label dans le wrapper
+                    checkbox.parentNode.insertBefore(wrapper, checkbox);
+                    wrapper.appendChild(checkbox);
+                    wrapper.appendChild(label);
+
+                    // Ajouter l'événement
+                    checkbox.addEventListener('change', function() {
+                        if (this.checked) {
+                            wrapper.classList.add('checked');
+                        } else {
+                            wrapper.classList.remove('checked');
+                        }
+                    });
+                }
+            });
+        }
+
+        // Toutes les autres checkboxes de la page (hors recettes et régimes)
+        document.querySelectorAll('.form-card input[type="checkbox"]').forEach(checkbox => {
+            // Ignorer les checkboxes déjà traitées (recettes et régimes)
+            if (!checkbox.closest('.recipe-checkboxes') && !checkbox.closest('.dietary-grid')) {
+                const parent = checkbox.closest('.form-check') || checkbox.parentElement;
+
+                // Si c'est déjà dans un .form-check, ajouter la classe
+                if (parent.classList.contains('form-check')) {
+                    parent.classList.add('recipe-checkbox-item');
+                    if (checkbox.checked) {
+                        parent.classList.add('checked');
+                    }
+                    checkbox.addEventListener('change', function() {
+                        if (this.checked) {
+                            parent.classList.add('checked');
+                        } else {
+                            parent.classList.remove('checked');
+                        }
+                    });
+                } else {
+                    // Sinon, créer un wrapper
+                    const label = parent.querySelector(`label[for="${checkbox.id}"]`);
+                    if (label) {
+                        const wrapper = document.createElement('div');
+                        wrapper.classList.add('recipe-checkbox-item');
+                        if (checkbox.checked) {
+                            wrapper.classList.add('checked');
+                        }
+                        checkbox.parentNode.insertBefore(wrapper, checkbox);
+                        wrapper.appendChild(checkbox);
+                        wrapper.appendChild(label);
+
+                        checkbox.addEventListener('change', function() {
+                            if (this.checked) {
+                                wrapper.classList.add('checked');
+                            } else {
+                                wrapper.classList.remove('checked');
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    }
+
+    // Initialisation
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(function() {
+            styleCheckboxes();
+            updateAllBadges();
         }, 100);
     });
 </script>

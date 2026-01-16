@@ -1,201 +1,157 @@
 {% extends 'admin/base_admin.html.twig' %}
 
 {% block title %}Dashboard Administration{% endblock %}
-{% block page_title %}Dashboard{% endblock %}
 
 {% block content %}
-<style>
-    .welcome-section {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 40px;
-        border-radius: 12px;
-        margin-bottom: 30px;
-        box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
-    }
+<h1 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 2.5rem; font-weight: 400; margin-bottom: 2rem;">
+    📊 Tableau de bord
+</h1>
 
-    .welcome-section h2 {
-        font-size: 2rem;
-        margin-bottom: 10px;
-        font-weight: 600;
-    }
-
-    .welcome-section p {
-        opacity: 0.9;
-        font-size: 1.1rem;
-    }
-
-    .quick-stats {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 20px;
-        margin-bottom: 30px;
-    }
-
-    .quick-stat {
-        background: white;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-        border-left: 4px solid #3498db;
-    }
-
-    .quick-stat.warning {
-        border-left-color: #e74c3c;
-    }
-
-    .quick-stat .label {
-        font-size: 0.85rem;
-        color: #7f8c8d;
-        margin-bottom: 8px;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-
-    .quick-stat .value {
-        font-size: 2rem;
-        font-weight: 700;
-        color: #2c3e50;
-    }
-
-    .section-title {
-        font-size: 1.3rem;
-        margin-bottom: 20px;
-        color: #2c3e50;
-        font-weight: 600;
-    }
-
-    .table-container {
-        background: white;
-        border-radius: 8px;
-        padding: 20px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-    }
-
-    .table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    .table th {
-        text-align: left;
-        padding: 12px;
-        border-bottom: 2px solid #e9ecef;
-        color: #7f8c8d;
-        font-weight: 600;
-        font-size: 0.85rem;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-
-    .table td {
-        padding: 12px;
-        border-bottom: 1px solid #e9ecef;
-    }
-
-    .table tbody tr:hover {
-        background: #f8f9fa;
-    }
-
-    .btn {
-        padding: 6px 12px;
-        border-radius: 4px;
-        text-decoration: none;
-        font-size: 0.85rem;
-        display: inline-block;
-        margin-right: 5px;
-        transition: all 0.2s;
-    }
-
-    .btn-info {
-        background: #3498db;
-        color: white;
-    }
-
-    .btn-info:hover {
-        background: #2980b9;
-        color: white;
-    }
-
-    .btn-warning {
-        background: #f39c12;
-        color: white;
-    }
-
-    .btn-warning:hover {
-        background: #d68910;
-        color: white;
-    }
-
-    .btn-danger {
-        background: #e74c3c;
-        color: white;
-    }
-
-    .btn-danger:hover {
-        background: #c0392b;
-        color: white;
-    }
-</style>
-
-<!-- Section de bienvenue -->
-<div class="welcome-section">
-    <h2>Bienvenue, {{ app.user.firstname }} 👋</h2>
-    <p>Voici un aperçu rapide de votre restaurant</p>
-</div>
-
-<!-- Statistiques rapides -->
-<div class="quick-stats">
-    <div class="quick-stat warning">
-        <div class="label">⚡ Commandes en attente</div>
-        <div class="value">{{ stats.pendingOrders }}</div>
+<!-- Stats Grid - Figma Design -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+    <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 1.5rem;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+            <span style="font-size: 0.875rem; color: var(--dark-text);">Commandes totales</span>
+            <span data-icon="shopping-cart" data-icon-width="20" data-icon-height="20" style="color: var(--bordeaux);"></span>
+        </div>
+        <p style="font-family: var(--font-heading); font-size: 2.5rem; font-weight: 400; color: var(--bordeaux); margin-bottom: 0.25rem;">
+            {{ stats.totalMenus + stats.totalRecipes }}
+        </p>
+        <p style="font-size: 0.875rem; color: var(--gold);">+{{ stats.pendingOrders }} en attente</p>
     </div>
-    <div class="quick-stat">
-        <div class="label">📋 Menus disponibles</div>
-        <div class="value">{{ stats.totalMenus }}</div>
+
+    <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 1.5rem;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+            <span style="font-size: 0.875rem; color: var(--dark-text);">Menus disponibles</span>
+            <span data-icon="file-text" data-icon-width="20" data-icon-height="20" style="color: var(--gold);"></span>
+        </div>
+        <p style="font-family: var(--font-heading); font-size: 2.5rem; font-weight: 400; color: var(--bordeaux); margin-bottom: 0.25rem;">
+            {{ stats.totalMenus }}
+        </p>
+        <p style="font-size: 0.875rem; color: var(--gold);">Actifs</p>
     </div>
-    <div class="quick-stat">
-        <div class="label">🍳 Recettes</div>
-        <div class="value">{{ stats.totalRecipes }}</div>
+
+    <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 1.5rem;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+            <span style="font-size: 0.875rem; color: var(--dark-text);">Recettes</span>
+            <span data-icon="utensils-crossed" data-icon-width="20" data-icon-height="20" style="color: var(--green);"></span>
+        </div>
+        <p style="font-family: var(--font-heading); font-size: 2.5rem; font-weight: 400; color: var(--bordeaux); margin-bottom: 0.25rem;">
+            {{ stats.totalRecipes }}
+        </p>
+        <p style="font-size: 0.875rem; color: var(--gold);">Disponibles</p>
     </div>
-    <div class="quick-stat">
-        <div class="label">👥 Utilisateurs</div>
-        <div class="value">{{ stats.totalUsers }}</div>
+
+    <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 1.5rem;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+            <span style="font-size: 0.875rem; color: var(--dark-text);">Utilisateurs</span>
+            <span data-icon="users" data-icon-width="20" data-icon-height="20" style="color: var(--gold);"></span>
+        </div>
+        <p style="font-family: var(--font-heading); font-size: 2.5rem; font-weight: 400; color: var(--bordeaux); margin-bottom: 0.25rem;">
+            {{ stats.totalUsers }}
+        </p>
+        <p style="font-size: 0.875rem; color: var(--gold);">Inscrits</p>
     </div>
 </div>
 
-<!-- Dernières recettes -->
-<h2 class="section-title">📝 Dernières recettes ajoutées</h2>
-<div class="table-container">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Titre</th>
-                <th>Catégorie</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for recipe in latestRecipes %}
-            <tr>
-                <td><strong>#{{ recipe.id }}</strong></td>
-                <td>{{ recipe.title }}</td>
-                <td>{{ recipe.category ? recipe.category.name : 'N/A' }}</td>
-                <td>
-                    <a href="#" class="btn btn-info">Voir</a>
-                    <a href="#" class="btn btn-warning">Modifier</a>
-                    <a href="#" class="btn btn-danger">Supprimer</a>
-                </td>
-            </tr>
-            {% else %}
-            <tr>
-                <td colspan="4" style="text-align: center; padding: 40px; color: #95a5a6;">
-                    Aucune recette pour le moment
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<!-- Pending Orders - Figma Design -->
+<div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 1.5rem; margin-bottom: 1.5rem;">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+        <h2 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.5rem; font-weight: 400; margin: 0;">
+            🛒 Commandes en attente de validation
+        </h2>
+        <a href="{{ path('app_admin_orders') }}" style="font-size: 0.875rem; color: var(--gold); text-decoration: none; transition: opacity var(--transition-base);" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+            Voir toutes →
+        </a>
+    </div>
+    {% if pendingOrdersList is empty %}
+        <div style="text-align: center; padding: 3rem 1.25rem;">
+            <span data-icon="inbox" data-icon-width="48" data-icon-height="48" style="color: var(--dark-text); opacity: 0.3; margin-bottom: 1rem; display: inline-block;"></span>
+            <p style="color: var(--dark-text); opacity: 0.6; margin: 0;">Aucune commande en attente</p>
+        </div>
+    {% else %}
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+                <colgroup>
+                    <col style="width: 8%;">
+                    <col style="width: 20%;">
+                    <col style="width: 25%;">
+                    <col style="width: 12%;">
+                    <col style="width: 15%;">
+                    <col style="width: 20%;">
+                </colgroup>
+                <thead style="background: var(--beige);">
+                    <tr>
+                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">N°</th>
+                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">Client</th>
+                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">Email</th>
+                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">Date</th>
+                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">Montant</th>
+                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in pendingOrdersList %}
+                    <tr style="border-bottom: 1px solid var(--beige);" onmouseover="this.style.backgroundColor='#f8f9fa'" onmouseout="this.style.backgroundColor=''">
+                        <td style="padding: 1rem 1.5rem; color: var(--dark-text);">
+                            <strong>#{{ order.id }}</strong>
+                        </td>
+                        <td style="padding: 1rem 1.5rem; color: var(--dark-text);">
+                            {{ order.user.firstname }} {{ order.user.lastname }}
+                        </td>
+                        <td style="padding: 1rem 1.5rem; color: var(--dark-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="{{ order.user.email }}">
+                            {{ order.user.email }}
+                        </td>
+                        <td style="padding: 1rem 1.5rem; color: var(--dark-text);">
+                            {{ order.createdAt|date('d/m/Y') }}
+                        </td>
+                        <td style="padding: 1rem 1.5rem; color: var(--dark-text);">
+                            {{ order.totalPrice|number_format(2, ',', ' ') }} €
+                        </td>
+                        <td style="padding: 1rem 1.5rem;">
+                            <a href="{{ path('app_admin_orders_show', {id: order.id}) }}" class="btn-crud btn-crud-view">
+                                <span data-icon="eye" data-icon-width="16" data-icon-height="16"></span>
+                                <span class="btn-crud-text">Voir</span>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Quick Actions - Figma Design -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+    <button onclick="window.location.href='{{ path('app_admin_orders') }}'" style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 1.5rem; border: none; cursor: pointer; text-align: left; transition: box-shadow var(--transition-base);" onmouseover="this.style.boxShadow='0 10px 40px rgba(0,0,0,0.15)'" onmouseout="this.style.boxShadow='var(--shadow-md)'">
+        <span data-icon="shopping-cart" data-icon-width="32" data-icon-height="32" style="color: var(--bordeaux); margin-bottom: 0.75rem; display: block;"></span>
+        <h3 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.25rem; font-weight: 400; margin-bottom: 0.5rem;">
+            Gérer les commandes
+        </h3>
+        <p style="font-size: 0.875rem; color: var(--dark-text); margin: 0;">
+            Voir et gérer toutes les commandes
+        </p>
+    </button>
+
+    <button onclick="window.location.href='{{ path('app_admin_menus') }}'" style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 1.5rem; border: none; cursor: pointer; text-align: left; transition: box-shadow var(--transition-base);" onmouseover="this.style.boxShadow='0 10px 40px rgba(0,0,0,0.15)'" onmouseout="this.style.boxShadow='var(--shadow-md)'">
+        <span data-icon="file-text" data-icon-width="32" data-icon-height="32" style="color: var(--gold); margin-bottom: 0.75rem; display: block;"></span>
+        <h3 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.25rem; font-weight: 400; margin-bottom: 0.5rem;">
+            Modifier les menus
+        </h3>
+        <p style="font-size: 0.875rem; color: var(--dark-text); margin: 0;">
+            Ajouter ou modifier les menus
+        </p>
+    </button>
+
+    <button onclick="window.location.href='{{ path('app_admin_reviews') }}'" style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 1.5rem; border: none; cursor: pointer; text-align: left; transition: box-shadow var(--transition-base);" onmouseover="this.style.boxShadow='0 10px 40px rgba(0,0,0,0.15)'" onmouseout="this.style.boxShadow='var(--shadow-md)'">
+        <span data-icon="star" data-icon-width="32" data-icon-height="32" style="color: var(--gold); margin-bottom: 0.75rem; display: block;"></span>
+        <h3 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.25rem; font-weight: 400; margin-bottom: 0.5rem;">
+            Modérer les avis
+        </h3>
+        <p style="font-size: 0.875rem; color: var(--dark-text); margin: 0;">
+            Gérer les avis clients
+        </p>
+    </button>
 </div>
 {% endblock %}

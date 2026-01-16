@@ -1,81 +1,77 @@
 {% extends 'admin/base_admin.html.twig' %}
 
-{% block title %}Gestion des Allergènes{% endblock %}
+{% block title %}Gestion des Allergènes - Admin{% endblock %}
 
 {% block content %}
-<div style="margin-top: 30px;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-        <h1>Gestion des Allergènes</h1>
-        <div>
-            <a href="{{ path('app_admin_dashboard') }}" class="btn btn-secondary">Retour au Dashboard</a>
-            <a href="{{ path('app_admin_allergens_new') }}" class="btn btn-success">Ajouter un allergène</a>
+<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
+    <h1 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 2.5rem; font-weight: 400;">
+        ⚠️ Gestion des allergènes
+    </h1>
+    <a href="{{ path('app_admin_allergens_new') }}" style="padding: 0.75rem 1.5rem; border-radius: var(--radius-lg); border: none; background: var(--gold); color: var(--dark-text); cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: all var(--transition-base);" onmouseover="this.style.boxShadow='var(--shadow-md)'" onmouseout="this.style.boxShadow='none'">
+        <span data-icon="plus" data-icon-width="16" data-icon-height="16"></span>
+        Ajouter un allergène
+    </a>
+</div>
+
+{# Afficher les messages flash #}
+{% for message in app.flashes('success') %}
+    <div style="background: #d4edda; color: #155724; padding: 1rem; border-radius: var(--radius-sm); margin-bottom: 1rem; border: 1px solid #c3e6cb;">
+        {{ message }}
+    </div>
+{% endfor %}
+
+{% for message in app.flashes('error') %}
+    <div style="background: #f8d7da; color: #721c24; padding: 1rem; border-radius: var(--radius-sm); margin-bottom: 1rem; border: 1px solid #f5c6cb;">
+        {{ message }}
+    </div>
+{% endfor %}
+
+<!-- Liste des allergènes -->
+<div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); overflow: hidden;">
+    <div style="padding: 1rem 1.5rem; border-bottom: 1px solid var(--beige);">
+        <div style="position: relative;">
+            <span data-icon="search" data-icon-width="20" data-icon-height="20" style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--dark-text);"></span>
+            <input type="text" id="searchInput" placeholder="Rechercher un allergène..." style="width: 100%; padding: 0.5rem 1rem 0.5rem 2.5rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-lg); font-family: var(--font-body);">
         </div>
     </div>
 
-    {# Afficher les messages flash #}
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    {% if allergens is empty %}
+        <div style="text-align: center; padding: 3rem 1.25rem;">
+            <span data-icon="inbox" data-icon-width="48" data-icon-height="48" style="color: var(--dark-text); opacity: 0.3; margin-bottom: 1rem; display: inline-block;"></span>
+            <p style="color: var(--dark-text); opacity: 0.6; margin: 0;">Aucun allergène trouvé.</p>
         </div>
-    {% endfor %}
-
-    {% for message in app.flashes('error') %}
-        <div class="alert alert-danger" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    {% endfor %}
-
-    {# Barre de recherche #}
-    <div style="margin-bottom: 20px;">
-        <div style="max-width: 500px;">
-            <input type="text" class="form-control" placeholder="Rechercher un allergène..." id="searchInput">
-        </div>
-    </div>
-
-    {# Table des allergènes #}
-    <div class="card">
-        <div class="card-body">
-            <table class="table table-sortable" id="allergensTable">
-                <thead>
+    {% else %}
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+                <colgroup>
+                    <col style="width: 8%;">
+                    <col style="width: 70%;">
+                    <col style="width: 22%;">
+                </colgroup>
+                <thead style="background: var(--beige);">
                     <tr>
-                        <th>ID</th>
-                        <th>Nom</th>
-                        <th>Nombre de recettes</th>
-                        <th style="text-align: right;">Actions</th>
+                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">ID</th>
+                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">Nom</th>
+                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for allergen in allergens %}
-                    <tr class="allergen-row">
-                        <td>{{ allergen.id }}</td>
-                        <td style="font-weight: 600;">{{ allergen.name }}</td>
-                        <td data-sort="{{ allergen.recipes|length }}">
-                            <span class="badge badge-warning">{{ allergen.recipes|length }} recette(s)</span>
-                        </td>
-                        <td style="text-align: right;">
-                            <div style="display: inline-flex; gap: 5px;" role="group">
-                                <a href="{{ path('app_admin_allergens_edit', {id: allergen.id}) }}"
-                                   style="font-size: 0.85rem; padding: 5px 10px;">
-                                    Modifier
+                    <tr class="allergen-row" style="border-bottom: 1px solid var(--beige);" onmouseover="this.style.backgroundColor='#f8f9fa'" onmouseout="this.style.backgroundColor=''">
+                        <td style="padding: 1rem 1.5rem; color: var(--dark-text);">{{ allergen.id }}</td>
+                        <td style="padding: 1rem 1.5rem; color: var(--dark-text);"><strong>{{ allergen.name }}</strong></td>
+                        <td style="padding: 1rem 1.5rem;">
+                            <div class="crud-actions">
+                                <a href="{{ path('app_admin_allergens_edit', {id: allergen.id}) }}" class="btn-crud btn-crud-edit">
+                                    <span data-icon="edit" data-icon-width="16" data-icon-height="16"></span>
+                                    <span class="btn-crud-text">Modifier</span>
                                 </a>
-                                <form method="post"
-                                      action="{{ path('app_admin_allergens_delete', {id: allergen.id}) }}"
-                                      style="display: inline;"
-                                      onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer l\'allergène « {{ allergen.name }} » ?')">
-                                    <button type="submit" style="font-size: 0.85rem; padding: 5px 10px;">
-                                        Supprimer
+                                <form method="post" action="{{ path('app_admin_allergens_delete', {id: allergen.id}) }}" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer l\'allergène « {{ allergen.name }} » ?')">
+                                    <button type="submit" class="btn-crud btn-crud-delete">
+                                        <span data-icon="trash-2" data-icon-width="16" data-icon-height="16"></span>
+                                        <span class="btn-crud-text">Supprimer</span>
                                     </button>
                                 </form>
-                            </div>
-                        </td>
-                    </tr>
-                    {% else %}
-                    <tr>
-                        <td colspan="4" style="text-align: center;">
-                            <div style="margin: 0;">
-                                Aucun allergène trouvé. <a href="{{ path('app_admin_allergens_new') }}" class="alert-link">Créer un nouvel allergène</a>
                             </div>
                         </td>
                     </tr>
@@ -83,14 +79,7 @@
                 </tbody>
             </table>
         </div>
-    </div>
-
-    {# Informations sur le nombre d'allergènes #}
-    <div style="margin-top: 20px;">
-        <p style="color: #95a5a6;">
-            Total : <strong>{{ allergens|length }}</strong> allergène(s)
-        </p>
-    </div>
+    {% endif %}
 </div>
 
 {# Script pour la recherche en temps réel et le tri #}
@@ -98,7 +87,7 @@
 <script>
     // Initialiser le tri du tableau (exclure la dernière colonne "Actions")
     initTableSort('allergensTable', {
-        excludeColumns: [3]
+        excludeColumns: [2]
     });
 
     // Recherche en temps réel

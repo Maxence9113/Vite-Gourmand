@@ -3,332 +3,353 @@
 {% block title %}Commande {{ order.orderNumber }} - Admin{% endblock %}
 
 {% block content %}
-<div style="padding: 25px;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-        <h1>Commande {{ order.orderNumber }}</h1>
-        <a href="{{ path('app_admin_orders') }}" class="btn btn-outline-secondary">
-            <i data-feather="arrow-left"></i> Retour à la liste
-        </a>
-    </div>
+<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
+    <h1 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 2.5rem; font-weight: 400;">
+        📦 Commande {{ order.orderNumber }}
+    </h1>
+    <a href="{{ path('app_admin_orders') }}" style="padding: 0.75rem 1.5rem; border-radius: var(--radius-lg); border: 2px solid var(--bordeaux); background: transparent; color: var(--bordeaux); cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: all var(--transition-base);" onmouseover="this.style.background='var(--bordeaux)'; this.style.color='white'" onmouseout="this.style.background='transparent'; this.style.color='var(--bordeaux)'">
+        <span data-icon="arrow-left" data-icon-width="16" data-icon-height="16"></span>
+        Retour à la liste
+    </a>
+</div>
 
-    {# Flash messages #}
-    {% for label, messages in app.flashes %}
-        {% for message in messages %}
-            <div style="margin-bottom: 25px;">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        {% endfor %}
+{# Flash messages #}
+{% for label, messages in app.flashes %}
+    {% for message in messages %}
+        <div style="background: {% if label == 'success' %}#d4edda{% elseif label == 'error' %}#f8d7da{% else %}#fff3cd{% endif %}; color: {% if label == 'success' %}#155724{% elseif label == 'error' %}#721c24{% else %}#856404{% endif %}; padding: 1rem; border-radius: var(--radius-sm); margin-bottom: 1.5rem; border-left: 4px solid {% if label == 'success' %}#28a745{% elseif label == 'error' %}#dc3545{% else %}#ffc107{% endif %};">
+            {{ message }}
+        </div>
     {% endfor %}
+{% endfor %}
 
-    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 25px;">
-        {# Colonne principale #}
-        <div>
-            {# Informations client #}
-            <div style="margin-bottom: 25px;">
-                <div class="card-header">
-                    <h5 style="margin: 0;"><i data-feather="user"></i> Informations Client</h5>
-                </div>
-                <div class="card-body">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                        <div>
-                            <p><strong>Nom complet :</strong><br>{{ order.customerFirstname }} {{ order.customerLastname }}</p>
-                            <p><strong>Email :</strong><br>{{ order.customerEmail }}</p>
-                            <p><strong>Téléphone :</strong><br>{{ order.customerPhone }}</p>
-                        </div>
-                        <div>
-                            <p><strong>Compte utilisateur :</strong><br>
-                                {% if order.user %}
-                                    {{ order.user.firstname }} {{ order.user.lastname }}<br>
-                                    <small style="color: #95a5a6;">{{ order.user.email }}</small>
-                                {% else %}
-                                    <span style="color: #95a5a6;">Non associé</span>
-                                {% endif %}
-                            </p>
-                        </div>
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
+    {# Colonne principale #}
+    <div>
+        {# Informations client #}
+        <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); margin-bottom: 1.5rem; overflow: hidden;">
+            <div style="background: var(--beige); padding: 1rem 1.5rem; border-bottom: 1px solid #e0e0e0;">
+                <h5 style="margin: 0; display: flex; align-items: center; gap: 0.5rem; color: var(--dark-text); font-family: var(--font-heading); font-weight: 400; font-size: 1.25rem;">
+                    <span data-icon="user" data-icon-width="20" data-icon-height="20"></span>
+                    Informations Client
+                </h5>
+            </div>
+            <div style="padding: 1.5rem;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div>
+                        <p style="margin-bottom: 1rem;"><strong style="color: var(--dark-text);">Nom complet :</strong><br><span style="color: var(--dark-text);">{{ order.customerFirstname }} {{ order.customerLastname }}</span></p>
+                        <p style="margin-bottom: 1rem;"><strong style="color: var(--dark-text);">Email :</strong><br><span style="color: var(--dark-text);">{{ order.customerEmail }}</span></p>
+                        <p style="margin: 0;"><strong style="color: var(--dark-text);">Téléphone :</strong><br><span style="color: var(--dark-text);">{{ order.customerPhone }}</span></p>
+                    </div>
+                    <div>
+                        <p style="margin: 0;"><strong style="color: var(--dark-text);">Compte utilisateur :</strong><br>
+                            {% if order.user %}
+                                <span style="color: var(--dark-text);">{{ order.user.firstname }} {{ order.user.lastname }}</span><br>
+                                <small style="color: #95a5a6;">{{ order.user.email }}</small>
+                            {% else %}
+                                <span style="color: #95a5a6;">Non associé</span>
+                            {% endif %}
+                        </p>
                     </div>
                 </div>
             </div>
-
-            {# Informations de livraison #}
-            <div style="margin-bottom: 25px;">
-                <div class="card-header">
-                    <h5 style="margin: 0;"><i data-feather="map-pin"></i> Livraison</h5>
-                </div>
-                <div class="card-body">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                        <div style="grid-column: span 1;">
-                            <p><strong>Adresse :</strong><br>{{ order.deliveryAddress }}</p>
-                            {% if order.deliveryDistanceKm %}
-                                <p><strong>Distance :</strong><br>{{ order.deliveryDistanceKm }} km</p>
-                            {% endif %}
-                        </div>
-                        <div style="grid-column: span 1;">
-                            <p><strong>Date et heure :</strong><br>
-                                <i data-feather="calendar" style="width: 16px; height: 16px;"></i>
-                                {{ order.deliveryDateTime|date('d/m/Y à H:i') }}
-                            </p>
-                            <p><strong>Coût de livraison :</strong><br>{{ (order.deliveryCost / 100)|number_format(2, ',', ' ') }} €</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {# Détails de la commande #}
-            <div style="margin-bottom: 25px;">
-                <div class="card-header">
-                    <h5 style="margin: 0;"><i data-feather="shopping-cart"></i> Détails de la commande</h5>
-                </div>
-                <div class="card-body">
-                    <table style="margin-bottom: 15px;">
-                        <tbody>
-                            <tr>
-                                <td><strong>Menu :</strong></td>
-                                <td>{{ order.menuName }}</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Nombre de personnes :</strong></td>
-                                <td>{{ order.numberOfPersons }}</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Prix par personne :</strong></td>
-                                <td>{{ (order.menuPricePerPerson / 100)|number_format(2, ',', ' ') }} €</td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <hr>
-
-                    <table style="margin: 0; font-size: 0.9rem;">
-                        <tbody>
-                            <tr>
-                                <td><strong>Sous-total menu :</strong></td>
-                                <td style="text-align: right;">{{ (order.menuSubtotal / 100)|number_format(2, ',', ' ') }} €</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Livraison :</strong></td>
-                                <td style="text-align: right;">{{ (order.deliveryCost / 100)|number_format(2, ',', ' ') }} €</td>
-                            </tr>
-                            {% if order.discountAmount %}
-                            <tr class="table-success">
-                                <td><strong>Réduction (10%) :</strong></td>
-                                <td style="text-align: right;">- {{ (order.discountAmount / 100)|number_format(2, ',', ' ') }} €</td>
-                            </tr>
-                            {% endif %}
-                            <tr class="table-active">
-                                <td><strong>TOTAL :</strong></td>
-                                <td style="text-align: right;"><h5 style="margin: 0;">{{ (order.totalPrice / 100)|number_format(2, ',', ' ') }} €</h5></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            {# Matériel prêté #}
-            {% if order.hasMaterialLoan %}
-            <div style="margin-bottom: 25px; border-left: 4px solid #3498db;">
-                <div style="background: #3498db; color: white;">
-                    <h5 style="margin: 0;"><i data-feather="box"></i> Prêt de matériel</h5>
-                </div>
-                <div class="card-body">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                        <div style="grid-column: span 1;">
-                            <p><strong>Matériel prêté :</strong><br>
-                                <span class="badge badge-info">Oui</span>
-                            </p>
-                        </div>
-                        <div style="grid-column: span 1;">
-                            <p><strong>Date limite de retour :</strong><br>
-                                {% if order.materialReturnDeadline %}
-                                    {{ order.materialReturnDeadline|date('d/m/Y') }}
-                                {% else %}
-                                    <span style="color: #95a5a6;">Non définie</span>
-                                {% endif %}
-                            </p>
-                        </div>
-                        <div style="grid-column: span 2;">
-                            <p><strong>Statut du retour :</strong><br>
-                                {% if order.materialReturned %}
-                                    <span class="badge badge-success">
-                                        <i data-feather="check-circle" style="width: 14px; height: 14px;"></i> Retourné
-                                    </span>
-                                {% else %}
-                                    <span class="badge badge-warning">
-                                        <i data-feather="clock" style="width: 14px; height: 14px;"></i> En attente
-                                    </span>
-                                {% endif %}
-                            </p>
-
-                            {% if not order.materialReturned and order.status.value == 'waiting_material_return' %}
-                                <form method="post" action="{{ path('app_admin_orders_material_returned', {id: order.id}) }}"
-                                      onsubmit="return confirm('Confirmer que le matériel a bien été retourné ?');">
-                                    <button type="submit" class="btn btn-success">
-                                        <i data-feather="check"></i> Marquer comme retourné
-                                    </button>
-                                </form>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-
-            {# Annulation #}
-            {% if order.status.value == 'cancelled' %}
-            <div style="margin-bottom: 25px; border-left: 4px solid #e74c3c;">
-                <div style="background: #e74c3c; color: white;">
-                    <h5 style="margin: 0;"><i data-feather="x-circle"></i> Annulation</h5>
-                </div>
-                <div class="card-body">
-                    <p><strong>Date d'annulation :</strong><br>{{ order.cancelledAt|date('d/m/Y à H:i') }}</p>
-                    <p><strong>Détails de l'annulation :</strong><br>
-                        <span style="white-space: pre-line;">{{ order.cancellationReason }}</span>
-                    </p>
-                </div>
-            </div>
-            {% endif %}
         </div>
 
-        {# Colonne latérale #}
-        <div style="grid-column: span 1;">
-            {# Statut actuel #}
-            <div style="margin-bottom: 25px;">
-                <div class="card-header">
-                    <h5 style="margin: 0;"><i data-feather="activity"></i> Statut</h5>
-                </div>
-                <div class="card-body">
-                    <div style="text-align: center; margin-bottom: 20px;">
-                        {% include 'admin/orders/_status_badge.html.twig' with {'status': order.status, 'large': true} %}
+        {# Informations de livraison #}
+        <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); margin-bottom: 1.5rem; overflow: hidden;">
+            <div style="background: var(--beige); padding: 1rem 1.5rem; border-bottom: 1px solid #e0e0e0;">
+                <h5 style="margin: 0; display: flex; align-items: center; gap: 0.5rem; color: var(--dark-text); font-family: var(--font-heading); font-weight: 400; font-size: 1.25rem;">
+                    <span data-icon="map-pin" data-icon-width="20" data-icon-height="20"></span>
+                    Livraison
+                </h5>
+            </div>
+            <div style="padding: 1.5rem;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div>
+                        <p style="margin-bottom: 1rem;"><strong style="color: var(--dark-text);">Adresse :</strong><br><span style="color: var(--dark-text);">{{ order.deliveryAddress }}</span></p>
+                        {% if order.deliveryDistanceKm %}
+                            <p style="margin: 0;"><strong style="color: var(--dark-text);">Distance :</strong><br><span style="color: var(--dark-text);">{{ order.deliveryDistanceKm }} km</span></p>
+                        {% endif %}
                     </div>
-
-                    {# Actions de changement de statut #}
-                    {% if not order.status.isFinal %}
-                        <hr>
-                        <form method="post" action="{{ path('app_admin_orders_change_status', {id: order.id}) }}">
-                            <label for="new_status" class="form-label">Changer le statut :</label>
-                            <select name="status" id="new_status" style="margin-bottom: 20px;">
-                                {% for nextStatus in order.status.getNextStatuses %}
-                                    <option value="{{ nextStatus.value }}">{{ nextStatus.label }}</option>
-                                {% endfor %}
-                            </select>
-                            <button type="submit" style="width: 100%;">
-                                <i data-feather="refresh-cw"></i> Mettre à jour
-                            </button>
-                        </form>
-                    {% endif %}
-
-                    {# Bouton d'annulation #}
-                    {% if order.canBeCancelled %}
-                        <button type="button" style="width: 100%; margin-top: 10px;" data-bs-toggle="modal" data-bs-target="#cancelModal">
-                            <i data-feather="x"></i> Annuler la commande
-                        </button>
-                    {% endif %}
+                    <div>
+                        <p style="margin-bottom: 1rem;"><strong style="color: var(--dark-text);">Date et heure :</strong><br>
+                            <span style="display: inline-flex; align-items: center; gap: 0.25rem; color: var(--dark-text);">
+                                <span data-icon="calendar" data-icon-width="16" data-icon-height="16"></span>
+                                {{ order.deliveryDateTime|date('d/m/Y à H:i') }}
+                            </span>
+                        </p>
+                        <p style="margin: 0;"><strong style="color: var(--dark-text);">Coût de livraison :</strong><br><span style="color: var(--bordeaux); font-weight: 600;">{{ (order.deliveryCost / 100)|number_format(2, ',', ' ') }} €</span></p>
+                    </div>
                 </div>
             </div>
+        </div>
 
-            {# Historique des statuts #}
-            <div style="margin-bottom: 25px;">
-                <div class="card-header">
-                    <h5 style="margin: 0;"><i data-feather="clock"></i> Historique</h5>
+        {# Détails de la commande #}
+        <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); margin-bottom: 1.5rem; overflow: hidden;">
+            <div style="background: var(--beige); padding: 1rem 1.5rem; border-bottom: 1px solid #e0e0e0;">
+                <h5 style="margin: 0; display: flex; align-items: center; gap: 0.5rem; color: var(--dark-text); font-family: var(--font-heading); font-weight: 400; font-size: 1.25rem;">
+                    <span data-icon="shopping-cart" data-icon-width="20" data-icon-height="20"></span>
+                    Détails de la commande
+                </h5>
+            </div>
+            <div style="padding: 1.5rem;">
+                <table style="width: 100%; margin-bottom: 1.5rem;">
+                    <tbody>
+                        <tr>
+                            <td style="padding: 0.5rem 0; color: var(--dark-text);"><strong>Menu :</strong></td>
+                            <td style="padding: 0.5rem 0; color: var(--dark-text);">{{ order.menuName }}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.5rem 0; color: var(--dark-text);"><strong>Nombre de personnes :</strong></td>
+                            <td style="padding: 0.5rem 0; color: var(--dark-text);">{{ order.numberOfPersons }}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.5rem 0; color: var(--dark-text);"><strong>Prix par personne :</strong></td>
+                            <td style="padding: 0.5rem 0; color: var(--dark-text);">{{ (order.menuPricePerPerson / 100)|number_format(2, ',', ' ') }} €</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <hr style="border: none; border-top: 1px solid var(--beige); margin: 1.5rem 0;">
+
+                <table style="width: 100%; font-size: 0.9rem;">
+                    <tbody>
+                        <tr>
+                            <td style="padding: 0.5rem 0; color: var(--dark-text);"><strong>Sous-total menu :</strong></td>
+                            <td style="padding: 0.5rem 0; text-align: right; color: var(--dark-text);">{{ (order.menuSubtotal / 100)|number_format(2, ',', ' ') }} €</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.5rem 0; color: var(--dark-text);"><strong>Livraison :</strong></td>
+                            <td style="padding: 0.5rem 0; text-align: right; color: var(--dark-text);">{{ (order.deliveryCost / 100)|number_format(2, ',', ' ') }} €</td>
+                        </tr>
+                        {% if order.discountAmount %}
+                        <tr style="background: #d4edda;">
+                            <td style="padding: 0.5rem 0.5rem; color: #155724;"><strong>Réduction (10%) :</strong></td>
+                            <td style="padding: 0.5rem 0.5rem; text-align: right; color: #155724;">- {{ (order.discountAmount / 100)|number_format(2, ',', ' ') }} €</td>
+                        </tr>
+                        {% endif %}
+                        <tr style="background: var(--beige);">
+                            <td style="padding: 1rem 0.5rem;"><strong style="font-size: 1.1rem; color: var(--dark-text);">TOTAL :</strong></td>
+                            <td style="padding: 1rem 0.5rem; text-align: right;"><strong style="font-size: 1.25rem; color: var(--bordeaux);">{{ (order.totalPrice / 100)|number_format(2, ',', ' ') }} €</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        {# Matériel prêté #}
+        {% if order.hasMaterialLoan %}
+        <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); margin-bottom: 1.5rem; overflow: hidden; border-left: 4px solid #3498db;">
+            <div style="background: #3498db; padding: 1rem 1.5rem;">
+                <h5 style="margin: 0; display: flex; align-items: center; gap: 0.5rem; color: white; font-family: var(--font-heading); font-weight: 400; font-size: 1.25rem;">
+                    <span data-icon="package" data-icon-width="20" data-icon-height="20"></span>
+                    Prêt de matériel
+                </h5>
+            </div>
+            <div style="padding: 1.5rem;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div>
+                        <p style="margin: 0;"><strong style="color: var(--dark-text);">Matériel prêté :</strong><br>
+                            <span style="padding: 0.25rem 0.75rem; border-radius: var(--radius-sm); background: #3498db; color: white; font-size: 0.875rem; display: inline-block; margin-top: 0.5rem;">Oui</span>
+                        </p>
+                    </div>
+                    <div>
+                        <p style="margin: 0;"><strong style="color: var(--dark-text);">Date limite de retour :</strong><br>
+                            <span style="color: var(--dark-text);">
+                            {% if order.materialReturnDeadline %}
+                                {{ order.materialReturnDeadline|date('d/m/Y') }}
+                            {% else %}
+                                <span style="color: #95a5a6;">Non définie</span>
+                            {% endif %}
+                            </span>
+                        </p>
+                    </div>
+                    <div style="grid-column: span 2;">
+                        <p style="margin-bottom: 1rem;"><strong style="color: var(--dark-text);">Statut du retour :</strong><br>
+                            {% if order.materialReturned %}
+                                <span style="padding: 0.25rem 0.75rem; border-radius: var(--radius-sm); background: #27ae60; color: white; font-size: 0.875rem; display: inline-flex; align-items: center; gap: 0.25rem; margin-top: 0.5rem;">
+                                    <span data-icon="check-circle" data-icon-width="14" data-icon-height="14"></span>
+                                    Retourné
+                                </span>
+                            {% else %}
+                                <span style="padding: 0.25rem 0.75rem; border-radius: var(--radius-sm); background: #f39c12; color: white; font-size: 0.875rem; display: inline-flex; align-items: center; gap: 0.25rem; margin-top: 0.5rem;">
+                                    <span data-icon="clock" data-icon-width="14" data-icon-height="14"></span>
+                                    En attente
+                                </span>
+                            {% endif %}
+                        </p>
+
+                        {% if not order.materialReturned and order.status.value == 'waiting_material_return' %}
+                            <form method="post" action="{{ path('app_admin_orders_material_returned', {id: order.id}) }}" onsubmit="return confirm('Confirmer que le matériel a bien été retourné ?');">
+                                <button type="submit" style="padding: 0.75rem 1.5rem; border-radius: var(--radius-lg); border: none; background: #27ae60; color: white; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; transition: all var(--transition-base);" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+                                    <span data-icon="check" data-icon-width="16" data-icon-height="16"></span>
+                                    Marquer comme retourné
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
                 </div>
-                <div class="card-body">
-                    {% if order.statusHistory is not empty %}
-                        <div class="timeline">
-                            {% for history in order.statusHistory|reverse %}
-                                <div style="margin-bottom: 15px;">
-                                    <div style="display: flex;">
-                                        <div style="flex-shrink: 0;">
-                                            <span class="badge bg-{{ constant('App\\Enum\\OrderStatus::' ~ history.status|upper).badgeClass }}">
-                                                <i data-feather="{{ constant('App\\Enum\\OrderStatus::' ~ history.status|upper).icon }}" style="width: 14px; height: 14px;"></i>
-                                            </span>
-                                        </div>
-                                        <div style="flex-grow: 1; margin-left: 15px;">
-                                            <strong>{{ history.label }}</strong><br>
-                                            <small style="color: #95a5a6;">{{ history.changed_at }}</small>
-                                        </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {# Annulation #}
+        {% if order.status.value == 'cancelled' %}
+        <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); margin-bottom: 1.5rem; overflow: hidden; border-left: 4px solid #e74c3c;">
+            <div style="background: #e74c3c; padding: 1rem 1.5rem;">
+                <h5 style="margin: 0; display: flex; align-items: center; gap: 0.5rem; color: white; font-family: var(--font-heading); font-weight: 400; font-size: 1.25rem;">
+                    <span data-icon="x-circle" data-icon-width="20" data-icon-height="20"></span>
+                    Annulation
+                </h5>
+            </div>
+            <div style="padding: 1.5rem;">
+                <p style="margin-bottom: 1rem;"><strong style="color: var(--dark-text);">Date d'annulation :</strong><br><span style="color: var(--dark-text);">{{ order.cancelledAt|date('d/m/Y à H:i') }}</span></p>
+                <p style="margin: 0;"><strong style="color: var(--dark-text);">Détails de l'annulation :</strong><br>
+                    <span style="white-space: pre-line; color: var(--dark-text);">{{ order.cancellationReason }}</span>
+                </p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    {# Colonne latérale #}
+    <div>
+        {# Statut actuel #}
+        <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); margin-bottom: 1.5rem; overflow: hidden;">
+            <div style="background: var(--beige); padding: 1rem 1.5rem; border-bottom: 1px solid #e0e0e0;">
+                <h5 style="margin: 0; display: flex; align-items: center; gap: 0.5rem; color: var(--dark-text); font-family: var(--font-heading); font-weight: 400; font-size: 1.25rem;">
+                    <span data-icon="activity" data-icon-width="20" data-icon-height="20"></span>
+                    Statut
+                </h5>
+            </div>
+            <div style="padding: 1.5rem;">
+                <div style="text-align: center; margin-bottom: 1.5rem;">
+                    {% include 'admin/orders/_status_badge.html.twig' with {'status': order.status, 'large': true} %}
+                </div>
+
+                {# Actions de changement de statut #}
+                {% if not order.status.isFinal %}
+                    <hr style="border: none; border-top: 1px solid var(--beige); margin: 1.5rem 0;">
+                    <form method="post" action="{{ path('app_admin_orders_change_status', {id: order.id}) }}">
+                        <label for="new_status" style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: var(--dark-text); font-weight: 600;">Changer le statut :</label>
+                        <select name="status" id="new_status" style="width: 100%; padding: 0.75rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-sm); margin-bottom: 1rem; font-family: var(--font-body);">
+                            {% for nextStatus in order.status.getNextStatuses %}
+                                <option value="{{ nextStatus.value }}">{{ nextStatus.label }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit" style="width: 100%; padding: 0.75rem 1rem; border-radius: var(--radius-lg); border: none; background: var(--bordeaux); color: white; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all var(--transition-base);" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+                            <span data-icon="refresh-cw" data-icon-width="16" data-icon-height="16"></span>
+                            Mettre à jour
+                        </button>
+                    </form>
+                {% endif %}
+
+                {# Bouton d'annulation #}
+                {% if order.canBeCancelled %}
+                    <button type="button" onclick="document.getElementById('cancelModal').style.display='flex'" style="width: 100%; margin-top: 0.75rem; padding: 0.75rem 1rem; border-radius: var(--radius-lg); border: 2px solid #e74c3c; background: transparent; color: #e74c3c; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all var(--transition-base);" onmouseover="this.style.background='#e74c3c'; this.style.color='white'" onmouseout="this.style.background='transparent'; this.style.color='#e74c3c'">
+                        <span data-icon="x" data-icon-width="16" data-icon-height="16"></span>
+                        Annuler la commande
+                    </button>
+                {% endif %}
+            </div>
+        </div>
+
+        {# Historique des statuts #}
+        <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); margin-bottom: 1.5rem; overflow: hidden;">
+            <div style="background: var(--beige); padding: 1rem 1.5rem; border-bottom: 1px solid #e0e0e0;">
+                <h5 style="margin: 0; display: flex; align-items: center; gap: 0.5rem; color: var(--dark-text); font-family: var(--font-heading); font-weight: 400; font-size: 1.25rem;">
+                    <span data-icon="clock" data-icon-width="20" data-icon-height="20"></span>
+                    Historique
+                </h5>
+            </div>
+            <div style="padding: 1.5rem;">
+                {% if order.statusHistory is not empty %}
+                    <div>
+                        {% for history in order.statusHistory|reverse %}
+                            <div style="margin-bottom: {% if not loop.last %}1rem{% else %}0{% endif %}; padding-bottom: {% if not loop.last %}1rem{% else %}0{% endif %}; border-bottom: {% if not loop.last %}1px solid var(--beige){% else %}none{% endif %};">
+                                <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                                    <div style="flex-shrink: 0;">
+                                        {% include 'admin/orders/_status_badge.html.twig' with {'status': constant('App\\Enum\\OrderStatus::' ~ history.status|upper)} %}
+                                    </div>
+                                    <div style="flex-grow: 1;">
+                                        <div style="color: var(--dark-text); font-weight: 600; margin-bottom: 0.25rem;">{{ history.label }}</div>
+                                        <small style="color: #95a5a6;">{{ history.changed_at }}</small>
                                     </div>
                                 </div>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        <p style="color: #95a5a6; margin: 0;">Aucun historique disponible.</p>
-                    {% endif %}
-                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p style="color: #95a5a6; margin: 0; text-align: center;">Aucun historique disponible.</p>
+                {% endif %}
             </div>
+        </div>
 
-            {# Dates importantes #}
-            <div class="card">
-                <div class="card-header">
-                    <h5 style="margin: 0;"><i data-feather="calendar"></i> Dates</h5>
-                </div>
-                <div class="card-body">
-                    <p><strong>Créée le :</strong><br>
-                        <small>{{ order.createdAt|date('d/m/Y à H:i') }}</small>
+        {# Dates importantes #}
+        <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); overflow: hidden;">
+            <div style="background: var(--beige); padding: 1rem 1.5rem; border-bottom: 1px solid #e0e0e0;">
+                <h5 style="margin: 0; display: flex; align-items: center; gap: 0.5rem; color: var(--dark-text); font-family: var(--font-heading); font-weight: 400; font-size: 1.25rem;">
+                    <span data-icon="calendar" data-icon-width="20" data-icon-height="20"></span>
+                    Dates
+                </h5>
+            </div>
+            <div style="padding: 1.5rem;">
+                <p style="margin-bottom: 1rem;"><strong style="color: var(--dark-text);">Créée le :</strong><br>
+                    <small style="color: #95a5a6;">{{ order.createdAt|date('d/m/Y à H:i') }}</small>
+                </p>
+                {% if order.acceptedAt %}
+                    <p style="margin-bottom: 1rem;"><strong style="color: var(--dark-text);">Acceptée le :</strong><br>
+                        <small style="color: #95a5a6;">{{ order.acceptedAt|date('d/m/Y à H:i') }}</small>
                     </p>
-                    {% if order.acceptedAt %}
-                        <p><strong>Acceptée le :</strong><br>
-                            <small>{{ order.acceptedAt|date('d/m/Y à H:i') }}</small>
-                        </p>
-                    {% endif %}
-                    {% if order.completedAt %}
-                        <p><strong>Terminée le :</strong><br>
-                            <small>{{ order.completedAt|date('d/m/Y à H:i') }}</small>
-                        </p>
-                    {% endif %}
-                    <p style="margin: 0;"><strong>Dernière mise à jour :</strong><br>
-                        <small>{{ order.updatedAt|date('d/m/Y à H:i') }}</small>
+                {% endif %}
+                {% if order.completedAt %}
+                    <p style="margin-bottom: 1rem;"><strong style="color: var(--dark-text);">Terminée le :</strong><br>
+                        <small style="color: #95a5a6;">{{ order.completedAt|date('d/m/Y à H:i') }}</small>
                     </p>
-                </div>
+                {% endif %}
+                <p style="margin: 0;"><strong style="color: var(--dark-text);">Dernière mise à jour :</strong><br>
+                    <small style="color: #95a5a6;">{{ order.updatedAt|date('d/m/Y à H:i') }}</small>
+                </p>
             </div>
         </div>
     </div>
 </div>
 
 {# Modal d'annulation #}
-<div class="modal fade" id="cancelModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form method="post" action="{{ path('app_admin_orders_cancel', {id: order.id}) }}">
-                <div style="background: #e74c3c; color: white;">
-                    <h5 class="modal-title">Annuler la commande</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="alert alert-warning">
-                        <i data-feather="alert-triangle"></i>
-                        Vous êtes sur le point d'annuler la commande <strong>{{ order.orderNumber }}</strong>.
+<div id="cancelModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 1000;">
+    <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); width: 90%; max-width: 500px; max-height: 90vh; overflow-y: auto;">
+        <form method="post" action="{{ path('app_admin_orders_cancel', {id: order.id}) }}">
+            <div style="background: #e74c3c; padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between; border-top-left-radius: var(--radius-lg); border-top-right-radius: var(--radius-lg);">
+                <h5 style="margin: 0; color: white; font-family: var(--font-heading); font-weight: 400; font-size: 1.25rem;">Annuler la commande</h5>
+                <button type="button" onclick="document.getElementById('cancelModal').style.display='none'" style="background: none; border: none; color: white; cursor: pointer; font-size: 1.5rem; line-height: 1; padding: 0;">&times;</button>
+            </div>
+            <div style="padding: 1.5rem;">
+                <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 1rem; margin-bottom: 1.5rem;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; color: #856404;">
+                        <span data-icon="alert-triangle" data-icon-width="20" data-icon-height="20"></span>
+                        <span>Vous êtes sur le point d'annuler la commande <strong>{{ order.orderNumber }}</strong>.</span>
                     </div>
+                </div>
 
-                    <div style="margin-bottom: 15px;">
-                        <label for="contact_method" class="form-label">Mode de contact client <span style="color: #e74c3c;">*</span></label>
-                        <select name="contact_method" id="contact_method" class="form-select" required>
-                            <option value="">-- Sélectionnez --</option>
-                            <option value="phone">Appel téléphonique (GSM)</option>
-                            <option value="email">Email</option>
-                        </select>
-                        <small style="color: #95a5a6;">Vous devez avoir contacté le client avant d'annuler la commande</small>
-                    </div>
+                <div style="margin-bottom: 1.5rem;">
+                    <label for="contact_method" style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: var(--dark-text); font-weight: 600;">Mode de contact client <span style="color: #e74c3c;">*</span></label>
+                    <select name="contact_method" id="contact_method" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-sm); font-family: var(--font-body);">
+                        <option value="">-- Sélectionnez --</option>
+                        <option value="phone">Appel téléphonique (GSM)</option>
+                        <option value="email">Email</option>
+                    </select>
+                    <small style="color: #95a5a6; font-size: 0.75rem;">Vous devez avoir contacté le client avant d'annuler la commande</small>
+                </div>
 
-                    <div style="margin-bottom: 15px;">
-                        <label for="reason" class="form-label">Motif de l'annulation <span style="color: #e74c3c;">*</span></label>
-                        <textarea name="reason" id="reason" class="form-control" rows="4" required
-                                  placeholder="Expliquez le motif de l'annulation et le résultat du contact avec le client..."></textarea>
-                    </div>
+                <div style="margin-bottom: 1.5rem;">
+                    <label for="reason" style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: var(--dark-text); font-weight: 600;">Motif de l'annulation <span style="color: #e74c3c;">*</span></label>
+                    <textarea name="reason" id="reason" rows="4" required placeholder="Expliquez le motif de l'annulation et le résultat du contact avec le client..." style="width: 100%; padding: 0.75rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-sm); font-family: var(--font-body); resize: vertical;"></textarea>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                    <button type="submit" class="btn btn-danger">Confirmer l'annulation</button>
-                </div>
-            </form>
-        </div>
+            </div>
+            <div style="padding: 1rem 1.5rem; border-top: 1px solid #e0e0e0; display: flex; gap: 0.75rem; justify-content: flex-end;">
+                <button type="button" onclick="document.getElementById('cancelModal').style.display='none'" style="padding: 0.75rem 1.5rem; border-radius: var(--radius-lg); border: 2px solid #95a5a6; background: transparent; color: #95a5a6; cursor: pointer; transition: all var(--transition-base);" onmouseover="this.style.background='#95a5a6'; this.style.color='white'" onmouseout="this.style.background='transparent'; this.style.color='#95a5a6'">Fermer</button>
+                <button type="submit" style="padding: 0.75rem 1.5rem; border-radius: var(--radius-lg); border: none; background: #e74c3c; color: white; cursor: pointer; transition: all var(--transition-base);" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">Confirmer l'annulation</button>
+            </div>
+        </form>
     </div>
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        if (typeof feather !== 'undefined') {
-            feather.replace();
-        }
-    });
-</script>
 {% endblock %}

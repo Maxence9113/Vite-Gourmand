@@ -52,18 +52,20 @@ final class AdminController extends AbstractController
             'pendingOrders' => $pendingOrders,
         ];
 
-        // Récupérer les dernières recettes créées
-        $latestRecipes = $recipeRepository->createQueryBuilder('r')
-            ->leftJoin('r.category', 'c')
-            ->addSelect('c')
-            ->orderBy('r.id', 'DESC')
-            ->setMaxResults(5)
+        // Récupérer les dernières commandes non validées (pending)
+        $pendingOrdersList = $orderRepository->createQueryBuilder('o')
+            ->leftJoin('o.user', 'u')
+            ->addSelect('u')
+            ->where('o.status = :pending')
+            ->setParameter('pending', OrderStatus::PENDING)
+            ->orderBy('o.createdAt', 'DESC')
+            ->setMaxResults(10)
             ->getQuery()
             ->getResult();
 
         return $this->render('admin/index.html.twig', [
             'stats' => $stats,
-            'latestRecipes' => $latestRecipes,
+            'pendingOrdersList' => $pendingOrdersList,
         ]);
     }
 }

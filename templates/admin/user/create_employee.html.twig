@@ -3,92 +3,324 @@
 {% block title %}Créer un compte employé{% endblock %}
 
 {% block content %}
-<div style="margin: 30px 0;">
-    <div style="display: flex; flex-wrap: wrap; margin: 0 -0.75rem; justify-content: center;">
-        <div style="flex: 0 0 66.666%; max-width: 66.666%; padding: 0 0.75rem;">
-            <h1 style="margin-bottom: 1.5rem;">Créer un compte employé</h1>
+<style>
+    .form-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
+    }
 
-            {% for message in app.flashes('error') %}
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    .form-header h1 {
+        font-family: var(--font-heading);
+        color: var(--bordeaux);
+        font-size: 2.5rem;
+        font-weight: 400;
+        margin: 0;
+    }
+
+    .btn-back {
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--radius-lg);
+        border: 2px solid var(--bordeaux);
+        background: transparent;
+        color: var(--bordeaux);
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all var(--transition-base);
+        font-family: var(--font-body);
+    }
+
+    .btn-back:hover {
+        background: var(--bordeaux);
+        color: white;
+    }
+
+    .form-card {
+        background: white;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-md);
+        overflow: hidden;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .form-section {
+        border-bottom: 1px solid var(--beige);
+    }
+
+    .section-header {
+        background: var(--beige);
+        padding: 1rem 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .section-title {
+        font-family: var(--font-heading);
+        font-size: 1.25rem;
+        font-weight: 400;
+        color: var(--dark-text);
+        margin: 0;
+    }
+
+    .section-body {
+        padding: 1.5rem;
+    }
+
+    .form-control {
+        width: 100%;
+        border: 1px solid var(--bordeaux);
+        border-radius: var(--radius-sm);
+        padding: 0.75rem;
+        font-size: 0.95rem;
+        font-family: var(--font-body);
+        transition: all var(--transition-base);
+    }
+
+    .form-control:focus {
+        border-color: var(--bordeaux);
+        box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.1);
+        outline: none;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: var(--dark-text);
+        margin-bottom: 0.5rem;
+        display: block;
+        font-size: 0.875rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-text {
+        font-size: 0.875rem;
+        color: #6c757d;
+        margin-top: 0.25rem;
+        display: block;
+    }
+
+    .form-text ul {
+        margin: 0.25rem 0 0 0;
+        padding-left: 1.25rem;
+    }
+
+    .form-text li {
+        margin-bottom: 0.125rem;
+    }
+
+    .password-wrapper {
+        position: relative;
+    }
+
+    .password-toggle {
+        position: absolute;
+        right: 0.75rem;
+        top: 50%;
+        transform: translateY(-50%);
+        border: none;
+        background: none;
+        cursor: pointer;
+        padding: 0.25rem;
+        color: var(--dark-text);
+        transition: color var(--transition-base);
+        display: flex;
+        align-items: center;
+    }
+
+    .password-toggle:hover {
+        color: var(--bordeaux);
+    }
+
+    .alert-info-custom {
+        background: #e7f1ff;
+        border: 2px solid #004085;
+        border-radius: var(--radius-lg);
+        padding: 1rem 1.5rem;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        margin-top: 1.5rem;
+    }
+
+    .alert-info-custom strong {
+        color: #004085;
+    }
+
+    .alert-danger-custom {
+        background: #f8d7da;
+        border: 2px solid #dc3545;
+        border-radius: var(--radius-lg);
+        padding: 1rem 1.5rem;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .alert-danger-custom strong {
+        color: #721c24;
+    }
+
+    .form-actions {
+        padding: 1.5rem;
+        background: var(--beige);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .btn-cancel {
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--radius-lg);
+        border: 2px solid #95a5a6;
+        background: transparent;
+        color: #95a5a6;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all var(--transition-base);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-cancel:hover {
+        background: #95a5a6;
+        color: white;
+    }
+
+    .btn-submit {
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--radius-lg);
+        border: none;
+        background: var(--bordeaux);
+        color: white;
+        font-weight: 600;
+        transition: all var(--transition-base);
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-submit:hover {
+        opacity: 0.9;
+        box-shadow: var(--shadow-md);
+    }
+</style>
+
+<div class="form-header">
+    <h1>
+        <span data-icon="user-plus" data-icon-width="32" data-icon-height="32" style="display: inline-block; vertical-align: middle;"></span>
+        Créer un compte employé
+    </h1>
+    <a href="{{ path('admin_users_index') }}" class="btn-back">
+        <span data-icon="arrow-left" data-icon-width="16" data-icon-height="16"></span>
+        Retour
+    </a>
+</div>
+
+{% for message in app.flashes('error') %}
+    <div class="alert-danger-custom">
+        <span data-icon="alert-circle" data-icon-width="20" data-icon-height="20" style="color: #721c24; flex-shrink: 0;"></span>
+        <div>{{ message }}</div>
+    </div>
+{% endfor %}
+
+<div class="form-card">
+    <form method="post">
+        <div class="form-section">
+            <div class="section-header">
+                <span data-icon="user" data-icon-width="20" data-icon-height="20" style="color: var(--bordeaux);"></span>
+                <h3 class="section-title">Informations personnelles</h3>
+            </div>
+            <div class="section-body">
+                <div class="form-group">
+                    <label for="email" class="form-label">Email (identifiant)</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                    <span class="form-text">Cet email sera utilisé comme identifiant de connexion.</span>
                 </div>
-            {% endfor %}
 
-            <div class="card">
-                <div class="card-body">
-                    <form method="post">
-                        <div style="margin-bottom: 1rem;">
-                            <label for="email" class="form-label">Email (identifiant)</label>
-                            <input type="email" class="form-control" id="email" name="email" required>
-                            <div class="form-text">Cet email sera utilisé comme identifiant de connexion.</div>
-                        </div>
+                <div class="form-group">
+                    <label for="firstname" class="form-label">Prénom</label>
+                    <input type="text" class="form-control" id="firstname" name="firstname" required>
+                </div>
 
-                        <div style="margin-bottom: 1rem;">
-                            <label for="firstname" class="form-label">Prénom</label>
-                            <input type="text" class="form-control" id="firstname" name="firstname" required>
-                        </div>
-
-                        <div style="margin-bottom: 1rem;">
-                            <label for="lastname" class="form-label">Nom</label>
-                            <input type="text" class="form-control" id="lastname" name="lastname" required>
-                        </div>
-
-                        <div style="margin-bottom: 1rem;">
-                            <label for="password" class="form-label">Mot de passe</label>
-                            <div style="position: relative;">
-                                <input type="password" class="form-control" id="password" name="password" required minlength="10">
-                                <button type="button"
-                                        class="btn btn-sm" style="position: absolute; right: 0; margin-right: 0.5rem;"
-                                        style="border: none; background: none; z-index: 10;"
-                                        onclick="togglePasswordVisibility('password', this)">
-                                    <i data-feather="eye" width="20"></i>
-                                </button>
-                            </div>
-                            <div class="form-text">
-                                Le mot de passe doit contenir au minimum 10 caractères avec au moins :
-                                <ul style="margin-bottom: 0; margin-top: 0.25rem;">
-                                    <li>Une majuscule</li>
-                                    <li>Une minuscule</li>
-                                    <li>Un chiffre</li>
-                                    <li>Un caractère spécial</li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="alert alert-info">
-                            <strong>Important :</strong> Un email sera automatiquement envoyé à l'employé pour l'informer
-                            de la création de son compte, mais sans communiquer le mot de passe. Vous devrez le lui transmettre
-                            séparément.
-                        </div>
-
-                        <div style="display: flex; justify-content: space-between;">
-                            <a href="{{ path('admin_users_index') }}" class="btn btn-secondary">Annuler</a>
-                            <button type="submit" class="btn btn-primary">Créer le compte employé</button>
-                        </div>
-                    </form>
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label for="lastname" class="form-label">Nom</label>
+                    <input type="text" class="form-control" id="lastname" name="lastname" required>
                 </div>
             </div>
         </div>
-    </div>
+
+        <div class="form-section">
+            <div class="section-header">
+                <span data-icon="lock" data-icon-width="20" data-icon-height="20" style="color: var(--gold);"></span>
+                <h3 class="section-title">Sécurité</h3>
+            </div>
+            <div class="section-body">
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label for="password" class="form-label">Mot de passe</label>
+                    <div class="password-wrapper">
+                        <input type="password" class="form-control" id="password" name="password" required minlength="10" style="padding-right: 3rem;">
+                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility('password', this)">
+                            <span data-icon="eye" data-icon-width="20" data-icon-height="20"></span>
+                        </button>
+                    </div>
+                    <span class="form-text">
+                        Le mot de passe doit contenir au minimum 10 caractères avec au moins :
+                        <ul>
+                            <li>Une majuscule</li>
+                            <li>Une minuscule</li>
+                            <li>Un chiffre</li>
+                            <li>Un caractère spécial</li>
+                        </ul>
+                    </span>
+                </div>
+
+                <div class="alert-info-custom">
+                    <span data-icon="info" data-icon-width="20" data-icon-height="20" style="color: #004085; flex-shrink: 0;"></span>
+                    <div>
+                        <strong>Important :</strong> Un email sera automatiquement envoyé à l'employé pour l'informer
+                        de la création de son compte, mais sans communiquer le mot de passe. Vous devrez le lui transmettre
+                        séparément.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <a href="{{ path('admin_users_index') }}" class="btn-cancel">
+                <span data-icon="x" data-icon-width="16" data-icon-height="16"></span>
+                Annuler
+            </a>
+            <button type="submit" class="btn-submit">
+                <span data-icon="user-check" data-icon-width="16" data-icon-height="16"></span>
+                Créer le compte employé
+            </button>
+        </div>
+    </form>
 </div>
 
 <script>
 function togglePasswordVisibility(inputId, button) {
     const input = document.getElementById(inputId);
-    const icon = button.querySelector('i');
+    const icon = button.querySelector('span');
 
     if (input.type === 'password') {
         input.type = 'text';
-        icon.setAttribute('data-feather', 'eye-off');
+        icon.setAttribute('data-icon', 'eye-off');
     } else {
         input.type = 'password';
-        icon.setAttribute('data-feather', 'eye');
-    }
-
-    // Réinitialiser les icônes Feather
-    if (typeof feather !== 'undefined') {
-        feather.replace();
+        icon.setAttribute('data-icon', 'eye');
     }
 }
 

@@ -1,7 +1,18 @@
-{# Composant réutilisable pour afficher un badge de statut de commande #}
-{% set badgeSize = large|default(false) ? 'font-size: 1.1rem; padding: 8px 12px;' : '' %}
+{# Composant réutilisable pour afficher un badge de statut de commande - Figma Design #}
+{% set statusColors = {
+    'pending': '#FF8C00',
+    'validated': '#FFD700',
+    'preparing': '#8B0000',
+    'ready': '#228B22',
+    'delivering': '#4682B4',
+    'delivered': '#32CD32',
+    'waiting_material_return': '#FFA500',
+    'completed': '#2E8B57',
+    'cancelled': '#DC143C'
+} %}
 
-<span style="{{ badgeSize }}">
-    <i data-feather="{{ status.icon }}" style="width: {{ large|default(false) ? '18' : '14' }}px; height: {{ large|default(false) ? '18' : '14' }}px;"></i>
+{% set bgColor = statusColors[status.value] ?? '#6c757d' %}
+
+<span style="padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.875rem; color: white; background-color: {{ bgColor }}; display: inline-block;">
     {{ status.label }}
 </span>
