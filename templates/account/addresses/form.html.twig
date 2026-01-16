@@ -1,134 +1,227 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ isEdit ? 'Modifier' : 'Nouvelle' }} adresse - Vite & Gourmand{% endblock %}
+{% block title %}{{ isEdit ? 'Modifier' : 'Nouvelle' }} adresse{% endblock %}
 
 {% block body %}
+{# ========================================
+   HEADER SECTION - Figma Design
+   ======================================== #}
+<section style="background-color: var(--beige); padding: 2rem 0 3rem;">
+    <div style="max-width: 80rem; margin: 0 auto; padding: 0 1rem;">
 
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            {# En-tête #}
-            <div class="mb-4">
-                <a href="{{ path('app_account_addresses') }}" class="text-decoration-none text-muted mb-2 d-inline-block">
-                    <i data-feather="arrow-left" width="16"></i> Retour à mes adresses
-                </a>
-                <h1 class="h2 fw-bold mb-1" style="color: var(--primary);">
-                    <i data-feather="{% if isEdit %}edit-2{% else %}plus{% endif %}" width="32" class="me-2"></i>
+        {# Fil d'ariane #}
+        <nav aria-label="Fil d'ariane" style="margin-bottom: 1.5rem;">
+            <ol style="display: flex; align-items: center; gap: 0.5rem; list-style: none; padding: 0; margin: 0; font-size: 0.875rem;">
+                <li>
+                    <a href="{{ path('app_home') }}" style="color: var(--dark-text); text-decoration: none; transition: color var(--transition-base);"
+                       onmouseover="this.style.color='var(--bordeaux)'"
+                       onmouseout="this.style.color='var(--dark-text)'">
+                        Accueil
+                    </a>
+                </li>
+                <li style="color: var(--dark-text); opacity: 0.5;">
+                    <span data-icon="chevron-right" data-icon-width="16" data-icon-height="16"></span>
+                </li>
+                <li>
+                    <a href="{{ path('app_account_addresses') }}" style="color: var(--dark-text); text-decoration: none; transition: color var(--transition-base);"
+                       onmouseover="this.style.color='var(--bordeaux)'"
+                       onmouseout="this.style.color='var(--dark-text)'">
+                        Mes adresses
+                    </a>
+                </li>
+                <li style="color: var(--dark-text); opacity: 0.5;">
+                    <span data-icon="chevron-right" data-icon-width="16" data-icon-height="16"></span>
+                </li>
+                <li style="color: var(--bordeaux); font-weight: 600;">
                     {{ isEdit ? 'Modifier l\'adresse' : 'Nouvelle adresse' }}
-                </h1>
-                <p class="text-muted mb-0">
-                    {% if isEdit %}
-                        Modifiez les informations de votre adresse
-                    {% else %}
-                        Ajoutez une nouvelle adresse de livraison
-                    {% endif %}
-                </p>
-            </div>
+                </li>
+            </ol>
+        </nav>
 
-            {# Formulaire #}
-            <div class="account-card">
-                <div class="card-body">
-                    {{ form_start(form) }}
+        {# Titre #}
+        <div style="margin-bottom: 2rem;">
+            <h1 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 2.25rem; margin-bottom: 0.5rem; font-weight: 400;">
+                {% if isEdit %}
+                    <span data-icon="edit-2" data-icon-width="32" data-icon-height="32" style="vertical-align: middle; margin-right: 0.5rem;"></span>
+                    Modifier l'adresse
+                {% else %}
+                    <span data-icon="plus" data-icon-width="32" data-icon-height="32" style="vertical-align: middle; margin-right: 0.5rem;"></span>
+                    Nouvelle adresse
+                {% endif %}
+            </h1>
+            <div style="width: 5rem; height: 4px; background-color: var(--gold); border-radius: var(--radius-sm); margin-bottom: 0.75rem;"></div>
+            <p style="color: var(--dark-text); opacity: 0.8; margin: 0;">
+                {% if isEdit %}
+                    Modifiez les informations de votre adresse
+                {% else %}
+                    Ajoutez une nouvelle adresse de livraison
+                {% endif %}
+            </p>
+        </div>
 
-                    <div class="row g-3">
-                        {# Label (optionnel) #}
-                        <div class="col-12">
-                            <div class="mb-3">
-                                {{ form_label(form.label, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
-                                {{ form_widget(form.label) }}
-                                {{ form_help(form.label) }}
-                                {{ form_errors(form.label) }}
-                            </div>
-                        </div>
+        {# Formulaire #}
+        <div style="max-width: 50rem; margin: 0 auto;">
+            <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 2rem;">
 
-                        {# Adresse #}
-                        <div class="col-12">
-                            <div class="mb-3">
-                                {{ form_label(form.street, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
-                                <span class="text-danger">*</span>
-                                {{ form_widget(form.street) }}
-                                {{ form_errors(form.street) }}
-                            </div>
-                        </div>
+                {{ form_start(form) }}
 
-                        {# Code postal et Ville #}
-                        <div class="col-md-4">
-                            <div class="mb-3">
-                                {{ form_label(form.postalCode, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
-                                <span class="text-danger">*</span>
-                                {{ form_widget(form.postalCode) }}
-                                {{ form_errors(form.postalCode) }}
-                            </div>
-                        </div>
-
-                        <div class="col-md-8">
-                            <div class="mb-3">
-                                {{ form_label(form.city, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
-                                <span class="text-danger">*</span>
-                                {{ form_widget(form.city) }}
-                                {{ form_errors(form.city) }}
-                            </div>
-                        </div>
-
-                        {# Téléphone #}
-                        <div class="col-12">
-                            <div class="mb-3">
-                                {{ form_label(form.phone, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
-                                <span class="text-danger">*</span>
-                                {{ form_widget(form.phone) }}
-                                {{ form_help(form.phone) }}
-                                {{ form_errors(form.phone) }}
-                            </div>
-                        </div>
-
-                        {# Adresse par défaut #}
-                        <div class="col-12">
-                            <div class="form-check mb-3">
-                                {{ form_widget(form.isDefault, {'attr': {'class': 'form-check-input'}}) }}
-                                {{ form_label(form.isDefault, null, {'label_attr': {'class': 'form-check-label'}}) }}
-                                <div class="form-text">{{ form_help(form.isDefault) }}</div>
-                                {{ form_errors(form.isDefault) }}
-                            </div>
-                        </div>
-                    </div>
-
-                    {# Info Bordeaux #}
-                    <div class="alert alert-info d-flex align-items-start" role="alert">
-                        <i data-feather="info" width="20" class="me-2 mt-1"></i>
-                        <div>
-                            <strong>Frais de livraison :</strong>
-                            <ul class="mb-0 mt-2">
-                                <li>Bordeaux : 5€</li>
-                                <li>Hors Bordeaux : 5€ + 0,59€/km parcouru</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    {# Boutons d'action #}
-                    <div class="d-flex justify-content-between align-items-center mt-4">
-                        <a href="{{ path('app_account_addresses') }}" class="btn btn-outline-secondary">
-                            <i data-feather="x" width="18" class="me-2"></i>
-                            Annuler
-                        </a>
-                        <button type="submit" class="btn btn-primary">
-                            <i data-feather="{% if isEdit %}save{% else %}plus{% endif %}" width="18" class="me-2"></i>
-                            {{ isEdit ? 'Enregistrer les modifications' : 'Ajouter l\'adresse' }}
-                        </button>
-                    </div>
-
-                    {{ form_end(form) }}
+                {# Label (optionnel) #}
+                <div style="margin-bottom: 1.5rem;">
+                    {{ form_label(form.label, null, {
+                        'label_attr': {
+                            'style': 'display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark-text); font-size: 0.875rem;'
+                        }
+                    }) }}
+                    {{ form_widget(form.label, {
+                        'attr': {
+                            'style': 'width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 1rem;',
+                            'placeholder': 'Ex: Maison, Travail, Domicile...',
+                            'onfocus': "this.style.borderColor='var(--gold)'; this.style.boxShadow='0 0 0 3px rgba(212, 175, 55, 0.1)'",
+                            'onblur': "this.style.borderColor='var(--bordeaux)'; this.style.boxShadow='none'"
+                        }
+                    }) }}
+                    <small style="color: var(--dark-text); opacity: 0.7; font-size: 0.875rem;">{{ form_help(form.label) }}</small>
+                    {{ form_errors(form.label) }}
                 </div>
-            </div>
 
-            {# Note sur les champs obligatoires #}
-            <div class="mt-3">
-                <small class="text-muted">
-                    <span class="text-danger">*</span> Champs obligatoires
-                </small>
+                {# Adresse #}
+                <div style="margin-bottom: 1.5rem;">
+                    {{ form_label(form.street, null, {
+                        'label_attr': {
+                            'style': 'display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark-text); font-size: 0.875rem;'
+                        }
+                    }) }}
+                    <span style="color: #dc3545;">*</span>
+                    {{ form_widget(form.street, {
+                        'attr': {
+                            'style': 'width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 1rem;',
+                            'placeholder': '25 Rue des Chartrons',
+                            'onfocus': "this.style.borderColor='var(--gold)'; this.style.boxShadow='0 0 0 3px rgba(212, 175, 55, 0.1)'",
+                            'onblur': "this.style.borderColor='var(--bordeaux)'; this.style.boxShadow='none'"
+                        }
+                    }) }}
+                    {{ form_errors(form.street) }}
+                </div>
+
+                {# Code postal et Ville #}
+                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                    <div>
+                        {{ form_label(form.postalCode, null, {
+                            'label_attr': {
+                                'style': 'display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark-text); font-size: 0.875rem;'
+                            }
+                        }) }}
+                        <span style="color: #dc3545;">*</span>
+                        {{ form_widget(form.postalCode, {
+                            'attr': {
+                                'style': 'width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 1rem;',
+                                'placeholder': '33000',
+                                'onfocus': "this.style.borderColor='var(--gold)'; this.style.boxShadow='0 0 0 3px rgba(212, 175, 55, 0.1)'",
+                                'onblur': "this.style.borderColor='var(--bordeaux)'; this.style.boxShadow='none'"
+                            }
+                        }) }}
+                        {{ form_errors(form.postalCode) }}
+                    </div>
+
+                    <div>
+                        {{ form_label(form.city, null, {
+                            'label_attr': {
+                                'style': 'display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark-text); font-size: 0.875rem;'
+                            }
+                        }) }}
+                        <span style="color: #dc3545;">*</span>
+                        {{ form_widget(form.city, {
+                            'attr': {
+                                'style': 'width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 1rem;',
+                                'placeholder': 'Bordeaux',
+                                'onfocus': "this.style.borderColor='var(--gold)'; this.style.boxShadow='0 0 0 3px rgba(212, 175, 55, 0.1)'",
+                                'onblur': "this.style.borderColor='var(--bordeaux)'; this.style.boxShadow='none'"
+                            }
+                        }) }}
+                        {{ form_errors(form.city) }}
+                    </div>
+                </div>
+
+                {# Téléphone #}
+                <div style="margin-bottom: 1.5rem;">
+                    {{ form_label(form.phone, null, {
+                        'label_attr': {
+                            'style': 'display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark-text); font-size: 0.875rem;'
+                        }
+                    }) }}
+                    <span style="color: #dc3545;">*</span>
+                    {{ form_widget(form.phone, {
+                        'attr': {
+                            'style': 'width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 1rem;',
+                            'placeholder': '05 56 12 34 56',
+                            'onfocus': "this.style.borderColor='var(--gold)'; this.style.boxShadow='0 0 0 3px rgba(212, 175, 55, 0.1)'",
+                            'onblur': "this.style.borderColor='var(--bordeaux)'; this.style.boxShadow='none'"
+                        }
+                    }) }}
+                    <small style="color: var(--dark-text); opacity: 0.7; font-size: 0.875rem;">{{ form_help(form.phone) }}</small>
+                    {{ form_errors(form.phone) }}
+                </div>
+
+                {# Adresse par défaut #}
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: var(--beige); border-radius: var(--radius-sm); cursor: pointer; transition: background-color var(--transition-base);"
+                           onmouseover="this.style.backgroundColor='#f0ead2'"
+                           onmouseout="this.style.backgroundColor='var(--beige)'">
+                        {{ form_widget(form.isDefault, {
+                            'attr': {
+                                'style': 'width: 1.25rem; height: 1.25rem; cursor: pointer;'
+                            }
+                        }) }}
+                        <div style="flex: 1;">
+                            <span style="font-weight: 600; color: var(--dark-text);">{{ form.isDefault.vars.label }}</span>
+                            <p style="font-size: 0.875rem; color: var(--dark-text); opacity: 0.7; margin: 0.25rem 0 0;">
+                                {{ form_help(form.isDefault) }}
+                            </p>
+                        </div>
+                    </label>
+                    {{ form_errors(form.isDefault) }}
+                </div>
+
+                {# Info Bordeaux #}
+                <div style="background: #e7f1ff; border-left: 4px solid #004085; padding: 1rem 1.5rem; border-radius: var(--radius-sm); margin-bottom: 2rem; display: flex; align-items: flex-start; gap: 0.75rem;">
+                    <span data-icon="info" data-icon-width="20" data-icon-height="20" style="color: #004085; flex-shrink: 0; margin-top: 2px;"></span>
+                    <div style="color: #004085;">
+                        <p style="font-weight: 600; margin: 0 0 0.5rem;">Frais de livraison</p>
+                        <ul style="margin: 0; padding-left: 1.25rem; font-size: 0.875rem;">
+                            <li>Bordeaux : 5€</li>
+                            <li>Hors Bordeaux : 5€ + 0,59€/km parcouru</li>
+                        </ul>
+                    </div>
+                </div>
+
+                {# Boutons d'action #}
+                <div style="display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;">
+                    <a href="{{ path('app_account_addresses') }}" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border: 2px solid var(--bordeaux); color: var(--bordeaux); background: white; border-radius: var(--radius-sm); text-decoration: none; font-weight: 600; transition: background-color var(--transition-base), color var(--transition-base);"
+                       onmouseover="this.style.backgroundColor='var(--bordeaux)'; this.style.color='white'"
+                       onmouseout="this.style.backgroundColor='white'; this.style.color='var(--bordeaux)'">
+                        <span data-icon="x" data-icon-width="18" data-icon-height="18"></span>
+                        Annuler
+                    </a>
+                    <button type="submit" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; background: var(--bordeaux); color: white; border: none; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; transition: background-color var(--transition-base);"
+                            onmouseover="this.style.backgroundColor='#8B0000'"
+                            onmouseout="this.style.backgroundColor='var(--bordeaux)'">
+                        <span data-icon="{% if isEdit %}save{% else %}plus{% endif %}" data-icon-width="18" data-icon-height="18"></span>
+                        {{ isEdit ? 'Enregistrer les modifications' : 'Ajouter l\'adresse' }}
+                    </button>
+                </div>
+
+                {{ form_end(form) }}
+
+                {# Note sur les champs obligatoires #}
+                <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--beige);">
+                    <small style="color: var(--dark-text); opacity: 0.7;">
+                        <span style="color: #dc3545;">*</span> Champs obligatoires
+                    </small>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</section>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -152,6 +245,7 @@ document.addEventListener('DOMContentLoaded', function() {
         select.name = 'address[city]';
         select.className = cityInput.className;
         select.required = cityInput.required;
+        select.style.cssText = cityInput.style.cssText;
 
         // Ajouter une option par défaut
         const defaultOption = document.createElement('option');
@@ -173,14 +267,24 @@ document.addEventListener('DOMContentLoaded', function() {
             select.appendChild(option);
         });
 
+        // Ajouter les événements focus/blur pour le style
+        select.addEventListener('focus', function() {
+            this.style.borderColor = 'var(--gold)';
+            this.style.boxShadow = '0 0 0 3px rgba(212, 175, 55, 0.1)';
+        });
+        select.addEventListener('blur', function() {
+            this.style.borderColor = 'var(--bordeaux)';
+            this.style.boxShadow = 'none';
+        });
+
         // Remplacer l'input par le select
         cityInput.replaceWith(select);
         citySelectElement = select;
 
         // Animer pour indiquer le changement
-        select.classList.add('border-success');
+        select.style.borderColor = '#28a745';
         setTimeout(() => {
-            select.classList.remove('border-success');
+            select.style.borderColor = 'var(--bordeaux)';
         }, 2000);
     }
 
@@ -192,10 +296,21 @@ document.addEventListener('DOMContentLoaded', function() {
         input.type = 'text';
         input.id = 'address_city';
         input.name = 'address[city]';
-        input.className = citySelectElement.className.replace('border-success', '');
+        input.className = citySelectElement.className;
         input.required = citySelectElement.required;
         input.placeholder = 'Bordeaux';
         input.value = citySelectElement.value || originalCityValue;
+        input.style.cssText = citySelectElement.style.cssText;
+
+        // Ajouter les événements focus/blur pour le style
+        input.addEventListener('focus', function() {
+            this.style.borderColor = 'var(--gold)';
+            this.style.boxShadow = '0 0 0 3px rgba(212, 175, 55, 0.1)';
+        });
+        input.addEventListener('blur', function() {
+            this.style.borderColor = 'var(--bordeaux)';
+            this.style.boxShadow = 'none';
+        });
 
         citySelectElement.replaceWith(input);
         citySelectElement = null;

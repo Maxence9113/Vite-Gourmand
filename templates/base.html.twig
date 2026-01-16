@@ -1,9 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html class="fonts-loading">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+
+        {# Preload des polices Google Fonts critiques #}
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Open+Sans:wght@300;400;500;600;700&display=swap">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Open+Sans:wght@300;400;500;600;700&display=swap" media="print" onload="this.media='all'; document.documentElement.classList.remove('fonts-loading'); document.documentElement.classList.add('fonts-loaded');">
+        <noscript>
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Open+Sans:wght@300;400;500;600;700&display=swap">
+        </noscript>
+
+        {# CSS Critique inline pour éviter le FOUC #}
+        <style>
+            {{ source('styles/critical.css')|raw }}
+        </style>
+
+        {# Preload du CSS principal (non-critique) #}
+        <link rel="preload" as="style" href="{{ asset('styles/app.css') }}">
 
         {% block stylesheets %}
         {% endblock %}
@@ -11,17 +29,6 @@
     </head>
     <body>
         {% include "_partials/_navbar.html.twig" %}
-
-        <div class="container">
-            {# read and display all flash messages #}
-            {% for label, messages in app.flashes %}
-                {% for message in messages %}
-                    <div class="alert mt-2 alert-{{ label }}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endfor %}
-        </div>
 
         <main>
             {% block body %}{% endblock %}

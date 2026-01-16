@@ -4,237 +4,590 @@
 {% block page_title %}Statistiques{% endblock %}
 
 {% block content %}
-<div class="container-fluid mt-4">
-    <div class="row mb-4">
-        <div class="col-12">
-            <h1 class="mb-0">Statistiques des commandes</h1>
-            <p class="text-muted">Analyse des performances par thème et par menu</p>
-        </div>
+<style>
+    .stats-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+    }
+
+    .stats-header h1 {
+        font-family: var(--font-heading);
+        color: var(--bordeaux);
+        font-size: 2.5rem;
+        font-weight: 400;
+        margin: 0;
+    }
+
+    .stats-description {
+        font-size: 0.95rem;
+        color: #95a5a6;
+        margin-top: 0.5rem;
+    }
+
+    /* KPI Cards */
+    .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .kpi-card {
+        background: white;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-md);
+        padding: 1.5rem;
+        text-align: center;
+        border-top: 4px solid;
+        transition: all var(--transition-base);
+    }
+
+    .kpi-card:hover {
+        box-shadow: var(--shadow-lg);
+        transform: translateY(-2px);
+    }
+
+    .kpi-card.bordeaux { border-top-color: var(--bordeaux); }
+    .kpi-card.green { border-top-color: var(--green); }
+    .kpi-card.blue { border-top-color: #3498db; }
+    .kpi-card.gold { border-top-color: var(--gold); }
+
+    .kpi-label {
+        font-size: 0.875rem;
+        color: #95a5a6;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.75rem;
+        font-weight: 600;
+    }
+
+    .kpi-value {
+        font-family: var(--font-heading);
+        font-size: 2.25rem;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .kpi-card.bordeaux .kpi-value { color: var(--bordeaux); }
+    .kpi-card.green .kpi-value { color: var(--green); }
+    .kpi-card.blue .kpi-value { color: #3498db; }
+    .kpi-card.gold .kpi-value { color: var(--gold); }
+
+    .kpi-subtext {
+        font-size: 0.8rem;
+        color: #95a5a6;
+        margin-top: 0.5rem;
+    }
+
+    /* Filter Card */
+    .filter-card {
+        background: white;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-md);
+        margin-bottom: 2rem;
+        overflow: hidden;
+    }
+
+    .filter-header {
+        background: var(--beige);
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .filter-header h3 {
+        font-family: var(--font-heading);
+        font-size: 1.25rem;
+        font-weight: 400;
+        color: var(--dark-text);
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .filter-body {
+        padding: 1.5rem;
+    }
+
+    .filter-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .filter-group {
+        flex: 1;
+        min-width: 200px;
+    }
+
+    .filter-label {
+        font-weight: 600;
+        color: var(--dark-text);
+        margin-bottom: 0.5rem;
+        display: block;
+        font-size: 0.875rem;
+    }
+
+    .form-select, .form-control {
+        width: 100%;
+        border: 1px solid var(--bordeaux);
+        border-radius: var(--radius-sm);
+        padding: 0.75rem;
+        font-size: 0.95rem;
+        font-family: var(--font-body);
+        transition: all var(--transition-base);
+    }
+
+    .form-select:focus, .form-control:focus {
+        border-color: var(--bordeaux);
+        box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.1);
+        outline: none;
+    }
+
+    /* View Toggle */
+    .view-toggle {
+        display: flex;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .view-toggle label {
+        font-weight: 600;
+        color: var(--dark-text);
+        margin-bottom: 0.5rem;
+        display: block;
+        font-size: 0.875rem;
+    }
+
+    .btn-group {
+        display: inline-flex;
+        gap: 0;
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        border: 2px solid var(--bordeaux);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .btn-radio {
+        display: none;
+    }
+
+    .btn-radio-label {
+        padding: 0.875rem 2rem;
+        background: white;
+        color: var(--bordeaux);
+        cursor: pointer;
+        transition: all var(--transition-base);
+        border-right: 2px solid var(--bordeaux);
+        font-weight: 600;
+        text-align: center;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        min-width: 150px;
+        justify-content: center;
+    }
+
+    .btn-radio-label:last-of-type {
+        border-right: none;
+    }
+
+    .btn-radio:checked + .btn-radio-label {
+        background: var(--bordeaux);
+        color: white;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-radio-label:hover:not(:has(+ input:checked)) {
+        background: linear-gradient(to bottom, #fff5f5, white);
+    }
+
+    .btn-radio:checked + .btn-radio-label:hover {
+        background: linear-gradient(to bottom, #7a0000, var(--bordeaux));
+    }
+
+    /* Buttons */
+    .btn-primary, .btn-secondary {
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--radius-lg);
+        font-weight: 600;
+        cursor: pointer;
+        transition: all var(--transition-base);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+        border: none;
+    }
+
+    .btn-primary {
+        background: var(--bordeaux);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        opacity: 0.9;
+        box-shadow: var(--shadow-md);
+    }
+
+    .btn-secondary {
+        background: transparent;
+        color: #95a5a6;
+        border: 2px solid #95a5a6;
+    }
+
+    .btn-secondary:hover {
+        background: #95a5a6;
+        color: white;
+    }
+
+    /* Chart and Table Cards */
+    .content-card {
+        background: white;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-md);
+        margin-bottom: 2rem;
+        overflow: hidden;
+    }
+
+    .content-header {
+        background: var(--beige);
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .content-header h3 {
+        font-family: var(--font-heading);
+        font-size: 1.25rem;
+        font-weight: 400;
+        color: var(--dark-text);
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .content-body {
+        padding: 1.5rem;
+    }
+
+    .chart-container {
+        height: 400px;
+        position: relative;
+    }
+
+    /* Table Styles */
+    .stats-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .stats-table thead {
+        background: var(--beige);
+    }
+
+    .stats-table th {
+        padding: 1rem 1.5rem;
+        text-align: left;
+        color: var(--dark-text);
+        font-weight: 600;
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .stats-table tbody tr {
+        border-bottom: 1px solid var(--beige);
+        transition: background var(--transition-base);
+    }
+
+    .stats-table tbody tr:hover {
+        background: #f8f9fa;
+    }
+
+    .stats-table td {
+        padding: 1rem 1.5rem;
+        color: var(--dark-text);
+    }
+
+    .stats-table tfoot {
+        background: #f8f9fa;
+        font-weight: 600;
+        border-top: 2px solid var(--bordeaux);
+    }
+
+    .stats-table tfoot td {
+        padding: 1rem 1.5rem;
+    }
+
+    .theme-badge {
+        display: inline-block;
+        padding: 0.35rem 0.85rem;
+        border-radius: var(--radius-lg);
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: white;
+    }
+
+    .count-badge {
+        background: var(--bordeaux);
+        color: white;
+        padding: 0.35rem 0.85rem;
+        border-radius: 9999px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .alert-info-custom {
+        background: #e7f1ff;
+        border: 2px solid #004085;
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        color: #004085;
+    }
+
+    @media (max-width: 1024px) {
+        .kpi-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 640px) {
+        .kpi-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="stats-header">
+    <div>
+        <h1>
+            <span data-icon="trending-up" data-icon-width="32" data-icon-height="32" style="display: inline-block; vertical-align: middle;"></span>
+            Statistiques des commandes
+        </h1>
+        <p class="stats-description">Analyse des performances par thème et par menu</p>
     </div>
+</div>
 
-    {# KPIs - Indicateurs clés #}
-    <div class="row mb-4">
-        <div class="col-md-3">
-            <div class="card text-center border-primary">
-                <div class="card-body">
-                    <h6 class="card-subtitle mb-2 text-muted">Total commandes</h6>
-                    <h2 class="card-title mb-0 text-primary">{{ globalStats.totalOrders }}</h2>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card text-center border-success">
-                <div class="card-body">
-                    <h6 class="card-subtitle mb-2 text-muted">Chiffre d'affaires</h6>
-                    <h2 class="card-title mb-0 text-success">{{ globalStats.totalRevenue|number_format(0, ',', ' ') }} €</h2>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card text-center border-info">
-                <div class="card-body">
-                    <h6 class="card-subtitle mb-2 text-muted">Moy. personnes</h6>
-                    <h2 class="card-title mb-0 text-info">{{ globalStats.avgPeoplePerOrder|number_format(1, ',', ' ') }}</h2>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card text-center border-warning">
-                <div class="card-body">
-                    <h6 class="card-subtitle mb-2 text-muted">
-                        {% if viewType == 'theme' %}Top thème{% else %}Top menu{% endif %}
-                    </h6>
-                    <h6 class="card-title mb-0 text-warning">
-                        {% if viewType == 'theme' and topTheme %}
-                            {{ topTheme.themeName }}
-                            <small class="text-muted d-block">({{ topTheme.count }} cmd)</small>
-                        {% elseif viewType == 'menu' and topMenu %}
-                            {{ topMenu.menuName }}
-                            <small class="text-muted d-block">({{ topMenu.count }} cmd)</small>
-                        {% else %}
-                            -
-                        {% endif %}
-                    </h6>
-                </div>
-            </div>
-        </div>
+{# KPI Cards #}
+<div class="kpi-grid">
+    <div class="kpi-card bordeaux">
+        <div class="kpi-label">Total commandes</div>
+        <h2 class="kpi-value">{{ globalStats.totalOrders }}</h2>
     </div>
-
-    {# Filtres #}
-    <div class="card mb-4">
-        <div class="card-header">
-            <h5 class="mb-0">Filtres et options d'affichage</h5>
-        </div>
-        <div class="card-body">
-            <form method="get" action="{{ path('app_admin_order_stats') }}" id="filterForm">
-                {# Boutons de sélection de vue #}
-                <div class="row mb-3">
-                    <div class="col-12">
-                        <label class="form-label fw-bold">Vue</label>
-                        <div class="btn-group w-100" role="group">
-                            <input type="radio" class="btn-check" name="view" value="theme" id="viewTheme"
-                                   {{ viewType == 'theme' ? 'checked' : '' }} onchange="this.form.submit()">
-                            <label class="btn btn-outline-primary" for="viewTheme">Par thème</label>
-
-                            <input type="radio" class="btn-check" name="view" value="menu" id="viewMenu"
-                                   {{ viewType == 'menu' ? 'checked' : '' }} onchange="this.form.submit()">
-                            <label class="btn btn-outline-primary" for="viewMenu">Par menu</label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    {# Filtre par période #}
-                    <div class="col-md-4 mb-3">
-                        <label for="period" class="form-label fw-bold">Période</label>
-                        <select name="period" id="period" class="form-select" onchange="toggleCustomDates()">
-                            <option value="all" {{ currentPeriod == 'all' ? 'selected' : '' }}>Toutes les données</option>
-                            <option value="week" {{ currentPeriod == 'week' ? 'selected' : '' }}>7 derniers jours</option>
-                            <option value="month" {{ currentPeriod == 'month' ? 'selected' : '' }}>30 derniers jours</option>
-                            <option value="3months" {{ currentPeriod == '3months' ? 'selected' : '' }}>3 derniers mois</option>
-                            <option value="6months" {{ currentPeriod == '6months' ? 'selected' : '' }}>6 derniers mois</option>
-                            <option value="custom" {{ currentPeriod == 'custom' ? 'selected' : '' }}>Personnalisé</option>
-                        </select>
-                    </div>
-
-                    {# Dates personnalisées (visibles seulement si "custom" est sélectionné) #}
-                    <div class="col-md-3 mb-3" id="customDatesStart" style="display: {{ currentPeriod == 'custom' ? 'block' : 'none' }}">
-                        <label for="start_date" class="form-label">Date de début</label>
-                        <input type="date" name="start_date" id="start_date" class="form-control" value="{{ currentStartDate }}">
-                    </div>
-                    <div class="col-md-3 mb-3" id="customDatesEnd" style="display: {{ currentPeriod == 'custom' ? 'block' : 'none' }}">
-                        <label for="end_date" class="form-label">Date de fin</label>
-                        <input type="date" name="end_date" id="end_date" class="form-control" value="{{ currentEndDate }}">
-                    </div>
-
-                    {# Filtre par thème (visible seulement en vue "menu" ou si filtré) #}
-                    <div class="col-md-2 mb-3">
-                        <label for="theme" class="form-label fw-bold">Thème</label>
-                        <select name="theme" id="theme" class="form-select">
-                            <option value="">Tous</option>
-                            {% for themeName in availableThemes %}
-                                <option value="{{ themeName }}" {{ currentTheme == themeName ? 'selected' : '' }}>
-                                    {{ themeName }}
-                                </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-12">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-funnel"></i> Appliquer les filtres
-                        </button>
-                        <a href="{{ path('app_admin_order_stats') }}" class="btn btn-outline-secondary">
-                            <i class="bi bi-arrow-counterclockwise"></i> Réinitialiser
-                        </a>
-                    </div>
-                </div>
-            </form>
-        </div>
+    <div class="kpi-card green">
+        <div class="kpi-label">Chiffre d'affaires</div>
+        <h2 class="kpi-value">{{ globalStats.totalRevenue|number_format(0, ',', ' ') }} €</h2>
     </div>
+    <div class="kpi-card blue">
+        <div class="kpi-label">Moyenne personnes</div>
+        <h2 class="kpi-value">{{ globalStats.avgPeoplePerOrder|number_format(1, ',', ' ') }}</h2>
+    </div>
+    <div class="kpi-card gold">
+        <div class="kpi-label">
+            {% if viewType == 'theme' %}Top thème{% else %}Top menu{% endif %}
+        </div>
+        {% if viewType == 'theme' and topTheme %}
+            <h2 class="kpi-value" style="font-size: 1.5rem;">{{ topTheme.themeName }}</h2>
+            <p class="kpi-subtext">{{ topTheme.count }} commandes</p>
+        {% elseif viewType == 'menu' and topMenu %}
+            <h2 class="kpi-value" style="font-size: 1.5rem;">{{ topMenu.menuName }}</h2>
+            <p class="kpi-subtext">{{ topMenu.count }} commandes</p>
+        {% else %}
+            <h2 class="kpi-value">-</h2>
+        {% endif %}
+    </div>
+</div>
 
-    {# Graphique #}
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">
-                        {% if viewType == 'theme' %}
-                            Nombre de commandes par thème
-                        {% else %}
-                            Nombre de commandes par menu
-                        {% endif %}
-                    </h5>
-                </div>
-                <div class="card-body">
-                    {% if orderCountData is not empty %}
-                        <div style="height: 400px;">
-                            <canvas id="orderCountChart"></canvas>
-                        </div>
-                    {% else %}
-                        <div class="alert alert-info">
-                            <i class="bi bi-info-circle"></i> Aucune donnée à afficher pour les filtres sélectionnés.
-                        </div>
-                    {% endif %}
+{# Filters #}
+<div class="filter-card">
+    <div class="filter-header">
+        <h3>
+            <span data-icon="sliders" data-icon-width="20" data-icon-height="20"></span>
+            Filtres et options d'affichage
+        </h3>
+    </div>
+    <div class="filter-body">
+        <form method="get" action="{{ path('app_admin_order_stats') }}" id="filterForm">
+            {# View Toggle #}
+            <div class="view-toggle">
+                <div style="width: 100%;">
+                    <label class="filter-label">Vue</label>
+                    <div class="btn-group">
+                        <input type="radio" class="btn-radio" name="view" value="theme" id="viewTheme"
+                               {{ viewType == 'theme' ? 'checked' : '' }} onchange="this.form.submit()">
+                        <label class="btn-radio-label" for="viewTheme">
+                            <span data-icon="palette" data-icon-width="16" data-icon-height="16" style="vertical-align: middle;"></span>
+                            Par thème
+                        </label>
+
+                        <input type="radio" class="btn-radio" name="view" value="menu" id="viewMenu"
+                               {{ viewType == 'menu' ? 'checked' : '' }} onchange="this.form.submit()">
+                        <label class="btn-radio-label" for="viewMenu">
+                            <span data-icon="file-text" data-icon-width="16" data-icon-height="16" style="vertical-align: middle;"></span>
+                            Par menu
+                        </label>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    {# Tableau détaillé #}
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">Détail du chiffre d'affaires</h5>
+            {# Filter Row #}
+            <div class="filter-row">
+                {# Period Filter #}
+                <div class="filter-group">
+                    <label for="period" class="filter-label">Période</label>
+                    <select name="period" id="period" class="form-select" onchange="toggleCustomDates()">
+                        <option value="all" {{ currentPeriod == 'all' ? 'selected' : '' }}>Toutes les données</option>
+                        <option value="week" {{ currentPeriod == 'week' ? 'selected' : '' }}>7 derniers jours</option>
+                        <option value="month" {{ currentPeriod == 'month' ? 'selected' : '' }}>30 derniers jours</option>
+                        <option value="3months" {{ currentPeriod == '3months' ? 'selected' : '' }}>3 derniers mois</option>
+                        <option value="6months" {{ currentPeriod == '6months' ? 'selected' : '' }}>6 derniers mois</option>
+                        <option value="custom" {{ currentPeriod == 'custom' ? 'selected' : '' }}>Personnalisé</option>
+                    </select>
                 </div>
-                <div class="card-body">
-                    {% if revenueData is not empty %}
-                        <div class="table-responsive">
-                            <table class="table table-striped table-hover">
-                                <thead class="table-dark">
-                                    <tr>
-                                        <th>#</th>
-                                        <th>
-                                            {% if viewType == 'theme' %}Thème{% else %}Menu{% endif %}
-                                        </th>
-                                        {% if viewType == 'menu' %}
-                                            <th>Thème</th>
-                                        {% endif %}
-                                        <th class="text-center">Nombre de commandes</th>
-                                        <th class="text-end">Chiffre d'affaires</th>
-                                        <th class="text-end">CA moyen / commande</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for key, item in revenueData %}
-                                        {% set orderCount = orderCountData[key] %}
-                                        <tr>
-                                            <td>{{ key + 1 }}</td>
-                                            <td>
-                                                {% if viewType == 'theme' %}
-                                                    <strong>{{ item.themeName }}</strong>
-                                                {% else %}
-                                                    {{ item.menuName }}
-                                                {% endif %}
-                                            </td>
-                                            {% if viewType == 'menu' %}
-                                                <td>
-                                                    <span class="badge" style="background-color: {{ chartBorderColorsArray[key] }}; color: white;">
-                                                        {{ item.themeName }}
-                                                    </span>
-                                                </td>
-                                            {% endif %}
-                                            <td class="text-center">
-                                                <span class="badge bg-primary">{{ orderCount.count }}</span>
-                                            </td>
-                                            <td class="text-end">{{ item.totalRevenue|number_format(2, ',', ' ') }} €</td>
-                                            <td class="text-end text-muted">
-                                                {{ (item.totalRevenue / orderCount.count)|number_format(2, ',', ' ') }} €
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                                <tfoot class="table-secondary">
-                                    <tr class="fw-bold">
-                                        <td colspan="{% if viewType == 'menu' %}3{% else %}2{% endif %}">TOTAL</td>
-                                        <td class="text-center">{{ globalStats.totalOrders }}</td>
-                                        <td class="text-end">{{ globalStats.totalRevenue|number_format(2, ',', ' ') }} €</td>
-                                        <td class="text-end">{{ (globalStats.totalRevenue / globalStats.totalOrders)|number_format(2, ',', ' ') }} €</td>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                    {% else %}
-                        <div class="alert alert-info">
-                            <i class="bi bi-info-circle"></i> Aucune donnée à afficher pour les filtres sélectionnés.
-                        </div>
-                    {% endif %}
+
+                {# Custom Dates #}
+                <div class="filter-group" id="customDatesStart" style="display: {{ currentPeriod == 'custom' ? 'block' : 'none' }}">
+                    <label for="start_date" class="filter-label">Date de début</label>
+                    <input type="date" name="start_date" id="start_date" class="form-control" value="{{ currentStartDate }}">
+                </div>
+                <div class="filter-group" id="customDatesEnd" style="display: {{ currentPeriod == 'custom' ? 'block' : 'none' }}">
+                    <label for="end_date" class="filter-label">Date de fin</label>
+                    <input type="date" name="end_date" id="end_date" class="form-control" value="{{ currentEndDate }}">
+                </div>
+
+                {# Theme Filter #}
+                <div class="filter-group">
+                    <label for="theme" class="filter-label">Thème</label>
+                    <select name="theme" id="theme" class="form-select">
+                        <option value="">Tous</option>
+                        {% for themeName in availableThemes %}
+                            <option value="{{ themeName }}" {{ currentTheme == themeName ? 'selected' : '' }}>
+                                {{ themeName }}
+                            </option>
+                        {% endfor %}
+                    </select>
                 </div>
             </div>
-        </div>
+
+            {# Actions #}
+            <div style="display: flex; gap: 1rem;">
+                <button type="submit" class="btn-primary">
+                    <span data-icon="filter" data-icon-width="16" data-icon-height="16"></span>
+                    Appliquer les filtres
+                </button>
+                <a href="{{ path('app_admin_order_stats') }}" class="btn-secondary">
+                    <span data-icon="rotate-ccw" data-icon-width="16" data-icon-height="16"></span>
+                    Réinitialiser
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+{# Chart #}
+<div class="content-card">
+    <div class="content-header">
+        <h3>
+            <span data-icon="bar-chart-2" data-icon-width="20" data-icon-height="20"></span>
+            {% if viewType == 'theme' %}
+                Nombre de commandes par thème
+            {% else %}
+                Nombre de commandes par menu
+            {% endif %}
+        </h3>
+    </div>
+    <div class="content-body">
+        {% if orderCountData is not empty %}
+            <div class="chart-container">
+                <canvas id="orderCountChart"></canvas>
+            </div>
+        {% else %}
+            <div class="alert-info-custom">
+                <span data-icon="info" data-icon-width="20" data-icon-height="20" style="flex-shrink: 0;"></span>
+                Aucune donnée à afficher pour les filtres sélectionnés.
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{# Detailed Table #}
+<div class="content-card">
+    <div class="content-header">
+        <h3>
+            <span data-icon="table" data-icon-width="20" data-icon-height="20"></span>
+            Détail du chiffre d'affaires
+        </h3>
+    </div>
+    <div class="content-body">
+        {% if revenueData is not empty %}
+            <div style="overflow-x: auto;">
+                <table class="stats-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 5%;">#</th>
+                            <th style="width: {% if viewType == 'menu' %}30{% else %}45{% endif %}%;">
+                                {% if viewType == 'theme' %}Thème{% else %}Menu{% endif %}
+                            </th>
+                            {% if viewType == 'menu' %}
+                                <th style="width: 20%;">Thème</th>
+                            {% endif %}
+                            <th style="width: 15%; text-align: center;">Commandes</th>
+                            <th style="width: 15%; text-align: right;">Chiffre d'affaires</th>
+                            <th style="width: 15%; text-align: right;">CA moyen / cmd</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for key, item in revenueData %}
+                            {% set orderCount = orderCountData[key] %}
+                            <tr>
+                                <td>{{ key + 1 }}</td>
+                                <td>
+                                    {% if viewType == 'theme' %}
+                                        <strong>{{ item.themeName }}</strong>
+                                    {% else %}
+                                        {{ item.menuName }}
+                                    {% endif %}
+                                </td>
+                                {% if viewType == 'menu' %}
+                                    <td>
+                                        <span class="theme-badge" style="background-color: {{ chartBorderColorsArray[key] }};">
+                                            {{ item.themeName }}
+                                        </span>
+                                    </td>
+                                {% endif %}
+                                <td style="text-align: center;">
+                                    <span class="count-badge">{{ orderCount.count }}</span>
+                                </td>
+                                <td style="text-align: right;"><strong>{{ item.totalRevenue|number_format(2, ',', ' ') }} €</strong></td>
+                                <td style="text-align: right; color: #95a5a6;">
+                                    {{ (item.totalRevenue / orderCount.count)|number_format(2, ',', ' ') }} €
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="{% if viewType == 'menu' %}3{% else %}2{% endif %}">TOTAL</td>
+                            <td style="text-align: center;"><span class="count-badge">{{ globalStats.totalOrders }}</span></td>
+                            <td style="text-align: right;"><strong>{{ globalStats.totalRevenue|number_format(2, ',', ' ') }} €</strong></td>
+                            <td style="text-align: right;">{{ (globalStats.totalRevenue / globalStats.totalOrders)|number_format(2, ',', ' ') }} €</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        {% else %}
+            <div class="alert-info-custom">
+                <span data-icon="info" data-icon-width="20" data-icon-height="20" style="flex-shrink: 0;"></span>
+                Aucune donnée à afficher pour les filtres sélectionnés.
+            </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
@@ -272,7 +625,7 @@
         const chartBackgroundColors = {{ chartBackgroundColors|raw }};
         const chartBorderColors = {{ chartBorderColors|raw }};
 
-        // Configuration du graphique
+        // Configuration du graphique (horizontal)
         const ctx = document.getElementById('orderCountChart').getContext('2d');
         const orderCountChart = new Chart(ctx, {
             type: 'bar',
@@ -283,14 +636,16 @@
                     data: chartData,
                     backgroundColor: chartBackgroundColors,
                     borderColor: chartBorderColors,
-                    borderWidth: 2
+                    borderWidth: 2,
+                    borderRadius: 6
                 }]
             },
             options: {
+                indexAxis: 'y', // Horizontal bar chart
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {
-                    y: {
+                    x: {
                         beginAtZero: true,
                         ticks: {
                             stepSize: 1,
@@ -302,10 +657,11 @@
                             color: 'rgba(0, 0, 0, 0.05)'
                         }
                     },
-                    x: {
+                    y: {
                         ticks: {
                             font: {
-                                size: 11
+                                size: 12,
+                                weight: 500
                             }
                         },
                         grid: {
@@ -321,14 +677,15 @@
                         backgroundColor: 'rgba(0, 0, 0, 0.8)',
                         padding: 12,
                         titleFont: {
-                            size: 14
+                            size: 14,
+                            weight: 600
                         },
                         bodyFont: {
                             size: 13
                         },
                         callbacks: {
                             label: function(context) {
-                                return 'Commandes : ' + context.parsed.y;
+                                return 'Commandes : ' + context.parsed.x;
                             }
                         }
                     }

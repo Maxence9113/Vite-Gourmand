@@ -6,8 +6,8 @@
     <title>{% block title %}Administration{% endblock %} - Vite & Gourmand</title>
 
     {% block stylesheets %}
-        {{ importmap('app') }}
         <link rel="stylesheet" href="{{ asset('table-sort.css') }}">
+        <link rel="stylesheet" href="{{ asset('admin-crud.css') }}">
     {% endblock %}
 
     <style>
@@ -18,8 +18,8 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background-color: #f5f5f5;
+            font-family: var(--font-body);
+            background-color: var(--beige);
         }
 
         .admin-container {
@@ -27,151 +27,142 @@
             min-height: 100vh;
         }
 
-        /* Sidebar */
+        /* Sidebar - Figma Design */
         .sidebar {
-            width: 260px;
-            background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
-            color: white;
+            width: 16rem;
+            background: white;
             position: fixed;
             height: 100vh;
             overflow-y: auto;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow-lg);
         }
 
         .sidebar-header {
-            padding: 20px;
-            background: rgba(0,0,0,0.2);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--beige);
         }
 
         .sidebar-header h2 {
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin-bottom: 5px;
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: var(--bordeaux);
+            margin-bottom: 0.5rem;
         }
 
         .sidebar-header p {
-            font-size: 0.85rem;
-            opacity: 0.8;
+            font-size: 0.875rem;
+            color: var(--dark-text);
         }
 
         .sidebar-menu {
-            padding: 20px 0;
+            padding: 1rem;
         }
 
         .menu-section {
-            margin-bottom: 25px;
-        }
-
-        .menu-section-title {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            padding: 0 20px 10px;
-            opacity: 0.6;
-            font-weight: 600;
+            margin-bottom: 0.5rem;
         }
 
         .menu-item {
-            display: block;
-            padding: 12px 20px;
-            color: rgba(255,255,255,0.85);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1rem;
+            color: var(--dark-text);
             text-decoration: none;
-            transition: all 0.2s;
-            border-left: 3px solid transparent;
+            transition: all var(--transition-base);
+            border-radius: var(--radius-lg);
+            margin-bottom: 0.5rem;
         }
 
         .menu-item:hover {
-            background: rgba(255,255,255,0.1);
-            color: white;
-            border-left-color: #3498db;
+            background: #f8f9fa;
+            color: var(--dark-text);
         }
 
         .menu-item.active {
-            background: rgba(255,255,255,0.15);
+            background: var(--bordeaux);
             color: white;
-            border-left-color: #3498db;
-            font-weight: 500;
+            box-shadow: var(--shadow-md);
+        }
+
+        .menu-item-content {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
         }
 
         .menu-item i {
-            width: 20px;
-            margin-right: 10px;
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+
+        .menu-badge {
+            background: white;
+            color: var(--bordeaux);
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .menu-item.active .menu-badge {
+            background: white;
+            color: var(--bordeaux);
+        }
+
+        .menu-item:not(.active) .menu-badge {
+            background: var(--bordeaux);
+            color: white;
+        }
+
+        .menu-divider {
+            margin: 1.5rem 0;
+        }
+
+        .menu-link-home {
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-lg);
+            margin-top: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border: 2px solid var(--gold);
+            color: var(--gold);
+            text-decoration: none;
+            transition: all var(--transition-base);
+        }
+
+        .menu-link-home:hover {
+            box-shadow: var(--shadow-md);
+            color: var(--gold);
         }
 
         /* Main content */
         .main-content {
-            margin-left: 260px;
+            margin-left: 16rem;
             flex: 1;
             min-height: 100vh;
         }
 
-        .topbar {
-            background: white;
-            padding: 15px 30px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .topbar-title h1 {
-            font-size: 1.75rem;
-            color: #2c3e50;
-            font-weight: 600;
-        }
-
-        .topbar-user {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .user-info {
-            text-align: right;
-        }
-
-        .user-info .name {
-            font-weight: 500;
-            color: #2c3e50;
-        }
-
-        .user-info .role {
-            font-size: 0.85rem;
-            color: #7f8c8d;
-        }
-
-        .btn-logout {
-            padding: 8px 16px;
-            background: #e74c3c;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: background 0.2s;
-        }
-
-        .btn-logout:hover {
-            background: #c0392b;
-            color: white;
-        }
-
         .content-wrapper {
-            padding: 30px;
+            padding: 2rem;
         }
 
-        /* Flash messages */
+        /* Flash messages - Figma Style */
         .alert {
-            padding: 12px 20px;
-            margin-bottom: 20px;
-            border-radius: 6px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: var(--radius-sm);
             border-left: 4px solid;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
         }
 
         .alert-success {
             background: #d4edda;
-            border-left-color: #28a745;
+            border-left-color: var(--green);
             color: #155724;
         }
 
@@ -188,20 +179,32 @@
         }
 
         .alert-info {
-            background: #d1ecf1;
-            border-left-color: #17a2b8;
-            color: #0c5460;
+            background: #e7f1ff;
+            border-left-color: #004085;
+            color: #004085;
         }
 
-        /* Badge pour les notifications */
-        .menu-badge {
-            background: #e74c3c;
-            color: white;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            margin-left: auto;
-            float: right;
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .sidebar-menu {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.5rem;
+            }
+
+            .menu-link-home {
+                grid-column: span 2;
+            }
         }
     </style>
 </head>
@@ -215,104 +218,104 @@
             </div>
 
             <nav class="sidebar-menu">
-                <div class="menu-section">
-                    <div class="menu-section-title">Tableau de bord</div>
-                    <a href="{{ path('app_admin_dashboard') }}" class="menu-item {{ app.request.attributes.get('_route') == 'app_admin_dashboard' ? 'active' : '' }}">
-                        <i>📊</i> Dashboard
-                    </a>
-                </div>
+                <a href="{{ path('app_admin_dashboard') }}" class="menu-item {{ app.request.attributes.get('_route') == 'app_admin_dashboard' ? 'active' : '' }}">
+                    <div class="menu-item-content">
+                        <span data-icon="layout-dashboard" data-icon-width="20" data-icon-height="20"></span>
+                        <span>Dashboard</span>
+                    </div>
+                </a>
 
-                <div class="menu-section">
-                    <div class="menu-section-title">Gestion des commandes</div>
-                    <a href="{{ path('app_admin_orders') }}" class="menu-item {{ app.request.attributes.get('_route') starts with 'app_admin_order' ? 'active' : '' }}">
-                        <i>🛒</i> Commandes
-                        {% if stats is defined and stats.pendingOrders is defined and stats.pendingOrders > 0 %}
-                            <span class="menu-badge">{{ stats.pendingOrders }}</span>
-                        {% endif %}
-                    </a>
-                    <a href="{{ path('app_admin_reviews') }}" class="menu-item {{ app.request.attributes.get('_route') == 'app_admin_reviews' ? 'active' : '' }}">
-                        <i>⭐</i> Avis clients
-                    </a>
-                </div>
-
-                <div class="menu-section">
-                    <div class="menu-section-title">Catalogue</div>
-                    <a href="{{ path('app_admin_menus') }}" class="menu-item {{ app.request.attributes.get('_route') starts with 'app_admin_menu' ? 'active' : '' }}">
-                        <i>📋</i> Menus
-                    </a>
-                    <a href="{{ path('app_admin_recipes') }}" class="menu-item {{ app.request.attributes.get('_route') starts with 'app_admin_recipe' ? 'active' : '' }}">
-                        <i>🍳</i> Recettes
-                    </a>
-                    <a href="{{ path('app_admin_themes') }}" class="menu-item {{ app.request.attributes.get('_route') starts with 'app_admin_theme' ? 'active' : '' }}">
-                        <i>🎨</i> Thèmes
-                    </a>
-                    <a href="{{ path('app_admin_categories') }}" class="menu-item {{ app.request.attributes.get('_route') starts with 'app_admin_categor' ? 'active' : '' }}">
-                        <i>📂</i> Catégories
-                    </a>
-                </div>
-
-                <div class="menu-section">
-                    <div class="menu-section-title">Paramètres alimentaires</div>
-                    <a href="{{ path('app_admin_allergens') }}" class="menu-item {{ app.request.attributes.get('_route') starts with 'app_admin_allergen' ? 'active' : '' }}">
-                        <i>⚠️</i> Allergènes
-                    </a>
-                    <a href="{{ path('app_admin_dietetaries') }}" class="menu-item {{ app.request.attributes.get('_route') starts with 'app_admin_dietetar' ? 'active' : '' }}">
-                        <i>🥗</i> Régimes
-                    </a>
-                </div>
-
-                <div class="menu-section">
-                    <div class="menu-section-title">Configuration</div>
-                    <a href="{{ path('app_admin_opening_schedule_index') }}" class="menu-item {{ app.request.attributes.get('_route') starts with 'app_admin_opening' ? 'active' : '' }}">
-                        <i>🕐</i> Horaires
-                    </a>
-                    {% if is_granted('ROLE_EMPLOYEE') %}
-                    <a href="{{ path('admin_users_index') }}" class="menu-item {{ app.request.attributes.get('_route') starts with 'admin_users' ? 'active' : '' }}">
-                        <i>👥</i> Utilisateurs
-                    </a>
+                <a href="{{ path('app_admin_orders') }}" class="menu-item {{ app.request.attributes.get('_route') starts with 'app_admin_orders' ? 'active' : '' }}">
+                    <div class="menu-item-content">
+                        <span data-icon="shopping-cart" data-icon-width="20" data-icon-height="20"></span>
+                        <span>Commandes</span>
+                    </div>
+                    {% if stats is defined and stats.pendingOrders is defined and stats.pendingOrders > 0 %}
+                        <span class="menu-badge">{{ stats.pendingOrders }}</span>
                     {% endif %}
-                </div>
+                </a>
 
-                <div class="menu-section">
-                    <div class="menu-section-title">Statistiques</div>
-                    <a href="{{ path('app_admin_order_stats') }}" class="menu-item {{ app.request.attributes.get('_route') == 'app_admin_order_stats' ? 'active' : '' }}">
-                        <i>📈</i> Statistiques
-                    </a>
-                </div>
+                <a href="{{ path('app_admin_reviews') }}" class="menu-item {{ app.request.attributes.get('_route') == 'app_admin_reviews' ? 'active' : '' }}">
+                    <div class="menu-item-content">
+                        <span data-icon="star" data-icon-width="20" data-icon-height="20"></span>
+                        <span>Avis clients</span>
+                    </div>
+                </a>
 
-                <div class="menu-section">
-                    <a href="{{ path('app_home') }}" class="menu-item">
-                        <i>🏠</i> Retour au site
-                    </a>
-                </div>
+                <a href="{{ path('app_admin_menus') }}" class="menu-item {{ app.request.attributes.get('_route') starts with 'app_admin_menu' ? 'active' : '' }}">
+                    <div class="menu-item-content">
+                        <span data-icon="file-text" data-icon-width="20" data-icon-height="20"></span>
+                        <span>Menus</span>
+                    </div>
+                </a>
+
+                <a href="{{ path('app_admin_recipes') }}" class="menu-item {{ app.request.attributes.get('_route') starts with 'app_admin_recipe' ? 'active' : '' }}">
+                    <div class="menu-item-content">
+                        <span data-icon="utensils-crossed" data-icon-width="20" data-icon-height="20"></span>
+                        <span>Recettes</span>
+                    </div>
+                </a>
+
+                <a href="{{ path('app_admin_themes') }}" class="menu-item {{ app.request.attributes.get('_route') starts with 'app_admin_theme' ? 'active' : '' }}">
+                    <div class="menu-item-content">
+                        <span data-icon="palette" data-icon-width="20" data-icon-height="20"></span>
+                        <span>Thèmes</span>
+                    </div>
+                </a>
+
+                <a href="{{ path('app_admin_categories') }}" class="menu-item {{ app.request.attributes.get('_route') starts with 'app_admin_categor' ? 'active' : '' }}">
+                    <div class="menu-item-content">
+                        <span data-icon="folder-open" data-icon-width="20" data-icon-height="20"></span>
+                        <span>Catégories</span>
+                    </div>
+                </a>
+
+                <a href="{{ path('app_admin_allergens') }}" class="menu-item {{ app.request.attributes.get('_route') starts with 'app_admin_allergen' ? 'active' : '' }}">
+                    <div class="menu-item-content">
+                        <span data-icon="alert-triangle" data-icon-width="20" data-icon-height="20"></span>
+                        <span>Allergènes</span>
+                    </div>
+                </a>
+
+                <a href="{{ path('app_admin_dietetaries') }}" class="menu-item {{ app.request.attributes.get('_route') starts with 'app_admin_dietetar' ? 'active' : '' }}">
+                    <div class="menu-item-content">
+                        <span data-icon="salad" data-icon-width="20" data-icon-height="20"></span>
+                        <span>Régimes</span>
+                    </div>
+                </a>
+
+                <a href="{{ path('app_admin_opening_schedule_index') }}" class="menu-item {{ app.request.attributes.get('_route') starts with 'app_admin_opening' ? 'active' : '' }}">
+                    <div class="menu-item-content">
+                        <span data-icon="clock" data-icon-width="20" data-icon-height="20"></span>
+                        <span>Horaires</span>
+                    </div>
+                </a>
+
+                {% if is_granted('ROLE_EMPLOYEE') %}
+                <a href="{{ path('admin_users_index') }}" class="menu-item {{ app.request.attributes.get('_route') starts with 'admin_users' ? 'active' : '' }}">
+                    <div class="menu-item-content">
+                        <span data-icon="users" data-icon-width="20" data-icon-height="20"></span>
+                        <span>Utilisateurs</span>
+                    </div>
+                </a>
+                {% endif %}
+
+                <a href="{{ path('app_admin_order_stats') }}" class="menu-item {{ app.request.attributes.get('_route') == 'app_admin_order_stats' ? 'active' : '' }}">
+                    <div class="menu-item-content">
+                        <span data-icon="trending-up" data-icon-width="20" data-icon-height="20"></span>
+                        <span>Statistiques</span>
+                    </div>
+                </a>
+
+                <a href="{{ path('app_home') }}" class="menu-link-home">
+                    <span data-icon="home" data-icon-width="20" data-icon-height="20"></span>
+                    <span>Retour au site</span>
+                </a>
             </nav>
         </aside>
 
         <!-- Main Content -->
         <main class="main-content">
-            <!-- Top Bar -->
-            <div class="topbar">
-                <div class="topbar-title">
-                    <h1>{% block page_title %}Dashboard{% endblock %}</h1>
-                </div>
-                <div class="topbar-user">
-                    <div class="user-info">
-                        <div class="name">{{ app.user.firstname }} {{ app.user.lastname }}</div>
-                        <div class="role">
-                            {% if is_granted('ROLE_ADMIN') %}
-                                Administrateur
-                            {% elseif is_granted('ROLE_EMPLOYEE') %}
-                                Employé
-                            {% else %}
-                                Utilisateur
-                            {% endif %}
-                        </div>
-                    </div>
-                    <a href="{{ path('app_logout') }}" class="btn-logout">Déconnexion</a>
-                </div>
-            </div>
-
-            <!-- Flash Messages -->
             <div class="content-wrapper">
                 {% for label, messages in app.flashes %}
                     {% for message in messages %}

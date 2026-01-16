@@ -1,97 +1,103 @@
 {% extends 'admin/base_admin.html.twig' %}
 
-{% block title %}Gestion des Menus{% endblock %}
-{% block page_title %}Gestion des Menus{% endblock %}
-
-{% block stylesheets %}
-    {{ parent() }}
-    {{ importmap('admin-menus-list-styles') }}
-{% endblock %}
+{% block title %}Gestion des Menus - Admin{% endblock %}
 
 {% block content %}
-
-<div class="action-bar">
-    <div class="search-box">
-        <input type="text" placeholder="🔍 Rechercher un menu..." id="searchInput">
-    </div>
-    <a href="{{ path('app_admin_menus_new') }}" class="btn-add">+ Ajouter un menu</a>
+<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
+    <h1 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 2.5rem; font-weight: 400;">
+        📋 Gestion des menus
+    </h1>
+    <a href="{{ path('app_admin_menus_new') }}" style="padding: 0.75rem 1.5rem; border-radius: var(--radius-lg); border: none; background: var(--gold); color: var(--dark-text); cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: all var(--transition-base);" onmouseover="this.style.boxShadow='var(--shadow-md)'" onmouseout="this.style.boxShadow='none'">
+        <span data-icon="plus" data-icon-width="16" data-icon-height="16"></span>
+        Ajouter un menu
+    </a>
 </div>
 
-<div class="table-container">
-    <table class="table table-sortable" id="menusTable">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Nom</th>
-                <th>Thème</th>
-                <th>Régimes</th>
-                <th>Prix/pers</th>
-                <th>Min. pers.</th>
-                <th>Recettes</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for menu in menus %}
-            <tr class="menu-row">
-                <td><strong>#{{ menu.id }}</strong></td>
-                <td>{{ menu.name }}</td>
-                <td data-sort="{{ menu.theme.name }}"><span class="badge badge-primary">{{ menu.theme.name }}</span></td>
-                <td data-sort="{% if menu.dietetary|length > 0 %}{% for diet in menu.dietetary %}{{ diet.name }} {% endfor %}{% else %}-{% endif %}">
-                    {% if menu.dietetary|length > 0 %}
-                        {% for diet in menu.dietetary %}
-                            <span class="badge badge-success">{{ diet.name }}</span>
-                        {% endfor %}
-                    {% else %}
-                        <span style="color: #95a5a6;">-</span>
-                    {% endif %}
-                </td>
-                <td data-sort="{{ menu.pricePerPerson }}">{{ menu.pricePerPerson|number_format(2, ',', ' ') }} €</td>
-                <td>{{ menu.nbPersonMin }}</td>
-                <td data-sort="{{ menu.recipes|length }}">{{ menu.recipes|length }}</td>
-                <td>
-                    <a href="{{ path('app_admin_menus_edit', {id: menu.id}) }}" class="btn btn-warning">
-                        Modifier
-                    </a>
-                    <form method="post"
-                          action="{{ path('app_admin_menus_delete', {id: menu.id}) }}"
-                          style="display: inline;"
-                          data-confirm="Êtes-vous sûr de vouloir supprimer le menu « {{ menu.name }} » ?">
-                        <button type="submit" class="btn btn-danger">
-                            Supprimer
-                        </button>
-                    </form>
-                </td>
-            </tr>
-            {% else %}
-            <tr>
-                <td colspan="8" class="empty-state">
-                    Aucun menu trouvé. <a href="{{ path('app_admin_menus_new') }}" style="color: #3498db;">Créer un nouveau menu</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-    <div style="margin-top: 20px; color: #7f8c8d; font-size: 0.9rem;">
-        Total : <strong>{{ menus|length }}</strong> menu(s)
+<!-- Liste des menus -->
+<div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); overflow: hidden;">
+    <div style="padding: 1rem 1.5rem; border-bottom: 1px solid var(--beige);">
+        <div style="position: relative;">
+            <span data-icon="search" data-icon-width="20" data-icon-height="20" style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--dark-text);"></span>
+            <input type="text" id="searchInput" placeholder="Rechercher un menu..." style="width: 100%; padding: 0.5rem 1rem 0.5rem 2.5rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-lg); font-family: var(--font-body);">
+        </div>
     </div>
+
+    {% if menus is empty %}
+        <div style="text-align: center; padding: 3rem 1.25rem;">
+            <span data-icon="inbox" data-icon-width="48" data-icon-height="48" style="color: var(--dark-text); opacity: 0.3; margin-bottom: 1rem; display: inline-block;"></span>
+            <p style="color: var(--dark-text); opacity: 0.6; margin: 0;">Aucun menu trouvé.</p>
+        </div>
+    {% else %}
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+                <colgroup>
+                    <col style="width: 8%;">
+                    <col style="width: 30%;">
+                    <col style="width: 15%;">
+                    <col style="width: 15%;">
+                    <col style="width: 10%;">
+                    <col style="width: 22%;">
+                </colgroup>
+                <thead style="background: var(--beige);">
+                    <tr>
+                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">#</th>
+                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">Nom</th>
+                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">Thème</th>
+                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">Prix/pers</th>
+                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">Min. pers.</th>
+                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for menu in menus %}
+                    <tr class="menu-row" style="border-bottom: 1px solid var(--beige);" onmouseover="this.style.backgroundColor='#f8f9fa'" onmouseout="this.style.backgroundColor=''">
+                        <td style="padding: 1rem 1.5rem; color: var(--dark-text);"><strong>#{{ menu.id }}</strong></td>
+                        <td style="padding: 1rem 1.5rem; color: var(--dark-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="{{ menu.name }}">{{ menu.name }}</td>
+                        <td style="padding: 1rem 1.5rem; color: var(--dark-text);" data-sort="{{ menu.theme.name }}">
+                            <span style="padding: 0.25rem 0.75rem; border-radius: var(--radius-sm); background: #3498db; color: white; font-size: 0.875rem;">{{ menu.theme.name }}</span>
+                        </td>
+                        <td style="padding: 1rem 1.5rem;" data-sort="{{ menu.pricePerPerson }}">
+                            <strong style="color: var(--bordeaux);">{{ menu.pricePerPerson|number_format(2, ',', ' ') }} €</strong>
+                        </td>
+                        <td style="padding: 1rem 1.5rem; color: var(--dark-text);">{{ menu.nbPersonMin }}</td>
+                        <td style="padding: 1rem 1.5rem;">
+                            <div class="crud-actions">
+                                <a href="{{ path('app_admin_menus_edit', {id: menu.id}) }}" class="btn-crud btn-crud-edit">
+                                    <span data-icon="edit" data-icon-width="16" data-icon-height="16"></span>
+                                    <span class="btn-crud-text">Modifier</span>
+                                </a>
+                                <form method="post" action="{{ path('app_admin_menus_delete', {id: menu.id}) }}" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer le menu « {{ menu.name }} » ?')">
+                                    <button type="submit" class="btn-crud btn-crud-delete">
+                                        <span data-icon="trash-2" data-icon-width="16" data-icon-height="16"></span>
+                                        <span class="btn-crud-text">Supprimer</span>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
 </div>
 
-{% endblock %}
+<script src="{{ asset('table-sort.js') }}"></script>
+<script>
+    // Initialiser le tri du tableau (exclure la dernière colonne "Actions")
+    initTableSort('menusTable', {
+        excludeColumns: [5]
+    });
 
-{% block javascripts %}
-    {{ parent() }}
-    {{ importmap('table-search') }}
-    {{ importmap('confirmation-dialog') }}
-    <script src="{{ asset('table-sort.js') }}"></script>
-    <script>
-        // Initialiser le tri du tableau
-        initTableSort('menusTable', {
-            excludeColumns: [7]
+    // Recherche en temps réel
+    document.getElementById('searchInput')?.addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        const rows = document.querySelectorAll('.menu-row');
+
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.style.display = text.includes(searchTerm) ? '' : 'none';
         });
-
-        // Initialiser la recherche en temps réel
-        initTableSearch('searchInput', '.menu-row');
-    </script>
+    });
+</script>
 {% endblock %}

@@ -1,4 +1,4 @@
-# Bordeaux Gourmant
+# Vite & Gourmand
 
 Application web de gestion de restaurant développée avec Symfony.
 
@@ -128,8 +128,8 @@ public/
 - Doctrine ORM (MariaDB)
 - Doctrine MongoDB ODM (MongoDB)
 - Twig
-- Bootstrap 5
 - AssetMapper
+- CSS personnalisé (design Figma)
 
 ## Support
 

@@ -1,152 +1,152 @@
 {% extends 'admin/base_admin.html.twig' %}
 
-{% block title %}Gestion des utilisateurs{% endblock %}
-{% block page_title %}Gestion des utilisateurs{% endblock %}
+{% block title %}Gestion des Utilisateurs - Admin{% endblock %}
 
 {% block content %}
-<div class="container my-5">
-    <div class="row mb-4">
-        <div class="col-md-8">
-            <h1>Gestion des utilisateurs</h1>
-        </div>
-        <div class="col-md-4 text-end">
+<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
+    <h1 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 2.5rem; font-weight: 400;">
+        👥 Gestion des utilisateurs
+    </h1>
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_users_create_employee') }}" style="padding: 0.75rem 1.5rem; border-radius: var(--radius-lg); border: none; background: var(--gold); color: var(--dark-text); cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: all var(--transition-base);" onmouseover="this.style.boxShadow='var(--shadow-md)'" onmouseout="this.style.boxShadow='none'">
+            <span data-icon="user-plus" data-icon-width="16" data-icon-height="16"></span>
+            Créer un employé
+        </a>
+    {% endif %}
+</div>
+
+{# Messages flash #}
+{% for message in app.flashes('success') %}
+    <div style="background: #d4edda; color: #155724; padding: 1rem; border-radius: var(--radius-sm); margin-bottom: 1rem; border: 1px solid #c3e6cb;">
+        {{ message }}
+    </div>
+{% endfor %}
+
+{% for message in app.flashes('error') %}
+    <div style="background: #f8d7da; color: #721c24; padding: 1rem; border-radius: var(--radius-sm); margin-bottom: 1rem; border: 1px solid #f5c6cb;">
+        {{ message }}
+    </div>
+{% endfor %}
+
+{# Filtres de recherche #}
+<div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 1rem; margin-bottom: 1.5rem;">
+    <form method="get" action="{{ path('admin_users_index') }}">
+        <div style="display: grid; grid-template-columns: {% if is_granted('ROLE_ADMIN') %}repeat(4, 1fr){% else %}repeat(3, 1fr){% endif %}; gap: 1rem;">
+            <div>
+                <label for="search" style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: var(--dark-text); font-weight: 600;">Recherche</label>
+                <input type="text" id="search" name="search" placeholder="Email, nom ou prénom" value="{{ app.request.query.get('search') }}" style="width: 100%; padding: 0.5rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-sm); font-family: var(--font-body);">
+            </div>
             {% if is_granted('ROLE_ADMIN') %}
-                <a href="{{ path('admin_users_create_employee') }}" class="btn btn-primary">
-                    <i class="bi bi-person-plus"></i> Créer un employé
-                </a>
+            <div>
+                <label for="role" style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: var(--dark-text); font-weight: 600;">Rôle</label>
+                <select id="role" name="role" style="width: 100%; padding: 0.5rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-sm); font-family: var(--font-body);">
+                    <option value="">Tous les rôles</option>
+                    <option value="ROLE_ADMIN" {% if app.request.query.get('role') == 'ROLE_ADMIN' %}selected{% endif %}>Administrateur</option>
+                    <option value="ROLE_EMPLOYEE" {% if app.request.query.get('role') == 'ROLE_EMPLOYEE' %}selected{% endif %}>Employé</option>
+                    <option value="ROLE_USER" {% if app.request.query.get('role') == 'ROLE_USER' %}selected{% endif %}>Utilisateur</option>
+                </select>
+            </div>
             {% endif %}
+            <div>
+                <label for="status" style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: var(--dark-text); font-weight: 600;">Statut</label>
+                <select id="status" name="status" style="width: 100%; padding: 0.5rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-sm); font-family: var(--font-body);">
+                    <option value="">Tous les statuts</option>
+                    <option value="1" {% if app.request.query.get('status') == '1' %}selected{% endif %}>Actif</option>
+                    <option value="0" {% if app.request.query.get('status') == '0' %}selected{% endif %}>Désactivé</option>
+                </select>
+            </div>
+            <div style="display: flex; align-items: flex-end; gap: 0.5rem;">
+                <button type="submit" style="padding: 0.5rem 1rem; border-radius: var(--radius-sm); border: none; background: var(--bordeaux); color: white; cursor: pointer; font-family: var(--font-body); display: inline-flex; align-items: center; gap: 0.5rem; transition: all var(--transition-base);" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+                    <span data-icon="search" data-icon-width="16" data-icon-height="16"></span>
+                    Rechercher
+                </button>
+                <a href="{{ path('admin_users_index') }}" style="padding: 0.5rem 1rem; border-radius: var(--radius-sm); border: 1px solid var(--bordeaux); background: transparent; color: var(--bordeaux); cursor: pointer; text-decoration: none; font-family: var(--font-body); display: inline-flex; align-items: center; gap: 0.5rem; transition: all var(--transition-base);" onmouseover="this.style.background='var(--bordeaux)'; this.style.color='white'" onmouseout="this.style.background='transparent'; this.style.color='var(--bordeaux)'">
+                    <span data-icon="x-circle" data-icon-width="16" data-icon-height="16"></span>
+                    Réinitialiser
+                </a>
+            </div>
         </div>
-    </div>
+    </form>
+</div>
 
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<!-- Liste des utilisateurs -->
+<div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); overflow: hidden;">
+    {% if users is empty %}
+        <div style="text-align: center; padding: 3rem 1.25rem;">
+            <span data-icon="inbox" data-icon-width="48" data-icon-height="48" style="color: var(--dark-text); opacity: 0.3; margin-bottom: 1rem; display: inline-block;"></span>
+            <p style="color: var(--dark-text); opacity: 0.6; margin: 0;">Aucun utilisateur trouvé.</p>
         </div>
-    {% endfor %}
-
-    {% for message in app.flashes('error') %}
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    {% endfor %}
-
-    {# Filtres de recherche #}
-    <div class="card mb-4">
-        <div class="card-body">
-            <h5 class="card-title mb-3">
-                <i class="bi bi-funnel"></i> Filtres de recherche
-            </h5>
-            <form method="get" action="{{ path('admin_users_index') }}">
-                <div class="row g-3">
-                    <div class="col-md-{% if is_granted('ROLE_ADMIN') %}3{% else %}4{% endif %}">
-                        <label for="search" class="form-label">Recherche</label>
-                        <input type="text"
-                               class="form-control"
-                               id="search"
-                               name="search"
-                               placeholder="Email, nom ou prénom"
-                               value="{{ app.request.query.get('search') }}">
-                    </div>
-                    {% if is_granted('ROLE_ADMIN') %}
-                    <div class="col-md-3">
-                        <label for="role" class="form-label">Rôle</label>
-                        <select class="form-select" id="role" name="role">
-                            <option value="">Tous les rôles</option>
-                            <option value="ROLE_ADMIN" {% if app.request.query.get('role') == 'ROLE_ADMIN' %}selected{% endif %}>Administrateur</option>
-                            <option value="ROLE_EMPLOYEE" {% if app.request.query.get('role') == 'ROLE_EMPLOYEE' %}selected{% endif %}>Employé</option>
-                            <option value="ROLE_USER" {% if app.request.query.get('role') == 'ROLE_USER' %}selected{% endif %}>Utilisateur</option>
-                        </select>
-                    </div>
-                    {% endif %}
-                    <div class="col-md-{% if is_granted('ROLE_ADMIN') %}3{% else %}4{% endif %}">
-                        <label for="status" class="form-label">Statut</label>
-                        <select class="form-select" id="status" name="status">
-                            <option value="">Tous les statuts</option>
-                            <option value="1" {% if app.request.query.get('status') == '1' %}selected{% endif %}>Actif</option>
-                            <option value="0" {% if app.request.query.get('status') == '0' %}selected{% endif %}>Désactivé</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3 d-flex align-items-end">
-                        <button type="submit" class="btn btn-primary me-2">
-                            <i class="bi bi-search"></i> Rechercher
-                        </button>
-                        <a href="{{ path('admin_users_index') }}" class="btn btn-secondary">
-                            <i class="bi bi-x-circle"></i> Réinitialiser
-                        </a>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <div class="card">
-        <div class="card-body">
-            <table class="table table-striped table-sortable" id="usersTable">
-                <thead>
+    {% else %}
+        <div style="overflow-x: auto;">
+            <table id="usersTable" style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+                <colgroup>
+                    <col style="width: 5%;">
+                    <col style="width: 28%;">
+                    <col style="width: 13%;">
+                    <col style="width: 13%;">
+                    <col style="width: 11%;">
+                    <col style="width: 9%;">
+                    <col style="width: 21%;">
+                </colgroup>
+                <thead style="background: var(--beige);">
                     <tr>
-                        <th>ID</th>
-                        <th>Email</th>
-                        <th>Nom</th>
-                        <th>Prénom</th>
-                        <th>Rôles</th>
-                        <th>Statut</th>
-                        <th>Actions</th>
+                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">ID</th>
+                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">Email</th>
+                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">Nom</th>
+                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">Prénom</th>
+                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">Rôle</th>
+                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">Statut</th>
+                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for user in users %}
-                        <tr class="user-row">
-                            <td>{{ user.id }}</td>
-                            <td>{{ user.email }}</td>
-                            <td>{{ user.lastname }}</td>
-                            <td>{{ user.firstname }}</td>
-                            <td data-sort="{% if 'ROLE_ADMIN' in user.roles %}Administrateur{% elseif 'ROLE_EMPLOYEE' in user.roles %}Employé{% else %}Utilisateur{% endif %}">
-                                {% if 'ROLE_ADMIN' in user.roles %}
-                                    <span class="badge bg-danger">Administrateur</span>
-                                {% elseif 'ROLE_EMPLOYEE' in user.roles %}
-                                    <span class="badge bg-warning">Employé</span>
-                                {% else %}
-                                    <span class="badge bg-info">Utilisateur</span>
-                                {% endif %}
-                            </td>
-                            <td data-sort="{% if user.isEnabled %}Actif{% else %}Désactivé{% endif %}">
-                                {% if user.isEnabled %}
-                                    <span class="badge bg-success">Actif</span>
-                                {% else %}
-                                    <span class="badge bg-secondary">Désactivé</span>
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if 'ROLE_ADMIN' not in user.roles %}
-                                    <a href="{{ path('admin_users_edit', {id: user.id}) }}" class="btn btn-sm btn-primary">
-                                        <i class="bi bi-pencil"></i> Éditer
+                    <tr class="user-row" style="border-bottom: 1px solid var(--beige);" onmouseover="this.style.backgroundColor='#f8f9fa'" onmouseout="this.style.backgroundColor=''">
+                        <td style="padding: 1rem 1.5rem; color: var(--dark-text);"><strong>{{ user.id }}</strong></td>
+                        <td style="padding: 1rem 1.5rem; color: var(--dark-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="{{ user.email }}">{{ user.email }}</td>
+                        <td style="padding: 1rem 1.5rem; color: var(--dark-text);">{{ user.lastname }}</td>
+                        <td style="padding: 1rem 1.5rem; color: var(--dark-text);">{{ user.firstname }}</td>
+                        <td style="padding: 1rem 1.5rem; color: var(--dark-text);" data-sort="{% if 'ROLE_ADMIN' in user.roles %}Administrateur{% elseif 'ROLE_EMPLOYEE' in user.roles %}Employé{% else %}Utilisateur{% endif %}">
+                            {% if 'ROLE_ADMIN' in user.roles %}
+                                <span style="padding: 0.25rem 0.75rem; border-radius: var(--radius-sm); background: #d4183d; color: white; font-size: 0.875rem;">Admin</span>
+                            {% elseif 'ROLE_EMPLOYEE' in user.roles %}
+                                <span style="padding: 0.25rem 0.75rem; border-radius: var(--radius-sm); background: #f39c12; color: white; font-size: 0.875rem;">Employé</span>
+                            {% else %}
+                                <span style="padding: 0.25rem 0.75rem; border-radius: var(--radius-sm); background: #3498db; color: white; font-size: 0.875rem;">Utilisateur</span>
+                            {% endif %}
+                        </td>
+                        <td style="padding: 1rem 1.5rem;" data-sort="{% if user.isEnabled %}Actif{% else %}Désactivé{% endif %}">
+                            {% if user.isEnabled %}
+                                <span style="padding: 0.25rem 0.75rem; border-radius: var(--radius-sm); background: #27ae60; color: white; font-size: 0.875rem;">Actif</span>
+                            {% else %}
+                                <span style="padding: 0.25rem 0.75rem; border-radius: var(--radius-sm); background: #95a5a6; color: white; font-size: 0.875rem;">Désactivé</span>
+                            {% endif %}
+                        </td>
+                        <td style="padding: 1rem 1.5rem;">
+                            {% if 'ROLE_ADMIN' not in user.roles %}
+                                <div class="crud-actions">
+                                    <a href="{{ path('admin_users_edit', {id: user.id}) }}" class="btn-crud btn-crud-edit">
+                                        <span data-icon="edit" data-icon-width="16" data-icon-height="16"></span>
+                                        <span class="btn-crud-text">Éditer</span>
                                     </a>
-                                    <form method="post" action="{{ path('admin_users_toggle_status', {id: user.id}) }}" class="d-inline">
+                                    <form method="post" action="{{ path('admin_users_toggle_status', {id: user.id}) }}" style="display: inline;">
                                         <input type="hidden" name="_token" value="{{ csrf_token('toggle-status' ~ user.id) }}">
-                                        <button type="submit" class="btn btn-sm btn-{{ user.isEnabled ? 'warning' : 'success' }}">
-                                            {{ user.isEnabled ? 'Désactiver' : 'Activer' }}
+                                        <button type="submit" class="btn-crud" style="background: transparent; color: {% if user.isEnabled %}#f39c12{% else %}#27ae60{% endif %}; border: 1px solid {% if user.isEnabled %}#f39c12{% else %}#27ae60{% endif %}; transition: all var(--transition-base);" onmouseover="this.style.background='{% if user.isEnabled %}#f39c12{% else %}#27ae60{% endif %}'; this.style.color='white'" onmouseout="this.style.background='transparent'; this.style.color='{% if user.isEnabled %}#f39c12{% else %}#27ae60{% endif %}'">
+                                            <span data-icon="{% if user.isEnabled %}ban{% else %}check{% endif %}" data-icon-width="16" data-icon-height="16"></span>
+                                            <span class="btn-crud-text">{% if user.isEnabled %}Désactiver{% else %}Activer{% endif %}</span>
                                         </button>
                                     </form>
-                                {% else %}
-                                    <span class="text-muted">Compte admin protégé</span>
-                                {% endif %}
-                            </td>
-                        </tr>
-                    {% else %}
-                        <tr>
-                            <td colspan="7" class="text-center">Aucun utilisateur trouvé</td>
-                        </tr>
+                                </div>
+                            {% else %}
+                                <span style="color: #95a5a6; font-size: 0.875rem;">Protégé</span>
+                            {% endif %}
+                        </td>
+                    </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
-    </div>
-
-    <div class="mt-3">
-        <a href="{{ path('app_admin_dashboard') }}" class="btn btn-secondary">Retour à l'administration</a>
-    </div>
+    {% endif %}
 </div>
 
 {# Script pour le tri #}

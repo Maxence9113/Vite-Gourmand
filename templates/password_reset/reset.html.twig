@@ -1,120 +1,165 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nouveau mot de passe - Vite & Gourmand{% endblock %}
+{% block title %}Nouveau mot de passe{% endblock %}
 
 {% block body %}
+{# ========================================
+   PASSWORD RESET - Figma Design
+   ======================================== #}
+<section style="background-color: var(--beige); padding: 3rem 0; min-height: calc(100vh - 73px - 200px);">
+    <div style="max-width: 500px; margin: 0 auto; padding: 0 1rem;">
 
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-5">
+        {# Card de réinitialisation #}
+        <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 2.5rem;">
 
-            {# Card de réinitialisation #}
-            <div class="login-card">
-
-                {# En-tête avec logo #}
-                <div class="text-center mb-4">
-                    <div class="login-icon mb-3">
-                        <i data-feather="lock" width="48" height="48"></i>
-                    </div>
-                    <h1 class="h3 fw-bold mb-2" style="color: var(--primary);">Nouveau mot de passe</h1>
-                    <p class="text-muted">Choisissez un nouveau mot de passe sécurisé</p>
+            {# En-tête avec logo #}
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <div style="width: 4rem; height: 4rem; margin: 0 auto 1rem; border-radius: 50%; background: var(--bordeaux); display: flex; align-items: center; justify-content: center;">
+                    <span data-icon="lock" data-icon-width="28" data-icon-height="28" style="color: white;"></span>
                 </div>
+                <h1 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.75rem; font-weight: 400; margin-bottom: 0.5rem;">Nouveau mot de passe</h1>
+                <p style="color: var(--dark-text); opacity: 0.8; margin: 0;">Choisissez un nouveau mot de passe sécurisé</p>
+            </div>
 
-                {# Affichage des messages #}
-                {% for message in app.flashes('error') %}
-                    <div class="alert alert-danger d-flex align-items-center mb-4" role="alert">
-                        <i data-feather="alert-circle" width="20" class="me-2"></i>
-                        <div>{{ message }}</div>
-                    </div>
-                {% endfor %}
-
-                {# Exigences mot de passe #}
-                <div class="alert alert-info d-flex align-items-start mb-4" role="alert">
-                    <i data-feather="info" width="20" class="me-2 mt-1"></i>
-                    <div>
-                        <small>
-                            <strong>Exigences du mot de passe :</strong><br>
-                            Minimum 10 caractères avec au moins 1 majuscule, 1 minuscule, 1 chiffre et 1 caractère spécial.
-                        </small>
-                    </div>
+            {# Affichage des messages #}
+            {% for message in app.flashes('error') %}
+                <div style="background: #f8d7da; border-left: 4px solid #dc3545; color: #721c24; padding: 1rem 1.5rem; border-radius: var(--radius-sm); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
+                    <span data-icon="alert-circle" data-icon-width="20" data-icon-height="20" style="color: #dc3545;"></span>
+                    <div>{{ message }}</div>
                 </div>
+            {% endfor %}
 
-                {# Formulaire #}
-                <form method="post" id="resetPasswordForm">
-                    <div class="form-floating mb-3 position-relative">
-                        <input class="form-control"
-                               type="password"
-                               id="password"
-                               name="password"
-                               placeholder="Nouveau mot de passe"
-                               required
-                               minlength="10"
-                               autofocus>
-                        <label for="password">
-                            <i data-feather="lock" width="16" class="me-1"></i>
-                            Nouveau mot de passe
-                        </label>
-                        <button type="button"
-                                class="btn btn-sm position-absolute end-0 top-50 translate-middle-y me-2"
-                                style="border: none; background: none; z-index: 10;"
-                                onclick="togglePasswordVisibility('password', this)">
-                            <i data-feather="eye" width="20"></i>
-                        </button>
-                    </div>
+            {# Exigences mot de passe #}
+            <div style="background: #e7f1ff; border-left: 4px solid #004085; padding: 1rem 1.5rem; border-radius: var(--radius-sm); margin-bottom: 1.5rem; display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span data-icon="info" data-icon-width="20" data-icon-height="20" style="color: #004085; flex-shrink: 0; margin-top: 2px;"></span>
+                <div style="color: #004085;">
+                    <p style="font-weight: 600; margin: 0 0 0.25rem; font-size: 0.875rem;">Exigences du mot de passe</p>
+                    <p style="font-size: 0.875rem; margin: 0;">
+                        Minimum 10 caractères avec au moins 1 majuscule, 1 minuscule, 1 chiffre et 1 caractère spécial.
+                    </p>
+                </div>
+            </div>
 
-                    <div class="form-floating mb-3 position-relative">
-                        <input class="form-control"
-                               type="password"
-                               id="confirm_password"
-                               name="confirm_password"
-                               placeholder="Confirmer le mot de passe"
-                               required
-                               minlength="10">
-                        <label for="confirm_password">
-                            <i data-feather="check-circle" width="16" class="me-1"></i>
-                            Confirmer le mot de passe
-                        </label>
-                        <button type="button"
-                                class="btn btn-sm position-absolute end-0 top-50 translate-middle-y me-2"
-                                style="border: none; background: none; z-index: 10;"
-                                onclick="togglePasswordVisibility('confirm_password', this)">
-                            <i data-feather="eye" width="20"></i>
-                        </button>
-                    </div>
-
-                    <button class="btn btn-primary w-100 py-3 mb-3" type="submit">
-                        <i data-feather="save" width="18" class="me-2"></i>
-                        Réinitialiser mon mot de passe
+            {# Formulaire #}
+            <form method="post" id="resetPasswordForm">
+                <div style="margin-bottom: 1.5rem; position: relative;">
+                    <label for="password" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark-text); font-size: 0.875rem;">
+                        <span data-icon="lock" data-icon-width="16" data-icon-height="16" style="vertical-align: middle; margin-right: 0.25rem;"></span>
+                        Nouveau mot de passe
+                    </label>
+                    <input type="password"
+                           id="password"
+                           name="password"
+                           placeholder="Nouveau mot de passe"
+                           required
+                           minlength="10"
+                           autofocus
+                           style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 1rem; transition: border-color var(--transition-base), box-shadow var(--transition-base);"
+                           onfocus="this.style.borderColor='var(--gold)'; this.style.boxShadow='0 0 0 3px rgba(212, 175, 55, 0.1)'"
+                           onblur="this.style.borderColor='var(--bordeaux)'; this.style.boxShadow='none'">
+                    <button type="button"
+                            style="border: none; background: none; z-index: 10; position: absolute; right: 0; top: 2.2rem; margin-right: 0.5rem; cursor: pointer; color: var(--dark-text); opacity: 0.5; padding: 0.5rem;"
+                            onmouseover="this.style.opacity='0.8'"
+                            onmouseout="this.style.opacity='0.5'"
+                            onclick="togglePasswordVisibility('password', this)">
+                        <span data-icon="eye" data-icon-width="20" data-icon-height="20"></span>
                     </button>
-                </form>
-
-                {# Divider #}
-                <div class="divider my-4">
-                    <span class="divider-text">ou</span>
                 </div>
 
-                {# Lien retour à la connexion #}
-                <div class="text-center">
-                    <a href="{{ path('app_login') }}" class="text-decoration-none" style="color: var(--primary);">
-                        <i data-feather="arrow-left" width="16" class="me-1"></i>
-                        Retour à la connexion
-                    </a>
+                <div style="margin-bottom: 1.5rem; position: relative;">
+                    <label for="confirm_password" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark-text); font-size: 0.875rem;">
+                        <span data-icon="check-circle" data-icon-width="16" data-icon-height="16" style="vertical-align: middle; margin-right: 0.25rem;"></span>
+                        Confirmer le mot de passe
+                    </label>
+                    <input type="password"
+                           id="confirm_password"
+                           name="confirm_password"
+                           placeholder="Confirmer le mot de passe"
+                           required
+                           minlength="10"
+                           style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 1rem; transition: border-color var(--transition-base), box-shadow var(--transition-base);"
+                           onfocus="this.style.borderColor='var(--gold)'; this.style.boxShadow='0 0 0 3px rgba(212, 175, 55, 0.1)'"
+                           onblur="this.style.borderColor='var(--bordeaux)'; this.style.boxShadow='none'">
+                    <button type="button"
+                            style="border: none; background: none; z-index: 10; position: absolute; right: 0; top: 2.2rem; margin-right: 0.5rem; cursor: pointer; color: var(--dark-text); opacity: 0.5; padding: 0.5rem;"
+                            onmouseover="this.style.opacity='0.8'"
+                            onmouseout="this.style.opacity='0.5'"
+                            onclick="togglePasswordVisibility('confirm_password', this)">
+                        <span data-icon="eye" data-icon-width="20" data-icon-height="20"></span>
+                    </button>
                 </div>
 
+                <button type="submit" style="width: 100%; padding: 0.875rem 1rem; background: var(--bordeaux); color: white; border: none; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; transition: background-color var(--transition-base); display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: var(--shadow-md); margin-bottom: 1.5rem;"
+                        onmouseover="this.style.backgroundColor='#8B0000'"
+                        onmouseout="this.style.backgroundColor='var(--bordeaux)'">
+                    <span data-icon="save" data-icon-width="18" data-icon-height="18"></span>
+                    Réinitialiser mon mot de passe
+                </button>
+            </form>
+
+            {# Divider #}
+            <div style="margin: 1.5rem 0; text-align: center; position: relative;">
+                <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--beige);"></div>
+                <span style="position: relative; background: white; padding: 0 1rem; color: var(--dark-text); opacity: 0.6; font-size: 0.875rem;">ou</span>
+            </div>
+
+            {# Lien retour à la connexion #}
+            <div style="text-align: center;">
+                <a href="{{ path('app_login') }}" style="color: var(--bordeaux); text-decoration: none; display: inline-flex; align-items: center; gap: 0.375rem; transition: opacity var(--transition-base);"
+                   onmouseover="this.style.opacity='0.8'"
+                   onmouseout="this.style.opacity='1'">
+                    <span data-icon="arrow-left" data-icon-width="16" data-icon-height="16"></span>
+                    Retour à la connexion
+                </a>
             </div>
 
         </div>
+
     </div>
-</div>
+</section>
 
+<script>
+function togglePasswordVisibility(inputId, button) {
+    const input = document.getElementById(inputId);
+    const icon = button.querySelector('span[data-icon]');
 
-{% endblock %}
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.setAttribute('data-icon', 'eye-off');
+    } else {
+        input.type = 'password';
+        icon.setAttribute('data-icon', 'eye');
+    }
+}
 
-{% block javascripts %}
-    {{ parent() }}
-    {{ importmap('password-validator') }}
-    {{ importmap('password-toggle') }}
-    <script>
-        initPasswordValidation('resetPasswordForm', 'password', 'confirm_password');
-    </script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('resetPasswordForm');
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirm_password');
+
+    form.addEventListener('submit', function(e) {
+        const password = passwordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
+
+        // Vérifier que les mots de passe correspondent
+        if (password !== confirmPassword) {
+            e.preventDefault();
+            alert('Les mots de passe ne correspondent pas.');
+            return;
+        }
+
+        // Validation de la complexité du mot de passe
+        const hasUpperCase = /[A-Z]/.test(password);
+        const hasLowerCase = /[a-z]/.test(password);
+        const hasNumber = /[0-9]/.test(password);
+        const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+        if (!hasUpperCase || !hasLowerCase || !hasNumber || !hasSpecialChar) {
+            e.preventDefault();
+            alert('Le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial.');
+        }
+    });
+});
+</script>
+
 {% endblock %}

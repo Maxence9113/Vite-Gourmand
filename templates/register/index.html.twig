@@ -1,165 +1,192 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Inscription - Vite & Gourmand{% endblock %}
+{% block title %}Inscription{% endblock %}
 
 {% block body %}
+{# ========================================
+   REGISTER SECTION - Figma Design
+   ======================================== #}
+<section style="background-color: var(--beige); padding: 3rem 0; min-height: calc(100vh - 73px - 200px);">
+    <div style="max-width: 650px; margin: 0 auto; padding: 0 1rem;">
 
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-6">
+        {# Card d'inscription #}
+        <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 2.5rem;">
 
-            {# Card d'inscription #}
-            <div class="register-card">
-
-                {# En-tête avec logo #}
-                <div class="text-center mb-4">
-                    <div class="register-icon mb-3">
-                        <i data-feather="user-plus" width="48" height="48"></i>
-                    </div>
-                    <h1 class="h3 fw-bold mb-2" style="color: var(--primary);">Créer un compte</h1>
-                    <p class="text-muted">Rejoignez Vite & Gourmand</p>
+            {# En-tête avec logo #}
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <div style="width: 4rem; height: 4rem; margin: 0 auto 1rem; border-radius: 50%; background: var(--bordeaux); display: flex; align-items: center; justify-content: center;">
+                    <span data-icon="user-plus" data-icon-width="28" data-icon-height="28" style="color: white;"></span>
                 </div>
+                <h1 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.75rem; font-weight: 400; margin-bottom: 0.5rem;">Créer un compte</h1>
+                <p style="color: var(--dark-text); opacity: 0.8; margin: 0;">Rejoignez-nous</p>
+            </div>
 
-                {# Formulaire d'inscription #}
-                {{ form_start(registerForm, {'attr': {'class': 'register-form'}}) }}
+            {# Formulaire d'inscription #}
+            {{ form_start(registerForm) }}
 
-                    <div class="row">
-                        {# Prénom #}
-                        <div class="col-md-6 mb-3">
-                            <div class="form-floating">
-                                {{ form_widget(registerForm.firstname, {
-                                    'attr': {
-                                        'class': 'form-control',
-                                        'placeholder': 'Prénom'
-                                    }
-                                }) }}
-                                <label for="{{ registerForm.firstname.vars.id }}">
-                                    <i data-feather="user" width="16" class="me-1"></i>
-                                    Prénom
-                                </label>
-                            </div>
-                            {{ form_errors(registerForm.firstname) }}
-                        </div>
-
-                        {# Nom #}
-                        <div class="col-md-6 mb-3">
-                            <div class="form-floating">
-                                {{ form_widget(registerForm.lastname, {
-                                    'attr': {
-                                        'class': 'form-control',
-                                        'placeholder': 'Nom'
-                                    }
-                                }) }}
-                                <label for="{{ registerForm.lastname.vars.id }}">
-                                    <i data-feather="user" width="16" class="me-1"></i>
-                                    Nom
-                                </label>
-                            </div>
-                            {{ form_errors(registerForm.lastname) }}
-                        </div>
-                    </div>
-
-                    {# Email #}
-                    <div class="form-floating mb-3">
-                        {{ form_widget(registerForm.email, {
-                            'attr': {
-                                'class': 'form-control',
-                                'placeholder': 'nom@exemple.com'
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                    {# Prénom #}
+                    <div>
+                        {{ form_label(registerForm.firstname, 'Prénom', {
+                            'label_attr': {
+                                'style': 'display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark-text); font-size: 0.875rem;'
                             }
                         }) }}
-                        <label for="{{ registerForm.email.vars.id }}">
-                            <i data-feather="mail" width="16" class="me-1"></i>
-                            Adresse email
-                        </label>
+                        {{ form_widget(registerForm.firstname, {
+                            'attr': {
+                                'style': 'width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 1rem;',
+                                'placeholder': 'Prénom',
+                                'onfocus': "this.style.borderColor='var(--gold)'; this.style.boxShadow='0 0 0 3px rgba(212, 175, 55, 0.1)'",
+                                'onblur': "this.style.borderColor='var(--bordeaux)'; this.style.boxShadow='none'"
+                            }
+                        }) }}
+                        {{ form_errors(registerForm.firstname) }}
                     </div>
+
+                    {# Nom #}
+                    <div>
+                        {{ form_label(registerForm.lastname, 'Nom', {
+                            'label_attr': {
+                                'style': 'display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark-text); font-size: 0.875rem;'
+                            }
+                        }) }}
+                        {{ form_widget(registerForm.lastname, {
+                            'attr': {
+                                'style': 'width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 1rem;',
+                                'placeholder': 'Nom',
+                                'onfocus': "this.style.borderColor='var(--gold)'; this.style.boxShadow='0 0 0 3px rgba(212, 175, 55, 0.1)'",
+                                'onblur': "this.style.borderColor='var(--bordeaux)'; this.style.boxShadow='none'"
+                            }
+                        }) }}
+                        {{ form_errors(registerForm.lastname) }}
+                    </div>
+                </div>
+
+                {# Email #}
+                <div style="margin-bottom: 1.5rem;">
+                    {{ form_label(registerForm.email, 'Adresse email', {
+                        'label_attr': {
+                            'style': 'display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark-text); font-size: 0.875rem;'
+                        }
+                    }) }}
+                    {{ form_widget(registerForm.email, {
+                        'attr': {
+                            'style': 'width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 1rem;',
+                            'placeholder': 'nom@exemple.com',
+                            'onfocus': "this.style.borderColor='var(--gold)'; this.style.boxShadow='0 0 0 3px rgba(212, 175, 55, 0.1)'",
+                            'onblur': "this.style.borderColor='var(--bordeaux)'; this.style.boxShadow='none'"
+                        }
+                    }) }}
                     {{ form_errors(registerForm.email) }}
+                </div>
 
-                    {# Mot de passe #}
-                    <div class="form-floating mb-3 position-relative">
-                        {{ form_widget(registerForm.plainPassword.first, {
-                            'attr': {
-                                'class': 'form-control',
-                                'placeholder': 'Mot de passe'
-                            }
-                        }) }}
-                        <label for="{{ registerForm.plainPassword.first.vars.id }}">
-                            <i data-feather="lock" width="16" class="me-1"></i>
-                            Mot de passe
-                        </label>
-                        <button type="button"
-                                class="btn btn-sm position-absolute end-0 top-50 translate-middle-y me-2"
-                                style="border: none; background: none; z-index: 10;"
-                                onclick="togglePasswordVisibility('{{ registerForm.plainPassword.first.vars.id }}', this)">
-                            <i data-feather="eye" width="20"></i>
-                        </button>
-                    </div>
-                    {{ form_errors(registerForm.plainPassword.first) }}
-
-                    {# Confirmation mot de passe #}
-                    <div class="form-floating mb-3 position-relative">
-                        {{ form_widget(registerForm.plainPassword.second, {
-                            'attr': {
-                                'class': 'form-control',
-                                'placeholder': 'Confirmer le mot de passe'
-                            }
-                        }) }}
-                        <label for="{{ registerForm.plainPassword.second.vars.id }}">
-                            <i data-feather="check-circle" width="16" class="me-1"></i>
-                            Confirmer le mot de passe
-                        </label>
-                        <button type="button"
-                                class="btn btn-sm position-absolute end-0 top-50 translate-middle-y me-2"
-                                style="border: none; background: none; z-index: 10;"
-                                onclick="togglePasswordVisibility('{{ registerForm.plainPassword.second.vars.id }}', this)">
-                            <i data-feather="eye" width="20"></i>
-                        </button>
-                    </div>
-                    {{ form_errors(registerForm.plainPassword.second) }}
-
-                    {# Exigences mot de passe #}
-                    <div class="alert alert-info d-flex align-items-start mb-4" role="alert">
-                        <i data-feather="info" width="20" class="me-2 mt-1"></i>
-                        <div>
-                            <small>
-                                <strong>Exigences du mot de passe :</strong><br>
-                                Minimum 10 caractères avec au moins 1 majuscule, 1 minuscule, 1 chiffre et 1 caractère spécial.
-                            </small>
-                        </div>
-                    </div>
-
-                    {# Bouton de soumission personnalisé #}
-                    <button type="submit" class="btn btn-primary w-100 py-3 mb-3">
-                        <i data-feather="user-plus" width="18" class="me-2"></i>
-                        Créer mon compte
+                {# Mot de passe #}
+                <div style="margin-bottom: 1.5rem; position: relative;">
+                    {{ form_label(registerForm.plainPassword.first, 'Mot de passe', {
+                        'label_attr': {
+                            'style': 'display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark-text); font-size: 0.875rem;'
+                        }
+                    }) }}
+                    {{ form_widget(registerForm.plainPassword.first, {
+                        'attr': {
+                            'style': 'width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 1rem;',
+                            'placeholder': 'Mot de passe',
+                            'onfocus': "this.style.borderColor='var(--gold)'; this.style.boxShadow='0 0 0 3px rgba(212, 175, 55, 0.1)'",
+                            'onblur': "this.style.borderColor='var(--bordeaux)'; this.style.boxShadow='none'"
+                        }
+                    }) }}
+                    <button type="button"
+                            style="border: none; background: none; z-index: 10; position: absolute; right: 0; top: 2.2rem; margin-right: 0.5rem; cursor: pointer; color: var(--dark-text); opacity: 0.5; padding: 0.5rem;"
+                            onmouseover="this.style.opacity='0.8'"
+                            onmouseout="this.style.opacity='0.5'"
+                            onclick="togglePasswordVisibility('{{ registerForm.plainPassword.first.vars.id }}', this)">
+                        <span data-icon="eye" data-icon-width="20" data-icon-height="20"></span>
                     </button>
-
-                {{ form_end(registerForm) }}
-
-                {# Divider #}
-                <div class="divider my-4">
-                    <span class="divider-text">ou</span>
+                    {{ form_errors(registerForm.plainPassword.first) }}
                 </div>
 
-                {# Lien connexion #}
-                <div class="text-center">
-                    <p class="mb-0 text-muted">
-                        Vous avez déjà un compte ?
-                        <a href="{{ path('app_login') }}" class="fw-bold text-decoration-none" style="color: var(--secondary);">
-                            Se connecter
-                        </a>
-                    </p>
+                {# Confirmation mot de passe #}
+                <div style="margin-bottom: 1.5rem; position: relative;">
+                    {{ form_label(registerForm.plainPassword.second, 'Confirmer le mot de passe', {
+                        'label_attr': {
+                            'style': 'display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark-text); font-size: 0.875rem;'
+                        }
+                    }) }}
+                    {{ form_widget(registerForm.plainPassword.second, {
+                        'attr': {
+                            'style': 'width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 1rem;',
+                            'placeholder': 'Confirmer le mot de passe',
+                            'onfocus': "this.style.borderColor='var(--gold)'; this.style.boxShadow='0 0 0 3px rgba(212, 175, 55, 0.1)'",
+                            'onblur': "this.style.borderColor='var(--bordeaux)'; this.style.boxShadow='none'"
+                        }
+                    }) }}
+                    <button type="button"
+                            style="border: none; background: none; z-index: 10; position: absolute; right: 0; top: 2.2rem; margin-right: 0.5rem; cursor: pointer; color: var(--dark-text); opacity: 0.5; padding: 0.5rem;"
+                            onmouseover="this.style.opacity='0.8'"
+                            onmouseout="this.style.opacity='0.5'"
+                            onclick="togglePasswordVisibility('{{ registerForm.plainPassword.second.vars.id }}', this)">
+                        <span data-icon="eye" data-icon-width="20" data-icon-height="20"></span>
+                    </button>
+                    {{ form_errors(registerForm.plainPassword.second) }}
                 </div>
 
+                {# Exigences mot de passe #}
+                <div style="background: #e7f1ff; border-left: 4px solid #004085; padding: 1rem 1.5rem; border-radius: var(--radius-sm); margin-bottom: 1.5rem; display: flex; align-items: flex-start; gap: 0.75rem;">
+                    <span data-icon="info" data-icon-width="20" data-icon-height="20" style="color: #004085; flex-shrink: 0; margin-top: 2px;"></span>
+                    <div style="color: #004085;">
+                        <p style="font-weight: 600; margin: 0 0 0.25rem; font-size: 0.875rem;">Exigences du mot de passe</p>
+                        <p style="font-size: 0.875rem; margin: 0;">
+                            Minimum 10 caractères avec au moins 1 majuscule, 1 minuscule, 1 chiffre et 1 caractère spécial.
+                        </p>
+                    </div>
+                </div>
+
+                {# Bouton de soumission #}
+                <button type="submit" style="width: 100%; padding: 0.875rem 1rem; background: var(--bordeaux); color: white; border: none; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; transition: background-color var(--transition-base); display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: var(--shadow-md); margin-bottom: 1rem;"
+                        onmouseover="this.style.backgroundColor='#8B0000'"
+                        onmouseout="this.style.backgroundColor='var(--bordeaux)'">
+                    <span data-icon="user-plus" data-icon-width="18" data-icon-height="18"></span>
+                    Créer mon compte
+                </button>
+
+            {{ form_end(registerForm, {'render_rest': false}) }}
+
+            {# Divider #}
+            <div style="margin: 1.5rem 0; text-align: center; position: relative;">
+                <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--beige);"></div>
+                <span style="position: relative; background: white; padding: 0 1rem; color: var(--dark-text); opacity: 0.6; font-size: 0.875rem;">ou</span>
+            </div>
+
+            {# Lien connexion #}
+            <div style="text-align: center;">
+                <p style="margin-bottom: 0; color: var(--dark-text); opacity: 0.8;">
+                    Vous avez déjà un compte ?
+                    <a href="{{ path('app_login') }}" style="color: var(--gold); text-decoration: none; font-weight: 600; margin-left: 0.25rem; transition: opacity var(--transition-base);"
+                       onmouseover="this.style.opacity='0.8'"
+                       onmouseout="this.style.opacity='1'">
+                        Se connecter
+                    </a>
+                </p>
             </div>
 
         </div>
+
     </div>
-</div>
+</section>
 
+<script>
+function togglePasswordVisibility(inputId, button) {
+    const input = document.getElementById(inputId);
+    const icon = button.querySelector('span[data-icon]');
 
-{% endblock %}
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.setAttribute('data-icon', 'eye-off');
+    } else {
+        input.type = 'password';
+        icon.setAttribute('data-icon', 'eye');
+    }
+}
+</script>
 
-{% block javascripts %}
-    {{ parent() }}
-    {{ importmap('password-toggle') }}
 {% endblock %}

@@ -1,150 +1,171 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mes adresses - Vite & Gourmand{% endblock %}
+{% block title %}Mes adresses{% endblock %}
 
 {% block body %}
+{# ========================================
+   HEADER SECTION - Figma Design
+   ======================================== #}
+<section style="background-color: var(--beige); padding: 2rem 0 3rem;">
+    <div style="max-width: 80rem; margin: 0 auto; padding: 0 1rem;">
 
-<div class="container py-5">
-    {# Messages flash #}
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    {% endfor %}
-
-    {% for message in app.flashes('error') %}
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    {% endfor %}
-
-    {# En-tête #}
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <a href="{{ path('app_account') }}" class="text-decoration-none text-muted mb-2 d-inline-block">
-                        <i data-feather="arrow-left" width="16"></i> Retour au compte
-                    </a>
-                    <h1 class="h2 fw-bold mb-1" style="color: var(--primary);">
-                        <i data-feather="map-pin" width="32" class="me-2"></i>
-                        Mes adresses
-                    </h1>
-                    <p class="text-muted mb-0">Gérez vos adresses de livraison</p>
-                </div>
-                <div>
-                    <a href="{{ path('app_account_address_new') }}" class="btn btn-primary">
-                        <i data-feather="plus" width="18" class="me-2"></i>
-                        Nouvelle adresse
-                    </a>
-                </div>
+        {# Flash messages #}
+        {% for message in app.flashes('success') %}
+            <div style="background: #d4edda; border-left: 4px solid #28a745; color: #155724; padding: 1rem 1.5rem; border-radius: var(--radius-sm); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
+                <span data-icon="check-circle" data-icon-width="24" data-icon-height="24" style="color: #28a745;"></span>
+                <span>{{ message }}</span>
             </div>
-        </div>
-    </div>
+        {% endfor %}
 
-    {# Liste des adresses #}
-    <div class="row g-4">
+        {% for message in app.flashes('error') %}
+            <div style="background: #f8d7da; border-left: 4px solid #dc3545; color: #721c24; padding: 1rem 1.5rem; border-radius: var(--radius-sm); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
+                <span data-icon="alert-circle" data-icon-width="24" data-icon-height="24" style="color: #dc3545;"></span>
+                <span>{{ message }}</span>
+            </div>
+        {% endfor %}
+
+        {# Fil d'ariane #}
+        <nav aria-label="Fil d'ariane" style="margin-bottom: 1.5rem;">
+            <ol style="display: flex; align-items: center; gap: 0.5rem; list-style: none; padding: 0; margin: 0; font-size: 0.875rem;">
+                <li>
+                    <a href="{{ path('app_home') }}" style="color: var(--dark-text); text-decoration: none; transition: color var(--transition-base);"
+                       onmouseover="this.style.color='var(--bordeaux)'"
+                       onmouseout="this.style.color='var(--dark-text)'">
+                        Accueil
+                    </a>
+                </li>
+                <li style="color: var(--dark-text); opacity: 0.5;">
+                    <span data-icon="chevron-right" data-icon-width="16" data-icon-height="16"></span>
+                </li>
+                <li>
+                    <a href="{{ path('app_account') }}" style="color: var(--dark-text); text-decoration: none; transition: color var(--transition-base);"
+                       onmouseover="this.style.color='var(--bordeaux)'"
+                       onmouseout="this.style.color='var(--dark-text)'">
+                        Mon compte
+                    </a>
+                </li>
+                <li style="color: var(--dark-text); opacity: 0.5;">
+                    <span data-icon="chevron-right" data-icon-width="16" data-icon-height="16"></span>
+                </li>
+                <li style="color: var(--bordeaux); font-weight: 600;">
+                    Mes adresses
+                </li>
+            </ol>
+        </nav>
+
+        {# En-tête avec titre et bouton #}
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; gap: 1rem; flex-wrap: wrap;">
+            <div>
+                <h1 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 2.25rem; margin-bottom: 0.5rem; font-weight: 400;">
+                    Mes adresses de livraison
+                </h1>
+                <div style="width: 5rem; height: 4px; background-color: var(--gold); border-radius: var(--radius-sm); margin-bottom: 0.75rem;"></div>
+                <p style="color: var(--dark-text); opacity: 0.8; margin: 0;">
+                    Gérez vos adresses de livraison pour vos futures commandes
+                </p>
+            </div>
+            <a href="{{ path('app_account_address_new') }}" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.875rem 1.5rem; background: var(--bordeaux); color: white; border-radius: var(--radius-sm); text-decoration: none; font-weight: 600; transition: background-color var(--transition-base);"
+               onmouseover="this.style.backgroundColor='#8B0000'"
+               onmouseout="this.style.backgroundColor='var(--bordeaux)'">
+                <span data-icon="plus" data-icon-width="18" data-icon-height="18"></span>
+                Nouvelle adresse
+            </a>
+        </div>
+
+        {# Liste des adresses #}
         {% if addresses is empty %}
-            <div class="col-12">
-                <div class="account-card">
-                    <div class="card-body text-center py-5">
-                        <i data-feather="map-pin" width="64" class="mb-3" style="color: var(--primary); opacity: 0.3;"></i>
-                        <h5 class="mb-3">Aucune adresse enregistrée</h5>
-                        <p class="text-muted mb-4">Ajoutez une adresse pour faciliter vos futures commandes</p>
-                        <a href="{{ path('app_account_address_new') }}" class="btn btn-primary">
-                            <i data-feather="plus" width="18" class="me-2"></i>
-                            Ajouter ma première adresse
-                        </a>
-                    </div>
-                </div>
+            <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 3rem 2rem; text-align: center;">
+                <span data-icon="map-pin" data-icon-width="64" data-icon-height="64" style="display: block; margin: 0 auto 1.5rem; color: var(--gold); opacity: 0.3;"></span>
+                <h2 style="font-family: var(--font-heading); color: var(--dark-text); font-size: 1.5rem; margin-bottom: 0.75rem; font-weight: 400;">
+                    Aucune adresse enregistrée
+                </h2>
+                <p style="color: var(--dark-text); opacity: 0.8; margin-bottom: 2rem;">
+                    Ajoutez une adresse pour faciliter vos futures commandes
+                </p>
+                <a href="{{ path('app_account_address_new') }}" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.875rem 2rem; background: var(--bordeaux); color: white; border-radius: var(--radius-sm); text-decoration: none; font-weight: 600; transition: background-color var(--transition-base);"
+                   onmouseover="this.style.backgroundColor='#8B0000'"
+                   onmouseout="this.style.backgroundColor='var(--bordeaux)'">
+                    <span data-icon="plus" data-icon-width="20" data-icon-height="20"></span>
+                    Ajouter ma première adresse
+                </a>
             </div>
         {% else %}
-            {% for address in addresses %}
-                <div class="col-md-6 col-lg-4">
-                    <div class="account-card h-100 {% if address.isDefault %}border-primary{% endif %}">
-                        <div class="card-body">
-                            {# Badge par défaut #}
-                            {% if address.isDefault %}
-                                <div class="mb-3">
-                                    <span class="badge bg-primary">
-                                        <i data-feather="star" width="14"></i>
-                                        Adresse par défaut
-                                    </span>
-                                </div>
-                            {% endif %}
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+                {% for address in addresses %}
+                    <div style="background: white; border: {{ address.isDefault ? '2px solid var(--gold)' : '1px solid var(--beige)' }}; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 1.5rem; position: relative; display: flex; flex-direction: column; transition: transform var(--transition-base), box-shadow var(--transition-base);"
+                         onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='var(--shadow-xl)'"
+                         onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--shadow-md)'">
 
-                            {# Label #}
+                        {# Badge par défaut #}
+                        {% if address.isDefault %}
+                            <div style="position: absolute; top: 1rem; right: 1rem; padding: 0.375rem 0.75rem; border-radius: var(--radius-full); background: var(--gold); color: white; font-size: 0.75rem; font-weight: 600; display: flex; align-items: center; gap: 0.25rem;">
+                                <span data-icon="star" data-icon-width="12" data-icon-height="12"></span>
+                                Défaut
+                            </div>
+                        {% endif %}
+
+                        {# Label #}
+                        <h3 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.25rem; margin: 0 0 1rem; font-weight: 400; padding-right: {{ address.isDefault ? '5rem' : '0' }};">
                             {% if address.label %}
-                                <h5 class="card-title mb-3">
-                                    <i data-feather="tag" width="18" class="me-1"></i>
-                                    {{ address.label }}
-                                </h5>
+                                <span data-icon="tag" data-icon-width="18" data-icon-height="18" style="vertical-align: middle; margin-right: 0.25rem;"></span>
+                                {{ address.label }}
                             {% else %}
-                                <h5 class="card-title mb-3 text-muted">
-                                    <i data-feather="map-pin" width="18" class="me-1"></i>
-                                    Adresse #{{ address.id }}
-                                </h5>
+                                <span data-icon="map-pin" data-icon-width="18" data-icon-height="18" style="vertical-align: middle; margin-right: 0.25rem;"></span>
+                                Adresse #{{ address.id }}
                             {% endif %}
+                        </h3>
 
-                            {# Adresse complète #}
-                            <div class="mb-3">
-                                <p class="mb-1 text-muted small fw-bold">
-                                    <i data-feather="map" width="16" class="me-1"></i>
-                                    Adresse
-                                </p>
-                                <p class="mb-0">{{ address.street }}</p>
-                                <p class="mb-0">{{ address.postalCode }} {{ address.city }}</p>
-                            </div>
+                        {# Adresse complète #}
+                        <div style="margin-bottom: 1rem; flex: 1;">
+                            <p style="font-size: 0.875rem; color: var(--dark-text); opacity: 0.7; margin: 0 0 0.25rem; font-weight: 600; display: flex; align-items: center; gap: 0.375rem;">
+                                <span data-icon="map" data-icon-width="14" data-icon-height="14"></span>
+                                Adresse
+                            </p>
+                            <p style="margin: 0 0 0.25rem; color: var(--dark-text);">{{ address.street }}</p>
+                            <p style="margin: 0 0 0.75rem; color: var(--dark-text);">{{ address.postalCode }} {{ address.city }}</p>
 
-                            {# Téléphone #}
-                            <div class="mb-3">
-                                <p class="mb-1 text-muted small fw-bold">
-                                    <i data-feather="phone" width="16" class="me-1"></i>
-                                    Téléphone
-                                </p>
-                                <p class="mb-0">{{ address.phone }}</p>
-                            </div>
+                            <p style="font-size: 0.875rem; color: var(--dark-text); opacity: 0.7; margin: 0 0 0.25rem; font-weight: 600; display: flex; align-items: center; gap: 0.375rem;">
+                                <span data-icon="phone" data-icon-width="14" data-icon-height="14"></span>
+                                Téléphone
+                            </p>
+                            <p style="margin: 0; color: var(--dark-text);">{{ address.phone }}</p>
+                        </div>
 
-                            {# Actions #}
-                            <div class="d-flex gap-2 flex-wrap">
-                                <a href="{{ path('app_account_address_edit', {id: address.id}) }}"
-                                   class="btn btn-sm btn-outline-primary flex-fill">
-                                    <i data-feather="edit-2" width="14" class="me-1"></i>
-                                    Modifier
-                                </a>
+                        {# Actions #}
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; padding-top: 1rem; border-top: 1px solid var(--beige);">
+                            <a href="{{ path('app_account_address_edit', {id: address.id}) }}" style="flex: 1; min-width: 120px; padding: 0.625rem 1rem; border-radius: var(--radius-sm); border: 2px solid var(--bordeaux); color: var(--bordeaux); background: white; text-decoration: none; font-weight: 600; text-align: center; font-size: 0.875rem; transition: background-color var(--transition-base), color var(--transition-base); display: flex; align-items: center; justify-content: center; gap: 0.375rem;"
+                               onmouseover="this.style.backgroundColor='var(--bordeaux)'; this.style.color='white'"
+                               onmouseout="this.style.backgroundColor='white'; this.style.color='var(--bordeaux)'">
+                                <span data-icon="edit-2" data-icon-width="14" data-icon-height="14"></span>
+                                Modifier
+                            </a>
 
-                                {% if not address.isDefault %}
-                                    <form method="post"
-                                          action="{{ path('app_account_address_set_default', {id: address.id}) }}"
-                                          class="flex-fill"
-                                          onsubmit="return confirm('Définir cette adresse comme adresse par défaut ?');">
-                                        <input type="hidden" name="_token" value="{{ csrf_token('set-default-' ~ address.id) }}">
-                                        <button type="submit" class="btn btn-sm btn-outline-success w-100">
-                                            <i data-feather="star" width="14" class="me-1"></i>
-                                            Par défaut
-                                        </button>
-                                    </form>
-                                {% endif %}
-
-                                <form method="post"
-                                      action="{{ path('app_account_address_delete', {id: address.id}) }}"
-                                      class="flex-fill"
-                                      onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette adresse ?');">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('delete-address-' ~ address.id) }}">
-                                    <button type="submit" class="btn btn-sm btn-outline-danger w-100">
-                                        <i data-feather="trash-2" width="14" class="me-1"></i>
-                                        Supprimer
+                            {% if not address.isDefault %}
+                                <form method="post" action="{{ path('app_account_address_set_default', {id: address.id}) }}" style="flex: 1; min-width: 120px;" onsubmit="return confirm('Définir cette adresse comme adresse par défaut ?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('set-default-' ~ address.id) }}">
+                                    <button type="submit" style="width: 100%; padding: 0.625rem 1rem; border-radius: var(--radius-sm); border: none; background-color: var(--green); color: white; cursor: pointer; font-weight: 600; font-size: 0.875rem; transition: opacity var(--transition-base); display: flex; align-items: center; justify-content: center; gap: 0.375rem;"
+                                            onmouseover="this.style.opacity='0.9'"
+                                            onmouseout="this.style.opacity='1'">
+                                        <span data-icon="star" data-icon-width="14" data-icon-height="14"></span>
+                                        Par défaut
                                     </button>
                                 </form>
-                            </div>
+                            {% endif %}
+
+                            <form method="post" action="{{ path('app_account_address_delete', {id: address.id}) }}" style="flex: 1; min-width: 120px;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette adresse ?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete-address-' ~ address.id) }}">
+                                <button type="submit" style="width: 100%; padding: 0.625rem 1rem; border-radius: var(--radius-sm); border: none; background-color: #dc3545; color: white; cursor: pointer; font-weight: 600; font-size: 0.875rem; transition: background-color var(--transition-base); display: flex; align-items: center; justify-content: center; gap: 0.375rem;"
+                                        onmouseover="this.style.backgroundColor='#c82333'"
+                                        onmouseout="this.style.backgroundColor='#dc3545'">
+                                    <span data-icon="trash-2" data-icon-width="14" data-icon-height="14"></span>
+                                    Supprimer
+                                </button>
+                            </form>
                         </div>
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
+            </div>
         {% endif %}
     </div>
-</div>
-
+</section>
 {% endblock %}
