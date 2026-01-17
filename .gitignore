@@ -47,3 +47,9 @@ Charte-Graphique.md
 ###> heroku ###
 # Ne pas ignorer le composer.lock pour Heroku
 ###< heroku ###/public/assets/*.json
+
+# Ajouter à la fin :
+###> symfony/asset-mapper ###
+/public/assets/**
+!/public/assets/.gitkeep
+###< symfony/asset-mapper ###
