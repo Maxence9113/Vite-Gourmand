@@ -1,83 +1,89 @@
 {% extends 'admin/base_admin.html.twig' %}
 
-{% block title %}Gestion des Thèmes{% endblock %}
-{% block page_title %}Gestion des Thèmes{% endblock %}
+{% block title %}Gestion des Thèmes - Admin{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
-    {{ importmap('admin-themes-list-styles') }}
+    <link rel="stylesheet" href="{{ asset('styles/pages/admin-lists.css') }}">
 {% endblock %}
 
 {% block content %}
-
-<div class="action-bar">
-    <div class="search-box">
-        <input type="text" placeholder="🔍 Rechercher un thème..." id="searchInput">
-    </div>
-    <a href="{{ path('app_admin_themes_new') }}" class="btn-add">+ Ajouter un thème</a>
+<div class="list-header">
+    <h1>🎨 Gestion des thèmes</h1>
+    <a href="{{ path('app_admin_themes_new') }}" class="btn-add">
+        <span data-icon="plus" data-icon-width="16" data-icon-height="16"></span>
+        Ajouter un thème
+    </a>
 </div>
 
-<div class="table-container">
-    <table class="table table-sortable" id="themesTable">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Nom</th>
-                <th>Description</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for theme in themes %}
-            <tr class="theme-row">
-                <td><strong>#{{ theme.id }}</strong></td>
-                <td>{{ theme.name }}</td>
-                <td class="description-cell" title="{{ theme.description }}">
-                    {{ theme.description }}
-                </td>
-                <td>
-                    <a href="{{ path('app_admin_themes_edit', {id: theme.id}) }}" class="btn btn-warning">
-                        Modifier
-                    </a>
-                    <form method="post"
-                          action="{{ path('app_admin_themes_delete', {id: theme.id}) }}"
-                          style="display: inline;"
-                          data-confirm="Êtes-vous sûr de vouloir supprimer le thème « {{ theme.name }} » ?">
-                        <button type="submit" class="btn btn-danger">
-                            Supprimer
-                        </button>
-                    </form>
-                </td>
-            </tr>
-            {% else %}
-            <tr>
-                <td colspan="4" class="empty-state">
-                    Aucun thème trouvé. <a href="{{ path('app_admin_themes_new') }}" style="color: #3498db;">Créer un nouveau thème</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+{% for message in app.flashes('success') %}
+    <div class="flash-success-list">{{ message }}</div>
+{% endfor %}
+{% for message in app.flashes('error') %}
+    <div class="flash-error-list">{{ message }}</div>
+{% endfor %}
 
-    <div style="margin-top: 20px; color: #7f8c8d; font-size: 0.9rem;">
-        Total : <strong>{{ themes|length }}</strong> thème(s)
+<div class="list-container">
+    <div class="list-search-bar">
+        <div class="list-search-wrapper">
+            <span data-icon="search" data-icon-width="20" data-icon-height="20" class="list-search-icon"></span>
+            <input type="text" id="searchInput" placeholder="Rechercher un thème..." class="list-search-input">
+        </div>
     </div>
+
+    {% if themes is empty %}
+        <div class="list-empty-state">
+            <span data-icon="inbox" data-icon-width="48" data-icon-height="48" class="list-empty-icon"></span>
+            <p class="list-empty-text">Aucun thème trouvé.</p>
+        </div>
+    {% else %}
+        <div class="list-table-wrapper">
+            <table class="list-table small-list">
+                <colgroup><col><col><col></colgroup>
+                <thead>
+                    <tr><th>ID</th><th>Nom</th><th>Actions</th></tr>
+                </thead>
+                <tbody>
+                    {% for theme in themes %}
+                    <tr class="theme-row">
+                        <td>{{ theme.id }}</td>
+                        <td><strong>{{ theme.name }}</strong></td>
+                        <td>
+                            <div class="crud-actions">
+                                <a href="{{ path('app_admin_themes_edit', {id: theme.id}) }}" class="btn-crud btn-crud-edit">
+                                    <span data-icon="edit" data-icon-width="16" data-icon-height="16"></span>
+                                    <span class="btn-crud-text">Modifier</span>
+                                </a>
+                                <form method="post" action="{{ path('app_admin_themes_delete', {id: theme.id}) }}" class="delete-form">
+                                    <button type="submit" class="btn-crud btn-crud-delete">
+                                        <span data-icon="trash-2" data-icon-width="16" data-icon-height="16"></span>
+                                        <span class="btn-crud-text">Supprimer</span>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
 </div>
 
-{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-    {{ importmap('table-search') }}
-    {{ importmap('confirmation-dialog') }}
-    <script src="{{ asset('table-sort.js') }}"></script>
-    <script>
-        // Initialiser le tri du tableau
-        initTableSort('themesTable', {
-            excludeColumns: [3]
-        });
-
-        // Initialiser la recherche en temps réel
-        initTableSearch('searchInput', '.theme-row');
-    </script>
+<script src="{{ asset('table-sort.js') }}"></script>
+<script>
+initTableSort('themesTable', {excludeColumns: [2]});
+document.getElementById('searchInput')?.addEventListener('input', function(e) {
+    const searchTerm = e.target.value.toLowerCase();
+    document.querySelectorAll('.theme-row').forEach(row => {
+        row.style.display = row.textContent.toLowerCase().includes(searchTerm) ? '' : 'none';
+    });
+});
+document.querySelectorAll('.delete-form').forEach(form => {
+    form.addEventListener('submit', function(e) {
+        const name = this.closest('tr').querySelector('strong').textContent;
+        if (!confirm(`Êtes-vous sûr de vouloir supprimer le thème « ${name} » ?`)) e.preventDefault();
+    });
+});
+</script>
 {% endblock %}

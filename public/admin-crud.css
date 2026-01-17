@@ -1,0 +1,84 @@
+/* ========================================
+   CRUD BUTTONS - Figma Design
+   Style uniforme pour les boutons CRUD admin
+   ======================================== */
+
+.crud-actions {
+    display: inline-flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.btn-crud {
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-sm);
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all var(--transition-base);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    white-space: nowrap;
+}
+
+/* Bouton Voir - Bordeaux */
+.btn-crud-view {
+    background: transparent;
+    color: var(--bordeaux);
+    border: 1px solid var(--bordeaux);
+}
+
+.btn-crud-view:hover {
+    background: var(--bordeaux);
+    color: white;
+}
+
+/* Bouton Modifier - Gold */
+.btn-crud-edit {
+    background: transparent;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+}
+
+.btn-crud-edit:hover {
+    background: var(--gold);
+    color: var(--dark-text);
+}
+
+/* Bouton Supprimer - Rouge */
+.btn-crud-delete {
+    background: transparent;
+    color: #d4183d;
+    border: 1px solid #d4183d;
+}
+
+.btn-crud-delete:hover {
+    background: #d4183d;
+    color: white;
+}
+
+/* Version compacte avec icônes seulement */
+.btn-crud-icon {
+    padding: 0.5rem;
+    background: none;
+    border: none;
+}
+
+.btn-crud-icon:hover {
+    background: #e9ecef;
+}
+
+/* Responsive - Sur mobile, masquer le texte et garder seulement les icônes */
+@media (max-width: 768px) {
+    .btn-crud-text {
+        display: none;
+    }
+
+    .btn-crud {
+        padding: 0.5rem;
+    }
+}

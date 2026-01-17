@@ -1,0 +1,257 @@
+/* ========================================
+   PAGE - ADMIN DASHBOARD
+   Dashboard d'administration
+   ======================================== */
+
+/* ========================================
+   TITRE PRINCIPAL
+   ======================================== */
+
+.admin-dashboard-title {
+    font-family: var(--font-heading);
+    color: var(--bordeaux);
+    font-size: 2.5rem;
+    font-weight: 400;
+    margin-bottom: 2rem;
+}
+
+/* ========================================
+   GRILLE DE STATISTIQUES
+   ======================================== */
+
+.admin-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.admin-stat-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: 1.5rem;
+}
+
+.admin-stat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.admin-stat-label {
+    font-size: 0.875rem;
+    color: var(--dark-text);
+}
+
+.admin-stat-icon {
+    color: var(--bordeaux);
+}
+
+.admin-stat-icon.gold {
+    color: var(--gold);
+}
+
+.admin-stat-icon.green {
+    color: var(--green);
+}
+
+.admin-stat-value {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    font-weight: 400;
+    color: var(--bordeaux);
+    margin-bottom: 0.25rem;
+}
+
+.admin-stat-caption {
+    font-size: 0.875rem;
+    color: var(--gold);
+}
+
+/* ========================================
+   SECTION COMMANDES EN ATTENTE
+   ======================================== */
+
+.admin-pending-orders {
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.admin-pending-orders-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.admin-pending-orders-title {
+    font-family: var(--font-heading);
+    color: var(--bordeaux);
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin: 0;
+}
+
+.admin-pending-orders-link {
+    font-size: 0.875rem;
+    color: var(--gold);
+    text-decoration: none;
+    transition: opacity var(--transition-base);
+}
+
+.admin-pending-orders-link:hover {
+    opacity: 0.8;
+}
+
+.admin-pending-orders-empty {
+    text-align: center;
+    padding: 3rem 1.25rem;
+}
+
+.admin-pending-orders-empty-icon {
+    color: var(--dark-text);
+    opacity: 0.3;
+    margin-bottom: 1rem;
+    display: inline-block;
+}
+
+.admin-pending-orders-empty-text {
+    color: var(--dark-text);
+    opacity: 0.6;
+    margin: 0;
+}
+
+/* ========================================
+   TABLEAU COMMANDES
+   ======================================== */
+
+.admin-orders-table-wrapper {
+    overflow-x: auto;
+}
+
+.admin-orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.admin-orders-table colgroup col:nth-child(1) { width: 8%; }
+.admin-orders-table colgroup col:nth-child(2) { width: 20%; }
+.admin-orders-table colgroup col:nth-child(3) { width: 25%; }
+.admin-orders-table colgroup col:nth-child(4) { width: 12%; }
+.admin-orders-table colgroup col:nth-child(5) { width: 15%; }
+.admin-orders-table colgroup col:nth-child(6) { width: 20%; }
+
+.admin-orders-table thead {
+    background: var(--beige);
+}
+
+.admin-orders-table th {
+    padding: 1rem 1.5rem;
+    text-align: left;
+    color: var(--dark-text);
+    font-weight: 600;
+}
+
+.admin-orders-table tbody tr {
+    border-bottom: 1px solid var(--beige);
+    transition: background-color var(--transition-base);
+}
+
+.admin-orders-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.admin-orders-table td {
+    padding: 1rem 1.5rem;
+    color: var(--dark-text);
+}
+
+.admin-orders-table td.email-cell {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.admin-orders-table td strong {
+    font-weight: 600;
+}
+
+/* ========================================
+   ACTIONS RAPIDES
+   ======================================== */
+
+.admin-quick-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.admin-quick-action-btn {
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: 1.5rem;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    transition: box-shadow var(--transition-base);
+}
+
+.admin-quick-action-btn:hover {
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+}
+
+.admin-quick-action-icon {
+    margin-bottom: 0.75rem;
+    display: block;
+}
+
+.admin-quick-action-icon.bordeaux {
+    color: var(--bordeaux);
+}
+
+.admin-quick-action-icon.gold {
+    color: var(--gold);
+}
+
+.admin-quick-action-title {
+    font-family: var(--font-heading);
+    color: var(--bordeaux);
+    font-size: 1.25rem;
+    font-weight: 400;
+    margin-bottom: 0.5rem;
+}
+
+.admin-quick-action-description {
+    font-size: 0.875rem;
+    color: var(--dark-text);
+    margin: 0;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 768px) {
+    .admin-dashboard-title {
+        font-size: 2rem;
+    }
+
+    .admin-stat-value {
+        font-size: 2rem;
+    }
+
+    .admin-orders-table-wrapper {
+        overflow-x: scroll;
+    }
+
+    .admin-quick-actions-grid {
+        grid-template-columns: 1fr;
+    }
+}

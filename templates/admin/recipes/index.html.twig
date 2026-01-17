@@ -1,125 +1,127 @@
 {% extends 'admin/base_admin.html.twig' %}
 
-{% block title %}Gestion des Recettes{% endblock %}
+{% block title %}Gestion des Recettes - Admin{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/pages/admin-lists.css') }}">
+{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>Gestion des Recettes</h1>
-        <div>
-            <a href="{{ path('app_admin_dashboard') }}" class="btn btn-secondary">Retour au Dashboard</a>
-            <a href="{{ path('app_admin_recipes_new') }}" class="btn btn-success">Ajouter une recette</a>
+<div class="list-header">
+    <h1>
+        🍽️ Gestion des recettes
+    </h1>
+    <a href="{{ path('app_admin_recipes_new') }}" class="btn-add">
+        <span data-icon="plus" data-icon-width="16" data-icon-height="16"></span>
+        Ajouter une recette
+    </a>
+</div>
+
+{# Afficher les messages flash #}
+{% for message in app.flashes('success') %}
+    <div class="flash-success-list">
+        {{ message }}
+    </div>
+{% endfor %}
+
+{% for message in app.flashes('error') %}
+    <div class="flash-error-list">
+        {{ message }}
+    </div>
+{% endfor %}
+
+<!-- Liste des recettes -->
+<div class="list-container">
+    <div class="list-search-bar">
+        <div class="list-search-wrapper">
+            <span data-icon="search" data-icon-width="20" data-icon-height="20" class="list-search-icon"></span>
+            <input type="text" id="searchInput" placeholder="Rechercher une recette..." class="list-search-input">
         </div>
     </div>
 
-    {# Afficher les messages flash #}
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    {% if recipes is empty %}
+        <div class="list-empty-state">
+            <span data-icon="inbox" data-icon-width="48" data-icon-height="48" class="list-empty-icon"></span>
+            <p class="list-empty-text">Aucune recette trouvée.</p>
         </div>
-    {% endfor %}
-
-    {# Barre de recherche (pour plus tard) #}
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <input type="text" class="form-control" placeholder="Rechercher une recette..." id="searchInput">
-        </div>
-        <div class="col-md-3">
-            <select class="form-control" id="categoryFilter">
-                <option value="">Toutes les catégories</option>
-                {# On ajoutera les catégories dynamiquement plus tard #}
-            </select>
-        </div>
-    </div>
-
-    {# Tableau des recettes #}
-    <div class="card">
-        <div class="card-body">
-            <table class="table table-hover table-sortable" id="recipesTable">
+    {% else %}
+        <div class="list-table-wrapper">
+            <table class="list-table medium-list">
+                <colgroup>
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                </colgroup>
                 <thead>
                     <tr>
                         <th>#</th>
                         <th>Titre</th>
                         <th>Description</th>
-                        <th>Catégorie</th>
-                        <th>Allergènes</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for recipe in recipes %}
                     <tr class="recipe-row">
-                        <td>{{ recipe.id }}</td>
-                        <td>{{ recipe.title }}</td>
-                        <td>{{ recipe.description|length > 50 ? recipe.description|slice(0, 50) ~ '...' : recipe.description }}</td>
-                        <td data-sort="{% if recipe.category %}{{ recipe.category.name }}{% else %}Non défini{% endif %}">
-                            {% if recipe.category %}
-                                <span class="badge bg-info">{{ recipe.category.name }}</span>
-                            {% else %}
-                                <span class="badge bg-secondary">Non défini</span>
-                            {% endif %}
-                        </td>
-                        <td data-sort="{% if recipe.allergen|length > 0 %}{% for allergen in recipe.allergen %}{{ allergen.name }} {% endfor %}{% else %}Aucun{% endif %}">
-                            {% if recipe.allergen|length > 0 %}
-                                {% for allergen in recipe.allergen %}
-                                    <span class="badge bg-warning text-dark">{{ allergen.name }}</span>
-                                {% endfor %}
-                            {% else %}
-                                <span class="text-muted">Aucun</span>
-                            {% endif %}
-                        </td>
+                        <td><strong>{{ recipe.id }}</strong></td>
+                        <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="{{ recipe.title }}">{{ recipe.title }}</td>
+                        <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="{{ recipe.description }}">{{ recipe.description }}</td>
                         <td>
-                            <div class="btn-group" role="group">
-                                <a href="#" class="btn btn-sm btn-info" title="Voir les détails">
-                                    Voir
+                            <div class="crud-actions">
+                                <a href="{{ path('app_admin_recipes_edit', {id: recipe.id}) }}" class="btn-crud btn-crud-edit">
+                                    <span data-icon="edit" data-icon-width="16" data-icon-height="16"></span>
+                                    <span class="btn-crud-text">Modifier</span>
                                 </a>
-                                <a href="{{ path('app_admin_recipes_edit', {id: recipe.id}) }}" class="btn btn-sm btn-warning" title="Modifier">
-                                    Modifier
-                                </a>
-                                <form method="post" action="{{ path('app_admin_recipes_delete', {id: recipe.id}) }}" style="display: inline;"
-                                      data-confirm="Êtes-vous sûr de vouloir supprimer la recette « {{ recipe.title }} » ?">
-                                    <button type="submit" class="btn btn-sm btn-danger" title="Supprimer">
-                                        Supprimer
+                                <form method="post" action="{{ path('app_admin_recipes_delete', {id: recipe.id}) }}" class="delete-form">
+                                    <button type="submit" class="btn-crud btn-crud-delete">
+                                        <span data-icon="trash-2" data-icon-width="16" data-icon-height="16"></span>
+                                        <span class="btn-crud-text">Supprimer</span>
                                     </button>
                                 </form>
                             </div>
-                        </td>
-                    </tr>
-                    {% else %}
-                    <tr>
-                        <td colspan="6" class="text-center text-muted py-4">
-                            Aucune recette trouvée. <a href="#">Créer une nouvelle recette</a>
                         </td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
-    </div>
-
-    {# Informations sur le nombre de recettes #}
-    <div class="mt-3">
-        <p class="text-muted">
-            Total : <strong>{{ recipes|length }}</strong> recette(s)
-        </p>
-    </div>
+    {% endif %}
 </div>
 
-{% endblock %}
+{# Script pour la recherche en temps réel et le tri #}
+<script src="{{ asset('table-sort.js') }}"></script>
+<script>
+    // Initialiser le tri du tableau (exclure la dernière colonne "Actions")
+    initTableSort('recipesTable', {
+        excludeColumns: [3]
+    });
 
-{% block javascripts %}
-    {{ parent() }}
-    {{ importmap('table-search') }}
-    {{ importmap('confirmation-dialog') }}
-    <script src="{{ asset('table-sort.js') }}"></script>
-    <script>
-        // Initialiser le tri du tableau
-        initTableSort('recipesTable', {
-            excludeColumns: [5]
+    // Recherche en temps réel
+    document.getElementById('searchInput')?.addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        const rows = document.querySelectorAll('.recipe-row');
+
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.classList.toggle('hidden', !text.includes(searchTerm));
+            if (text.includes(searchTerm)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
         });
+    });
 
-        // Initialiser la recherche en temps réel
-        initTableSearch('searchInput', '.recipe-row');
-    </script>
+    // Confirmation de suppression
+    document.querySelectorAll('.delete-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            const recipeTitle = this.closest('tr').querySelectorAll('td')[1].textContent.trim();
+            if (!confirm(`Êtes-vous sûr de vouloir supprimer la recette « ${recipeTitle} » ?`)) {
+                e.preventDefault();
+            }
+        });
+    });
+</script>
 {% endblock %}

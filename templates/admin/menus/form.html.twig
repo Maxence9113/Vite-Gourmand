@@ -1,231 +1,206 @@
 {% extends 'admin/base_admin.html.twig' %}
-
-{% block title %}{{ isEdit ? 'Modifier' : 'Ajouter' }} un menu{% endblock %}
-{% block page_title %}{{ isEdit ? 'Modifier le menu' : 'Nouveau menu' }}{% endblock %}
-
-{% block stylesheets %}
-    {{ parent() }}
-    {{ importmap('admin-menu-form-styles') }}
-{% endblock %}
-
+{% block title %}{{ isEdit ? 'Modifier' : 'Nouveau' }} menu{% endblock %}
+{% block stylesheets %}{{ parent() }}<link rel="stylesheet" href="{{ asset('styles/pages/admin-forms.css') }}">{% endblock %}
 {% block content %}
-
 <div class="form-header">
-    <a href="{{ path('app_admin_menus') }}" class="btn-back">← Retour à la liste</a>
+    <h1><span data-icon="file-text" data-icon-width="32" data-icon-height="32" class="form-header-icon"></span>{{ isEdit ? 'Modifier le menu' : 'Nouveau menu' }}</h1>
+    <a href="{{ path('app_admin_menus') }}" class="btn-back"><span data-icon="arrow-left" data-icon-width="16" data-icon-height="16"></span>Retour</a>
 </div>
-
+{% for message in app.flashes('success') %}<div class="flash-success-inline">{{ message }}</div>{% endfor %}
 <div class="form-card">
     {{ form_start(form) }}
-
-    {# Section 1: Informations de base #}
     <div class="form-section">
-        <h3 class="section-title">📋 Informations de base</h3>
-        <div class="form-grid">
-            <div>
-                {{ form_row(form.name) }}
-            </div>
-            <div>
-                {{ form_row(form.theme) }}
-            </div>
+        <div class="section-header">
+            <span data-icon="info" data-icon-width="20" data-icon-height="20" class="section-header-icon"></span>
+            <h3 class="section-title">Informations générales</h3>
         </div>
-        <div style="margin-top: 15px;">
+        <div class="section-body">
+            {{ form_row(form.name) }}
             {{ form_row(form.description) }}
-        </div>
-    </div>
-
-    {# Section 2: Tarification #}
-    <div class="form-section">
-        <h3 class="section-title">💰 Tarification</h3>
-        <div class="form-grid">
-            <div>
-                {{ form_row(form.nb_person_min) }}
-            </div>
-            <div>
+            <div class="form-grid two-cols">
+                {{ form_row(form.theme) }}
                 {{ form_row(form.price_per_person) }}
             </div>
-        </div>
-        <div style="margin-top: 15px;">
-            {{ form_row(form.stock) }}
+            <div class="form-grid two-cols">
+                {{ form_row(form.nb_person_min) }}
+                {{ form_row(form.stock) }}
+            </div>
         </div>
     </div>
-
-    {# Section 3: Sélection des recettes #}
     <div class="form-section">
-        <h3 class="section-title">🍽️ Composition du menu</h3>
-        <p class="section-description">
-            Sélectionnez les recettes pour chaque catégorie. Les badges indiquent le nombre de recettes sélectionnées.
-        </p>
-
-        <div class="accordion recipe-accordion" id="recipesAccordion">
+        <div class="section-header">
+            <span data-icon="image" data-icon-width="20" data-icon-height="20" class="section-header-icon"></span>
+            <h3 class="section-title">Illustration</h3>
+        </div>
+        <div class="section-body">
+            {{ form_row(form.imageFile) }}
+            {{ form_row(form.textAlt) }}
+        </div>
+    </div>
+    <div class="form-section">
+        <div class="section-header">
+            <span data-icon="utensils-crossed" data-icon-width="20" data-icon-height="20" class="section-header-icon"></span>
+            <h3 class="section-title">Recettes du menu</h3>
+        </div>
+        <div class="section-body">
             {# Entrées #}
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEntrees">
-                        Entrées
-                        <span class="accordion-badge" id="badge-entrees">0</span>
-                    </button>
-                </h2>
-                <div id="collapseEntrees" class="accordion-collapse collapse" data-bs-parent="#recipesAccordion">
+            <div class="recipe-accordion">
+                <div class="accordion-header" data-accordion="entrees">
+                    <div class="accordion-title">
+                        <span data-icon="salad" data-icon-width="20" data-icon-height="20" class="accordion-icon"></span>
+                        <span>Entrées</span>
+                        <span class="accordion-badge" data-count="entrees">0</span>
+                    </div>
+                    <span data-icon="chevron-down" data-icon-width="20" data-icon-height="20" class="accordion-chevron"></span>
+                </div>
+                <div class="accordion-content" id="accordion-entrees">
                     <div class="accordion-body">
-                        <div class="recipe-checkboxes">
-                            {{ form_widget(form.entrees) }}
-                        </div>
-                        {{ form_errors(form.entrees) }}
+                        {{ form_widget(form.entrees) }}
                     </div>
                 </div>
             </div>
 
             {# Plats #}
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePlats">
-                        Plats
-                        <span class="accordion-badge" id="badge-plats">0</span>
-                    </button>
-                </h2>
-                <div id="collapsePlats" class="accordion-collapse collapse" data-bs-parent="#recipesAccordion">
+            <div class="recipe-accordion">
+                <div class="accordion-header" data-accordion="plats">
+                    <div class="accordion-title">
+                        <span data-icon="utensils" data-icon-width="20" data-icon-height="20" class="accordion-icon"></span>
+                        <span>Plats</span>
+                        <span class="accordion-badge" data-count="plats">0</span>
+                    </div>
+                    <span data-icon="chevron-down" data-icon-width="20" data-icon-height="20" class="accordion-chevron"></span>
+                </div>
+                <div class="accordion-content" id="accordion-plats">
                     <div class="accordion-body">
-                        <div class="recipe-checkboxes">
-                            {{ form_widget(form.plats) }}
-                        </div>
-                        {{ form_errors(form.plats) }}
+                        {{ form_widget(form.plats) }}
                     </div>
                 </div>
             </div>
 
             {# Fromages #}
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFromages">
-                        Fromages
-                        <span class="accordion-badge" id="badge-fromages">0</span>
-                    </button>
-                </h2>
-                <div id="collapseFromages" class="accordion-collapse collapse" data-bs-parent="#recipesAccordion">
+            <div class="recipe-accordion">
+                <div class="accordion-header" data-accordion="fromages">
+                    <div class="accordion-title">
+                        <span data-icon="cookie" data-icon-width="20" data-icon-height="20" class="accordion-icon"></span>
+                        <span>Fromages</span>
+                        <span class="accordion-badge" data-count="fromages">0</span>
+                    </div>
+                    <span data-icon="chevron-down" data-icon-width="20" data-icon-height="20" class="accordion-chevron"></span>
+                </div>
+                <div class="accordion-content" id="accordion-fromages">
                     <div class="accordion-body">
-                        <div class="recipe-checkboxes">
-                            {{ form_widget(form.fromages) }}
-                        </div>
-                        {{ form_errors(form.fromages) }}
+                        {{ form_widget(form.fromages) }}
                     </div>
                 </div>
             </div>
 
             {# Desserts #}
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDesserts">
-                        Desserts
-                        <span class="accordion-badge" id="badge-desserts">0</span>
-                    </button>
-                </h2>
-                <div id="collapseDesserts" class="accordion-collapse collapse" data-bs-parent="#recipesAccordion">
+            <div class="recipe-accordion">
+                <div class="accordion-header" data-accordion="desserts">
+                    <div class="accordion-title">
+                        <span data-icon="cake" data-icon-width="20" data-icon-height="20" class="accordion-icon"></span>
+                        <span>Desserts</span>
+                        <span class="accordion-badge" data-count="desserts">0</span>
+                    </div>
+                    <span data-icon="chevron-down" data-icon-width="20" data-icon-height="20" class="accordion-chevron"></span>
+                </div>
+                <div class="accordion-content" id="accordion-desserts">
                     <div class="accordion-body">
-                        <div class="recipe-checkboxes">
-                            {{ form_widget(form.desserts) }}
-                        </div>
-                        {{ form_errors(form.desserts) }}
+                        {{ form_widget(form.desserts) }}
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    {# Section 4: Régimes alimentaires #}
     <div class="form-section">
-        <h3 class="section-title">🥗 Régimes alimentaires</h3>
-        <p class="section-description">
-            Sélectionnez les régimes alimentaires compatibles avec ce menu (optionnel).
-        </p>
-        <div class="dietary-choices">
-            {{ form_widget(form.dietetary) }}
-            {{ form_errors(form.dietetary) }}
+        <div class="section-header">
+            <span data-icon="leaf" data-icon-width="20" data-icon-height="20" class="section-header-icon"></span>
+            <h3 class="section-title">Régimes alimentaires</h3>
+        </div>
+        <div class="section-body">
+            {{ form_row(form.dietetary) }}
         </div>
     </div>
-
-    {# Section 5: Image #}
-    <div class="form-section">
-        <h3 class="section-title">🖼️ Illustration du menu</h3>
-        <div style="display: grid; grid-template-columns: 300px 1fr; gap: 30px; align-items: start;">
-            {% if isEdit and menu.illustration %}
-                <div>
-                    <p class="form-label">Image actuelle :</p>
-                    <img src="{{ menu.illustration }}"
-                         alt="{{ menu.textAlt ?: menu.name }}"
-                         class="current-image">
-                </div>
-            {% else %}
-                <div style="background: #f8f9fa; border: 2px dashed #ddd; border-radius: 8px; padding: 40px; text-align: center; color: #95a5a6;">
-                    <p style="margin: 0; font-size: 0.9rem;">Aucune image</p>
-                </div>
-            {% endif %}
-            <div>
-                <div style="margin-bottom: 15px;">
-                    {{ form_row(form.imageFile) }}
-                </div>
-                <div>
-                    {{ form_row(form.textAlt) }}
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {# Informations de modification #}
-    {% if isEdit %}
-        <div class="info-box">
-            <strong>Menu actuel :</strong><br>
-            Thème : {{ menu.theme.name }}<br>
-            Régimes : 
-            {% if menu.dietetary|length > 0 %}
-                {% for diet in menu.dietetary %}
-                    {{ diet.name }}{% if not loop.last %}, {% endif %}
-                {% endfor %}
-            {% else %}
-                Aucun
-            {% endif %}<br>
-            Recettes : {{ menu.recipes|length }}
-        </div>
-    {% endif %}
-
-    {# Actions du formulaire #}
     <div class="form-actions">
-        <a href="{{ path('app_admin_menus') }}" class="btn-cancel">Annuler</a>
+        <div class="form-actions-left">
+            <a href="{{ path('app_admin_menus') }}" class="btn-cancel">
+                <span data-icon="x" data-icon-width="16" data-icon-height="16"></span>Annuler
+            </a>
+            {% if isEdit %}
+                <button type="button" class="btn-delete" onclick="if(confirm('Êtes-vous sûr de vouloir supprimer ce menu ?')) document.getElementById('delete-form').submit();">
+                    <span data-icon="trash-2" data-icon-width="16" data-icon-height="16"></span>Supprimer
+                </button>
+            {% endif %}
+        </div>
         <button type="submit" class="btn-submit">
-            {{ isEdit ? 'Enregistrer les modifications' : 'Créer le menu' }}
+            <span data-icon="check" data-icon-width="16" data-icon-height="16"></span>{{ isEdit ? 'Enregistrer' : 'Créer' }}
         </button>
     </div>
-
     {{ form_end(form) }}
 </div>
+{% if isEdit %}
+<div class="info-box"><strong>ID:</strong> {{ menu.id }}</div>
+
+{# Formulaire caché pour la suppression #}
+<form id="delete-form" method="post" action="{{ path('app_admin_menus_delete', {id: menu.id}) }}" class="hidden-form"></form>
+{% endif %}
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        function updateBadge(containerId, badgeId) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
+document.addEventListener('DOMContentLoaded', function() {
+    // Gestion de l'accordéon
+    document.querySelectorAll('.accordion-header').forEach(header => {
+        header.addEventListener('click', function() {
+            const accordionId = this.dataset.accordion;
+            const content = document.getElementById('accordion-' + accordionId);
 
-            const checkboxes = container.querySelectorAll('input[type="checkbox"]:checked');
-            const badge = document.getElementById(badgeId);
-            if (badge) {
-                badge.textContent = checkboxes.length;
+            // Toggle l'accordéon actuel
+            this.classList.toggle('active');
+            content.classList.toggle('active');
+        });
+    });
+
+    // Fonction pour compter les checkboxes cochées
+    function updateCounts() {
+        ['entrees', 'plats', 'fromages', 'desserts'].forEach(category => {
+            const container = document.getElementById('accordion-' + category);
+            if (container) {
+                const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+                const checkedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
+                const badge = document.querySelector(`[data-count="${category}"]`);
+                if (badge) {
+                    badge.textContent = checkedCount;
+                    // Changer la couleur du badge si des items sont sélectionnés
+                    if (checkedCount > 0) {
+                        badge.style.background = 'var(--gold)';
+                    } else {
+                        badge.style.background = 'var(--bordeaux)';
+                    }
+                }
+            }
+        });
+    }
+
+    // Initialiser les compteurs
+    updateCounts();
+
+    // Écouter les changements sur les checkboxes
+    document.querySelectorAll('.accordion-body input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', updateCounts);
+    });
+
+    // Ouvrir automatiquement les accordéons qui ont des items sélectionnés
+    ['entrees', 'plats', 'fromages', 'desserts'].forEach(category => {
+        const container = document.getElementById('accordion-' + category);
+        if (container) {
+            const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+            const hasChecked = Array.from(checkboxes).some(cb => cb.checked);
+            if (hasChecked) {
+                const header = document.querySelector(`[data-accordion="${category}"]`);
+                header.classList.add('active');
+                container.classList.add('active');
             }
         }
-
-        function updateAllBadges() {
-            updateBadge('collapseEntrees', 'badge-entrees');
-            updateBadge('collapsePlats', 'badge-plats');
-            updateBadge('collapseFromages', 'badge-fromages');
-            updateBadge('collapseDesserts', 'badge-desserts');
-        }
-
-        setTimeout(function() {
-            updateAllBadges();
-
-            const allCheckboxes = document.querySelectorAll('.recipe-checkboxes input[type="checkbox"]');
-            allCheckboxes.forEach(function(checkbox) {
-                checkbox.addEventListener('change', updateAllBadges);
-            });
-        }, 100);
     });
+});
 </script>
 {% endblock %}

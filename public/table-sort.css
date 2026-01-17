@@ -1,0 +1,37 @@
+/* ========================================
+   TABLE SORT STYLES
+   Styles pour les tables triables
+   ======================================== */
+
+/* En-têtes de colonnes triables */
+th.sortable {
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    padding-right: 2rem !important;
+}
+
+th.sortable:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Indicateurs de tri */
+th.sortable::after {
+    content: '⇅';
+    position: absolute;
+    right: 0.75rem;
+    opacity: 0.3;
+    font-size: 0.875rem;
+}
+
+th.sortable.asc::after {
+    content: '↑';
+    opacity: 1;
+    color: var(--bordeaux);
+}
+
+th.sortable.desc::after {
+    content: '↓';
+    opacity: 1;
+    color: var(--bordeaux);
+}

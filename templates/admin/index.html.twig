@@ -1,73 +1,162 @@
 {% extends 'admin/base_admin.html.twig' %}
 
 {% block title %}Dashboard Administration{% endblock %}
-{% block page_title %}Dashboard{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
-    {{ importmap('admin-dashboard-styles') }}
+    <link rel="stylesheet" href="{{ asset('styles/pages/admin-dashboard.css') }}">
 {% endblock %}
 
 {% block content %}
+<h1 class="admin-dashboard-title">
+    📊 Tableau de bord
+</h1>
 
-<!-- Section de bienvenue -->
-<div class="welcome-section">
-    <h2>Bienvenue, {{ app.user.firstname }} 👋</h2>
-    <p>Voici un aperçu rapide de votre restaurant</p>
+<!-- Stats Grid - Figma Design -->
+<div class="admin-stats-grid">
+    <div class="admin-stat-card">
+        <div class="admin-stat-header">
+            <span class="admin-stat-label">Commandes totales</span>
+            <span data-icon="shopping-cart" data-icon-width="20" data-icon-height="20" class="admin-stat-icon"></span>
+        </div>
+        <p class="admin-stat-value">
+            {{ stats.totalMenus + stats.totalRecipes }}
+        </p>
+        <p class="admin-stat-caption">+{{ stats.pendingOrders }} en attente</p>
+    </div>
+
+    <div class="admin-stat-card">
+        <div class="admin-stat-header">
+            <span class="admin-stat-label">Menus disponibles</span>
+            <span data-icon="file-text" data-icon-width="20" data-icon-height="20" class="admin-stat-icon gold"></span>
+        </div>
+        <p class="admin-stat-value">
+            {{ stats.totalMenus }}
+        </p>
+        <p class="admin-stat-caption">Actifs</p>
+    </div>
+
+    <div class="admin-stat-card">
+        <div class="admin-stat-header">
+            <span class="admin-stat-label">Recettes</span>
+            <span data-icon="utensils-crossed" data-icon-width="20" data-icon-height="20" class="admin-stat-icon green"></span>
+        </div>
+        <p class="admin-stat-value">
+            {{ stats.totalRecipes }}
+        </p>
+        <p class="admin-stat-caption">Disponibles</p>
+    </div>
+
+    <div class="admin-stat-card">
+        <div class="admin-stat-header">
+            <span class="admin-stat-label">Utilisateurs</span>
+            <span data-icon="users" data-icon-width="20" data-icon-height="20" class="admin-stat-icon gold"></span>
+        </div>
+        <p class="admin-stat-value">
+            {{ stats.totalUsers }}
+        </p>
+        <p class="admin-stat-caption">Inscrits</p>
+    </div>
 </div>
 
-<!-- Statistiques rapides -->
-<div class="quick-stats">
-    <div class="quick-stat warning">
-        <div class="label">⚡ Commandes en attente</div>
-        <div class="value">{{ stats.pendingOrders }}</div>
+<!-- Pending Orders - Figma Design -->
+<div class="admin-pending-orders">
+    <div class="admin-pending-orders-header">
+        <h2 class="admin-pending-orders-title">
+            🛒 Commandes en attente de validation
+        </h2>
+        <a href="{{ path('app_admin_orders') }}" class="admin-pending-orders-link">
+            Voir toutes →
+        </a>
     </div>
-    <div class="quick-stat">
-        <div class="label">📋 Menus disponibles</div>
-        <div class="value">{{ stats.totalMenus }}</div>
-    </div>
-    <div class="quick-stat">
-        <div class="label">🍳 Recettes</div>
-        <div class="value">{{ stats.totalRecipes }}</div>
-    </div>
-    <div class="quick-stat">
-        <div class="label">👥 Utilisateurs</div>
-        <div class="value">{{ stats.totalUsers }}</div>
-    </div>
+    {% if pendingOrdersList is empty %}
+        <div class="admin-pending-orders-empty">
+            <span data-icon="inbox" data-icon-width="48" data-icon-height="48" class="admin-pending-orders-empty-icon"></span>
+            <p class="admin-pending-orders-empty-text">Aucune commande en attente</p>
+        </div>
+    {% else %}
+        <div class="admin-orders-table-wrapper">
+            <table class="admin-orders-table">
+                <colgroup>
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>N°</th>
+                        <th>Client</th>
+                        <th>Email</th>
+                        <th>Date</th>
+                        <th>Montant</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in pendingOrdersList %}
+                    <tr>
+                        <td>
+                            <strong>#{{ order.id }}</strong>
+                        </td>
+                        <td>
+                            {{ order.user.firstname }} {{ order.user.lastname }}
+                        </td>
+                        <td class="email-cell" title="{{ order.user.email }}">
+                            {{ order.user.email }}
+                        </td>
+                        <td>
+                            {{ order.createdAt|date('d/m/Y') }}
+                        </td>
+                        <td>
+                            {{ order.totalPrice|number_format(2, ',', ' ') }} €
+                        </td>
+                        <td>
+                            <a href="{{ path('app_admin_orders_show', {id: order.id}) }}" class="btn-crud btn-crud-view">
+                                <span data-icon="eye" data-icon-width="16" data-icon-height="16"></span>
+                                <span class="btn-crud-text">Voir</span>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
 </div>
 
-<!-- Dernières recettes -->
-<h2 class="section-title">📝 Dernières recettes ajoutées</h2>
-<div class="table-container">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Titre</th>
-                <th>Catégorie</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for recipe in latestRecipes %}
-            <tr>
-                <td><strong>#{{ recipe.id }}</strong></td>
-                <td>{{ recipe.title }}</td>
-                <td>{{ recipe.category ? recipe.category.name : 'N/A' }}</td>
-                <td>
-                    <a href="#" class="btn btn-info">Voir</a>
-                    <a href="#" class="btn btn-warning">Modifier</a>
-                    <a href="#" class="btn btn-danger">Supprimer</a>
-                </td>
-            </tr>
-            {% else %}
-            <tr>
-                <td colspan="4" style="text-align: center; padding: 40px; color: #95a5a6;">
-                    Aucune recette pour le moment
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<!-- Quick Actions - Figma Design -->
+<div class="admin-quick-actions-grid">
+    <button onclick="window.location.href='{{ path('app_admin_orders') }}'" class="admin-quick-action-btn">
+        <span data-icon="shopping-cart" data-icon-width="32" data-icon-height="32" class="admin-quick-action-icon bordeaux"></span>
+        <h3 class="admin-quick-action-title">
+            Gérer les commandes
+        </h3>
+        <p class="admin-quick-action-description">
+            Voir et gérer toutes les commandes
+        </p>
+    </button>
+
+    <button onclick="window.location.href='{{ path('app_admin_menus') }}'" class="admin-quick-action-btn">
+        <span data-icon="file-text" data-icon-width="32" data-icon-height="32" class="admin-quick-action-icon gold"></span>
+        <h3 class="admin-quick-action-title">
+            Modifier les menus
+        </h3>
+        <p class="admin-quick-action-description">
+            Ajouter ou modifier les menus
+        </p>
+    </button>
+
+    <button onclick="window.location.href='{{ path('app_admin_reviews') }}'" class="admin-quick-action-btn">
+        <span data-icon="star" data-icon-width="32" data-icon-height="32" class="admin-quick-action-icon gold"></span>
+        <h3 class="admin-quick-action-title">
+            Modérer les avis
+        </h3>
+        <p class="admin-quick-action-description">
+            Gérer les avis clients
+        </p>
+    </button>
 </div>
 {% endblock %}

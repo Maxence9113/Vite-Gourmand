@@ -1,0 +1,256 @@
+/* ========================================
+   PAGE - ACCOUNT EDIT
+   Page d'édition du compte utilisateur
+   ======================================== */
+
+/* ========================================
+   STRUCTURE DE LA PAGE
+   ======================================== */
+
+.account-edit-section {
+    background-color: var(--beige);
+    padding: 2rem 0 3rem;
+}
+
+.account-edit-container {
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* ========================================
+   EN-TÊTE DE PAGE
+   ======================================== */
+
+.account-edit-header {
+    margin-bottom: 2rem;
+}
+
+.account-edit-title {
+    font-family: var(--font-heading);
+    color: var(--bordeaux);
+    font-size: 2.25rem;
+    margin-bottom: 0.5rem;
+    font-weight: 400;
+}
+
+.account-edit-title-divider {
+    width: 5rem;
+    height: 4px;
+    background-color: var(--gold);
+    border-radius: var(--radius-sm);
+}
+
+/* ========================================
+   WRAPPER ET CARTE DU FORMULAIRE
+   ======================================== */
+
+.account-edit-form-wrapper {
+    max-width: 50rem;
+    margin: 0 auto;
+}
+
+.account-edit-form-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: 2rem;
+}
+
+/* ========================================
+   SECTION HEADER
+   ======================================== */
+
+.account-edit-section-header {
+    margin-bottom: 2rem;
+}
+
+.account-edit-section-title {
+    font-family: var(--font-heading);
+    color: var(--bordeaux);
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.account-edit-section-divider {
+    width: 3rem;
+    height: 3px;
+    background-color: var(--gold);
+    border-radius: var(--radius-sm);
+}
+
+/* ========================================
+   GRILLE DE FORMULAIRE
+   ======================================== */
+
+.account-edit-form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+/* ========================================
+   CHAMPS DE FORMULAIRE
+   ======================================== */
+
+.account-edit-form-group {
+    margin-bottom: 2rem;
+}
+
+.account-edit-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--dark-text);
+    font-size: 0.875rem;
+}
+
+.account-edit-required {
+    color: #dc3545;
+}
+
+.account-edit-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--bordeaux);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.account-edit-input:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+}
+
+/* ========================================
+   CHAMP EMAIL NON MODIFIABLE
+   ======================================== */
+
+.account-edit-email-display {
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-sm);
+    background: var(--beige);
+    border: 1px solid rgba(139, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.account-edit-email-icon {
+    color: var(--gold);
+}
+
+.account-edit-email-text {
+    flex: 1;
+    color: var(--dark-text);
+}
+
+.account-edit-email-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-full);
+    background: var(--dark-text);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.account-edit-email-help {
+    font-size: 0.875rem;
+    color: var(--dark-text);
+    opacity: 0.7;
+    margin: 0.5rem 0 0;
+}
+
+/* ========================================
+   BOUTONS D'ACTION
+   ======================================== */
+
+.account-edit-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.account-edit-btn-cancel {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border: 2px solid var(--bordeaux);
+    color: var(--bordeaux);
+    background: white;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color var(--transition-base), color var(--transition-base);
+}
+
+.account-edit-btn-cancel:hover {
+    background-color: var(--bordeaux);
+    color: white;
+}
+
+.account-edit-btn-submit {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: var(--bordeaux);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color var(--transition-base);
+}
+
+.account-edit-btn-submit:hover {
+    background-color: #8B0000;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 768px) {
+    .account-edit-section {
+        padding: 1.5rem 0 2rem;
+    }
+
+    .account-edit-title {
+        font-size: 1.75rem;
+    }
+
+    .account-edit-form-card {
+        padding: 1.5rem;
+    }
+
+    .account-edit-actions {
+        flex-direction: column;
+    }
+
+    .account-edit-btn-cancel,
+    .account-edit-btn-submit {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .account-edit-title {
+        font-size: 1.5rem;
+    }
+
+    .account-edit-form-grid {
+        grid-template-columns: 1fr;
+    }
+}

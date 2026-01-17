@@ -12,25 +12,25 @@
 
 <div class="opening-hours">
     {% if show_title %}
-        <h3 class="h5 mb-3">Horaires d'ouverture</h3>
+        <h3 class="opening-hours-title">Horaires d'ouverture</h3>
     {% endif %}
 
     {% if schedules is defined and schedules|length > 0 %}
-        <div class="list-group list-group-flush">
+        <div class="opening-hours-list">
             {% for item in schedules %}
-                <div class="list-group-item d-flex justify-content-between align-items-center px-0">
-                    <span class="fw-medium">{{ item.label }}</span>
+                <div class="opening-hours-item">
+                    <span class="opening-hours-day">{{ item.label }}</span>
                     <span>
                         {% if item.isOpen and item.openingTime and item.closingTime %}
-                            <span class="text-success">{{ item.openingTime }} - {{ item.closingTime }}</span>
+                            <span class="opening-hours-time opening-hours-time-open">{{ item.openingTime }} - {{ item.closingTime }}</span>
                         {% else %}
-                            <span class="text-muted">Fermé</span>
+                            <span class="opening-hours-time opening-hours-time-closed">Fermé</span>
                         {% endif %}
                     </span>
                 </div>
             {% endfor %}
         </div>
     {% else %}
-        <p class="text-muted">Horaires non disponibles pour le moment.</p>
+        <p class="opening-hours-empty">Horaires non disponibles pour le moment.</p>
     {% endif %}
 </div>

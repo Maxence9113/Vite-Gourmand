@@ -4,43 +4,43 @@
 
 {% block body %}
 
-<section class="py-5 bg-light">
-    <div class="container py-5">
-        <div class="text-center mb-5">
-            <span class="badge bg-secondary mb-3">Témoignages</span>
-            <h1 class="display-5 fw-bold mb-3" style="color: var(--primary);">
+<section style="padding: 3rem 0; background-color: var(--beige);">
+    <div class="container" style="padding: 3rem 0;">
+        <div style="text-align: center; margin-bottom: 3rem;">
+            <span style="margin-bottom: 20px;">Témoignages</span>
+            <h1 style="margin-bottom: 20px;; color: var(--primary);">
                 Avis de nos clients
             </h1>
-            <p class="lead text-muted">
+            <p style="color: #95a5a6;">
                 Découvrez ce que nos clients pensent de nos services
             </p>
 
             {% if app.user %}
-                <div class="mt-4">
+                <div style="margin-top: 25px;">
                     <a href="{{ path('app_review_new') }}" class="btn btn-primary btn-lg">
-                        <i data-feather="edit-3" width="20" class="me-2"></i>
+                        <i data-feather="edit-3" width="20" style="margin-right: 0.5rem;"></i>
                         Laisser un avis
                     </a>
                 </div>
             {% else %}
-                <div class="alert alert-info mt-4 d-inline-block">
-                    <i data-feather="info" width="18" class="me-2"></i>
+                <div class="alert alert-info" style="margin-top: 1.5rem; display: inline-block;">
+                    <i data-feather="info" width="18" style="margin-right: 0.5rem;"></i>
                     <a href="{{ path('app_login') }}" class="alert-link">Connectez-vous</a> pour laisser un avis
                 </div>
             {% endif %}
         </div>
 
         {% if reviews is empty %}
-            <div class="text-center py-5">
-                <i data-feather="message-circle" width="64" class="text-muted mb-3"></i>
-                <p class="lead text-muted">Aucun avis pour le moment. Soyez le premier à partager votre expérience !</p>
+            <div style="text-align: center; padding: 3rem 0;">
+                <i data-feather="message-circle" width="64" style="margin-bottom: 20px;"></i>
+                <p style="color: #95a5a6;">Aucun avis pour le moment. Soyez le premier à partager votre expérience !</p>
             </div>
         {% else %}
-            <div class="row">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
                 {% for review in reviews %}
-                    <div class="col-md-6 col-lg-4 mb-4">
+                    <div style="margin-bottom: 25px;">
                         <div class="review-card h-100">
-                            <div class="review-stars mb-3">
+                            <div style="margin-bottom: 20px;">
                                 {% for i in 1..5 %}
                                     {% if i <= review.rating %}
                                         <i data-feather="star" width="20" class="star-filled"></i>
@@ -51,18 +51,18 @@
                             </div>
 
                             {% if review.comment %}
-                                <p class="review-text mb-4">
+                                <p style="margin-bottom: 25px;">
                                     "{{ review.comment }}"
                                 </p>
                             {% endif %}
 
-                            <div class="d-flex align-items-center mt-auto">
-                                <div class="review-avatar me-3">
+                            <div style="display: flex; align-items: center; margin-top: auto;">
+                                <div class="review-avatar" style="margin-right: 1rem;">
                                     <i data-feather="user" width="24"></i>
                                 </div>
                                 <div>
-                                    <h6 class="mb-0 fw-bold">{{ review.customerName }}</h6>
-                                    <small class="text-muted">{{ review.createdAt|date('d/m/Y') }}</small>
+                                    <h6 class="mb-0 style="font-weight: 600;">{{ review.customerName }}</h6>
+                                    <small style="color: #95a5a6;">{{ review.createdAt|date('d/m/Y') }}</small>
                                 </div>
                             </div>
                         </div>

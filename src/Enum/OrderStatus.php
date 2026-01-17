@@ -69,7 +69,7 @@ enum OrderStatus: string
     }
 
     /**
-     * Retourne la classe CSS Bootstrap pour le badge de statut
+     * Retourne la classe CSS pour le badge de statut
      */
     public function getBadgeClass(): string
     {

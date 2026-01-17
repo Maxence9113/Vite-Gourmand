@@ -1,0 +1,79 @@
+/* ========================================
+   COMPOSANT - BADGES
+   Badges pour thèmes, régimes, statuts
+   ======================================== */
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-full);
+    font-family: var(--font-body);
+    font-size: 0.625rem;
+    font-weight: 400;
+    color: var(--white);
+}
+
+@media (min-width: 768px) {
+    .badge {
+        padding: 0.25rem 0.75rem;
+        font-size: var(--text-xs);
+    }
+}
+
+/* Badge thème (Doré) */
+.badge-theme,
+.badge-bordeaux {
+    background-color: var(--gold);
+}
+
+/* Badge végétarien/vegan (Vert) */
+.badge-vegetarian,
+.badge-success {
+    background-color: var(--green);
+}
+
+/* Badge classique (Bordeaux) */
+.badge-classic,
+.badge-primary {
+    background-color: var(--bordeaux);
+}
+
+/* Badge warning (Orange) */
+.badge-warning {
+    background-color: #F59E0B;
+}
+
+/* Badge danger (Rouge) */
+.badge-danger {
+    background-color: #EF4444;
+}
+
+/* Badge info (Bleu) */
+.badge-info {
+    background-color: #6BA5B8;
+}
+
+/* Badges de statut de commande */
+.badge-confirmed {
+    background-color: var(--gold);
+}
+
+.badge-delivered {
+    background-color: var(--green);
+}
+
+.badge-pending {
+    background-color: #F59E0B;
+}
+
+.badge-cancelled {
+    background-color: #EF4444;
+}
+
+/* Badge avec icône */
+.badge-icon {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}

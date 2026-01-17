@@ -1,0 +1,220 @@
+/* ========================================
+   PAGE - ADMIN BASE
+   Layout et structure de l'administration
+   ======================================== */
+
+/* ========================================
+   RESET & BASE
+   ======================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--beige);
+}
+
+/* ========================================
+   CONTAINER PRINCIPAL
+   ======================================== */
+
+.admin-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* ========================================
+   SIDEBAR - Figma Design
+   ======================================== */
+
+.sidebar {
+    width: 16rem;
+    background: white;
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+}
+
+.sidebar-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--beige);
+}
+
+.sidebar-header h2 {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--bordeaux);
+    margin-bottom: 0.5rem;
+}
+
+.sidebar-header p {
+    font-size: 0.875rem;
+    color: var(--dark-text);
+}
+
+.sidebar-menu {
+    padding: 1rem;
+}
+
+.menu-section {
+    margin-bottom: 0.5rem;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    color: var(--dark-text);
+    text-decoration: none;
+    transition: all var(--transition-base);
+    border-radius: var(--radius-lg);
+    margin-bottom: 0.5rem;
+}
+
+.menu-item:hover {
+    background: #f8f9fa;
+    color: var(--dark-text);
+}
+
+.menu-item.active {
+    background: var(--bordeaux);
+    color: white;
+    box-shadow: var(--shadow-md);
+}
+
+.menu-item-content {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.menu-item i {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.menu-badge {
+    background: white;
+    color: var(--bordeaux);
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.menu-item.active .menu-badge {
+    background: white;
+    color: var(--bordeaux);
+}
+
+.menu-item:not(.active) .menu-badge {
+    background: var(--bordeaux);
+    color: white;
+}
+
+.menu-divider {
+    margin: 1.5rem 0;
+}
+
+.menu-link-home {
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-lg);
+    margin-top: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border: 2px solid var(--gold);
+    color: var(--gold);
+    text-decoration: none;
+    transition: all var(--transition-base);
+}
+
+.menu-link-home:hover {
+    box-shadow: var(--shadow-md);
+    color: var(--gold);
+}
+
+/* ========================================
+   MAIN CONTENT
+   ======================================== */
+
+.main-content {
+    margin-left: 16rem;
+    flex: 1;
+    min-height: 100vh;
+}
+
+.content-wrapper {
+    padding: 2rem;
+}
+
+/* ========================================
+   FLASH MESSAGES - Figma Style
+   ======================================== */
+
+.alert {
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    border-radius: var(--radius-sm);
+    border-left: 4px solid;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.alert-success {
+    background: #d4edda;
+    border-left-color: var(--green);
+    color: #155724;
+}
+
+.alert-danger {
+    background: #f8d7da;
+    border-left-color: #dc3545;
+    color: #721c24;
+}
+
+.alert-warning {
+    background: #fff3cd;
+    border-left-color: #ffc107;
+    color: #856404;
+}
+
+.alert-info {
+    background: #e7f1ff;
+    border-left-color: #004085;
+    color: #004085;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        position: relative;
+        height: auto;
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+
+    .sidebar-menu {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+    }
+
+    .menu-link-home {
+        grid-column: span 2;
+    }
+}

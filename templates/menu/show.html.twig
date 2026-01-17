@@ -5,253 +5,253 @@
 {% block body %}
 
 {# ========================================
-   BREADCRUMB
+   MENU DETAIL PAGE - Figma Design
    ======================================== #}
-<section class="breadcrumb-section">
-    <div class="container">
-        <nav class="breadcrumb-nav">
-            <a href="{{ path('app_home') }}" class="breadcrumb-link">
-                <span data-icon="home" data-icon-width="14" data-icon-height="14"></span>
-                Accueil
-            </a>
-            <span class="breadcrumb-separator">/</span>
-            <a href="{{ path('app_menu_catalog') }}" class="breadcrumb-link">Nos menus</a>
-            <span class="breadcrumb-separator">/</span>
-            <span class="breadcrumb-active">{{ menu.name }}</span>
-        </nav>
-    </div>
-</section>
+<section style="background-color: var(--beige); padding: 3rem 0;">
+    <div style="max-width: 80rem; margin: 0 auto; padding: 0 1.5rem;">
 
-{# ========================================
-   MENU DETAILS
-   ======================================== #}
-<section class="menu-detail-section">
-    <div class="container">
-        <div class="menu-detail-layout">
-            {# ========== Galerie d'images - Gauche ========== #}
-            <div class="menu-gallery">
-                {# Image principale #}
-                <div class="gallery-main" id="galleryMain">
-                    <img src="{{ menu.illustration ?? 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&h=600&fit=crop' }}"
-                         alt="{{ menu.textAlt ?? menu.name }}"
-                         id="mainImage">
-                </div>
+        {# Bouton retour #}
+        <a href="{{ path('app_menu_catalog') }}"
+           style="display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 2rem; color: var(--bordeaux); font-family: var(--font-body); text-decoration: none; transition: opacity 0.2s;"
+           onmouseover="this.style.opacity='0.7'"
+           onmouseout="this.style.opacity='1'">
+            <span data-icon="arrow-left" data-icon-width="20" data-icon-height="20"></span>
+            Retour aux menus
+        </a>
 
-                {# Miniatures #}
-                <div class="gallery-thumbnails">
-                    {# Miniature de l'image principale #}
-                    <div class="thumbnail active" data-image="{{ menu.illustration ?? 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&h=600&fit=crop' }}">
-                        <img src="{{ menu.illustration ?? 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=200&h=150&fit=crop' }}"
-                             alt="{{ menu.textAlt ?? menu.name }}">
+        {# Layout 2 colonnes #}
+        <div style="display: grid; grid-template-columns: 1fr; gap: 3rem;">
+            <div style="display: grid; grid-template-columns: 1fr; gap: 3rem;">
+
+                {# ========== COLONNE GAUCHE - Images et Composition ========== #}
+                <div>
+                    {# Image principale avec badges #}
+                    <div style="position: relative; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-xl); margin-bottom: 1.5rem;">
+                        <img src="{{ menu.illustration ?? 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&h=600&fit=crop' }}"
+                             alt="{{ menu.textAlt ?? menu.name }}"
+                             style="width: 100%; height: 400px; object-fit: cover;">
+
+                        {# Badges en overlay #}
+                        <div style="position: absolute; top: 1.5rem; left: 1.5rem; display: flex; gap: 0.75rem;">
+                            <span style="padding: 0.5rem 1rem; border-radius: var(--radius-full); background-color: var(--gold); color: white; font-family: var(--font-body); font-size: var(--text-sm);">
+                                {{ menu.theme.name }}
+                            </span>
+                            {% if menu.dietetary|length > 0 %}
+                                {% for dietetary in menu.dietetary %}
+                                    <span style="padding: 0.5rem 1rem; border-radius: var(--radius-full); background-color: {% if dietetary.name in ['Végétarien', 'Vegan'] %}var(--green){% else %}var(--bordeaux){% endif %}; color: white; font-family: var(--font-body); font-size: var(--text-sm);">
+                                        {{ dietetary.name }}
+                                    </span>
+                                {% endfor %}
+                            {% else %}
+                                <span style="padding: 0.5rem 1rem; border-radius: var(--radius-full); background-color: var(--bordeaux); color: white; font-family: var(--font-body); font-size: var(--text-sm);">
+                                    Classique
+                                </span>
+                            {% endif %}
+                        </div>
                     </div>
 
-                    {# Miniatures des recettes (max 5) #}
-                    {% set imageCount = 0 %}
-                    {% for recipe in menu.recipes %}
-                        {% if imageCount < 5 and recipe.recipeIllustrations|length > 0 %}
-                            {% set firstIllustration = recipe.recipeIllustrations|first %}
-                            <div class="thumbnail" data-image="{{ firstIllustration.url }}">
-                                <img src="{{ firstIllustration.url }}"
-                                     alt="{{ firstIllustration.altText ?? recipe.title }}">
-                            </div>
-                            {% set imageCount = imageCount + 1 %}
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            </div>
-
-            {# ========== Informations du menu - Droite ========== #}
-            <div class="menu-info">
-                {# Titre #}
-                <h1 class="menu-detail-title">{{ menu.name }}</h1>
-
-                {# Badges thème et régimes alimentaires #}
-                <div class="menu-badges">
-                    <span class="badge badge-theme">{{ menu.theme.name }}</span>
-                    {% if menu.dietetary|length > 0 %}
-                        {% for dietetary in menu.dietetary %}
-                            <span class="badge {% if dietetary.name in ['Végétarien', 'Vegan'] %}badge-vegetarian{% else %}badge-classic{% endif %}">{{ dietetary.name }}</span>
+                    {# Images secondaires #}
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2rem;">
+                        {% set imageCount = 0 %}
+                        {% for recipe in menu.recipes %}
+                            {% if imageCount < 3 and recipe.recipeIllustrations|length > 0 %}
+                                {% set firstIllustration = recipe.recipeIllustrations|first %}
+                                <div style="border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md);">
+                                    <img src="{{ firstIllustration.url }}"
+                                         alt="{{ firstIllustration.altText ?? recipe.title }}"
+                                         style="width: 100%; height: 128px; object-fit: cover; transition: transform 0.3s;"
+                                         onmouseover="this.style.transform='scale(1.1)'"
+                                         onmouseout="this.style.transform='scale(1)'">
+                                </div>
+                                {% set imageCount = imageCount + 1 %}
+                            {% endif %}
                         {% endfor %}
-                    {% else %}
-                        <span class="badge badge-classic">Classique</span>
-                    {% endif %}
-                </div>
 
-                {# Prix #}
-                <div class="menu-price-box">
-                    <span class="price-large">{{ (menu.pricePerPerson / 100)|number_format(2, ',', ' ') }}€</span>
-                    <small>par personne</small>
-                </div>
-
-                {# Description #}
-                <div class="menu-description">
-                    <p>{{ menu.description }}</p>
-                </div>
-
-                {# Allergènes #}
-                {% set menuAllergens = [] %}
-                {% for recipe in menu.recipes %}
-                    {% for allergen in recipe.allergen %}
-                        {% if allergen.id not in menuAllergens|column('id') %}
-                            {% set menuAllergens = menuAllergens|merge([allergen]) %}
-                        {% endif %}
-                    {% endfor %}
-                {% endfor %}
-
-                {% if menuAllergens|length > 0 %}
-                    <div class="alert alert-warning">
-                        <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                            <span data-icon="alert-triangle" data-icon-width="20" data-icon-height="20" style="flex-shrink: 0; margin-top: 2px;"></span>
-                            <div>
-                                <strong style="display: block; margin-bottom: 0.25rem;">Allergènes présents</strong>
-                                <small>
-                                    {% for allergen in menuAllergens %}
-                                        {{ allergen.name }}{% if not loop.last %}, {% endif %}
-                                    {% endfor %}
-                                </small>
+                        {# Images par défaut si pas assez de recettes avec images #}
+                        {% for i in 1..(3 - imageCount) %}
+                            <div style="border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md);">
+                                <img src="https://images.unsplash.com/photo-{{ ['1767463467891-ac167dfd64fc', '1758384077164-c00b53cf718f', '1741965134280-9094486efd82'][loop.index0] }}?w=400&h=300&fit=crop"
+                                     alt="Plat gastronomique"
+                                     style="width: 100%; height: 128px; object-fit: cover; transition: transform 0.3s;"
+                                     onmouseover="this.style.transform='scale(1.1)'"
+                                     onmouseout="this.style.transform='scale(1)'">
                             </div>
-                        </div>
+                        {% endfor %}
                     </div>
-                {% endif %}
 
-                <hr style="margin: var(--spacing-lg) 0; border: none; border-top: 1px solid var(--beige);">
+                    {# Composition du menu #}
+                    <div style="background: white; border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: var(--shadow-md); margin-bottom: 2rem;">
+                        <h2 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.5rem; margin-bottom: 1.5rem; font-weight: 400;">
+                            Composition du menu
+                        </h2>
 
-                {# Informations pratiques #}
-                <div class="menu-practical-info">
-                    <h6 style="font-family: var(--font-heading); font-weight: 600; margin-bottom: var(--spacing-md); color: var(--dark-text);">
-                        Informations pratiques
-                    </h6>
+                        {# Regrouper les recettes par catégorie #}
+                        {% set recipesByCategory = {} %}
+                        {% for recipe in menu.recipes %}
+                            {% set categoryName = recipe.category.name %}
+                            {% if categoryName not in recipesByCategory|keys %}
+                                {% set recipesByCategory = recipesByCategory|merge({(categoryName): []}) %}
+                            {% endif %}
+                            {% set recipesByCategory = recipesByCategory|merge({
+                                (categoryName): recipesByCategory[categoryName]|merge([recipe])
+                            }) %}
+                        {% endfor %}
 
-                    <div class="info-grid">
-                        <div class="info-item">
-                            <small class="info-label">Nombre de personnes</small>
-                            <strong class="info-value">Minimum {{ menu.nbPersonMin }}</strong>
-                        </div>
-                        <div class="info-item">
-                            <small class="info-label">Nombre de plats</small>
-                            <strong class="info-value">{{ menu.recipes|length }} recettes</strong>
-                        </div>
-                        <div class="info-item">
-                            <small class="info-label">Disponibilité</small>
-                            <strong class="info-value">
-                                {% if menu.stock is defined and menu.stock is not null %}
-                                    {% if menu.stock > 0 %}
-                                        <span style="color: var(--green);">En stock ({{ menu.stock }} disponible{{ menu.stock > 1 ? 's' : '' }})</span>
-                                    {% else %}
-                                        <span style="color: #D97076;">Stock épuisé</span>
-                                    {% endif %}
-                                {% else %}
-                                    <span style="color: var(--gold);">Sur commande</span>
-                                {% endif %}
-                            </strong>
-                        </div>
-                        <div class="info-item">
-                            <small class="info-label">Délai de commande</small>
-                            <strong class="info-value">48h avant la prestation</strong>
-                        </div>
+                        {# Afficher par catégorie #}
+                        {% set orderedCategories = ['Entrée', 'Plat', 'Fromage', 'Dessert'] %}
+                        {% for categoryName in orderedCategories %}
+                            {% if categoryName in recipesByCategory|keys %}
+                                {% set recipes = recipesByCategory[categoryName] %}
+                                <div style="margin-bottom: 1.5rem;">
+                                    <h3 style="font-family: var(--font-heading); color: var(--gold); font-size: 1.125rem; margin-bottom: 0.75rem; font-weight: 400;">
+                                        {{ categoryName }}
+                                    </h3>
+                                    <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem;">
+                                        {% for recipe in recipes %}
+                                            <li style="display: flex; align-items: flex-start; gap: 0.5rem; color: var(--dark-text);">
+                                                <span data-icon="check" data-icon-width="20" data-icon-height="20" style="color: var(--green); flex-shrink: 0; margin-top: 2px;"></span>
+                                                <div>
+                                                    <div style="font-weight: 500; margin-bottom: 0.25rem;">{{ recipe.title }}</div>
+                                                    {% if recipe.description %}
+                                                        <div style="font-size: 0.875rem; color: var(--dark-text); opacity: 0.8; line-height: 1.5;">{{ recipe.description }}</div>
+                                                    {% endif %}
+                                                </div>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
                     </div>
                 </div>
 
-                <hr style="margin: var(--spacing-lg) 0; border: none; border-top: 1px solid var(--beige);">
+                {# ========== COLONNE DROITE - Détails et Commande ========== #}
+                <div>
+                    {# Titre #}
+                    <h1 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 2.25rem; margin-bottom: 1rem; font-weight: 400;">
+                        {{ menu.name }}
+                    </h1>
 
-                {# Conditions #}
-                {% if menu.conditions is defined and menu.conditions is not null %}
-                    <div class="menu-conditions">
-                        <h6 style="font-family: var(--font-heading); font-weight: 600; margin-bottom: var(--spacing-sm); color: var(--dark-text);">
-                            Conditions particulières
-                        </h6>
-                        <p style="font-size: 0.875rem; color: var(--muted); margin: 0;">{{ menu.conditions|nl2br }}</p>
-                    </div>
-                    <hr style="margin: var(--spacing-lg) 0; border: none; border-top: 1px solid var(--beige);">
-                {% endif %}
+                    {# Ligne dorée #}
+                    <div style="width: 5rem; height: 4px; background-color: var(--gold); border-radius: var(--radius-sm); margin-bottom: 1.5rem;"></div>
 
-                {# Boutons d'action #}
-                <div class="menu-actions">
-                    {% if app.user %}
-                        {% if menu.isAvailable %}
-                            <a href="{{ path('app_order_new', {id: menu.id}) }}" class="btn btn-primary btn-lg" data-turbo="false" style="width: 100%;">
-                                <span data-icon="shopping-cart" data-icon-width="20" data-icon-height="20"></span>
-                                Commander ce menu
-                            </a>
+                    {# Description #}
+                    <p style="font-size: 1.125rem; line-height: 1.75; color: var(--dark-text); margin-bottom: 2rem;">
+                        {{ menu.description }}
+                    </p>
+
+                    {# Box de commande - Call to Action #}
+                    <div style="background: white; border-radius: var(--radius-lg); padding: 2rem; box-shadow: var(--shadow-md); margin-bottom: 2rem; text-align: center;">
+                        <div style="margin-bottom: 1.5rem;">
+                            <div style="display: flex; justify-content: center; align-items: baseline; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                <span style="font-size: var(--text-sm); color: var(--dark-text);">À partir de</span>
+                                <span style="font-family: var(--font-heading); font-size: 3rem; color: var(--bordeaux); font-weight: 400;">
+                                    {{ (menu.pricePerPerson / 100)|number_format(0, ',', ' ') }}€
+                                </span>
+                                <span style="font-size: var(--text-sm); color: var(--dark-text);">/personne</span>
+                            </div>
+                            <p style="font-size: var(--text-sm); color: var(--dark-text); margin: 0;">
+                                Minimum {{ menu.nbPersonMin }} personnes
+                            </p>
+                        </div>
+
+                        {% if app.user %}
+                            {% if menu.isAvailable %}
+                                <a href="{{ path('app_order_new', {id: menu.id}) }}"
+                                   style="display: flex; align-items: center; justify-content: center; gap: 0.75rem; width: 100%; padding: 1rem 2rem; background-color: var(--bordeaux); color: white; border: none; border-radius: var(--radius-lg); font-family: var(--font-body); font-size: 1.25rem; text-decoration: none; cursor: pointer; transition: box-shadow 0.2s; margin-bottom: 1rem;"
+                                   onmouseover="this.style.boxShadow='var(--shadow-xl)'"
+                                   onmouseout="this.style.boxShadow='none'">
+                                    <span data-icon="shopping-cart" data-icon-width="24" data-icon-height="24"></span>
+                                    Commander ce menu
+                                </a>
+                            {% else %}
+                                <button disabled
+                                        style="display: flex; align-items: center; justify-content: center; gap: 0.75rem; width: 100%; padding: 1rem 2rem; background-color: #ccc; color: #666; border: none; border-radius: var(--radius-lg); font-family: var(--font-body); font-size: 1.25rem; cursor: not-allowed; margin-bottom: 1rem;">
+                                    <span data-icon="x-circle" data-icon-width="24" data-icon-height="24"></span>
+                                    Menu indisponible
+                                </button>
+                            {% endif %}
                         {% else %}
-                            <button class="btn btn-outline btn-lg" disabled style="width: 100%;">
-                                <span data-icon="x-circle" data-icon-width="20" data-icon-height="20"></span>
-                                Menu indisponible
+                            <button type="button"
+                                    onclick="document.getElementById('authRequiredModal').style.display='flex'"
+                                    style="display: flex; align-items: center; justify-content: center; gap: 0.75rem; width: 100%; padding: 1rem 2rem; background-color: var(--bordeaux); color: white; border: none; border-radius: var(--radius-lg); font-family: var(--font-body); font-size: 1.25rem; text-decoration: none; cursor: pointer; transition: box-shadow 0.2s; margin-bottom: 1rem;"
+                                    onmouseover="this.style.boxShadow='var(--shadow-xl)'"
+                                    onmouseout="this.style.boxShadow='none'">
+                                <span data-icon="shopping-cart" data-icon-width="24" data-icon-height="24"></span>
+                                Commander ce menu
                             </button>
                         {% endif %}
-                    {% else %}
-                        <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#authRequiredModal" style="width: 100%;">
-                            <span data-icon="shopping-cart" data-icon-width="20" data-icon-height="20"></span>
-                            Commander ce menu
-                        </button>
-                    {% endif %}
-                    <a href="{{ path('app_menu_catalog') }}" class="btn btn-outline" style="width: 100%;">
-                        Retour au catalogue
-                    </a>
-                </div>
-            </div>
-        </div>
 
-        {# ========================================
-           RECETTES DU MENU - Groupées par catégorie
-           ======================================== #}
-        <div class="menu-recipes-section">
-            <h3 style="font-family: var(--font-heading); font-weight: 700; margin-bottom: var(--spacing-xl); text-align: center; color: var(--dark-text);">
-                Composition du menu
-            </h3>
+                        <p style="font-size: var(--text-sm); color: var(--dark-text); margin: 0;">
+                            Livraison disponible • Réponse sous 24h
+                        </p>
+                    </div>
 
-            {# Regrouper les recettes par catégorie #}
-            {% set recipesByCategory = {} %}
-            {% for recipe in menu.recipes %}
-                {% set categoryName = recipe.category.name %}
-                {% if categoryName not in recipesByCategory|keys %}
-                    {% set recipesByCategory = recipesByCategory|merge({(categoryName): []}) %}
-                {% endif %}
-                {% set recipesByCategory = recipesByCategory|merge({
-                    (categoryName): recipesByCategory[categoryName]|merge([recipe])
-                }) %}
-            {% endfor %}
+                    {# Allergènes #}
+                    {% set menuAllergens = [] %}
+                    {% for recipe in menu.recipes %}
+                        {% for allergen in recipe.allergen %}
+                            {% if allergen.id not in menuAllergens|column('id') %}
+                                {% set menuAllergens = menuAllergens|merge([allergen]) %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
 
-            {# Afficher par catégorie dans l'ordre : Entrée, Plat, Fromage, Dessert #}
-            {% set orderedCategories = ['Entrée', 'Plat', 'Fromage', 'Dessert'] %}
-            {% for categoryName in orderedCategories %}
-                {% if categoryName in recipesByCategory|keys %}
-                    {% set recipes = recipesByCategory[categoryName] %}
-                    <div class="recipe-category">
-                        <h5 class="category-title">{{ categoryName }}</h5>
-                        <div class="recipe-grid">
-                            {% for recipe in recipes %}
-                                <div class="recipe-item">
-                                    <h6 class="recipe-title">{{ recipe.title }}</h6>
-                                    <p class="recipe-description">{{ recipe.description }}</p>
+                    {% if menuAllergens|length > 0 %}
+                        <div class="alert alert-warning" style="margin-bottom: 2rem;">
+                            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                                <span data-icon="alert-triangle" data-icon-width="20" data-icon-height="20" style="flex-shrink: 0; margin-top: 2px;"></span>
+                                <div>
+                                    <strong style="display: block; margin-bottom: 0.25rem;">Allergènes présents</strong>
+                                    <small>
+                                        {% for allergen in menuAllergens %}
+                                            {{ allergen.name }}{% if not loop.last %}, {% endif %}
+                                        {% endfor %}
+                                    </small>
                                 </div>
-                            {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {# Services #}
+                    <div style="background: white; border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: var(--shadow-md);">
+                        <h2 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.5rem; margin-bottom: 1rem; font-weight: 400;">
+                            Informations pratiques
+                        </h2>
+
+                        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; border-radius: var(--radius-sm); transition: background-color 0.2s;"
+                                 onmouseover="this.style.backgroundColor='#f9f9f9'"
+                                 onmouseout="this.style.backgroundColor='transparent'">
+                                <span data-icon="check" data-icon-width="20" data-icon-height="20" style="color: var(--green);"></span>
+                                <span style="color: var(--dark-text);">Vaisselle en prêt</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; border-radius: var(--radius-sm); transition: background-color 0.2s;"
+                                 onmouseover="this.style.backgroundColor='#f9f9f9'"
+                                 onmouseout="this.style.backgroundColor='transparent'">
+                                <span data-icon="check" data-icon-width="20" data-icon-height="20" style="color: var(--green);"></span>
+                                <span style="color: var(--dark-text);">Délai de commande : 48h avant prestation</span>
+                            </div>
                         </div>
                     </div>
-                {% endif %}
-            {% endfor %}
-        </div>
 
-        {# ========================================
-           CALL TO ACTION
-           ======================================== #}
-        <div class="menu-cta-section">
-            <div class="cta-box">
-                <h3 style="font-family: var(--font-heading); font-weight: 700; margin-bottom: var(--spacing-md); color: var(--dark-text);">
-                    Intéressé par ce menu ?
-                </h3>
-                <p style="font-size: 1.125rem; margin-bottom: var(--spacing-xl); color: var(--muted);">
-                    Contactez-nous pour personnaliser votre menu selon vos besoins et contraintes
-                </p>
-                <div style="display: flex; gap: var(--spacing-md); justify-content: center; flex-wrap: wrap;">
-                    <a href="{{ path('app_contact') }}" class="btn btn-primary btn-lg">
-                        <span data-icon="phone" data-icon-width="20" data-icon-height="20"></span>
-                        Nous contacter
-                    </a>
-                    <a href="{{ path('app_contact') }}" class="btn btn-outline btn-lg">
-                        <span data-icon="mail" data-icon-width="20" data-icon-height="20"></span>
-                        Demander un devis
-                    </a>
+                    {# Cartes informatives #}
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: 1.5rem;">
+                        <div style="background: white; border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: var(--shadow-md);">
+                            <span data-icon="users" data-icon-width="32" data-icon-height="32" style="display: block; color: var(--bordeaux); margin-bottom: 0.75rem;"></span>
+                            <p style="font-size: var(--text-sm); margin-bottom: 0.25rem; color: var(--dark-text);">Nombre de convives</p>
+                            <p style="font-family: var(--font-heading); font-size: 1.5rem; color: var(--bordeaux); margin: 0; font-weight: 400;">
+                                À partir de {{ menu.nbPersonMin }}
+                            </p>
+                        </div>
+                        <div style="background: white; border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: var(--shadow-md);">
+                            <span data-icon="chef-hat" data-icon-width="32" data-icon-height="32" style="display: block; color: var(--gold); margin-bottom: 0.75rem;"></span>
+                            <p style="font-size: var(--text-sm); margin-bottom: 0.25rem; color: var(--dark-text);">Préparé par</p>
+                            <p style="font-family: var(--font-heading); font-size: 1.5rem; color: var(--bordeaux); margin: 0; font-weight: 400;">
+                                Julie & José
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -262,78 +262,63 @@
    MODAL D'AUTHENTIFICATION
    ======================================== #}
 {% if not app.user %}
-<div class="modal" id="authRequiredModal">
-    <div class="modal-overlay" onclick="closeAuthModal()"></div>
-    <div class="modal-content">
-        <div class="modal-header">
+<div style="display: none; position: fixed; inset: 0; z-index: 9999; align-items: center; justify-content: center; padding: 1rem;" id="authRequiredModal">
+    <div style="position: absolute; inset: 0; background-color: rgba(0, 0, 0, 0.5);" onclick="document.getElementById('authRequiredModal').style.display='none'"></div>
+    <div style="position: relative; background: white; border-radius: var(--radius-lg); max-width: 500px; width: 100%; box-shadow: var(--shadow-xl);">
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 1.5rem; border-bottom: 1px solid var(--beige);">
             <h5 style="display: flex; align-items: center; gap: 0.5rem; margin: 0; font-family: var(--font-heading); font-weight: 700;">
                 <span data-icon="lock" data-icon-width="20" data-icon-height="20"></span>
                 Connexion requise
             </h5>
-            <button type="button" class="modal-close" onclick="closeAuthModal()">
+            <button type="button"
+                    onclick="document.getElementById('authRequiredModal').style.display='none'"
+                    style="background: none; border: none; cursor: pointer; color: var(--dark-text); padding: 0.5rem;">
                 <span data-icon="x" data-icon-width="24" data-icon-height="24"></span>
             </button>
         </div>
-        <div class="modal-body" style="text-align: center; padding: var(--spacing-xl);">
-            <span data-icon="user-check" data-icon-width="64" data-icon-height="64" style="display: block; margin: 0 auto var(--spacing-md); color: var(--bordeaux);"></span>
-            <p style="font-size: 1.125rem; margin-bottom: var(--spacing-md); color: var(--dark-text);">
+        <div style="text-align: center; padding: 2rem;">
+            <span data-icon="user" data-icon-width="64" data-icon-height="64" style="display: block; margin: 0 auto 1rem; color: var(--bordeaux);"></span>
+            <p style="font-size: 1.125rem; margin-bottom: 1rem; color: var(--dark-text);">
                 Pour commander ce menu, vous devez être connecté à votre compte.
             </p>
-            <p style="color: var(--muted); margin: 0;">
+            <p style="color: var(--dark-text); opacity: 0.7; margin: 0;">
                 Vous n'avez pas encore de compte ? C'est rapide et gratuit !
             </p>
         </div>
-        <div class="modal-footer" style="justify-content: center; padding-bottom: var(--spacing-xl);">
-            <a href="{{ path('app_login') }}?redirect={{ path('app_menu_show', {id: menu.id}) }}" class="btn btn-primary btn-lg">
+        <div style="display: flex; gap: 1rem; justify-content: center; padding: 0 2rem 2rem;">
+            <a href="{{ path('app_login') }}?redirect={{ path('app_menu_show', {id: menu.id}) }}"
+               class="btn btn-primary">
                 <span data-icon="log-in" data-icon-width="18" data-icon-height="18"></span>
                 Se connecter
             </a>
-            <a href="{{ path('app_register') }}?redirect={{ path('app_menu_show', {id: menu.id}) }}" class="btn btn-outline btn-lg">
+            <a href="{{ path('app_register') }}?redirect={{ path('app_menu_show', {id: menu.id}) }}"
+               class="btn btn-outline">
                 <span data-icon="user-plus" data-icon-width="18" data-icon-height="18"></span>
                 Créer un compte
             </a>
         </div>
     </div>
 </div>
-
-<script>
-    // Modal management
-    function closeAuthModal() {
-        document.getElementById('authRequiredModal').style.display = 'none';
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const modal = document.getElementById('authRequiredModal');
-        const trigger = document.querySelector('[data-bs-toggle="modal"]');
-
-        if (trigger && modal) {
-            trigger.addEventListener('click', function(e) {
-                e.preventDefault();
-                modal.style.display = 'flex';
-            });
-        }
-    });
-</script>
 {% endif %}
 
-<script>
-    // Gallery thumbnail navigation
-    document.addEventListener('DOMContentLoaded', function() {
-        const thumbnails = document.querySelectorAll('.thumbnail');
-        const mainImage = document.getElementById('mainImage');
+{# Media queries pour responsive #}
+<style>
+    @media (min-width: 1024px) {
+        .menu-detail-page-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+        }
+    }
+</style>
 
-        thumbnails.forEach(thumbnail => {
-            thumbnail.addEventListener('click', function() {
-                // Remove active class from all thumbnails
-                thumbnails.forEach(t => t.classList.remove('active'));
-                // Add active class to clicked thumbnail
-                this.classList.add('active');
-                // Change main image
-                const newImageSrc = this.getAttribute('data-image');
-                mainImage.src = newImageSrc;
-            });
-        });
-    });
+<script>
+// Ajouter la classe responsive au grid principal
+document.addEventListener('DOMContentLoaded', function() {
+    const mainGrid = document.querySelector('[style*="grid-template-columns: 1fr;"]');
+    if (mainGrid && mainGrid.querySelector('[style*="grid-template-columns: 1fr;"]')) {
+        const innerGrid = mainGrid.querySelector('[style*="grid-template-columns: 1fr;"]');
+        innerGrid.classList.add('menu-detail-page-grid');
+    }
+});
 </script>
 
 {% endblock %}

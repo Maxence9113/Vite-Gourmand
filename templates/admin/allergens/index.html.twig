@@ -1,81 +1,82 @@
 {% extends 'admin/base_admin.html.twig' %}
 
-{% block title %}Gestion des Allergènes{% endblock %}
+{% block title %}Gestion des Allergènes - Admin{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/pages/admin-lists.css') }}">
+{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>Gestion des Allergènes</h1>
-        <div>
-            <a href="{{ path('app_admin_dashboard') }}" class="btn btn-secondary">Retour au Dashboard</a>
-            <a href="{{ path('app_admin_allergens_new') }}" class="btn btn-success">Ajouter un allergène</a>
+<div class="list-header">
+    <h1>
+        ⚠️ Gestion des allergènes
+    </h1>
+    <a href="{{ path('app_admin_allergens_new') }}" class="btn-add">
+        <span data-icon="plus" data-icon-width="16" data-icon-height="16"></span>
+        Ajouter un allergène
+    </a>
+</div>
+
+{# Afficher les messages flash #}
+{% for message in app.flashes('success') %}
+    <div class="flash-success-list">
+        {{ message }}
+    </div>
+{% endfor %}
+
+{% for message in app.flashes('error') %}
+    <div class="flash-error-list">
+        {{ message }}
+    </div>
+{% endfor %}
+
+<!-- Liste des allergènes -->
+<div class="list-container">
+    <div class="list-search-bar">
+        <div class="list-search-wrapper">
+            <span data-icon="search" data-icon-width="20" data-icon-height="20" class="list-search-icon"></span>
+            <input type="text" id="searchInput" placeholder="Rechercher un allergène..." class="list-search-input">
         </div>
     </div>
 
-    {# Afficher les messages flash #}
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    {% if allergens is empty %}
+        <div class="list-empty-state">
+            <span data-icon="inbox" data-icon-width="48" data-icon-height="48" class="list-empty-icon"></span>
+            <p class="list-empty-text">Aucun allergène trouvé.</p>
         </div>
-    {% endfor %}
-
-    {% for message in app.flashes('error') %}
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    {% endfor %}
-
-    {# Barre de recherche #}
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <input type="text" class="form-control" placeholder="Rechercher un allergène..." id="searchInput">
-        </div>
-    </div>
-
-    {# Table des allergènes #}
-    <div class="card">
-        <div class="card-body">
-            <table class="table table-striped table-hover table-sortable" id="allergensTable">
+    {% else %}
+        <div class="list-table-wrapper">
+            <table class="list-table small-list">
+                <colgroup>
+                    <col>
+                    <col>
+                    <col>
+                </colgroup>
                 <thead>
                     <tr>
                         <th>ID</th>
                         <th>Nom</th>
-                        <th>Nombre de recettes</th>
-                        <th class="text-end">Actions</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for allergen in allergens %}
                     <tr class="allergen-row">
                         <td>{{ allergen.id }}</td>
-                        <td class="fw-bold">{{ allergen.name }}</td>
-                        <td data-sort="{{ allergen.recipes|length }}">
-                            <span class="badge bg-warning">{{ allergen.recipes|length }} recette(s)</span>
-                        </td>
-                        <td class="text-end">
-                            <div class="btn-group" role="group">
-                                <a href="{{ path('app_admin_allergens_edit', {id: allergen.id}) }}"
-                                   class="btn btn-sm btn-warning">
-                                    Modifier
+                        <td><strong>{{ allergen.name }}</strong></td>
+                        <td>
+                            <div class="crud-actions">
+                                <a href="{{ path('app_admin_allergens_edit', {id: allergen.id}) }}" class="btn-crud btn-crud-edit">
+                                    <span data-icon="edit" data-icon-width="16" data-icon-height="16"></span>
+                                    <span class="btn-crud-text">Modifier</span>
                                 </a>
-                                <form method="post"
-                                      action="{{ path('app_admin_allergens_delete', {id: allergen.id}) }}"
-                                      style="display: inline;"
-                                      data-confirm="Êtes-vous sûr de vouloir supprimer l'allergène « {{ allergen.name }} » ?">
-                                    <button type="submit" class="btn btn-sm btn-danger">
-                                        Supprimer
+                                <form method="post" action="{{ path('app_admin_allergens_delete', {id: allergen.id}) }}" class="delete-form">
+                                    <button type="submit" class="btn-crud btn-crud-delete">
+                                        <span data-icon="trash-2" data-icon-width="16" data-icon-height="16"></span>
+                                        <span class="btn-crud-text">Supprimer</span>
                                     </button>
                                 </form>
-                            </div>
-                        </td>
-                    </tr>
-                    {% else %}
-                    <tr>
-                        <td colspan="4" class="text-center">
-                            <div class="alert alert-info mb-0">
-                                Aucun allergène trouvé. <a href="{{ path('app_admin_allergens_new') }}" class="alert-link">Créer un nouvel allergène</a>
                             </div>
                         </td>
                     </tr>
@@ -83,30 +84,41 @@
                 </tbody>
             </table>
         </div>
-    </div>
-
-    {# Informations sur le nombre d'allergènes #}
-    <div class="mt-3">
-        <p class="text-muted">
-            Total : <strong>{{ allergens|length }}</strong> allergène(s)
-        </p>
-    </div>
+    {% endif %}
 </div>
 
-{% endblock %}
+{# Script pour la recherche en temps réel et le tri #}
+<script src="{{ asset('table-sort.js') }}"></script>
+<script>
+    // Initialiser le tri du tableau (exclure la dernière colonne "Actions")
+    initTableSort('allergensTable', {
+        excludeColumns: [2]
+    });
 
-{% block javascripts %}
-    {{ parent() }}
-    {{ importmap('table-search') }}
-    {{ importmap('confirmation-dialog') }}
-    <script src="{{ asset('table-sort.js') }}"></script>
-    <script>
-        // Initialiser le tri du tableau
-        initTableSort('allergensTable', {
-            excludeColumns: [3]
+    // Recherche en temps réel
+    document.getElementById('searchInput')?.addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        const rows = document.querySelectorAll('.allergen-row');
+
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.classList.toggle('hidden', !text.includes(searchTerm));
+            if (text.includes(searchTerm)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
         });
+    });
 
-        // Initialiser la recherche en temps réel
-        initTableSearch('searchInput', '.allergen-row');
-    </script>
+    // Confirmation de suppression
+    document.querySelectorAll('.delete-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            const allergenName = this.closest('tr').querySelector('strong').textContent;
+            if (!confirm(`Êtes-vous sûr de vouloir supprimer l'allergène « ${allergenName} » ?`)) {
+                e.preventDefault();
+            }
+        });
+    });
+</script>
 {% endblock %}

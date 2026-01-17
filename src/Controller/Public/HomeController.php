@@ -12,11 +12,11 @@ final class HomeController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(ReviewRepository $reviewRepository): Response
     {
-        // Récupérer les 3 derniers avis validés
+        // Récupérer les 4 derniers avis validés
         $reviews = $reviewRepository->findBy(
             ['isValidated' => true],
             ['createdAt' => 'DESC'],
-            3
+            4
         );
 
         return $this->render('home/index.html.twig', [

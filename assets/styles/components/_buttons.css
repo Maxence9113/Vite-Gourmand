@@ -1,0 +1,250 @@
+/* ========================================
+   COMPOSANT - BUTTONS
+   Système de boutons selon la charte Figma
+   ======================================== */
+
+/* Bouton de base */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 12px 24px;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: var(--text-base);
+    transition: all var(--transition-base);
+    cursor: pointer;
+    border: 2px solid transparent;
+    text-decoration: none;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Bouton primaire (Bordeaux) */
+.btn-primary {
+    background-color: var(--bordeaux);
+    color: var(--white);
+}
+
+.btn-primary:hover:not(:disabled) {
+    background-color: #6B0000;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.btn-primary:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+/* Bouton secondaire (Doré) */
+.btn-secondary {
+    background-color: var(--gold);
+    color: var(--dark-text);
+    border: 2px solid var(--gold);
+}
+
+.btn-secondary:hover:not(:disabled) {
+    gap: 1rem;
+    box-shadow: var(--shadow-xl);
+}
+
+/* Bouton secondaire avec bordure blanche (Hero section) */
+.btn-secondary.btn-hero {
+    border-color: var(--white);
+}
+
+.btn-secondary.btn-hero:hover:not(:disabled) {
+    gap: 1rem;
+    box-shadow: var(--shadow-xl);
+}
+
+/* Bouton outline (Bordure bordeaux) */
+.btn-outline {
+    background-color: transparent;
+    color: var(--bordeaux);
+    border: 2px solid var(--bordeaux);
+    padding: 10px 20px;
+}
+
+.btn-outline:hover:not(:disabled) {
+    background-color: var(--bordeaux);
+    color: var(--white);
+}
+
+/* Bouton succès (Vert) */
+.btn-success {
+    background-color: var(--green);
+    color: var(--white);
+}
+
+.btn-success:hover:not(:disabled) {
+    background-color: #1a6b1a;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Bouton danger */
+.btn-danger {
+    background-color: #D97076;
+    color: var(--white);
+}
+
+.btn-danger:hover:not(:disabled) {
+    background-color: #c55a60;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Tailles de boutons */
+.btn-sm {
+    padding: 8px 16px;
+    font-size: var(--text-sm);
+}
+
+.btn-lg {
+    padding: 16px 32px;
+    font-size: var(--text-lg);
+}
+
+/* Bouton pleine largeur */
+.btn-block {
+    width: 100%;
+}
+
+/* Bouton avec icône */
+.btn-icon {
+    padding: 12px;
+    width: auto;
+}
+
+/* Boutons spéciaux (Footer, Account, etc.) */
+.btn-footer {
+    margin-top: var(--spacing-md);
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 24px;
+    background-color: var(--gold);
+    color: var(--dark-text);
+    border: 2px solid var(--gold);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    text-decoration: none;
+    transition: all var(--transition-base);
+}
+
+.btn-footer:hover {
+    background-color: transparent;
+    color: var(--gold);
+    border-color: var(--gold);
+}
+
+.btn-user {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 10px 20px;
+    background-color: var(--bordeaux);
+    color: var(--white);
+    border: 2px solid transparent;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    position: relative;
+}
+
+.btn-user:hover {
+    background-color: #6B0000;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-account {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 8px 16px;
+    background: white;
+    color: var(--dark-text);
+    border: 2px solid var(--beige);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    text-decoration: none;
+    transition: all var(--transition-base);
+}
+
+.btn-account:hover {
+    background: var(--beige);
+    border-color: var(--bordeaux);
+}
+
+.btn-admin {
+    background-color: var(--gold);
+    color: var(--dark-text);
+}
+
+.btn-admin:hover {
+    background-color: #CDA434;
+}
+
+/* Bouton "Voir détails" du catalogue */
+.btn-view-details {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: var(--bordeaux);
+    color: white;
+    border: none;
+    border-radius: var(--radius-lg);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 400;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    text-decoration: none;
+}
+
+@media (min-width: 768px) {
+    .btn-view-details {
+        padding: 0.75rem 1.5rem;
+        font-size: var(--text-base);
+    }
+}
+
+.btn-view-details:hover {
+    box-shadow: var(--shadow-lg);
+}
+
+/* Textes responsive dans le bouton */
+.btn-view-details .btn-text-short {
+    display: inline;
+}
+
+.btn-view-details .btn-text-full {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .btn-view-details .btn-text-short {
+        display: none;
+    }
+
+    .btn-view-details .btn-text-full {
+        display: inline;
+    }
+}

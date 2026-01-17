@@ -1,131 +1,52 @@
 {% extends 'admin/base_admin.html.twig' %}
-
-{% block title %}{{ isEdit ? 'Modifier' : 'Ajouter' }} une recette{% endblock %}
-
+{% block title %}{{ isEdit ? 'Modifier' : 'Nouvelle' }} recette{% endblock %}
+{% block stylesheets %}{{ parent() }}<link rel="stylesheet" href="{{ asset('styles/pages/admin-forms.css') }}">{% endblock %}
 {% block content %}
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-8 offset-md-2">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h1>{{ isEdit ? 'Modifier la recette' : 'Ajouter une nouvelle recette' }}</h1>
-                <a href="{{ path('app_admin_recipes') }}" class="btn btn-secondary">
-                    Retour à la liste
-                </a>
-            </div>
-
-            {# Afficher les messages flash #}
-            {% for message in app.flashes('success') %}
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            {% endfor %}
-
-            <div class="card">
-                <div class="card-body">
-                    {{ form_start(form) }}
-
-                    <div class="mb-3">
-                        {{ form_row(form.title) }}
-                    </div>
-
-                    <div class="mb-3">
-                        {{ form_row(form.description) }}
-                    </div>
-
-                    <div class="mb-3">
-                        {{ form_row(form.category) }}
-                    </div>
-
-                    <div class="mb-3">
-                        {{ form_label(form.allergen) }}
-                        <div class="row">
-                            {% for allergen in form.allergen %}
-                                <div class="col-md-6">
-                                    <div class="form-check">
-                                        {{ form_widget(allergen) }}
-                                        {{ form_label(allergen) }}
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-                        {{ form_errors(form.allergen) }}
-                    </div>
-
-                    {# Section pour gérer les illustrations #}
-                    <div class="mb-3">
-                        <label class="form-label">Illustrations du plat</label>
-
-                        {# Conteneur pour la liste des illustrations #}
-                        <div id="illustrations-list"
-                             data-prototype="{{ form_widget(form.recipeIllustrations.vars.prototype)|e('html_attr') }}"
-                             data-index="{{ form.recipeIllustrations|length }}">
-
-                            {# Si la recette a déjà des illustrations, on les affiche #}
-                            {% for illustration in form.recipeIllustrations %}
-                                <div class="card mb-3 illustration-item">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                {{ form_row(illustration.imageFile) }}
-                                            </div>
-                                            <div class="col-md-6">
-                                                {{ form_row(illustration.alt_text) }}
-                                            </div>
-                                        </div>
-
-                                        {# Si on est en édition et qu'il y a déjà une image, l'afficher #}
-                                        {% if isEdit and illustration.vars.data.url %}
-                                            <div class="mt-2">
-                                                <img src="{{ illustration.vars.data.url }}"
-                                                     alt="{{ illustration.vars.data.altText }}"
-                                                     class="img-thumbnail"
-                                                     style="max-width: 200px;">
-                                            </div>
-                                        {% endif %}
-
-                                        {# Bouton pour supprimer une illustration #}
-                                        <button type="button" class="btn btn-danger btn-sm mt-2 remove-illustration">
-                                            Supprimer cette illustration
-                                        </button>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-
-                        {# Bouton pour ajouter une nouvelle illustration #}
-                        <button type="button" class="btn btn-success btn-sm mt-2" id="add-illustration">
-                            + Ajouter une illustration
-                        </button>
-                    </div>
-
-                    <div class="d-flex justify-content-between mt-4">
-                        <a href="{{ path('app_admin_recipes') }}" class="btn btn-secondary">
-                            Annuler
-                        </a>
-                        <button type="submit" class="btn btn-primary">
-                            {{ isEdit ? 'Modifier' : 'Créer' }} la recette
-                        </button>
-                    </div>
-
-                    {{ form_end(form) }}
-                </div>
-            </div>
-
-            {% if isEdit %}
-            <div class="mt-3 text-end">
-                <small class="text-muted">
-                    ID de la recette : {{ recipe.id }}
-                </small>
-            </div>
-            {% endif %}
+<div class="form-header">
+    <h1><span data-icon="utensils-crossed" data-icon-width="32" data-icon-height="32" class="form-header-icon"></span>{{ isEdit ? 'Modifier la recette' : 'Nouvelle recette' }}</h1>
+    <a href="{{ path('app_admin_recipes') }}" class="btn-back"><span data-icon="arrow-left" data-icon-width="16" data-icon-height="16"></span>Retour</a>
+</div>
+{% for message in app.flashes('success') %}<div class="flash-success-inline">{{ message }}</div>{% endfor %}
+<div class="form-card">
+    {{ form_start(form) }}
+    <div class="form-section">
+        <div class="section-header">
+            <span data-icon="info" data-icon-width="20" data-icon-height="20" class="section-header-icon"></span>
+            <h3 class="section-title">Informations de la recette</h3>
+        </div>
+        <div class="section-body">
+            {{ form_row(form.title) }}
+            {{ form_row(form.description) }}
+            {{ form_row(form.category) }}
         </div>
     </div>
+    <div class="form-section">
+        <div class="section-header">
+            <span data-icon="alert-triangle" data-icon-width="20" data-icon-height="20" class="section-header-icon"></span>
+            <h3 class="section-title">Allergènes</h3>
+        </div>
+        <div class="section-body">
+            {{ form_row(form.allergen) }}
+        </div>
+    </div>
+    <div class="form-section">
+        <div class="section-header">
+            <span data-icon="image" data-icon-width="20" data-icon-height="20" class="section-header-icon"></span>
+            <h3 class="section-title">Illustrations</h3>
+        </div>
+        <div class="section-body">
+            {{ form_row(form.recipeIllustrations) }}
+        </div>
+    </div>
+    <div class="form-actions">
+        <a href="{{ path('app_admin_recipes') }}" class="btn-cancel">
+            <span data-icon="x" data-icon-width="16" data-icon-height="16"></span>Annuler
+        </a>
+        <button type="submit" class="btn-submit">
+            <span data-icon="check" data-icon-width="16" data-icon-height="16"></span>{{ isEdit ? 'Enregistrer' : 'Créer' }}
+        </button>
+    </div>
+    {{ form_end(form) }}
 </div>
-{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-    {# Inclure le fichier JavaScript pour la gestion des illustrations #}
-    {{ importmap('admin-recipe-illustrations') }}
+{% if isEdit %}<div class="info-box"><strong>ID:</strong> {{ recipe.id }}</div>{% endif %}
 {% endblock %}

@@ -1,0 +1,262 @@
+/* ========================================
+   CRITICAL CSS - ANTI-FOUC
+   Styles critiques pour éviter le Flash of Unstyled Content
+   Ce fichier sera chargé inline dans le <head>
+   ======================================== */
+
+/* VARIABLES CSS - Charte Graphique Vite & Gourmand */
+:root {
+    /* Couleurs principales */
+    --bordeaux: #8B0000;
+    --gold: #D4AF37;
+    --beige: #F5F5DC;
+    --white-off: #FEFDFB;
+    --green: #228B22;
+    --dark-text: #333333;
+    --white: #FFFFFF;
+
+    /* Polices */
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Open Sans', sans-serif;
+
+    /* Espacements */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 3rem;
+    --spacing-2xl: 5rem;
+
+    /* Rayons de bordure */
+    --radius-sm: 0.5rem;
+    --radius-md: 0.75rem;
+    --radius-lg: 1rem;
+    --radius-full: 9999px;
+
+    /* Ombres */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+
+    /* Transitions */
+    --transition-fast: 0.2s ease;
+    --transition-base: 0.3s ease;
+    --transition-slow: 0.5s ease;
+}
+
+/* RESET DE BASE */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+    height: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: var(--font-body);
+    color: var(--dark-text);
+    background-color: var(--white-off);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+/* TYPOGRAPHIE DE BASE */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--bordeaux);
+}
+
+h1 {
+    font-size: clamp(2rem, 5vw, 4rem);
+}
+
+h2 {
+    font-size: clamp(1.75rem, 4vw, 3rem);
+}
+
+h3 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* CONTAINER */
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0 var(--spacing-sm);
+    }
+}
+
+/* HEADER - Layout de base */
+.header, .navbar {
+    background-color: var(--white);
+    border-bottom: 1px solid #e5e5e5;
+    box-shadow: var(--shadow-sm);
+}
+
+.header-container, .navbar-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem var(--spacing-md);
+}
+
+/* Logo */
+.header-logo, .navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.logo-icon, .navbar-logo {
+    width: 48px;
+    height: 48px;
+    background-color: var(--bordeaux);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.logo-text h1, .navbar-brand {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    color: var(--bordeaux);
+    font-weight: 700;
+    line-height: 1;
+    margin: 0;
+}
+
+/* FOOTER - Layout de base */
+.footer {
+    background-color: var(--dark-text);
+    color: var(--white);
+    margin-top: auto;
+    flex-shrink: 0;
+}
+
+/* BOUTONS DE BASE */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 12px 24px;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all var(--transition-base);
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.btn-primary {
+    background-color: var(--bordeaux);
+    color: var(--white);
+}
+
+.btn-secondary {
+    background-color: var(--gold);
+    color: var(--white);
+}
+
+/* CARDS DE BASE */
+.card {
+    background-color: var(--white);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+}
+
+/* ALERTS */
+.alert {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+.alert-success {
+    background-color: var(--green);
+    color: var(--white);
+}
+
+.alert-danger {
+    background-color: #D97076;
+    color: var(--white);
+}
+
+/* NAVIGATION MOBILE */
+.mobile-menu {
+    position: fixed;
+    top: 73px;
+    left: 0;
+    right: 0;
+    background-color: var(--white);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    z-index: 999;
+}
+
+.mobile-menu.show {
+    max-height: 500px;
+}
+
+/* RESPONSIVE HELPERS */
+@media (max-width: 1024px) {
+    .header-nav, .navbar-menu,
+    .header-actions, .navbar-actions {
+        display: none;
+    }
+}
+
+/* FORMULAIRES DE BASE */
+.form-control {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--bordeaux);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+    font-size: 1rem;
+}
+
+/* HIDE FOUC - Cache le contenu jusqu'au chargement complet des polices */
+html.fonts-loading body {
+    opacity: 0;
+}
+
+html.fonts-loaded body {
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}

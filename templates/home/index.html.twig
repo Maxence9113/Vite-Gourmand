@@ -5,29 +5,30 @@
 {% block body %}
 
 {# ========================================
-   HERO SECTION
+   HERO SECTION - Maquette Figma
    ======================================== #}
-<section class="hero-section" style="background-image: url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=1920&h=1080&fit=crop');">
+<section class="hero-section">
+    <div class="hero-background" style="background-image: url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=1920&h=1080&fit=crop');"></div>
     <div class="hero-overlay"></div>
-    <div class="container">
-        <div class="hero-content">
+    <div class="container hero-content">
+        <div class="hero-content-inner">
             <h1>L'excellence gastronomique pour vos événements</h1>
             <p>Depuis 25 ans, Julie et José subliment vos moments avec des créations culinaires d'exception</p>
-            <a href="{{ path('app_menu_catalog') }}" class="btn btn-secondary btn-lg">
-                <span data-icon="arrow-right" data-icon-width="20" data-icon-height="20"></span>
+            <a href="{{ path('app_menu_catalog') }}" class="btn btn-secondary btn-hero btn-lg">
                 Découvrir nos menus
+                <span data-icon="arrow-right" data-icon-width="20" data-icon-height="20"></span>
             </a>
         </div>
     </div>
 </section>
 
 {# ========================================
-   ABOUT SECTION
+   ABOUT SECTION - Maquette Figma
    ======================================== #}
 <section class="about-section">
     <div class="container">
         {# En-tête de section #}
-        <div style="text-align: center; margin-bottom: var(--spacing-2xl);">
+        <div class="section-header">
             <h2>À propos de nous</h2>
             <div class="divider-gold"></div>
         </div>
@@ -35,11 +36,9 @@
         {# Grille About #}
         <div class="about-grid">
             {# Texte de présentation #}
-            <div>
-                <h3 style="color: var(--dark-text); margin-bottom: var(--spacing-md);">
-                    Julie & José, passionnés de gastronomie
-                </h3>
-                <p style="margin-bottom: var(--spacing-md);">
+            <div class="about-text">
+                <h3>Julie & José, passionnés de gastronomie</h3>
+                <p>
                     Depuis 1999, notre duo de chefs passionnés met son savoir-faire au service de vos événements.
                     Formés dans les plus grandes maisons bordelaises, nous avons à cœur de sublimer chaque moment
                     avec des créations culinaires d'exception.
@@ -51,26 +50,26 @@
             </div>
 
             {# Stats cards #}
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--spacing-md);">
+            <div class="stats-grid">
                 {# 25 ans #}
                 <div class="stat-card">
                     <span data-icon="award" data-icon-width="48" data-icon-height="48" class="stat-icon"></span>
                     <div class="stat-number">25 ans</div>
-                    <p style="margin: 0;">D'expérience</p>
+                    <p>D'expérience</p>
                 </div>
 
                 {# 500+ événements #}
                 <div class="stat-card">
                     <span data-icon="users" data-icon-width="48" data-icon-height="48" class="stat-icon"></span>
                     <div class="stat-number">500+</div>
-                    <p style="margin: 0;">Événements réalisés</p>
+                    <p>Événements réalisés</p>
                 </div>
 
                 {# 100% satisfaits #}
-                <div class="stat-card" style="grid-column: 1 / -1;">
+                <div class="stat-card">
                     <span data-icon="heart" data-icon-width="48" data-icon-height="48" class="stat-icon"></span>
                     <div class="stat-number">100%</div>
-                    <p style="margin: 0;">Clients satisfaits</p>
+                    <p>Clients satisfaits</p>
                 </div>
             </div>
         </div>
@@ -78,12 +77,12 @@
 </section>
 
 {# ========================================
-   TEAM SECTION
+   TEAM SECTION - Maquette Figma
    ======================================== #}
 <section class="team-section">
     <div class="container">
         {# En-tête de section #}
-        <div style="text-align: center; margin-bottom: var(--spacing-2xl);">
+        <div class="section-header">
             <h2>Notre équipe</h2>
             <div class="divider-gold"></div>
         </div>
@@ -92,40 +91,43 @@
         <div class="team-grid">
             {# Julie Moreau #}
             <div class="team-card">
-                <img src="https://images.unsplash.com/photo-1611657365907-1ca5d9799f59?w=600&h=800&fit=crop"
-                     alt="Julie Moreau - Chef & Co-fondatrice"
-                     class="team-image">
-                <div class="team-overlay"></div>
-                <div style="position: absolute; bottom: var(--spacing-md); left: var(--spacing-md); z-index: 2; color: white;">
-                    <h3 style="color: white; margin-bottom: 0.5rem;">Julie Moreau</h3>
-                    <p style="color: var(--gold); margin-bottom: 0.5rem; font-size: 0.875rem;">Chef & Co-fondatrice</p>
-                    <p style="font-size: 0.875rem; margin: 0;">Formée aux Beaux-Arts de la cuisine, Julie apporte créativité et raffinement à chaque plat.</p>
+                <div class="team-card-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1611657365907-1ca5d9799f59?w=600&h=800&fit=crop"
+                         alt="Julie Moreau - Chef & Co-fondatrice">
+                    <div class="team-image-overlay"></div>
+                </div>
+                <div class="team-card-content">
+                    <h3>Julie Moreau</h3>
+                    <p class="team-role">Chef & Co-fondatrice</p>
+                    <p>Formée aux Beaux-Arts de la cuisine, Julie apporte créativité et raffinement à chaque plat.</p>
                 </div>
             </div>
 
             {# José Martinez #}
             <div class="team-card">
-                <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=600&h=800&fit=crop"
-                     alt="José Martinez - Chef & Co-fondateur"
-                     class="team-image">
-                <div class="team-overlay"></div>
-                <div style="position: absolute; bottom: var(--spacing-md); left: var(--spacing-md); z-index: 2; color: white;">
-                    <h3 style="color: white; margin-bottom: 0.5rem;">José Martinez</h3>
-                    <p style="color: var(--gold); margin-bottom: 0.5rem; font-size: 0.875rem;">Chef & Co-fondateur</p>
-                    <p style="font-size: 0.875rem; margin: 0;">Maître cuisinier avec 30 ans d'expérience, José garantit l'excellence de chaque création.</p>
+                <div class="team-card-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=600&h=800&fit=crop"
+                         alt="José Martinez - Chef & Co-fondateur">
+                    <div class="team-image-overlay"></div>
+                </div>
+                <div class="team-card-content">
+                    <h3>José Martinez</h3>
+                    <p class="team-role">Chef & Co-fondateur</p>
+                    <p>Maître cuisinier avec 30 ans d'expérience, José garantit l'excellence de chaque création.</p>
                 </div>
             </div>
 
             {# Équipe #}
             <div class="team-card">
-                <img src="https://images.unsplash.com/photo-1578366941741-9e517759c620?w=600&h=800&fit=crop"
-                     alt="Notre équipe de professionnels"
-                     class="team-image">
-                <div class="team-overlay"></div>
-                <div style="position: absolute; bottom: var(--spacing-md); left: var(--spacing-md); z-index: 2; color: white;">
-                    <h3 style="color: white; margin-bottom: 0.5rem;">Notre équipe</h3>
-                    <p style="color: var(--gold); margin-bottom: 0.5rem; font-size: 0.875rem;">Professionnels passionnés</p>
-                    <p style="font-size: 0.875rem; margin: 0;">Une équipe de 12 personnes dévouées à faire de votre événement un moment d'exception.</p>
+                <div class="team-card-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1578366941741-9e517759c620?w=600&h=800&fit=crop"
+                         alt="Notre équipe de professionnels">
+                    <div class="team-image-overlay"></div>
+                </div>
+                <div class="team-card-content">
+                    <h3>Notre équipe</h3>
+                    <p class="team-role">Professionnels passionnés</p>
+                    <p>Une équipe de 12 personnes dévouées à faire de votre événement un moment d'exception.</p>
                 </div>
             </div>
         </div>
@@ -133,17 +135,15 @@
 </section>
 
 {# ========================================
-   TESTIMONIALS SECTION
+   TESTIMONIALS SECTION - Maquette Figma
    ======================================== #}
 <section class="testimonials-section">
     <div class="container">
         {# En-tête de section #}
-        <div style="text-align: center; margin-bottom: var(--spacing-2xl);">
+        <div class="section-header">
             <h2>Avis clients validés</h2>
             <div class="divider-gold"></div>
-            <p style="margin-top: var(--spacing-md); font-size: 1.125rem;">
-                La satisfaction de nos clients est notre plus belle récompense
-            </p>
+            <p>La satisfaction de nos clients est notre plus belle récompense</p>
         </div>
 
         {# Grille Testimonials #}
@@ -152,15 +152,12 @@
                 {% for review in reviews %}
                     <div class="testimonial-card">
                         {# Icône quote #}
-                        <span data-icon="quote" data-icon-width="32" data-icon-height="32"
-                              style="position: absolute; top: 1rem; right: 1rem; opacity: 0.2; color: var(--gold);"></span>
+                        <span data-icon="quote" data-icon-width="32" data-icon-height="32" class="testimonial-quote-icon"></span>
 
                         {# Étoiles #}
                         <div class="testimonial-stars">
                             {% for i in 1..5 %}
-                                <span data-icon="star" data-icon-width="20" data-icon-height="20"
-                                      class="star-icon"
-                                      style="{% if i <= review.rating %}fill: var(--gold);{% else %}opacity: 0.3;{% endif %}"></span>
+                                <span data-icon="star" data-icon-width="20" data-icon-height="20" class="star-icon"></span>
                             {% endfor %}
                         </div>
 
@@ -170,85 +167,79 @@
                                 "{{ review.comment|length > 150 ? review.comment|slice(0, 150) ~ '...' : review.comment }}"
                             </p>
                         {% else %}
-                            <p class="testimonial-text" style="font-style: italic; opacity: 0.7;">
-                                Pas de commentaire, juste une note de {{ review.rating }}/5.
-                            </p>
+                            <p class="testimonial-text">Pas de commentaire, juste une note de {{ review.rating }}/5.</p>
                         {% endif %}
 
                         {# Auteur #}
-                        <div style="border-top: 1px solid var(--beige); padding-top: var(--spacing-md);">
-                            <p class="testimonial-author" style="margin-bottom: 0.25rem;">{{ review.customerName }}</p>
-                            <p class="testimonial-event" style="margin: 0;">{{ review.createdAt|date('d/m/Y') }}</p>
+                        <div class="testimonial-footer">
+                            <p class="customer-name">{{ review.customerName }}</p>
+                            <p class="event-info">{{ review.createdAt|date('d/m/Y') }}</p>
                         </div>
                     </div>
                 {% endfor %}
             {% else %}
                 {# Avis par défaut si pas de reviews #}
                 <div class="testimonial-card">
-                    <span data-icon="quote" data-icon-width="32" data-icon-height="32"
-                          style="position: absolute; top: 1rem; right: 1rem; opacity: 0.2; color: var(--gold);"></span>
+                    <span data-icon="quote" data-icon-width="32" data-icon-height="32" class="testimonial-quote-icon"></span>
                     <div class="testimonial-stars">
                         {% for i in 1..5 %}
-                            <span data-icon="star" data-icon-width="20" data-icon-height="20" class="star-icon" style="fill: var(--gold);"></span>
+                            <span data-icon="star" data-icon-width="20" data-icon-height="20" class="star-icon"></span>
                         {% endfor %}
                     </div>
                     <p class="testimonial-text">
                         "Un service exceptionnel ! Les plats étaient sublimes et nos invités en parlent encore. Julie et José ont su créer une ambiance gastronomique parfaite pour notre mariage."
                     </p>
-                    <div style="border-top: 1px solid var(--beige); padding-top: var(--spacing-md);">
-                        <p class="testimonial-author" style="margin-bottom: 0.25rem;">Marie Dubois</p>
-                        <p class="testimonial-event" style="margin: 0;">Mariage - Juin 2023</p>
+                    <div class="testimonial-footer">
+                        <p class="customer-name">Marie Dubois</p>
+                        <p class="event-info">Mariage - Juin 2023</p>
                     </div>
                 </div>
 
                 <div class="testimonial-card">
-                    <span data-icon="quote" data-icon-width="32" data-icon-height="32"
-                          style="position: absolute; top: 1rem; right: 1rem; opacity: 0.2; color: var(--gold);"></span>
+                    <span data-icon="quote" data-icon-width="32" data-icon-height="32" class="testimonial-quote-icon"></span>
                     <div class="testimonial-stars">
                         {% for i in 1..5 %}
-                            <span data-icon="star" data-icon-width="20" data-icon-height="20" class="star-icon" style="fill: var(--gold);"></span>
+                            <span data-icon="star" data-icon-width="20" data-icon-height="20" class="star-icon"></span>
                         {% endfor %}
                     </div>
                     <p class="testimonial-text">
                         "Professionnalisme et qualité au rendez-vous. Nos 150 convives ont été ravis. La présentation était digne d'un restaurant étoilé. Je recommande vivement !"
                     </p>
-                    <div style="border-top: 1px solid var(--beige); padding-top: var(--spacing-md);">
-                        <p class="testimonial-author" style="margin-bottom: 0.25rem;">Pierre Lefèvre</p>
-                        <p class="testimonial-event" style="margin: 0;">Événement d'entreprise - Mars 2023</p>
+                    <div class="testimonial-footer">
+                        <p class="customer-name">Pierre Lefèvre</p>
+                        <p class="event-info">Événement d'entreprise - Mars 2023</p>
                     </div>
                 </div>
 
                 <div class="testimonial-card">
-                    <span data-icon="quote" data-icon-width="32" data-icon-height="32"
-                          style="position: absolute; top: 1rem; right: 1rem; opacity: 0.2; color: var(--gold);"></span>
+                    <span data-icon="quote" data-icon-width="32" data-icon-height="32" class="testimonial-quote-icon"></span>
                     <div class="testimonial-stars">
                         {% for i in 1..5 %}
-                            <span data-icon="star" data-icon-width="20" data-icon-height="20" class="star-icon" style="fill: var(--gold);"></span>
+                            <span data-icon="star" data-icon-width="20" data-icon-height="20" class="star-icon"></span>
                         {% endfor %}
                     </div>
                     <p class="testimonial-text">
                         "Une cuisine raffinée avec des produits frais et locaux. L'équipe est aux petits soins. Mon anniversaire était parfait grâce à Vite & Gourmand !"
                     </p>
-                    <div style="border-top: 1px solid var(--beige); padding-top: var(--spacing-md);">
-                        <p class="testimonial-author" style="margin-bottom: 0.25rem;">Sophie Bernard</p>
-                        <p class="testimonial-event" style="margin: 0;">Anniversaire - Décembre 2023</p>
+                    <div class="testimonial-footer">
+                        <p class="customer-name">Sophie Bernard</p>
+                        <p class="event-info">Anniversaire - Décembre 2023</p>
                     </div>
                 </div>
 
                 <div class="testimonial-card">
-                    <span data-icon="quote" data-icon-width="32" data-icon-height="32"
-                          style="position: absolute; top: 1rem; right: 1rem; opacity: 0.2; color: var(--gold);"></span>
+                    <span data-icon="quote" data-icon-width="32" data-icon-height="32" class="testimonial-quote-icon"></span>
                     <div class="testimonial-stars">
                         {% for i in 1..5 %}
-                            <span data-icon="star" data-icon-width="20" data-icon-height="20" class="star-icon" style="fill: var(--gold);"></span>
+                            <span data-icon="star" data-icon-width="20" data-icon-height="20" class="star-icon"></span>
                         {% endfor %}
                     </div>
                     <p class="testimonial-text">
                         "Des saveurs exceptionnelles et une présentation soignée. Le menu végétarien était particulièrement réussi. Service impeccable du début à la fin."
                     </p>
-                    <div style="border-top: 1px solid var(--beige); padding-top: var(--spacing-md);">
-                        <p class="testimonial-author" style="margin-bottom: 0.25rem;">Laurent Petit</p>
-                        <p class="testimonial-event" style="margin: 0;">Baptême - Avril 2023</p>
+                    <div class="testimonial-footer">
+                        <p class="customer-name">Laurent Petit</p>
+                        <p class="event-info">Baptême - Avril 2023</p>
                     </div>
                 </div>
             {% endif %}
@@ -256,7 +247,7 @@
 
         {# Lien vers tous les avis #}
         {% if reviews is defined and reviews is not empty %}
-            <div style="text-align: center; margin-top: var(--spacing-xl);">
+            <div class="testimonials-cta">
                 <a href="{{ path('app_review_index') }}" class="btn btn-outline">
                     Voir tous les avis
                 </a>

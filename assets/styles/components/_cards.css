@@ -1,0 +1,252 @@
+/* ========================================
+   COMPOSANT - CARDS
+   Cartes pour menus, équipe, témoignages
+   ======================================== */
+
+/* Card de base */
+.card {
+    background-color: var(--white);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-base);
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-xl);
+}
+
+/* Card Menu - Design Figma */
+.menu-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    transition: all var(--transition-base);
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-card:hover {
+    box-shadow: var(--shadow-xl);
+}
+
+.menu-card-image {
+    position: relative;
+    width: 100%;
+    height: 12rem;
+    overflow: hidden;
+}
+
+@media (min-width: 768px) {
+    .menu-card-image {
+        height: 14rem;
+    }
+}
+
+.menu-card-image::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+    z-index: 1;
+}
+
+.menu-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+}
+
+.menu-card:hover .menu-card-image img {
+    transform: scale(1.1);
+}
+
+.menu-card-badges {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    z-index: 2;
+}
+
+@media (min-width: 768px) {
+    .menu-card-badges {
+        top: 1rem;
+        left: 1rem;
+    }
+}
+
+.menu-card-content {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+@media (min-width: 768px) {
+    .menu-card-content {
+        padding: 1.5rem;
+    }
+}
+
+.menu-card-title {
+    font-family: var(--font-heading);
+    font-weight: 400;
+    font-size: var(--text-xl);
+    color: var(--bordeaux);
+    margin-bottom: 0.5rem;
+}
+
+@media (min-width: 768px) {
+    .menu-card-title {
+        font-size: var(--text-2xl);
+        margin-bottom: 0.75rem;
+    }
+}
+
+.menu-card-description {
+    color: var(--dark-text);
+    font-size: var(--text-sm);
+    margin-bottom: 0.75rem;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+@media (min-width: 768px) {
+    .menu-card-description {
+        margin-bottom: 1rem;
+    }
+}
+
+.menu-card-tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.75rem;
+}
+
+@media (min-width: 768px) {
+    .menu-card-tags {
+        margin-bottom: 1rem;
+    }
+}
+
+.menu-card-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--dark-text);
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--beige);
+}
+
+@media (min-width: 768px) {
+    .menu-card-info {
+        font-size: var(--text-sm);
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+    }
+}
+
+.menu-card-info span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.menu-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: auto;
+}
+
+.menu-card-price {
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-card-price small {
+    font-size: 0.625rem;
+    color: var(--dark-text);
+    margin-bottom: 0.25rem;
+}
+
+@media (min-width: 768px) {
+    .menu-card-price small {
+        font-size: var(--text-xs);
+    }
+}
+
+.price-value {
+    font-family: var(--font-heading);
+    font-weight: 400;
+    font-size: var(--text-2xl);
+    color: var(--bordeaux);
+    line-height: 1;
+}
+
+@media (min-width: 768px) {
+    .price-value {
+        font-size: var(--text-3xl);
+    }
+}
+
+/* Card Statistique */
+.stat-card {
+    background-color: var(--white);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    text-align: center;
+    box-shadow: var(--shadow-md);
+}
+
+.stat-icon {
+    color: var(--gold);
+    width: 48px;
+    height: 48px;
+    margin: 0 auto var(--spacing-sm);
+}
+
+.stat-number {
+    font-family: var(--font-heading);
+    font-size: var(--text-4xl);
+    color: var(--bordeaux);
+    margin-bottom: 0.5rem;
+}
+
+/* Card Équipe */
+.team-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+}
+
+.team-image {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+}
+
+.team-card:hover .team-image {
+    transform: scale(1.1);
+}
+
+.team-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+}
+
+/* Card Témoignage - Styles définis dans layout/_sections.css */
