@@ -1,0 +1,547 @@
+/* ========================================
+   PAGE - ADMIN LISTS
+   Pages de liste/index d'administration (CRUD)
+   Réutilisable pour toutes les listes admin
+   ======================================== */
+
+/* ========================================
+   EN-TÊTE DE LA LISTE
+   ======================================== */
+
+.list-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.list-header h1 {
+    font-family: var(--font-heading);
+    color: var(--bordeaux);
+    font-size: 2.5rem;
+    font-weight: 400;
+}
+
+.btn-add {
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-lg);
+    border: none;
+    background: var(--gold);
+    color: var(--dark-text);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all var(--transition-base);
+}
+
+.btn-add:hover {
+    box-shadow: var(--shadow-md);
+}
+
+/* ========================================
+   MESSAGES FLASH
+   ======================================== */
+
+.flash-success-list {
+    background: #d4edda;
+    color: #155724;
+    padding: 1rem;
+    border-radius: var(--radius-sm);
+    margin-bottom: 1rem;
+    border: 1px solid #c3e6cb;
+}
+
+.flash-error-list {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 1rem;
+    border-radius: var(--radius-sm);
+    margin-bottom: 1rem;
+    border: 1px solid #f5c6cb;
+}
+
+/* ========================================
+   CONTAINER DE LISTE
+   ======================================== */
+
+.list-container {
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+}
+
+/* ========================================
+   BARRE DE RECHERCHE
+   ======================================== */
+
+.list-search-bar {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--beige);
+}
+
+.list-search-wrapper {
+    position: relative;
+}
+
+.list-search-icon {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--dark-text);
+}
+
+.list-search-input {
+    width: 100%;
+    padding: 0.5rem 1rem 0.5rem 2.5rem;
+    border: 1px solid var(--bordeaux);
+    border-radius: var(--radius-lg);
+    font-family: var(--font-body);
+}
+
+.list-search-input:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+}
+
+/* ========================================
+   ÉTAT VIDE
+   ======================================== */
+
+.list-empty-state {
+    text-align: center;
+    padding: 3rem 1.25rem;
+}
+
+.list-empty-icon {
+    color: var(--dark-text);
+    opacity: 0.3;
+    margin-bottom: 1rem;
+    display: inline-block;
+}
+
+.list-empty-text {
+    color: var(--dark-text);
+    opacity: 0.6;
+    margin: 0;
+}
+
+/* ========================================
+   TABLEAU
+   ======================================== */
+
+.list-table-wrapper {
+    overflow-x: auto;
+}
+
+.list-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.list-table thead {
+    background: var(--beige);
+}
+
+.list-table th {
+    padding: 1rem 1.5rem;
+    text-align: left;
+    color: var(--dark-text);
+    font-weight: 600;
+}
+
+.list-table tbody tr {
+    border-bottom: 1px solid var(--beige);
+    transition: background-color var(--transition-base);
+}
+
+.list-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.list-table td {
+    padding: 1rem 1.5rem;
+    color: var(--dark-text);
+}
+
+.list-table td strong {
+    font-weight: 600;
+}
+
+/* ========================================
+   ACTIONS CRUD
+   ======================================== */
+
+.crud-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.crud-actions form {
+    display: inline;
+    margin: 0;
+}
+
+/* ========================================
+   COLONNES SPÉCIFIQUES (widths variables)
+   ======================================== */
+
+/* Petite liste (3 colonnes : ID, Nom, Actions) */
+.list-table.small-list colgroup col:nth-child(1) { width: 8%; }
+.list-table.small-list colgroup col:nth-child(2) { width: 70%; }
+.list-table.small-list colgroup col:nth-child(3) { width: 22%; }
+
+/* Liste moyenne (4-5 colonnes) */
+.list-table.medium-list colgroup col:nth-child(1) { width: 8%; }
+.list-table.medium-list colgroup col:nth-child(2) { width: 30%; }
+.list-table.medium-list colgroup col:nth-child(3) { width: 30%; }
+.list-table.medium-list colgroup col:nth-child(4) { width: 15%; }
+.list-table.medium-list colgroup col:nth-child(5) { width: 17%; }
+
+/* ========================================
+   FILTRES DE RECHERCHE
+   ======================================== */
+
+.list-filters {
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.filters-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.filters-grid.four-col {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.filters-grid.three-col {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.filter-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--dark-text);
+    font-weight: 600;
+}
+
+.filter-group input,
+.filter-group select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--bordeaux);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+}
+
+.filter-actions {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.5rem;
+}
+
+.btn-filter {
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-sm);
+    border: none;
+    background: var(--bordeaux);
+    color: white;
+    cursor: pointer;
+    font-family: var(--font-body);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all var(--transition-base);
+}
+
+.btn-filter:hover {
+    opacity: 0.9;
+}
+
+.btn-filter-reset {
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--bordeaux);
+    background: transparent;
+    color: var(--bordeaux);
+    cursor: pointer;
+    text-decoration: none;
+    font-family: var(--font-body);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all var(--transition-base);
+}
+
+.btn-filter-reset:hover {
+    background: var(--bordeaux);
+    color: white;
+}
+
+/* ========================================
+   BADGES DE STATUT
+   ======================================== */
+
+.badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    font-weight: 500;
+    display: inline-block;
+}
+
+.badge-admin {
+    background: #d4183d;
+    color: white;
+}
+
+.badge-employee {
+    background: #f39c12;
+    color: white;
+}
+
+.badge-user {
+    background: #3498db;
+    color: white;
+}
+
+.badge-active {
+    background: #27ae60;
+    color: white;
+}
+
+.badge-inactive {
+    background: #95a5a6;
+    color: white;
+}
+
+.btn-toggle-status {
+    background: transparent;
+    border: 1px solid;
+    transition: all var(--transition-base);
+}
+
+.btn-toggle-status.disable {
+    color: #f39c12;
+    border-color: #f39c12;
+}
+
+.btn-toggle-status.disable:hover {
+    background: #f39c12;
+    color: white;
+}
+
+.btn-toggle-status.enable {
+    color: #27ae60;
+    border-color: #27ae60;
+}
+
+.btn-toggle-status.enable:hover {
+    background: #27ae60;
+    color: white;
+}
+
+.text-protected {
+    color: #95a5a6;
+    font-size: 0.875rem;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 768px) {
+    .list-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .list-header h1 {
+        font-size: 2rem;
+    }
+
+    .btn-add {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .list-table-wrapper {
+        overflow-x: scroll;
+    }
+
+    .filters-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn-filter,
+    .btn-filter-reset {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* ========================================
+   STATS GRID
+   ======================================== */
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.stat-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: 1.25rem;
+    text-align: center;
+}
+
+.stat-card.stat-success {
+    border-left: 4px solid #27ae60;
+}
+
+.stat-card.stat-warning {
+    border-left: 4px solid #f39c12;
+}
+
+.stat-card.stat-info {
+    border-left: 4px solid #3498db;
+}
+
+.stat-card h6 {
+    color: var(--dark-text);
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+    font-weight: 400;
+}
+
+.stat-card h3 {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    margin: 0;
+}
+
+.stat-card.stat-success h3 {
+    color: #27ae60;
+}
+
+.stat-card.stat-warning h3 {
+    color: #f39c12;
+}
+
+.stat-card.stat-info h3 {
+    color: #3498db;
+}
+
+.stat-card:not(.stat-success):not(.stat-warning):not(.stat-info) h3 {
+    color: var(--dark-text);
+}
+
+/* ========================================
+   BOUTONS CRUD
+   ======================================== */
+
+.btn-crud {
+    padding: 0.5rem;
+    border-radius: var(--radius-sm);
+    border: none;
+    background: none;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    text-decoration: none;
+    color: var(--dark-text);
+}
+
+.btn-crud:hover {
+    background-color: #e9ecef;
+}
+
+.btn-crud-text {
+    font-size: 0.875rem;
+}
+
+.btn-crud-edit {
+    color: #3498db;
+}
+
+.btn-crud-delete {
+    color: #d4183d;
+}
+
+.btn-crud-validate {
+    color: #27ae60;
+}
+
+.btn-crud-reject {
+    color: #f39c12;
+}
+
+/* ========================================
+   ÉTOILES DE NOTATION
+   ======================================== */
+
+.rating-stars {
+    display: flex;
+    gap: 0.125rem;
+}
+
+/* ========================================
+   TEXTE SECONDAIRE
+   ======================================== */
+
+.text-muted {
+    color: #95a5a6;
+    font-style: italic;
+}
+
+.text-small {
+    font-size: 0.875rem;
+}
+
+/* ========================================
+   COLONNE COMMENTAIRE (WRAPPING)
+   ======================================== */
+
+.comment-cell {
+    max-width: 400px;
+    word-wrap: break-word;
+    white-space: normal;
+    line-height: 1.5;
+}
+
+/* ========================================
+   FLASH WARNING
+   ======================================== */
+
+.flash-warning-list {
+    background: #fff3cd;
+    color: #856404;
+    padding: 1rem;
+    border-radius: var(--radius-sm);
+    margin-bottom: 1rem;
+    border: 1px solid #ffeeba;
+}

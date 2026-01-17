@@ -1,0 +1,821 @@
+/* ========================================
+   PAGE - ACCOUNT
+   Page de compte utilisateur principale
+   ======================================== */
+
+/* ========================================
+   SECTION PRINCIPALE
+   ======================================== */
+.account-page-section {
+    background-color: var(--beige);
+    padding: 2rem 0 3rem;
+}
+
+.account-page-container {
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* ========================================
+   TITRE DE PAGE
+   ======================================== */
+.account-page-title-block {
+    margin-bottom: 2rem;
+}
+
+.account-page-title-block h1 {
+    font-family: var(--font-heading);
+    color: var(--bordeaux);
+    font-size: 2.25rem;
+    margin-bottom: 0.5rem;
+    font-weight: 400;
+}
+
+.account-page-title-divider {
+    width: 5rem;
+    height: 4px;
+    background-color: var(--gold);
+    border-radius: var(--radius-sm);
+}
+
+/* ========================================
+   HEADER UTILISATEUR
+   ======================================== */
+.account-user-header {
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.account-header-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.account-user-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.account-user-avatar {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    background-color: var(--bordeaux);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.account-user-avatar svg,
+.account-user-avatar [data-icon] {
+    color: white;
+}
+
+.account-user-details {
+    min-width: 0;
+    flex: 1;
+}
+
+.account-user-name {
+    font-family: var(--font-heading);
+    color: var(--bordeaux);
+    font-size: 1.5rem;
+    margin: 0 0 0.25rem;
+    font-weight: 400;
+}
+
+.account-user-email {
+    color: var(--dark-text);
+    font-size: 0.875rem;
+    margin: 0;
+}
+
+.account-btn-logout {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--bordeaux);
+    color: var(--bordeaux);
+    background: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: background-color var(--transition-base), color var(--transition-base);
+    font-weight: 600;
+}
+
+.account-btn-logout:hover {
+    background-color: var(--bordeaux);
+    color: white;
+}
+
+/* ========================================
+   LAYOUT PRINCIPAL
+   ======================================== */
+.account-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+/* ========================================
+   SIDEBAR NAVIGATION
+   ======================================== */
+.account-sidebar {
+    width: 100%;
+}
+
+.account-sidebar-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: 0.75rem;
+}
+
+.account-tabs-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+}
+
+/* Lien Administration (pas un bouton d'onglet) */
+.account-tab-link {
+    padding: 0.875rem 1rem;
+    border-radius: var(--radius-sm);
+    background: var(--gold);
+    color: var(--dark-text);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    transition: opacity var(--transition-base);
+}
+
+.account-tab-link:hover {
+    opacity: 0.9;
+}
+
+/* Boutons d'onglets */
+.account-tab {
+    padding: 0.875rem 1rem;
+    border-radius: var(--radius-sm);
+    border: none;
+    background: transparent;
+    color: var(--dark-text);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: background-color var(--transition-base);
+    font-weight: 600;
+    font-family: var(--font-body);
+}
+
+.account-tab:hover {
+    background: rgba(139, 0, 0, 0.05);
+}
+
+.account-tab.active {
+    background: var(--bordeaux);
+    color: white;
+}
+
+/* Texte des onglets (caché sur mobile) */
+.tab-text {
+    display: none;
+}
+
+/* ========================================
+   CONTENU DES ONGLETS
+   ======================================== */
+.account-content {
+    width: 100%;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.tab-content-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: 1.5rem;
+}
+
+/* Titres de sections dans les onglets */
+.tab-section-title {
+    font-family: var(--font-heading);
+    color: var(--bordeaux);
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+    font-weight: 400;
+}
+
+.tab-section-title-small {
+    font-family: var(--font-heading);
+    color: var(--bordeaux);
+    font-size: 1.5rem;
+    margin: 0;
+    font-weight: 400;
+}
+
+.tab-section-divider {
+    width: 4rem;
+    height: 3px;
+    background-color: var(--gold);
+    border-radius: var(--radius-sm);
+    margin-bottom: 1.5rem;
+}
+
+/* ========================================
+   ONGLET COMMANDES - EMPTY STATE
+   ======================================== */
+.orders-empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+}
+
+.orders-empty-icon {
+    display: block;
+    margin: 0 auto 1.5rem;
+    color: var(--gold);
+}
+
+.orders-empty-title {
+    font-family: var(--font-heading);
+    color: var(--bordeaux);
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+    font-weight: 400;
+}
+
+.orders-empty-text {
+    color: var(--dark-text);
+    opacity: 0.8;
+    margin-bottom: 2rem;
+}
+
+.orders-btn-discover {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 2rem;
+    background: var(--bordeaux);
+    color: white;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color var(--transition-base);
+}
+
+.orders-btn-discover:hover {
+    background-color: #8B0000;
+}
+
+/* ========================================
+   ONGLET COMMANDES - LISTE
+   ======================================== */
+.orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.order-card {
+    border: 1px solid var(--beige);
+    border-radius: var(--radius-lg);
+    padding: 1rem;
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.order-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.order-card-layout {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+.order-card-info {
+    min-width: 0;
+}
+
+.order-card-title {
+    font-family: var(--font-heading);
+    color: var(--bordeaux);
+    font-size: 1.125rem;
+    margin: 0 0 0.375rem;
+    font-weight: 400;
+}
+
+.order-card-meta {
+    font-size: 0.8125rem;
+    color: var(--dark-text);
+    opacity: 0.7;
+    margin: 0 0 0.75rem;
+}
+
+.order-card-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    font-size: 0.8125rem;
+}
+
+.order-card-detail-item {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    color: var(--dark-text);
+}
+
+.order-card-detail-icon {
+    color: var(--gold);
+}
+
+.order-card-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+    min-width: 180px;
+}
+
+.order-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.625rem;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 0.75rem;
+}
+
+.order-status-badge.status-success {
+    background: #d4edda;
+    color: #155724;
+}
+
+.order-status-badge.status-warning {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.order-status-badge.status-danger {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.order-status-badge.status-info {
+    background: #e7f1ff;
+    color: #004085;
+}
+
+.order-card-price {
+    font-family: var(--font-heading);
+    color: var(--bordeaux);
+    font-size: 1.375rem;
+    margin: 0;
+    font-weight: 400;
+}
+
+.order-btn-details {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-sm);
+    background: var(--bordeaux);
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.8125rem;
+    transition: background-color var(--transition-base);
+    margin-top: 0.25rem;
+}
+
+.order-btn-details:hover {
+    background-color: #8B0000;
+}
+
+/* Footer des commandes */
+.orders-footer {
+    margin-top: 1.5rem;
+    text-align: center;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--beige);
+}
+
+.orders-btn-view-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 2rem;
+    border: 2px solid var(--bordeaux);
+    color: var(--bordeaux);
+    background: white;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color var(--transition-base), color var(--transition-base);
+}
+
+.orders-btn-view-all:hover {
+    background-color: var(--bordeaux);
+    color: white;
+}
+
+/* ========================================
+   ONGLET ADRESSES
+   ======================================== */
+.addresses-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.addresses-btn-add {
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-sm);
+    background: var(--bordeaux);
+    color: white;
+    text-decoration: none;
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    transition: background-color var(--transition-base);
+}
+
+.addresses-btn-add:hover {
+    background-color: #8B0000;
+}
+
+.addresses-empty {
+    text-align: center;
+    padding: 3rem 1rem;
+}
+
+.addresses-empty-icon {
+    display: block;
+    margin: 0 auto 1rem;
+    color: var(--gold);
+    opacity: 0.3;
+}
+
+.addresses-empty-title {
+    margin-bottom: 0.5rem;
+    font-family: var(--font-heading);
+    color: var(--bordeaux);
+    font-size: 1.25rem;
+    font-weight: 400;
+}
+
+.addresses-empty-text {
+    margin: 0;
+    color: var(--dark-text);
+}
+
+.addresses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+}
+
+.address-card {
+    border-radius: var(--radius-lg);
+    padding: 1rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.address-card.is-default {
+    border: 2px solid var(--gold);
+}
+
+.address-card:not(.is-default) {
+    border: 1px solid var(--beige);
+}
+
+.address-default-badge {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-full);
+    font-size: 0.625rem;
+    color: white;
+    background: var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.address-card-title {
+    font-family: var(--font-heading);
+    color: var(--bordeaux);
+    font-size: 1rem;
+    margin: 0 0 0.625rem;
+    font-weight: 400;
+}
+
+.address-card-title.with-badge {
+    padding-right: 4rem;
+}
+
+.address-card-body {
+    margin-bottom: 0.875rem;
+    color: var(--dark-text);
+    font-size: 0.8125rem;
+    flex: 1;
+}
+
+.address-card-body p {
+    margin: 0 0 0.25rem;
+}
+
+.address-card-body p:nth-child(2) {
+    margin-bottom: 0.5rem;
+}
+
+.address-card-phone {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.75rem;
+}
+
+.address-card-phone-icon {
+    color: var(--gold);
+}
+
+.address-card-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.address-btn-edit {
+    padding: 0.5rem 0.875rem;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--bordeaux);
+    color: var(--bordeaux);
+    background: white;
+    text-decoration: none;
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.75rem;
+    transition: background-color var(--transition-base), color var(--transition-base);
+}
+
+.address-btn-edit:hover {
+    background-color: var(--bordeaux);
+    color: white;
+}
+
+/* ========================================
+   ONGLET PROFIL
+   ======================================== */
+.profile-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.profile-section-card {
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+}
+
+.profile-section-card.primary {
+    background: var(--beige);
+    border-left: 4px solid var(--gold);
+}
+
+.profile-section-card.secondary {
+    background: white;
+    border: 1px solid var(--beige);
+}
+
+.profile-section-header {
+    font-family: var(--font-heading);
+    color: var(--bordeaux);
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.profile-fields-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.profile-field {
+}
+
+.profile-field-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--dark-text);
+    font-size: 0.875rem;
+}
+
+.profile-field-value {
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-sm);
+    background: white;
+    border: 1px solid rgba(139, 0, 0, 0.2);
+    color: var(--dark-text);
+    font-family: var(--font-body);
+}
+
+.profile-field-value.with-icon {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.profile-field-icon {
+    color: var(--gold);
+}
+
+.profile-btn-edit {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: var(--bordeaux);
+    color: white;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color var(--transition-base);
+}
+
+.profile-btn-edit:hover {
+    background-color: #8B0000;
+}
+
+.profile-btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border: 2px solid var(--bordeaux);
+    color: var(--bordeaux);
+    background: white;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color var(--transition-base), color var(--transition-base);
+}
+
+.profile-btn-outline:hover {
+    background-color: var(--bordeaux);
+    color: white;
+}
+
+.profile-security-info {
+    display: flex;
+    align-items: start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: var(--beige);
+    border-radius: var(--radius-sm);
+}
+
+.profile-security-icon {
+    color: var(--gold);
+    flex-shrink: 0;
+}
+
+.profile-security-content {
+    flex: 1;
+}
+
+.profile-security-title {
+    font-weight: 600;
+    color: var(--dark-text);
+    margin: 0 0 0.5rem;
+}
+
+.profile-security-text {
+    font-size: 0.875rem;
+    color: var(--dark-text);
+    margin: 0;
+}
+
+/* ========================================
+   RESPONSIVE: Tablette (768px+)
+   ======================================== */
+@media (min-width: 768px) {
+    /* Header utilisateur horizontal */
+    .account-header-layout {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .account-btn-logout {
+        width: auto;
+    }
+
+    .account-user-avatar {
+        width: 5rem;
+        height: 5rem;
+    }
+
+    .account-user-name {
+        font-size: 2.25rem;
+    }
+
+    .account-user-email {
+        font-size: 1.125rem;
+    }
+
+    /* Texte des onglets visible */
+    .tab-text {
+        display: inline;
+    }
+
+    /* Onglets en colonne */
+    .account-tabs-container {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Alignement à gauche */
+    .account-tab,
+    .account-tab-link {
+        justify-content: flex-start;
+    }
+
+    /* Padding des contenus */
+    .tab-content-card {
+        padding: 1.5rem;
+    }
+}
+
+/* ========================================
+   RESPONSIVE: Desktop (1024px+)
+   ======================================== */
+@media (min-width: 1024px) {
+    /* Layout 2 colonnes */
+    .account-layout {
+        grid-template-columns: 280px 1fr;
+        gap: 2rem;
+    }
+
+    .account-sidebar {
+        grid-column: 1;
+    }
+
+    .account-content {
+        grid-column: 2;
+    }
+}
+
+/* ========================================
+   RESPONSIVE: Mobile strict (< 768px)
+   ======================================== */
+@media (max-width: 767px) {
+    .tab-content-card {
+        padding: 1rem;
+    }
+}

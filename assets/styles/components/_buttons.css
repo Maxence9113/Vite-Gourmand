@@ -124,7 +124,7 @@
 
 /* Boutons spéciaux (Footer, Account, etc.) */
 .btn-footer {
-    margin-top: 1rem;
+    margin-top: var(--spacing-md);
     width: 100%;
     display: inline-flex;
     align-items: center;
@@ -132,6 +132,7 @@
     padding: 10px 24px;
     background-color: var(--gold);
     color: var(--dark-text);
+    border: 2px solid var(--gold);
     border-radius: var(--radius-sm);
     font-family: var(--font-body);
     font-weight: 600;
@@ -141,7 +142,9 @@
 }
 
 .btn-footer:hover {
-    opacity: 0.8;
+    background-color: transparent;
+    color: var(--gold);
+    border-color: var(--gold);
 }
 
 .btn-user {

@@ -29,13 +29,27 @@
    4. COMPONENTS - Composants réutilisables
    Boutons, Cards, Forms, etc.
    ======================================== */
+@import './components/_navbar.css';
 @import './components/_buttons.css';
 @import './components/_badges.css';
 @import './components/_cards.css';
 @import './components/_forms.css';
+@import './components/_breadcrumb.css';
+@import './components/_flash-messages.css';
+@import './components/_opening-hours.css';
 
 /* ========================================
-   5. UTILITIES - Classes utilitaires
+   5. PAGES - Styles spécifiques aux pages
+   Account, Contact, Home, etc.
+   ======================================== */
+@import './pages/account.css';
+@import './pages/account-edit.css';
+@import './pages/account-addresses.css';
+@import './pages/account-password.css';
+@import './pages/contact.css';
+
+/* ========================================
+   6. UTILITIES - Classes utilitaires
    Marges, Padding, Display, etc.
    ======================================== */
 @import './utilities/_utilities.css';
@@ -71,188 +85,6 @@
 .alert-info {
     background-color: #6BA5B8;
     color: var(--white);
-}
-
-/* Header - Design Figma */
-.header {
-    background-color: var(--white);
-    border-bottom: 1px solid #e5e5e5;
-    box-shadow: var(--shadow-sm);
-    z-index: var(--z-header);
-}
-
-.header-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem var(--spacing-md);
-}
-
-.header-logo {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    text-decoration: none;
-    transition: opacity var(--transition-base);
-}
-
-.header-logo:hover {
-    opacity: 0.8;
-}
-
-.logo-icon {
-    width: 48px;
-    height: 48px;
-    background-color: var(--bordeaux);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.logo-icon svg,
-.logo-icon span[data-icon] {
-    color: var(--white);
-}
-
-.logo-text {
-    display: flex;
-    flex-direction: column;
-    gap: 0.125rem;
-}
-
-.logo-text h1 {
-    font-family: var(--font-heading);
-    font-size: 1.5rem;
-    color: var(--bordeaux);
-    font-weight: 700;
-    line-height: 1;
-    margin: 0;
-}
-
-.logo-subtitle {
-    font-family: var(--font-body);
-    font-size: 0.75rem;
-    color: var(--dark-text);
-    opacity: 0.7;
-    margin: 0;
-}
-
-.header-nav {
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-}
-
-.nav-link {
-    font-family: var(--font-body);
-    font-weight: 500;
-    font-size: var(--text-base);
-    color: var(--dark-text);
-    text-decoration: none;
-    transition: color var(--transition-base);
-    position: relative;
-}
-
-.nav-link:hover,
-.nav-link.active {
-    color: var(--bordeaux);
-}
-
-.nav-link.active::after {
-    content: '';
-    position: absolute;
-    bottom: -8px;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background-color: var(--bordeaux);
-    border-radius: var(--radius-sm);
-}
-
-.header-actions {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    position: relative;
-}
-
-.mobile-menu-toggle {
-    display: none;
-    width: 40px;
-    height: 40px;
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 0.5rem;
-    color: var(--bordeaux);
-    align-items: center;
-    justify-content: center;
-}
-
-.mobile-menu {
-    position: fixed;
-    top: 73px;
-    left: 0;
-    right: 0;
-    background-color: var(--white);
-    box-shadow: var(--shadow-lg);
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease;
-    z-index: var(--z-mobile-menu);
-}
-
-.mobile-menu.show {
-    max-height: 500px;
-}
-
-.mobile-nav {
-    display: flex;
-    flex-direction: column;
-    padding: var(--spacing-md);
-}
-
-.mobile-nav-link {
-    padding: var(--spacing-sm) 0;
-    font-family: var(--font-body);
-    font-weight: 500;
-    font-size: var(--text-base);
-    color: var(--dark-text);
-    text-decoration: none;
-    border-bottom: 1px solid var(--beige);
-    transition: color var(--transition-base);
-}
-
-.mobile-nav-link:hover,
-.mobile-nav-link.active {
-    color: var(--bordeaux);
-}
-
-@media (max-width: 1024px) {
-    .header-nav,
-    .header-actions {
-        display: none;
-    }
-
-    .mobile-menu-toggle {
-        display: flex;
-    }
-
-    .logo-text h1 {
-        font-size: 1.25rem;
-    }
-
-    .logo-subtitle {
-        font-size: 0.625rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .logo-text {
-        display: none;
-    }
 }
 
 /* Footer - Styles définis dans layout/_footer.css */

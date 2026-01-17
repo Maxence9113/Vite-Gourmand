@@ -103,20 +103,6 @@
     opacity: 0.8;
 }
 
-/* Bouton footer */
-.btn-footer {
-    margin-top: var(--spacing-md);
-    background-color: var(--gold);
-    color: var(--dark-text);
-    border: 2px solid var(--gold);
-}
-
-.btn-footer:hover:not(:disabled) {
-    background-color: transparent;
-    color: var(--gold);
-    border-color: var(--gold);
-}
-
 /* Copyright bar */
 .footer-copyright {
     border-top: 1px solid rgba(255, 215, 0, 0.2);

@@ -2,12 +2,17 @@
 
 {% block title %}Gestion des Allergènes - Admin{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/pages/admin-lists.css') }}">
+{% endblock %}
+
 {% block content %}
-<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
-    <h1 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 2.5rem; font-weight: 400;">
+<div class="list-header">
+    <h1>
         ⚠️ Gestion des allergènes
     </h1>
-    <a href="{{ path('app_admin_allergens_new') }}" style="padding: 0.75rem 1.5rem; border-radius: var(--radius-lg); border: none; background: var(--gold); color: var(--dark-text); cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: all var(--transition-base);" onmouseover="this.style.boxShadow='var(--shadow-md)'" onmouseout="this.style.boxShadow='none'">
+    <a href="{{ path('app_admin_allergens_new') }}" class="btn-add">
         <span data-icon="plus" data-icon-width="16" data-icon-height="16"></span>
         Ajouter un allergène
     </a>
@@ -15,58 +20,58 @@
 
 {# Afficher les messages flash #}
 {% for message in app.flashes('success') %}
-    <div style="background: #d4edda; color: #155724; padding: 1rem; border-radius: var(--radius-sm); margin-bottom: 1rem; border: 1px solid #c3e6cb;">
+    <div class="flash-success-list">
         {{ message }}
     </div>
 {% endfor %}
 
 {% for message in app.flashes('error') %}
-    <div style="background: #f8d7da; color: #721c24; padding: 1rem; border-radius: var(--radius-sm); margin-bottom: 1rem; border: 1px solid #f5c6cb;">
+    <div class="flash-error-list">
         {{ message }}
     </div>
 {% endfor %}
 
 <!-- Liste des allergènes -->
-<div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); overflow: hidden;">
-    <div style="padding: 1rem 1.5rem; border-bottom: 1px solid var(--beige);">
-        <div style="position: relative;">
-            <span data-icon="search" data-icon-width="20" data-icon-height="20" style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--dark-text);"></span>
-            <input type="text" id="searchInput" placeholder="Rechercher un allergène..." style="width: 100%; padding: 0.5rem 1rem 0.5rem 2.5rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-lg); font-family: var(--font-body);">
+<div class="list-container">
+    <div class="list-search-bar">
+        <div class="list-search-wrapper">
+            <span data-icon="search" data-icon-width="20" data-icon-height="20" class="list-search-icon"></span>
+            <input type="text" id="searchInput" placeholder="Rechercher un allergène..." class="list-search-input">
         </div>
     </div>
 
     {% if allergens is empty %}
-        <div style="text-align: center; padding: 3rem 1.25rem;">
-            <span data-icon="inbox" data-icon-width="48" data-icon-height="48" style="color: var(--dark-text); opacity: 0.3; margin-bottom: 1rem; display: inline-block;"></span>
-            <p style="color: var(--dark-text); opacity: 0.6; margin: 0;">Aucun allergène trouvé.</p>
+        <div class="list-empty-state">
+            <span data-icon="inbox" data-icon-width="48" data-icon-height="48" class="list-empty-icon"></span>
+            <p class="list-empty-text">Aucun allergène trouvé.</p>
         </div>
     {% else %}
-        <div style="overflow-x: auto;">
-            <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+        <div class="list-table-wrapper">
+            <table class="list-table small-list">
                 <colgroup>
-                    <col style="width: 8%;">
-                    <col style="width: 70%;">
-                    <col style="width: 22%;">
+                    <col>
+                    <col>
+                    <col>
                 </colgroup>
-                <thead style="background: var(--beige);">
+                <thead>
                     <tr>
-                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">ID</th>
-                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">Nom</th>
-                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">Actions</th>
+                        <th>ID</th>
+                        <th>Nom</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for allergen in allergens %}
-                    <tr class="allergen-row" style="border-bottom: 1px solid var(--beige);" onmouseover="this.style.backgroundColor='#f8f9fa'" onmouseout="this.style.backgroundColor=''">
-                        <td style="padding: 1rem 1.5rem; color: var(--dark-text);">{{ allergen.id }}</td>
-                        <td style="padding: 1rem 1.5rem; color: var(--dark-text);"><strong>{{ allergen.name }}</strong></td>
-                        <td style="padding: 1rem 1.5rem;">
+                    <tr class="allergen-row">
+                        <td>{{ allergen.id }}</td>
+                        <td><strong>{{ allergen.name }}</strong></td>
+                        <td>
                             <div class="crud-actions">
                                 <a href="{{ path('app_admin_allergens_edit', {id: allergen.id}) }}" class="btn-crud btn-crud-edit">
                                     <span data-icon="edit" data-icon-width="16" data-icon-height="16"></span>
                                     <span class="btn-crud-text">Modifier</span>
                                 </a>
-                                <form method="post" action="{{ path('app_admin_allergens_delete', {id: allergen.id}) }}" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer l\'allergène « {{ allergen.name }} » ?')">
+                                <form method="post" action="{{ path('app_admin_allergens_delete', {id: allergen.id}) }}" class="delete-form">
                                     <button type="submit" class="btn-crud btn-crud-delete">
                                         <span data-icon="trash-2" data-icon-width="16" data-icon-height="16"></span>
                                         <span class="btn-crud-text">Supprimer</span>
@@ -97,7 +102,22 @@
 
         rows.forEach(row => {
             const text = row.textContent.toLowerCase();
-            row.style.display = text.includes(searchTerm) ? '' : 'none';
+            row.classList.toggle('hidden', !text.includes(searchTerm));
+            if (text.includes(searchTerm)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+
+    // Confirmation de suppression
+    document.querySelectorAll('.delete-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            const allergenName = this.closest('tr').querySelector('strong').textContent;
+            if (!confirm(`Êtes-vous sûr de vouloir supprimer l'allergène « ${allergenName} » ?`)) {
+                e.preventDefault();
+            }
         });
     });
 </script>

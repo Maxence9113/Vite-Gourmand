@@ -1,0 +1,42 @@
+/* ========================================
+   COMPOSANT - BREADCRUMB
+   Fil d'ariane
+   ======================================== */
+
+.breadcrumb {
+    margin-bottom: var(--spacing-md);
+}
+
+.breadcrumb-list {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-wrap: wrap;
+}
+
+.breadcrumb-link {
+    color: var(--dark-text);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    transition: color var(--transition-base);
+}
+
+.breadcrumb-link:hover {
+    color: var(--bordeaux);
+}
+
+.breadcrumb-separator {
+    color: var(--dark-text);
+    opacity: 0.5;
+    display: flex;
+    align-items: center;
+}
+
+.breadcrumb-current {
+    color: var(--bordeaux);
+    font-weight: 600;
+    font-size: var(--text-sm);
+}

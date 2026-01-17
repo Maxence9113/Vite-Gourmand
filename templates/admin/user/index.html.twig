@@ -2,13 +2,18 @@
 
 {% block title %}Gestion des Utilisateurs - Admin{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/pages/admin-lists.css') }}">
+{% endblock %}
+
 {% block content %}
-<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
-    <h1 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 2.5rem; font-weight: 400;">
+<div class="list-header">
+    <h1>
         👥 Gestion des utilisateurs
     </h1>
     {% if is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('admin_users_create_employee') }}" style="padding: 0.75rem 1.5rem; border-radius: var(--radius-lg); border: none; background: var(--gold); color: var(--dark-text); cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: all var(--transition-base);" onmouseover="this.style.boxShadow='var(--shadow-md)'" onmouseout="this.style.boxShadow='none'">
+        <a href="{{ path('admin_users_create_employee') }}" class="btn-add">
             <span data-icon="user-plus" data-icon-width="16" data-icon-height="16"></span>
             Créer un employé
         </a>
@@ -17,29 +22,29 @@
 
 {# Messages flash #}
 {% for message in app.flashes('success') %}
-    <div style="background: #d4edda; color: #155724; padding: 1rem; border-radius: var(--radius-sm); margin-bottom: 1rem; border: 1px solid #c3e6cb;">
+    <div class="flash-success-list">
         {{ message }}
     </div>
 {% endfor %}
 
 {% for message in app.flashes('error') %}
-    <div style="background: #f8d7da; color: #721c24; padding: 1rem; border-radius: var(--radius-sm); margin-bottom: 1rem; border: 1px solid #f5c6cb;">
+    <div class="flash-error-list">
         {{ message }}
     </div>
 {% endfor %}
 
 {# Filtres de recherche #}
-<div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 1rem; margin-bottom: 1.5rem;">
+<div class="list-filters">
     <form method="get" action="{{ path('admin_users_index') }}">
-        <div style="display: grid; grid-template-columns: {% if is_granted('ROLE_ADMIN') %}repeat(4, 1fr){% else %}repeat(3, 1fr){% endif %}; gap: 1rem;">
-            <div>
-                <label for="search" style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: var(--dark-text); font-weight: 600;">Recherche</label>
-                <input type="text" id="search" name="search" placeholder="Email, nom ou prénom" value="{{ app.request.query.get('search') }}" style="width: 100%; padding: 0.5rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-sm); font-family: var(--font-body);">
+        <div class="filters-grid {% if is_granted('ROLE_ADMIN') %}four-col{% else %}three-col{% endif %}">
+            <div class="filter-group">
+                <label for="search">Recherche</label>
+                <input type="text" id="search" name="search" placeholder="Email, nom ou prénom" value="{{ app.request.query.get('search') }}">
             </div>
             {% if is_granted('ROLE_ADMIN') %}
-            <div>
-                <label for="role" style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: var(--dark-text); font-weight: 600;">Rôle</label>
-                <select id="role" name="role" style="width: 100%; padding: 0.5rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-sm); font-family: var(--font-body);">
+            <div class="filter-group">
+                <label for="role">Rôle</label>
+                <select id="role" name="role">
                     <option value="">Tous les rôles</option>
                     <option value="ROLE_ADMIN" {% if app.request.query.get('role') == 'ROLE_ADMIN' %}selected{% endif %}>Administrateur</option>
                     <option value="ROLE_EMPLOYEE" {% if app.request.query.get('role') == 'ROLE_EMPLOYEE' %}selected{% endif %}>Employé</option>
@@ -47,20 +52,20 @@
                 </select>
             </div>
             {% endif %}
-            <div>
-                <label for="status" style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: var(--dark-text); font-weight: 600;">Statut</label>
-                <select id="status" name="status" style="width: 100%; padding: 0.5rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-sm); font-family: var(--font-body);">
+            <div class="filter-group">
+                <label for="status">Statut</label>
+                <select id="status" name="status">
                     <option value="">Tous les statuts</option>
                     <option value="1" {% if app.request.query.get('status') == '1' %}selected{% endif %}>Actif</option>
                     <option value="0" {% if app.request.query.get('status') == '0' %}selected{% endif %}>Désactivé</option>
                 </select>
             </div>
-            <div style="display: flex; align-items: flex-end; gap: 0.5rem;">
-                <button type="submit" style="padding: 0.5rem 1rem; border-radius: var(--radius-sm); border: none; background: var(--bordeaux); color: white; cursor: pointer; font-family: var(--font-body); display: inline-flex; align-items: center; gap: 0.5rem; transition: all var(--transition-base);" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+            <div class="filter-actions">
+                <button type="submit" class="btn-filter">
                     <span data-icon="search" data-icon-width="16" data-icon-height="16"></span>
                     Rechercher
                 </button>
-                <a href="{{ path('admin_users_index') }}" style="padding: 0.5rem 1rem; border-radius: var(--radius-sm); border: 1px solid var(--bordeaux); background: transparent; color: var(--bordeaux); cursor: pointer; text-decoration: none; font-family: var(--font-body); display: inline-flex; align-items: center; gap: 0.5rem; transition: all var(--transition-base);" onmouseover="this.style.background='var(--bordeaux)'; this.style.color='white'" onmouseout="this.style.background='transparent'; this.style.color='var(--bordeaux)'">
+                <a href="{{ path('admin_users_index') }}" class="btn-filter-reset">
                     <span data-icon="x-circle" data-icon-width="16" data-icon-height="16"></span>
                     Réinitialiser
                 </a>
@@ -70,15 +75,15 @@
 </div>
 
 <!-- Liste des utilisateurs -->
-<div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); overflow: hidden;">
+<div class="list-container">
     {% if users is empty %}
-        <div style="text-align: center; padding: 3rem 1.25rem;">
-            <span data-icon="inbox" data-icon-width="48" data-icon-height="48" style="color: var(--dark-text); opacity: 0.3; margin-bottom: 1rem; display: inline-block;"></span>
-            <p style="color: var(--dark-text); opacity: 0.6; margin: 0;">Aucun utilisateur trouvé.</p>
+        <div class="list-empty-state">
+            <span data-icon="inbox" data-icon-width="48" data-icon-height="48" class="list-empty-icon"></span>
+            <p class="list-empty-text">Aucun utilisateur trouvé.</p>
         </div>
     {% else %}
-        <div style="overflow-x: auto;">
-            <table id="usersTable" style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+        <div class="list-table-wrapper">
+            <table id="usersTable" class="list-table">
                 <colgroup>
                     <col style="width: 5%;">
                     <col style="width: 28%;">
@@ -88,57 +93,57 @@
                     <col style="width: 9%;">
                     <col style="width: 21%;">
                 </colgroup>
-                <thead style="background: var(--beige);">
+                <thead>
                     <tr>
-                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">ID</th>
-                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">Email</th>
-                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">Nom</th>
-                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">Prénom</th>
-                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">Rôle</th>
-                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">Statut</th>
-                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">Actions</th>
+                        <th>ID</th>
+                        <th>Email</th>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Rôle</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for user in users %}
-                    <tr class="user-row" style="border-bottom: 1px solid var(--beige);" onmouseover="this.style.backgroundColor='#f8f9fa'" onmouseout="this.style.backgroundColor=''">
-                        <td style="padding: 1rem 1.5rem; color: var(--dark-text);"><strong>{{ user.id }}</strong></td>
-                        <td style="padding: 1rem 1.5rem; color: var(--dark-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="{{ user.email }}">{{ user.email }}</td>
-                        <td style="padding: 1rem 1.5rem; color: var(--dark-text);">{{ user.lastname }}</td>
-                        <td style="padding: 1rem 1.5rem; color: var(--dark-text);">{{ user.firstname }}</td>
-                        <td style="padding: 1rem 1.5rem; color: var(--dark-text);" data-sort="{% if 'ROLE_ADMIN' in user.roles %}Administrateur{% elseif 'ROLE_EMPLOYEE' in user.roles %}Employé{% else %}Utilisateur{% endif %}">
+                    <tr class="user-row">
+                        <td><strong>{{ user.id }}</strong></td>
+                        <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="{{ user.email }}">{{ user.email }}</td>
+                        <td>{{ user.lastname }}</td>
+                        <td>{{ user.firstname }}</td>
+                        <td data-sort="{% if 'ROLE_ADMIN' in user.roles %}Administrateur{% elseif 'ROLE_EMPLOYEE' in user.roles %}Employé{% else %}Utilisateur{% endif %}">
                             {% if 'ROLE_ADMIN' in user.roles %}
-                                <span style="padding: 0.25rem 0.75rem; border-radius: var(--radius-sm); background: #d4183d; color: white; font-size: 0.875rem;">Admin</span>
+                                <span class="badge badge-admin">Admin</span>
                             {% elseif 'ROLE_EMPLOYEE' in user.roles %}
-                                <span style="padding: 0.25rem 0.75rem; border-radius: var(--radius-sm); background: #f39c12; color: white; font-size: 0.875rem;">Employé</span>
+                                <span class="badge badge-employee">Employé</span>
                             {% else %}
-                                <span style="padding: 0.25rem 0.75rem; border-radius: var(--radius-sm); background: #3498db; color: white; font-size: 0.875rem;">Utilisateur</span>
+                                <span class="badge badge-user">Utilisateur</span>
                             {% endif %}
                         </td>
-                        <td style="padding: 1rem 1.5rem;" data-sort="{% if user.isEnabled %}Actif{% else %}Désactivé{% endif %}">
+                        <td data-sort="{% if user.isEnabled %}Actif{% else %}Désactivé{% endif %}">
                             {% if user.isEnabled %}
-                                <span style="padding: 0.25rem 0.75rem; border-radius: var(--radius-sm); background: #27ae60; color: white; font-size: 0.875rem;">Actif</span>
+                                <span class="badge badge-active">Actif</span>
                             {% else %}
-                                <span style="padding: 0.25rem 0.75rem; border-radius: var(--radius-sm); background: #95a5a6; color: white; font-size: 0.875rem;">Désactivé</span>
+                                <span class="badge badge-inactive">Désactivé</span>
                             {% endif %}
                         </td>
-                        <td style="padding: 1rem 1.5rem;">
+                        <td>
                             {% if 'ROLE_ADMIN' not in user.roles %}
                                 <div class="crud-actions">
                                     <a href="{{ path('admin_users_edit', {id: user.id}) }}" class="btn-crud btn-crud-edit">
                                         <span data-icon="edit" data-icon-width="16" data-icon-height="16"></span>
                                         <span class="btn-crud-text">Éditer</span>
                                     </a>
-                                    <form method="post" action="{{ path('admin_users_toggle_status', {id: user.id}) }}" style="display: inline;">
+                                    <form method="post" action="{{ path('admin_users_toggle_status', {id: user.id}) }}">
                                         <input type="hidden" name="_token" value="{{ csrf_token('toggle-status' ~ user.id) }}">
-                                        <button type="submit" class="btn-crud" style="background: transparent; color: {% if user.isEnabled %}#f39c12{% else %}#27ae60{% endif %}; border: 1px solid {% if user.isEnabled %}#f39c12{% else %}#27ae60{% endif %}; transition: all var(--transition-base);" onmouseover="this.style.background='{% if user.isEnabled %}#f39c12{% else %}#27ae60{% endif %}'; this.style.color='white'" onmouseout="this.style.background='transparent'; this.style.color='{% if user.isEnabled %}#f39c12{% else %}#27ae60{% endif %}'">
+                                        <button type="submit" class="btn-crud btn-toggle-status {% if user.isEnabled %}disable{% else %}enable{% endif %}">
                                             <span data-icon="{% if user.isEnabled %}ban{% else %}check{% endif %}" data-icon-width="16" data-icon-height="16"></span>
                                             <span class="btn-crud-text">{% if user.isEnabled %}Désactiver{% else %}Activer{% endif %}</span>
                                         </button>
                                     </form>
                                 </div>
                             {% else %}
-                                <span style="color: #95a5a6; font-size: 0.875rem;">Protégé</span>
+                                <span class="text-protected">Protégé</span>
                             {% endif %}
                         </td>
                     </tr>

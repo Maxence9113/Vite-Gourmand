@@ -4,125 +4,122 @@
 
 {% block body %}
 {# ========================================
-   HEADER SECTION - Figma Design
+   PAGE ACCOUNT EDIT - Complètement refactorisée
+   CSS externalisé dans assets/styles/pages/account-edit.css
    ======================================== #}
-<section style="background-color: var(--beige); padding: 2rem 0 3rem;">
-    <div style="max-width: 80rem; margin: 0 auto; padding: 0 1rem;">
+<section class="account-edit-section">
+    <div class="account-edit-container">
 
         {# Fil d'ariane #}
-        <nav aria-label="Fil d'ariane" style="margin-bottom: 1.5rem;">
-            <ol style="display: flex; align-items: center; gap: 0.5rem; list-style: none; padding: 0; margin: 0; font-size: 0.875rem;">
+        <nav aria-label="Fil d'ariane" class="breadcrumb">
+            <ol class="breadcrumb-list">
                 <li>
-                    <a href="{{ path('app_home') }}" style="color: var(--dark-text); text-decoration: none; transition: color var(--transition-base);"
-                       onmouseover="this.style.color='var(--bordeaux)'"
-                       onmouseout="this.style.color='var(--dark-text)'">
+                    <a href="{{ path('app_home') }}" class="breadcrumb-link">
                         Accueil
                     </a>
                 </li>
-                <li style="color: var(--dark-text); opacity: 0.5;">
+                <li class="breadcrumb-separator">
                     <span data-icon="chevron-right" data-icon-width="16" data-icon-height="16"></span>
                 </li>
                 <li>
-                    <a href="{{ path('app_account') }}" style="color: var(--dark-text); text-decoration: none; transition: color var(--transition-base);"
-                       onmouseover="this.style.color='var(--bordeaux)'"
-                       onmouseout="this.style.color='var(--dark-text)'">
+                    <a href="{{ path('app_account') }}" class="breadcrumb-link">
                         Mon compte
                     </a>
                 </li>
-                <li style="color: var(--dark-text); opacity: 0.5;">
+                <li class="breadcrumb-separator">
                     <span data-icon="chevron-right" data-icon-width="16" data-icon-height="16"></span>
                 </li>
-                <li style="color: var(--bordeaux); font-weight: 600;">
+                <li class="breadcrumb-current">
                     Modifier mon profil
                 </li>
             </ol>
         </nav>
 
         {# Titre #}
-        <div style="margin-bottom: 2rem;">
-            <h1 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 2.25rem; margin-bottom: 0.5rem; font-weight: 400;">
+        <div class="account-edit-header">
+            <h1 class="account-edit-title">
                 Modifier mon profil
             </h1>
-            <div style="width: 5rem; height: 4px; background-color: var(--gold); border-radius: var(--radius-sm);"></div>
+            <div class="account-edit-title-divider"></div>
         </div>
 
         {# Flash messages #}
         {% for message in app.flashes('success') %}
-            <div style="background: #d4edda; border-left: 4px solid #28a745; color: #155724; padding: 1rem 1.5rem; border-radius: var(--radius-sm); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
-                <span data-icon="check-circle" data-icon-width="24" data-icon-height="24" style="color: #28a745;"></span>
-                <div>
-                    <p style="font-weight: 600; margin: 0;">{{ message }}</p>
+            <div class="flash-message flash-success">
+                <span data-icon="check-circle" data-icon-width="24" data-icon-height="24" class="flash-message-icon"></span>
+                <div class="flash-message-content">
+                    <p>{{ message }}</p>
                 </div>
             </div>
         {% endfor %}
 
         {% for message in app.flashes('error') %}
-            <div style="background: #f8d7da; border-left: 4px solid #dc3545; color: #721c24; padding: 1rem 1.5rem; border-radius: var(--radius-sm); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
-                <span data-icon="alert-circle" data-icon-width="24" data-icon-height="24" style="color: #dc3545;"></span>
-                <div>
-                    <p style="font-weight: 600; margin: 0;">{{ message }}</p>
+            <div class="flash-message flash-error">
+                <span data-icon="alert-circle" data-icon-width="24" data-icon-height="24" class="flash-message-icon"></span>
+                <div class="flash-message-content">
+                    <p>{{ message }}</p>
                 </div>
             </div>
         {% endfor %}
 
         {# Formulaire #}
-        <div style="max-width: 50rem; margin: 0 auto;">
-            <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 2rem;">
-                <div style="margin-bottom: 2rem;">
-                    <h2 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.5rem; margin-bottom: 0.5rem; font-weight: 400; display: flex; align-items: center; gap: 0.5rem;">
+        <div class="account-edit-form-wrapper">
+            <div class="account-edit-form-card">
+                <div class="account-edit-section-header">
+                    <h2 class="account-edit-section-title">
                         <span data-icon="user" data-icon-width="24" data-icon-height="24"></span>
                         Informations personnelles
                     </h2>
-                    <div style="width: 3rem; height: 3px; background-color: var(--gold); border-radius: var(--radius-sm);"></div>
+                    <div class="account-edit-section-divider"></div>
                 </div>
 
                 <form method="post">
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+                    <div class="account-edit-form-grid">
                         <div>
-                            <label for="firstname" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark-text); font-size: 0.875rem;">
-                                Prénom <span style="color: #dc3545;">*</span>
+                            <label for="firstname" class="account-edit-label">
+                                Prénom <span class="account-edit-required">*</span>
                             </label>
-                            <input type="text" id="firstname" name="firstname" value="{{ app.user.firstname }}" required
-                                   style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 1rem; transition: border-color var(--transition-base), box-shadow var(--transition-base);"
-                                   onfocus="this.style.borderColor='var(--gold)'; this.style.boxShadow='0 0 0 3px rgba(212, 175, 55, 0.1)'"
-                                   onblur="this.style.borderColor='var(--bordeaux)'; this.style.boxShadow='none'">
+                            <input type="text"
+                                   id="firstname"
+                                   name="firstname"
+                                   value="{{ app.user.firstname }}"
+                                   required
+                                   class="account-edit-input">
                         </div>
 
                         <div>
-                            <label for="lastname" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark-text); font-size: 0.875rem;">
-                                Nom <span style="color: #dc3545;">*</span>
+                            <label for="lastname" class="account-edit-label">
+                                Nom <span class="account-edit-required">*</span>
                             </label>
-                            <input type="text" id="lastname" name="lastname" value="{{ app.user.lastname }}" required
-                                   style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 1rem; transition: border-color var(--transition-base), box-shadow var(--transition-base);"
-                                   onfocus="this.style.borderColor='var(--gold)'; this.style.boxShadow='0 0 0 3px rgba(212, 175, 55, 0.1)'"
-                                   onblur="this.style.borderColor='var(--bordeaux)'; this.style.boxShadow='none'">
+                            <input type="text"
+                                   id="lastname"
+                                   name="lastname"
+                                   value="{{ app.user.lastname }}"
+                                   required
+                                   class="account-edit-input">
                         </div>
                     </div>
 
-                    <div style="margin-bottom: 2rem;">
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark-text); font-size: 0.875rem;">
+                    <div class="account-edit-form-group">
+                        <label class="account-edit-label">
                             Adresse email
                         </label>
-                        <div style="padding: 0.75rem 1rem; border-radius: var(--radius-sm); background: var(--beige); border: 1px solid rgba(139, 0, 0, 0.2); display: flex; align-items: center; gap: 0.75rem;">
-                            <span data-icon="mail" data-icon-width="18" data-icon-height="18" style="color: var(--gold);"></span>
-                            <span style="flex: 1; color: var(--dark-text);">{{ app.user.email }}</span>
-                            <span style="padding: 0.25rem 0.75rem; border-radius: var(--radius-full); background: var(--dark-text); color: white; font-size: 0.75rem; font-weight: 600;">Non modifiable</span>
+                        <div class="account-edit-email-display">
+                            <span data-icon="mail" data-icon-width="18" data-icon-height="18" class="account-edit-email-icon"></span>
+                            <span class="account-edit-email-text">{{ app.user.email }}</span>
+                            <span class="account-edit-email-badge">Non modifiable</span>
                         </div>
-                        <p style="font-size: 0.875rem; color: var(--dark-text); opacity: 0.7; margin: 0.5rem 0 0;">
+                        <p class="account-edit-email-help">
                             L'email sert d'identifiant de connexion et ne peut pas être modifié ici.
                         </p>
                     </div>
 
-                    <div style="display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;">
-                        <a href="{{ path('app_account') }}" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border: 2px solid var(--bordeaux); color: var(--bordeaux); background: white; border-radius: var(--radius-sm); text-decoration: none; font-weight: 600; transition: background-color var(--transition-base), color var(--transition-base);"
-                           onmouseover="this.style.backgroundColor='var(--bordeaux)'; this.style.color='white'"
-                           onmouseout="this.style.backgroundColor='white'; this.style.color='var(--bordeaux)'">
+                    <div class="account-edit-actions">
+                        <a href="{{ path('app_account') }}" class="account-edit-btn-cancel">
                             <span data-icon="x" data-icon-width="18" data-icon-height="18"></span>
                             Annuler
                         </a>
-                        <button type="submit" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; background: var(--bordeaux); color: white; border: none; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; transition: background-color var(--transition-base);"
-                                onmouseover="this.style.backgroundColor='#8B0000'"
-                                onmouseout="this.style.backgroundColor='var(--bordeaux)'">
+                        <button type="submit" class="account-edit-btn-submit">
                             <span data-icon="check" data-icon-width="18" data-icon-height="18"></span>
                             Enregistrer les modifications
                         </button>

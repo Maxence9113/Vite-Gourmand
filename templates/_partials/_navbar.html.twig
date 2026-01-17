@@ -81,16 +81,16 @@
                 Contact
             </a>
             {% if app.user %}
-                <a href="{{ path('app_account') }}" style="width: 100%; margin-top: 1rem;">
+                <a href="{{ path('app_account') }}" class="mobile-nav-link">
                     <span data-icon="user" data-icon-width="20" data-icon-height="20"></span>
                     Mon compte
                 </a>
             {% else %}
-                <a href="{{ path('app_login') }}" style="width: 100%; margin-top: 1rem;">
+                <a href="{{ path('app_login') }}" class="mobile-nav-link">
                     <span data-icon="log-in" data-icon-width="20" data-icon-height="20"></span>
                     Connexion
                 </a>
-                <a href="{{ path('app_register') }}" style="width: 100%; margin-top: 0.5rem;">
+                <a href="{{ path('app_register') }}" class="mobile-nav-link">
                     <span data-icon="user-plus" data-icon-width="20" data-icon-height="20"></span>
                     S'inscrire
                 </a>
