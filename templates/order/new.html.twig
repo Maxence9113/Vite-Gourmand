@@ -2,68 +2,73 @@
 
 {% block title %}Nouvelle commande - {{ menu.name }}{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/pages/order.css') }}">
+{% endblock %}
+
 {% block body %}
 
 {# ========================================
    NOUVELLE COMMANDE - Design sans Bootstrap
    ======================================== #}
-<section style="background-color: var(--beige); padding: 3rem 0;">
-    <div style="max-width: 80rem; margin: 0 auto; padding: 0 1.5rem;">
+<section class="order-section">
+    <div class="container">
 
         {# Titre de la page #}
-        <h1 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 2.25rem; margin-bottom: 1rem; font-weight: 400;">
+        <h1 class="order-section-title">
             Passer une commande
         </h1>
-        <div style="width: 5rem; height: 4px; background-color: var(--gold); border-radius: var(--radius-sm); margin-bottom: 2rem;"></div>
+        <div class="order-section-divider"></div>
 
         {# Messages d'erreur #}
         {% for message in app.flashes('error') %}
-            <div class="alert alert-danger" style="margin-bottom: 1.5rem;">
+            <div class="order-flash-error">
                 {{ message }}
             </div>
         {% endfor %}
 
         {# Layout 2 colonnes #}
-        <div style="display: grid; grid-template-columns: 1fr; gap: 2rem;">
+        <div class="order-new-grid">
 
             {# COLONNE PRINCIPALE - Formulaire #}
             <div>
                 {# Menu sélectionné #}
-                <div style="background: white; border-radius: var(--radius-lg); padding: 2rem; box-shadow: var(--shadow-md); margin-bottom: 2rem;">
-                    <h2 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.5rem; margin-bottom: 1rem; font-weight: 400;">
+                <div class="order-selected-menu-box">
+                    <h2 class="order-selected-menu-title">
                         Menu sélectionné
                     </h2>
-                    <h3 style="font-family: var(--font-heading); color: var(--gold); font-size: 1.75rem; margin-bottom: 0.75rem; font-weight: 400;">
+                    <h3 class="order-selected-menu-name">
                         {{ menu.name }}
                     </h3>
-                    <p style="color: var(--dark-text); margin-bottom: 1.5rem; line-height: 1.6;">
+                    <p class="order-selected-menu-description">
                         {{ menu.description }}
                     </p>
 
                     {# Badges #}
-                    <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-                        <span style="padding: 0.5rem 1rem; border-radius: var(--radius-full); background-color: var(--gold); color: white; font-family: var(--font-body); font-size: var(--text-sm);">
+                    <div class="order-selected-menu-badges">
+                        <span class="order-badge order-badge-price">
                             {{ (menu.pricePerPerson / 100)|number_format(2, ',', ' ') }}€ / personne
                         </span>
-                        <span style="padding: 0.5rem 1rem; border-radius: var(--radius-full); background-color: var(--bordeaux); color: white; font-family: var(--font-body); font-size: var(--text-sm);">
+                        <span class="order-badge order-badge-min">
                             Minimum {{ menu.nbPersonMin }} personnes
                         </span>
                         {% if menu.stock is not null %}
                             {% if menu.stock > 0 %}
                                 {% if menu.stock <= 5 %}
-                                    <span style="padding: 0.5rem 1rem; border-radius: var(--radius-full); background-color: #E8B563; color: var(--dark-text); font-family: var(--font-body); font-size: var(--text-sm); display: flex; align-items: center; gap: 0.5rem;">
+                                    <span class="order-badge order-badge-stock-limited">
                                         <span data-icon="alert-triangle" data-icon-width="16" data-icon-height="16"></span>
                                         Stock limité : {{ menu.stock }} disponible{{ menu.stock > 1 ? 's' : '' }}
                                     </span>
                                 {% else %}
-                                    <span style="padding: 0.5rem 1rem; border-radius: var(--radius-full); background-color: var(--green); color: white; font-family: var(--font-body); font-size: var(--text-sm); display: flex; align-items: center; gap: 0.5rem;">
+                                    <span class="order-badge order-badge-stock-available">
                                         <span data-icon="check-circle" data-icon-width="16" data-icon-height="16"></span>
                                         En stock : {{ menu.stock }} disponible{{ menu.stock > 1 ? 's' : '' }}
                                     </span>
                                 {% endif %}
                             {% endif %}
                         {% else %}
-                            <span style="padding: 0.5rem 1rem; border-radius: var(--radius-full); background-color: #f0f0f0; color: var(--dark-text); font-family: var(--font-body); font-size: var(--text-sm);">
+                            <span class="order-badge order-badge-stock-unlimited">
                                 Stock illimité
                             </span>
                         {% endif %}
@@ -74,8 +79,8 @@
                 {{ form_start(form, {'attr': {'data-turbo': 'false'}}) }}
 
                 {# Détails de la commande #}
-                <div style="background: white; border-radius: var(--radius-lg); padding: 2rem; box-shadow: var(--shadow-md); margin-bottom: 2rem;">
-                    <h2 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.5rem; margin-bottom: 1.5rem; font-weight: 400;">
+                <div class="order-form-box">
+                    <h2 class="order-form-title">
                         Détails de la commande
                     </h2>
 
@@ -88,32 +93,32 @@
                     </div>
 
                     {# Nombre de personnes #}
-                    <div style="margin-bottom: 1.5rem;">
+                    <div class="order-form-group">
                         {{ form_row(form.numberOfPersons) }}
-                        <small style="color: var(--dark-text); opacity: 0.7; display: block; margin-top: 0.5rem;">
+                        <small class="order-form-note">
                             Minimum pour ce menu: {{ menu.nbPersonMin }} personnes
                         </small>
                     </div>
 
                     {# Date et heure de livraison #}
-                    <div style="margin-bottom: 1.5rem;">
+                    <div class="order-form-group">
                         {{ form_row(form.deliveryDateTime) }}
-                        <small style="color: var(--dark-text); opacity: 0.7; display: block; margin-top: 0.5rem;">
+                        <small class="order-form-note">
                             Minimum 48h à l'avance - Uniquement pendant nos horaires d'ouverture
                         </small>
-                        <div style="background: #f9f9f9; padding: 1rem; border-radius: var(--radius-sm); margin-top: 1rem; border-left: 3px solid var(--gold);">
-                            <div style="display: flex; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.5rem;">
-                                <span data-icon="clock" data-icon-width="20" data-icon-height="20" style="color: var(--gold); flex-shrink: 0;"></span>
-                                <strong style="font-family: var(--font-body); color: var(--dark-text);">Horaires d'ouverture :</strong>
+                        <div class="order-form-info-box">
+                            <div class="order-form-info-header">
+                                <span data-icon="clock" data-icon-width="20" data-icon-height="20"></span>
+                                <strong>Horaires d'ouverture :</strong>
                             </div>
-                            <div style="font-size: 0.875rem; color: var(--dark-text); padding-left: 1.75rem;">
+                            <div class="order-form-info-content">
                                 {% for schedule in opening_schedules %}
-                                    <div style="margin-bottom: 0.25rem;">
+                                    <div class="order-form-schedule-line">
                                         {{ schedule.label }} :
                                         {% if schedule.isOpen %}
                                             {{ schedule.openingTime }} - {{ schedule.closingTime }}
                                         {% else %}
-                                            <span style="color: #D97076; font-weight: 600;">Fermé</span>
+                                            <span class="order-form-schedule-closed">Fermé</span>
                                         {% endif %}
                                     </div>
                                 {% endfor %}
@@ -122,17 +127,17 @@
                     </div>
 
                     {# Adresse de livraison #}
-                    <div style="margin-bottom: 1.5rem;">
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark-text); font-family: var(--font-body);">
+                    <div class="order-form-group">
+                        <label class="order-form-address-label">
                             Adresse de livraison
                         </label>
-                        {{ form_widget(form.deliveryAddress, {'attr': {'style': 'width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: var(--radius-sm); font-family: var(--font-body);'}}) }}
+                        {{ form_widget(form.deliveryAddress, {'attr': {'class': 'order-form-address-input'}}) }}
                         {{ form_errors(form.deliveryAddress) }}
-                        <div style="margin-top: 0.75rem; padding: 0.75rem; background: #f9f9f9; border-radius: var(--radius-sm); border-left: 3px solid var(--gold);">
-                            <small style="color: var(--dark-text); display: block; margin-bottom: 0.5rem;">
+                        <div class="order-form-address-help">
+                            <small>
                                 💡 Vous pouvez gérer vos adresses dans votre compte
                             </small>
-                            <a href="{{ path('app_account_address_new') }}" target="_blank" style="color: var(--bordeaux); text-decoration: none; font-weight: 600; font-size: 0.875rem; display: inline-flex; align-items: center; gap: 0.25rem;">
+                            <a href="{{ path('app_account_address_new') }}" target="_blank">
                                 <span data-icon="plus" data-icon-width="16" data-icon-height="16"></span>
                                 Ajouter une nouvelle adresse
                             </a>
@@ -141,20 +146,18 @@
 
                     {# Prêt de matériel #}
                     <div style="margin-bottom: 0;">
-                        <div style="background: #f9f9f9; padding: 1.5rem; border-radius: var(--radius-sm); border: 1px solid #e5e5e5;">
-                            <div style="display: flex; align-items: flex-start; gap: 1rem;">
-                                <div style="flex-shrink: 0; margin-top: 0.25rem;">
-                                    {{ form_widget(form.hasMaterialLoan, {'attr': {'style': 'width: 20px; height: 20px; cursor: pointer;'}}) }}
-                                </div>
-                                <div style="flex: 1;">
-                                    <label for="{{ form.hasMaterialLoan.vars.id }}" style="font-weight: 600; color: var(--dark-text); display: block; margin-bottom: 0.5rem; cursor: pointer; font-family: var(--font-body);">
-                                        Je souhaite emprunter du matériel (vaisselle, couverts, etc.)
-                                    </label>
-                                    <small style="color: var(--dark-text); opacity: 0.8; display: flex; align-items: center; gap: 0.5rem;">
-                                        <span data-icon="info" data-icon-width="16" data-icon-height="16" style="color: var(--gold);"></span>
-                                        Le matériel devra être retourné dans un délai de 10 jours
-                                    </small>
-                                </div>
+                        <div class="order-form-material-box">
+                            <div class="order-form-material-checkbox">
+                                {{ form_widget(form.hasMaterialLoan) }}
+                            </div>
+                            <div class="order-form-material-content">
+                                <label for="{{ form.hasMaterialLoan.vars.id }}" class="order-form-material-label">
+                                    Je souhaite emprunter du matériel (vaisselle, couverts, etc.)
+                                </label>
+                                <small class="order-form-material-note">
+                                    <span data-icon="info" data-icon-width="16" data-icon-height="16"></span>
+                                    Le matériel devra être retourné dans un délai de 10 jours
+                                </small>
                             </div>
                         </div>
                         {{ form_errors(form.hasMaterialLoan) }}
@@ -162,7 +165,7 @@
                 </div>
 
                 {# Boutons d'action #}
-                <div style="display: flex; gap: 1rem; justify-content: space-between; flex-wrap: wrap;">
+                <div class="order-form-actions">
                     <a href="{{ path('app_menu_catalog') }}" class="btn btn-outline">
                         <span data-icon="arrow-left" data-icon-width="20" data-icon-height="20"></span>
                         Retour aux menus
@@ -177,62 +180,62 @@
             </div>
 
             {# COLONNE RÉCAPITULATIF - Sticky #}
-            <div style="display: none;" class="order-summary-column">
-                <div style="position: sticky; top: 2rem;">
-                    <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); overflow: hidden;">
+            <div class="order-summary-column">
+                <div class="order-summary-sticky">
+                    <div class="order-summary-box-new">
                         {# Header #}
-                        <div style="background: var(--bordeaux); padding: 1.5rem;">
-                            <h2 style="font-family: var(--font-heading); font-size: 1.5rem; margin: 0; font-weight: 400; color: white;">
+                        <div class="order-summary-header-new">
+                            <h2 class="order-summary-header-title-new">
                                 Récapitulatif
                             </h2>
                         </div>
 
                         {# Body #}
-                        <div style="padding: 1.5rem;" id="order-summary">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--beige);">
-                                <span style="color: var(--dark-text);">Menu :</span>
-                                <strong style="color: var(--dark-text); text-align: right; max-width: 60%;">{{ menu.name }}</strong>
+                        <div class="order-summary-body-new" id="order-summary">
+                            <div class="order-summary-row">
+                                <span class="order-summary-row-label">Menu :</span>
+                                <strong class="order-summary-row-value">{{ menu.name }}</strong>
                             </div>
 
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem;">
-                                <span style="color: var(--dark-text);">Prix par personne :</span>
-                                <strong style="color: var(--dark-text);">{{ (menu.pricePerPerson / 100)|number_format(2, ',', ' ') }}€</strong>
+                            <div class="order-summary-simple-row">
+                                <span class="order-summary-row-label">Prix par personne :</span>
+                                <strong class="order-summary-row-value">{{ (menu.pricePerPerson / 100)|number_format(2, ',', ' ') }}€</strong>
                             </div>
 
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--beige);">
-                                <span style="color: var(--dark-text);">Nombre de personnes :</span>
-                                <strong style="color: var(--dark-text);"><span id="persons-display">{{ menu.nbPersonMin }}</span></strong>
+                            <div class="order-summary-row">
+                                <span class="order-summary-row-label">Nombre de personnes :</span>
+                                <strong class="order-summary-row-value"><span id="persons-display">{{ menu.nbPersonMin }}</span></strong>
                             </div>
 
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem;">
-                                <span style="color: var(--dark-text);">Sous-total menu :</span>
-                                <strong style="color: var(--dark-text);"><span id="subtotal-display">{{ (menu.pricePerPerson * menu.nbPersonMin / 100)|number_format(2, ',', ' ') }}</span>€</strong>
+                            <div class="order-summary-simple-row">
+                                <span class="order-summary-row-label">Sous-total menu :</span>
+                                <strong class="order-summary-row-value"><span id="subtotal-display">{{ (menu.pricePerPerson * menu.nbPersonMin / 100)|number_format(2, ',', ' ') }}</span>€</strong>
                             </div>
 
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem;">
-                                <span style="color: var(--dark-text);">Frais de livraison :</span>
-                                <strong style="color: var(--dark-text);"><span id="delivery-display">5,00</span>€</strong>
+                            <div class="order-summary-simple-row">
+                                <span class="order-summary-row-label">Frais de livraison :</span>
+                                <strong class="order-summary-row-value"><span id="delivery-display">5,00</span>€</strong>
                             </div>
 
-                            <div id="discount-row" style="display: none; justify-content: space-between; margin-bottom: 0.75rem; color: var(--green);">
+                            <div id="discount-row" class="order-summary-discount-row">
                                 <span>Réduction (10%) :</span>
                                 <strong>- <span id="discount-display">0,00</span>€</strong>
                             </div>
 
-                            <div id="discount-message" style="display: none; margin-top: 1rem; padding: 0.75rem; border-radius: var(--radius-sm); font-size: 0.875rem;"></div>
+                            <div id="discount-message" class="order-summary-discount-message"></div>
 
-                            <div style="margin: 1rem 0; padding: 1rem 0; border-top: 2px solid var(--bordeaux); border-bottom: 2px solid var(--bordeaux);">
-                                <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <span style="font-size: 1.125rem; font-family: var(--font-heading); color: var(--dark-text);">Total :</span>
-                                    <strong style="font-size: 1.75rem; font-family: var(--font-heading); color: var(--bordeaux); font-weight: 400;">
+                            <div class="order-summary-total-wrapper">
+                                <div class="order-summary-total-row">
+                                    <span class="order-summary-total-label-new">Total :</span>
+                                    <strong class="order-summary-total-value-new">
                                         <span id="total-display">{{ ((menu.pricePerPerson * menu.nbPersonMin + 500) / 100)|number_format(2, ',', ' ') }}</span>€
                                     </strong>
                                 </div>
                             </div>
 
-                            <div style="background: #f9f9f9; padding: 1rem; border-radius: var(--radius-sm); margin-top: 1rem;">
-                                <small style="color: var(--dark-text); display: flex; align-items: flex-start; gap: 0.5rem;">
-                                    <span data-icon="info" data-icon-width="16" data-icon-height="16" style="flex-shrink: 0; margin-top: 2px; color: var(--gold);"></span>
+                            <div class="order-summary-delivery-info">
+                                <small>
+                                    <span data-icon="info" data-icon-width="16" data-icon-height="16"></span>
                                     <span>Les frais de livraison définitifs seront calculés selon votre adresse.</span>
                                 </small>
                             </div>
@@ -244,26 +247,9 @@
     </div>
 </section>
 
-{# Media query pour afficher le récapitulatif en sidebar sur desktop #}
-<style>
-    @media (min-width: 1024px) {
-        .order-new-grid {
-            grid-template-columns: 2fr 1fr !important;
-        }
-        .order-summary-column {
-            display: block !important;
-        }
-    }
-</style>
-
 <script>
-// Ajouter la classe pour le responsive
+// Calcul dynamique du récapitulatif
 document.addEventListener('DOMContentLoaded', function() {
-    const grid = document.querySelector('section [style*="grid-template-columns: 1fr"]');
-    if (grid) {
-        grid.classList.add('order-new-grid');
-    }
-
     const personsInput = document.querySelector('#order_numberOfPersons');
     const addressSelect = document.querySelector('#order_deliveryAddress');
     const menuPrice = {{ menu.pricePerPerson }};

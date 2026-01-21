@@ -2,175 +2,185 @@
 
 {% block title %}Commande {{ order.orderNumber }}{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/pages/order.css') }}">
+{% endblock %}
+
 {% block body %}
 {# ========================================
    HEADER SECTION - Figma Design
    ======================================== #}
-<section style="background-color: var(--beige); padding: 2rem 0 3rem;">
-    <div style="max-width: 80rem; margin: 0 auto; padding: 0 1rem;">
+<section class="order-section">
+    <div class="container">
         {# Fil d'ariane #}
-        <nav aria-label="Fil d'ariane" style="margin-bottom: 1.5rem;">
-            <ol style="display: flex; align-items: center; gap: 0.5rem; list-style: none; padding: 0; margin: 0; font-size: 0.875rem;">
+        <nav aria-label="Fil d'ariane" class="order-breadcrumb">
+            <ol class="order-breadcrumb-list">
                 <li>
-                    <a href="{{ path('app_home') }}" style="color: var(--dark-text); text-decoration: none; transition: color var(--transition-base);"
-                       onmouseover="this.style.color='var(--bordeaux)'"
-                       onmouseout="this.style.color='var(--dark-text)'">
+                    <a href="{{ path('app_home') }}" class="order-breadcrumb-link">
                         Accueil
                     </a>
                 </li>
-                <li style="color: var(--dark-text); opacity: 0.5;">
+                <li class="order-breadcrumb-separator">
                     <span data-icon="chevron-right" data-icon-width="16" data-icon-height="16"></span>
                 </li>
                 <li>
-                    <a href="{{ path('app_account_orders') }}" style="color: var(--dark-text); text-decoration: none; transition: color var(--transition-base);"
-                       onmouseover="this.style.color='var(--bordeaux)'"
-                       onmouseout="this.style.color='var(--dark-text)'">
+                    <a href="{{ path('app_account_orders') }}" class="order-breadcrumb-link">
                         Mes commandes
                     </a>
                 </li>
-                <li style="color: var(--dark-text); opacity: 0.5;">
+                <li class="order-breadcrumb-separator">
                     <span data-icon="chevron-right" data-icon-width="16" data-icon-height="16"></span>
                 </li>
-                <li style="color: var(--bordeaux); font-weight: 600;">
+                <li class="order-breadcrumb-current">
                     {{ order.orderNumber }}
                 </li>
             </ol>
         </nav>
 
         {# Titre #}
-        <div style="margin-bottom: 2rem;">
-            <h1 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 2.25rem; margin-bottom: 0.5rem; font-weight: 400;">
+        <div class="order-section-header">
+            <h1 class="order-section-title">
                 Commande {{ order.orderNumber }}
             </h1>
-            <div style="width: 5rem; height: 4px; background-color: var(--gold); border-radius: var(--radius-sm);"></div>
+            <div class="order-section-divider"></div>
         </div>
 
         {# Flash messages #}
         {% for message in app.flashes('success') %}
-            <div style="background: #d4edda; border-left: 4px solid #28a745; color: #155724; padding: 1rem 1.5rem; border-radius: var(--radius-sm); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
-                <span data-icon="check" data-icon-width="20" data-icon-height="20" style="color: #28a745;"></span>
+            <div class="order-flash-success">
+                <span data-icon="check" data-icon-width="20" data-icon-height="20"></span>
                 <span>{{ message }}</span>
             </div>
         {% endfor %}
 
         {% for message in app.flashes('error') %}
-            <div style="background: #f8d7da; border-left: 4px solid #dc3545; color: #721c24; padding: 1rem 1.5rem; border-radius: var(--radius-sm); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
-                <span data-icon="alert-circle" data-icon-width="20" data-icon-height="20" style="color: #dc3545;"></span>
+            <div class="order-flash-error">
+                <span data-icon="alert-circle" data-icon-width="20" data-icon-height="20"></span>
                 <span>{{ message }}</span>
             </div>
         {% endfor %}
 
         {# Layout responsive - 2 colonnes desktop, 1 colonne mobile #}
-        <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem;">
-            @media (min-width: 768px) {
-                <style>
-                    .order-detail-grid {
-                        grid-template-columns: 2fr 1fr;
-                    }
-                </style>
-            }
-        </div>
-        <div class="order-detail-grid" style="display: grid; grid-template-columns: 1fr; gap: 1.5rem;">
+        <div class="order-detail-grid">
             {# ========== COLONNE GAUCHE - Détails commande ========== #}
             <div>
                 {# Statut de la commande #}
-                <div style="background: white; border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: var(--shadow-md); margin-bottom: 1.5rem;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
-                        <h2 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.5rem; margin: 0; font-weight: 400;">
+                <div class="order-box">
+                    <div class="order-box-header">
+                        <h2 class="order-box-title">
                             Statut de la commande
                         </h2>
-                        <span style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border-radius: var(--radius-sm); font-weight: 600; font-size: 0.875rem; background: #{{ order.status.badgeClass == 'success' ? 'd4edda' : (order.status.badgeClass == 'warning' ? 'fff3cd' : (order.status.badgeClass == 'danger' ? 'f8d7da' : 'e7f1ff')) }}; color: #{{ order.status.badgeClass == 'success' ? '155724' : (order.status.badgeClass == 'warning' ? '856404' : (order.status.badgeClass == 'danger' ? '721c24' : '004085')) }};">
+                        <span class="order-status-badge status-{{ order.status.badgeClass }}">
                             <span data-icon="{{ order.status.icon }}" data-icon-width="16" data-icon-height="16"></span>
                             {{ order.status.label }}
                         </span>
                     </div>
 
-                    <p style="color: var(--dark-text); margin-bottom: 1rem;">
+                    <p class="order-box-text">
                         Commande passée le <strong>{{ order.createdAt|date('d/m/Y à H:i') }}</strong>
                     </p>
 
                     {% if order.status.label == 'Annulée' %}
-                        <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 1rem; border-radius: var(--radius-sm); margin-bottom: 1rem;">
-                            <p style="font-weight: 600; margin-bottom: 0.5rem; color: #856404;">Raison de l'annulation</p>
-                            <p style="margin: 0; color: #856404;">{{ order.cancellationReason ?? 'Non spécifiée' }}</p>
+                        <div class="order-cancellation-alert">
+                            <p class="order-cancellation-reason-title">Raison de l'annulation</p>
+                            <p class="order-cancellation-reason-text">{{ order.cancellationReason ?? 'Non spécifiée' }}</p>
                         </div>
                     {% endif %}
 
                     {% if order.canBeCancelled %}
-                        <button type="button" onclick="document.getElementById('cancelModal').style.display='block'" style="display: inline-flex; align-items: center; gap: 0.5rem; background: #dc3545; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; transition: background-color var(--transition-base);"
-                                onmouseover="this.style.backgroundColor='#c82333'"
-                                onmouseout="this.style.backgroundColor='#dc3545'">
+                        <button type="button" onclick="document.getElementById('cancelModal').style.display='block'" class="order-cancel-btn">
                             <span data-icon="x-circle" data-icon-width="20" data-icon-height="20"></span>
                             Annuler la commande
                         </button>
                     {% endif %}
+
+                    {% if order.status.canReceiveReview() and not order.review %}
+                        <a href="{{ path('app_review_new', {orderId: order.id}) }}" class="order-review-btn">
+                            <span data-icon="star" data-icon-width="20" data-icon-height="20"></span>
+                            Laisser un avis
+                        </a>
+                    {% endif %}
+
+                    {% if order.review %}
+                        <div class="order-review-submitted">
+                            <span data-icon="check-circle" data-icon-width="20" data-icon-height="20"></span>
+                            <span>
+                                {% if order.review.isValidated %}
+                                    Votre avis a été publié. Merci pour votre retour !
+                                {% else %}
+                                    Votre avis est en cours de modération.
+                                {% endif %}
+                            </span>
+                        </div>
+                    {% endif %}
                 </div>
 
                 {# Détails du menu #}
-                <div style="background: white; border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: var(--shadow-md); margin-bottom: 1.5rem;">
-                    <h2 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.5rem; margin-bottom: 1rem; font-weight: 400;">
+                <div class="order-box">
+                    <h2 class="order-box-title">
                         Détails du menu
                     </h2>
-                    <h3 style="font-family: var(--font-heading); color: var(--dark-text); font-size: 1.25rem; margin-bottom: 1.5rem; font-weight: 400;">
+                    <h3 class="order-box-subtitle">
                         {{ order.menuName }}
                     </h3>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
-                        <div style="display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: #f9f9f9; border-radius: var(--radius-sm);">
-                            <span data-icon="users" data-icon-width="24" data-icon-height="24" style="color: var(--gold);"></span>
+                    <div class="order-menu-details-grid">
+                        <div class="order-menu-stat">
+                            <span data-icon="users" data-icon-width="24" data-icon-height="24"></span>
                             <div>
-                                <p style="font-size: 0.875rem; color: var(--dark-text); opacity: 0.8; margin: 0 0 0.25rem;">Nombre de personnes</p>
-                                <p style="font-weight: 600; font-size: 1.125rem; color: var(--dark-text); margin: 0;">{{ order.numberOfPersons }}</p>
+                                <p class="order-menu-stat-label">Nombre de personnes</p>
+                                <p class="order-menu-stat-value">{{ order.numberOfPersons }}</p>
                             </div>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: #f9f9f9; border-radius: var(--radius-sm);">
-                            <span data-icon="dollar-sign" data-icon-width="24" data-icon-height="24" style="color: var(--gold);"></span>
+                        <div class="order-menu-stat">
+                            <span data-icon="dollar-sign" data-icon-width="24" data-icon-height="24"></span>
                             <div>
-                                <p style="font-size: 0.875rem; color: var(--dark-text); opacity: 0.8; margin: 0 0 0.25rem;">Prix par personne</p>
-                                <p style="font-weight: 600; font-size: 1.125rem; color: var(--dark-text); margin: 0;">{{ (order.menuPricePerPerson / 100)|number_format(2, ',', ' ') }}€</p>
+                                <p class="order-menu-stat-label">Prix par personne</p>
+                                <p class="order-menu-stat-value">{{ (order.menuPricePerPerson / 100)|number_format(2, ',', ' ') }}€</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 {# Informations de livraison #}
-                <div style="background: white; border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: var(--shadow-md); margin-bottom: 1.5rem;">
-                    <h2 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.5rem; margin-bottom: 1rem; font-weight: 400;">
+                <div class="order-box">
+                    <h2 class="order-box-title">
                         Informations de livraison
                     </h2>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                    <div class="order-delivery-info-grid">
                         <div>
-                            <p style="font-weight: 600; color: var(--dark-text); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
-                                <span data-icon="calendar" data-icon-width="20" data-icon-height="20" style="color: var(--gold);"></span>
+                            <p class="order-delivery-info-item-label">
+                                <span data-icon="calendar" data-icon-width="20" data-icon-height="20"></span>
                                 Date et heure
                             </p>
-                            <p style="color: var(--dark-text); margin: 0; padding-left: 1.75rem;">{{ order.deliveryDateTime|date('d/m/Y à H:i') }}</p>
+                            <p class="order-delivery-info-item-value">{{ order.deliveryDateTime|date('d/m/Y à H:i') }}</p>
                         </div>
                         <div>
-                            <p style="font-weight: 600; color: var(--dark-text); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
-                                <span data-icon="map-pin" data-icon-width="20" data-icon-height="20" style="color: var(--gold);"></span>
+                            <p class="order-delivery-info-item-label">
+                                <span data-icon="map-pin" data-icon-width="20" data-icon-height="20"></span>
                                 Adresse
                             </p>
-                            <p style="color: var(--dark-text); margin: 0; padding-left: 1.75rem;">{{ order.deliveryAddress }}</p>
+                            <p class="order-delivery-info-item-value">{{ order.deliveryAddress }}</p>
                         </div>
                     </div>
 
                     {% if order.hasMaterialLoan %}
-                        <div style="margin-top: 1.5rem; padding: 1rem; background: #f9f9f9; border-radius: var(--radius-sm); border-left: 3px solid var(--gold);">
-                            <p style="font-weight: 600; color: var(--dark-text); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
-                                <span data-icon="package" data-icon-width="20" data-icon-height="20" style="color: var(--gold);"></span>
+                        <div class="order-material-box">
+                            <p class="order-material-title">
+                                <span data-icon="package" data-icon-width="20" data-icon-height="20"></span>
                                 Emprunt de matériel
                             </p>
-                            <p style="color: var(--dark-text); margin-bottom: 0.5rem; padding-left: 1.75rem;">
+                            <p class="order-material-deadline">
                                 Date limite de retour: <strong>{{ order.materialReturnDeadline|date('d/m/Y') }}</strong>
                             </p>
-                            <p style="margin: 0; padding-left: 1.75rem;">
+                            <p class="order-material-status">
                                 {% if order.materialReturned %}
-                                    <span style="display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.25rem 0.75rem; border-radius: var(--radius-sm); font-weight: 600; font-size: 0.875rem; background: #d4edda; color: #155724;">
+                                    <span class="order-material-status-badge returned">
                                         <span data-icon="check" data-icon-width="14" data-icon-height="14"></span>
                                         Matériel retourné
                                     </span>
                                 {% else %}
-                                    <span style="display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.25rem 0.75rem; border-radius: var(--radius-sm); font-weight: 600; font-size: 0.875rem; background: #fff3cd; color: #856404;">
+                                    <span class="order-material-status-badge pending">
                                         <span data-icon="clock" data-icon-width="14" data-icon-height="14"></span>
                                         En attente de retour
                                     </span>
@@ -180,91 +190,73 @@
                     {% endif %}
                 </div>
 
-                {% if order.canReceiveReview %}
-                    {# Section avis #}
-                    <div style="background: linear-gradient(135deg, var(--bordeaux) 0%, #8B0000 100%); border-radius: var(--radius-lg); padding: 2rem; box-shadow: var(--shadow-md); text-align: center;">
-                        <span data-icon="star" data-icon-width="48" data-icon-height="48" style="display: block; margin: 0 auto 1rem; color: var(--gold);"></span>
-                        <h2 style="font-family: var(--font-heading); color: white; font-size: 1.5rem; margin-bottom: 0.75rem; font-weight: 400;">
-                            Laisser un avis
-                        </h2>
-                        <p style="color: white; opacity: 0.9; margin-bottom: 1.5rem;">
-                            Votre commande a été livrée. Qu'en avez-vous pensé ?
-                        </p>
-                        <a href="#" style="display: inline-flex; align-items: center; gap: 0.5rem; background: var(--gold); color: var(--dark-text); border: none; padding: 0.875rem 2rem; border-radius: var(--radius-sm); font-weight: 600; text-decoration: none; transition: transform var(--transition-base), box-shadow var(--transition-base);"
-                           onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-lg)'"
-                           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-                            <span data-icon="star" data-icon-width="20" data-icon-height="20"></span>
-                            Écrire un avis
-                        </a>
-                    </div>
-                {% endif %}
             </div>
 
             {# ========== COLONNE DROITE - Récapitulatif et historique ========== #}
             <div>
                 {# Récapitulatif financier #}
-                <div style="background: white; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md); margin-bottom: 1.5rem;">
-                    <div style="background: var(--bordeaux); padding: 1.5rem;">
-                        <h2 style="font-family: var(--font-heading); font-size: 1.5rem; margin: 0; font-weight: 400; color: white;">
+                <div class="order-summary-box">
+                    <div class="order-summary-header">
+                        <h2 class="order-summary-header-title">
                             Récapitulatif financier
                         </h2>
                     </div>
-                    <div style="padding: 1.5rem;">
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; color: var(--dark-text);">
+                    <div class="order-summary-body">
+                        <div class="order-summary-line">
                             <span>Sous-total menu</span>
                             <strong>{{ (order.menuSubtotal / 100)|number_format(2, ',', ' ') }}€</strong>
                         </div>
 
                         {% if order.discountAmount %}
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; color: #27ae60;">
+                            <div class="order-summary-discount">
                                 <span>Réduction (10%)</span>
                                 <strong>- {{ (order.discountAmount / 100)|number_format(2, ',', ' ') }}€</strong>
                             </div>
                         {% endif %}
 
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; color: var(--dark-text);">
+                        <div class="order-summary-line">
                             <span>Frais de livraison</span>
                             <strong>{{ (order.deliveryCost / 100)|number_format(2, ',', ' ') }}€</strong>
                         </div>
 
                         {% if order.deliveryDistanceKm %}
-                            <div style="margin-bottom: 1rem; padding-left: 0.5rem;">
-                                <small style="color: var(--dark-text); opacity: 0.7;">
-                                    <span data-icon="map-pin" data-icon-width="14" data-icon-height="14" style="display: inline-block; vertical-align: middle;"></span>
+                            <div class="order-summary-delivery-note">
+                                <small>
+                                    <span data-icon="map-pin" data-icon-width="14" data-icon-height="14" class="order-summary-delivery-note-icon"></span>
                                     Distance: {{ order.deliveryDistanceKm }} km
                                 </small>
                             </div>
                         {% endif %}
 
-                        <hr style="border: none; border-top: 2px solid var(--beige); margin: 1.5rem 0;">
+                        <hr class="order-summary-divider">
 
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <span style="font-size: 1.125rem; color: var(--dark-text); font-weight: 600;">Total</span>
-                            <strong style="font-size: 1.75rem; color: var(--bordeaux); font-family: var(--font-heading); font-weight: 400;">{{ (order.totalPrice / 100)|number_format(2, ',', ' ') }}€</strong>
+                        <div class="order-summary-total">
+                            <span class="order-summary-total-label">Total</span>
+                            <strong class="order-summary-total-value">{{ (order.totalPrice / 100)|number_format(2, ',', ' ') }}€</strong>
                         </div>
                     </div>
                 </div>
 
                 {# Historique des statuts #}
-                <div style="background: white; border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: var(--shadow-md);">
-                    <h2 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.5rem; margin-bottom: 1rem; font-weight: 400;">
+                <div class="order-history-box">
+                    <h2 class="order-box-title">
                         Historique
                     </h2>
-                    <div style="position: relative; padding-left: 2rem;">
+                    <div class="order-history-timeline">
                         {# Ligne verticale #}
-                        <div style="position: absolute; left: 0.5rem; top: 0; bottom: 0; width: 2px; background: var(--beige);"></div>
+                        <div class="order-history-timeline-line"></div>
 
-                        <ul style="list-style: none; padding: 0; margin: 0;">
+                        <ul class="order-history-list">
                             {% for entry in order.statusHistory %}
-                                <li style="position: relative; margin-bottom: 1.5rem; padding-bottom: 1.5rem; {% if not loop.last %}border-bottom: 1px solid var(--beige);{% endif %}">
+                                <li class="order-history-item">
                                     {# Point sur la timeline #}
-                                    <div style="position: absolute; left: -1.55rem; top: 0.25rem; width: 0.75rem; height: 0.75rem; background: var(--gold); border: 2px solid white; border-radius: 50%; box-shadow: 0 0 0 2px var(--beige);"></div>
+                                    <div class="order-history-item-point"></div>
 
                                     <div>
-                                        <small style="color: var(--dark-text); opacity: 0.7; display: block; margin-bottom: 0.25rem;">
+                                        <small class="order-history-item-date">
                                             {{ entry.changed_at }}
                                         </small>
-                                        <span style="display: inline-block; padding: 0.25rem 0.75rem; border-radius: var(--radius-sm); font-weight: 600; font-size: 0.875rem; background: var(--beige); color: var(--dark-text);">
+                                        <span class="order-history-item-label">
                                             {{ entry.label }}
                                         </span>
                                     </div>
@@ -282,45 +274,39 @@
 {# ========================================
    MODAL D'ANNULATION - Sans Bootstrap
    ======================================== #}
-<div id="cancelModal" style="display: none; position: fixed; inset: 0; z-index: 1050; background: rgba(0, 0, 0, 0.5); padding: 1rem; overflow-y: auto;">
-    <div style="max-width: 32rem; margin: 3rem auto; background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-xl); overflow: hidden;">
+<div id="cancelModal" class="order-cancel-modal">
+    <div class="order-cancel-modal-content">
         {# Header #}
-        <div style="background: var(--bordeaux); padding: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
-            <h2 style="font-family: var(--font-heading); font-size: 1.5rem; margin: 0; font-weight: 400; color: white;">
+        <div class="order-cancel-modal-header">
+            <h2 class="order-cancel-modal-title">
                 Annuler la commande
             </h2>
-            <button type="button" onclick="document.getElementById('cancelModal').style.display='none'" style="background: transparent; border: none; color: white; cursor: pointer; padding: 0.5rem; display: flex; align-items: center; justify-content: center; border-radius: var(--radius-sm); transition: background-color var(--transition-base);"
-                    onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.1)'"
-                    onmouseout="this.style.backgroundColor='transparent'">
+            <button type="button" onclick="document.getElementById('cancelModal').style.display='none'" class="order-cancel-modal-close">
                 <span data-icon="x" data-icon-width="24" data-icon-height="24"></span>
             </button>
         </div>
 
         {# Body #}
         <form method="post" action="{{ path('app_order_cancel', {id: order.id}) }}">
-            <div style="padding: 1.5rem;">
-                <p style="color: var(--dark-text); margin-bottom: 1.5rem;">
+            <div class="order-cancel-modal-body">
+                <p class="order-cancel-modal-text">
                     Êtes-vous sûr de vouloir annuler cette commande ?
                 </p>
-                <div style="margin-bottom: 1.5rem;">
-                    <label for="reason" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark-text); font-family: var(--font-body);">
+                <div class="order-cancel-modal-form-group">
+                    <label for="reason" class="order-cancel-modal-label">
                         Raison (optionnel)
                     </label>
-                    <textarea id="reason" name="reason" rows="3" style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: var(--radius-sm); font-family: var(--font-body); resize: vertical;" placeholder="Indiquez la raison de l'annulation..."></textarea>
+                    <textarea id="reason" name="reason" rows="3" class="order-cancel-modal-textarea" placeholder="Indiquez la raison de l'annulation..."></textarea>
                 </div>
                 <input type="hidden" name="_token" value="{{ csrf_token('cancel-order-' ~ order.id) }}">
             </div>
 
             {# Footer #}
-            <div style="padding: 1rem 1.5rem; background: #f9f9f9; display: flex; justify-content: flex-end; gap: 1rem; border-top: 1px solid #e5e5e5;">
-                <button type="button" onclick="document.getElementById('cancelModal').style.display='none'" style="padding: 0.75rem 1.5rem; border: 1px solid #ddd; background: white; color: var(--dark-text); border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; transition: background-color var(--transition-base);"
-                        onmouseover="this.style.backgroundColor='#f9f9f9'"
-                        onmouseout="this.style.backgroundColor='white'">
+            <div class="order-cancel-modal-footer">
+                <button type="button" onclick="document.getElementById('cancelModal').style.display='none'" class="order-cancel-modal-btn-secondary">
                     Fermer
                 </button>
-                <button type="submit" style="padding: 0.75rem 1.5rem; border: none; background: #dc3545; color: white; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; transition: background-color var(--transition-base);"
-                        onmouseover="this.style.backgroundColor='#c82333'"
-                        onmouseout="this.style.backgroundColor='#dc3545'">
+                <button type="submit" class="order-cancel-modal-btn-danger">
                     Confirmer l'annulation
                 </button>
             </div>

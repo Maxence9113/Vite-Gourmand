@@ -1,0 +1,728 @@
+/* ========================================
+   PAGES MENUS (Catalog & Show)
+   Styles pour le catalogue et les détails de menu
+   ======================================== */
+
+/* ==================== CATALOG PAGE ==================== */
+
+/* Section titre de page */
+.menu-catalog-title-section {
+    background-color: var(--beige);
+    padding: 2rem 0 3rem;
+}
+
+.menu-catalog-title-wrapper {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.menu-catalog-divider {
+    width: 6rem;
+    height: 0.25rem;
+    background-color: var(--gold);
+    margin: 0 auto 1rem;
+    border-radius: var(--radius-sm);
+}
+
+/* Section catalogue */
+.menu-catalog-section {
+    background-color: var(--beige);
+    padding: 0 0 3rem;
+}
+
+.menu-catalog-container {
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* Filtres */
+.menu-filters-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.menu-filters-header span[data-icon] {
+    color: var(--bordeaux);
+}
+
+.menu-filters-title {
+    font-family: var(--font-secondary);
+    color: var(--bordeaux);
+    font-size: 1.25rem;
+    margin: 0;
+    font-weight: 400;
+}
+
+/* Grille de filtres */
+.filters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.filter-item label {
+    display: block;
+    margin-bottom: 0.75rem;
+    font-size: 0.875rem;
+    font-family: var(--font-body);
+    color: var(--dark-text);
+}
+
+.filter-item label .price-display {
+    color: var(--gold);
+}
+
+/* Slider de prix */
+.price-slider {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(to right, var(--bordeaux) 0%, var(--gold) 100%);
+    outline: none;
+    -webkit-appearance: none;
+}
+
+.price-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--bordeaux);
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.price-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--bordeaux);
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border: none;
+}
+
+.price-range-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--dark-text);
+}
+
+/* Select de filtre */
+.filter-select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--bordeaux);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    background-color: white;
+    cursor: pointer;
+    transition: border-color var(--transition-base);
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: var(--gold);
+}
+
+/* Boutons de régime alimentaire */
+.regime-filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.regime-filter-btn {
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--beige);
+    background-color: white;
+    color: var(--dark-text);
+    border-radius: var(--radius-full);
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.regime-filter-btn:hover {
+    border-color: var(--gold);
+    background-color: var(--beige);
+}
+
+.regime-filter-btn.active {
+    border-color: var(--bordeaux);
+    background-color: var(--bordeaux);
+    color: white;
+}
+
+/* Input de filtre */
+.filter-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--bordeaux);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    transition: border-color var(--transition-base);
+}
+
+.filter-input:focus {
+    outline: none;
+    border-color: var(--gold);
+}
+
+/* Message "Aucun menu trouvé" */
+.no-menu-message {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3rem 1rem;
+    background: white;
+    border-radius: var(--radius-lg);
+}
+
+.no-menu-message span[data-icon] {
+    display: block;
+    margin: 0 auto 1rem;
+    color: var(--gold);
+}
+
+.no-menu-message h5 {
+    margin-bottom: 0.5rem;
+    font-family: var(--font-secondary);
+    color: var(--bordeaux);
+}
+
+.no-menu-message p {
+    margin: 0;
+    color: var(--dark-text);
+}
+
+/* Compteur de résultats */
+.menu-results-count {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 2rem;
+}
+
+.menu-results-count p {
+    font-family: var(--font-body);
+    color: var(--dark-text);
+    font-size: 0.875rem;
+}
+
+/* ==================== SHOW PAGE ==================== */
+
+/* Section principale */
+.menu-detail-section {
+    background-color: var(--beige);
+    padding: 3rem 0;
+}
+
+.menu-detail-container {
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+/* Bouton retour */
+.menu-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    color: var(--bordeaux);
+    font-family: var(--font-body);
+    text-decoration: none;
+    transition: opacity 0.2s;
+}
+
+.menu-back-link:hover {
+    opacity: 0.7;
+}
+
+/* Layout principal */
+.menu-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+}
+
+@media (min-width: 1024px) {
+    .menu-detail-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Image principale */
+.menu-main-image-wrapper {
+    position: relative;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-xl);
+    margin-bottom: 1.5rem;
+}
+
+.menu-main-image {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+}
+
+.menu-image-badges {
+    position: absolute;
+    top: 1.5rem;
+    left: 1.5rem;
+    display: flex;
+    gap: 0.75rem;
+}
+
+.menu-badge {
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-full);
+    color: white;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+}
+
+.menu-badge-theme {
+    background-color: var(--gold);
+}
+
+.menu-badge-vegetarian {
+    background-color: var(--green);
+}
+
+.menu-badge-classic {
+    background-color: var(--bordeaux);
+}
+
+/* Images secondaires */
+.menu-secondary-images {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.menu-secondary-image-wrapper {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+}
+
+.menu-secondary-image {
+    width: 100%;
+    height: 128px;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.menu-secondary-image:hover {
+    transform: scale(1.1);
+}
+
+/* Box composition */
+.menu-composition-box {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-md);
+    margin-bottom: 2rem;
+}
+
+.menu-composition-title {
+    font-family: var(--font-secondary);
+    color: var(--bordeaux);
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 400;
+}
+
+.menu-category-section {
+    margin-bottom: 1.5rem;
+}
+
+.menu-category-title {
+    font-family: var(--font-secondary);
+    color: var(--gold);
+    font-size: 1.125rem;
+    margin-bottom: 0.75rem;
+    font-weight: 400;
+}
+
+.menu-recipe-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.menu-recipe-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    color: var(--dark-text);
+}
+
+.menu-recipe-item span[data-icon] {
+    color: var(--green);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.menu-recipe-title {
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.menu-recipe-description {
+    font-size: 0.875rem;
+    color: var(--dark-text);
+    opacity: 0.8;
+    line-height: 1.5;
+}
+
+/* Détails menu (colonne droite) */
+.menu-detail-title {
+    font-family: var(--font-secondary);
+    color: var(--bordeaux);
+    font-size: 2.25rem;
+    margin-bottom: 1rem;
+    font-weight: 400;
+}
+
+.menu-detail-divider {
+    width: 5rem;
+    height: 4px;
+    background-color: var(--gold);
+    border-radius: var(--radius-sm);
+    margin-bottom: 1.5rem;
+}
+
+.menu-detail-description {
+    font-size: 1.125rem;
+    line-height: 1.75;
+    color: var(--dark-text);
+    margin-bottom: 2rem;
+}
+
+/* Box de commande */
+.menu-order-box {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow-md);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.menu-price-wrapper {
+    margin-bottom: 1.5rem;
+}
+
+.menu-price-display {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.menu-price-label {
+    font-size: var(--text-sm);
+    color: var(--dark-text);
+}
+
+.menu-price-value {
+    font-family: var(--font-secondary);
+    font-size: 3rem;
+    color: var(--bordeaux);
+    font-weight: 400;
+}
+
+.menu-price-unit {
+    font-size: var(--text-sm);
+    color: var(--dark-text);
+}
+
+.menu-min-persons {
+    font-size: var(--text-sm);
+    color: var(--dark-text);
+    margin: 0;
+}
+
+.menu-order-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 1rem 2rem;
+    background-color: var(--bordeaux);
+    color: white;
+    border: none;
+    border-radius: var(--radius-lg);
+    font-family: var(--font-body);
+    font-size: 1.25rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: box-shadow 0.2s;
+    margin-bottom: 1rem;
+}
+
+.menu-order-btn:hover {
+    box-shadow: var(--shadow-xl);
+}
+
+.menu-order-btn:disabled,
+.menu-order-btn-disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+}
+
+.menu-order-info {
+    font-size: var(--text-sm);
+    color: var(--dark-text);
+    margin: 0;
+}
+
+/* Allergènes */
+.menu-allergens-alert {
+    background-color: #fff3cd;
+    border-left: 4px solid #ffc107;
+    color: #664d03;
+    padding: 1rem 1.5rem;
+    border-radius: var(--radius-sm);
+    margin-bottom: 2rem;
+}
+
+.menu-allergens-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.menu-allergens-content span[data-icon] {
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.menu-allergens-title {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+}
+
+/* Box informations pratiques */
+.menu-info-box {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-md);
+}
+
+.menu-info-title {
+    font-family: var(--font-secondary);
+    color: var(--bordeaux);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    font-weight: 400;
+}
+
+.menu-info-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.menu-info-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border-radius: var(--radius-sm);
+    transition: background-color 0.2s;
+}
+
+.menu-info-item:hover {
+    background-color: #f9f9f9;
+}
+
+.menu-info-item span[data-icon] {
+    color: var(--green);
+}
+
+.menu-info-item span:last-child {
+    color: var(--dark-text);
+}
+
+/* Cartes statistiques */
+.menu-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.menu-stat-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-md);
+}
+
+.menu-stat-icon {
+    display: block;
+    margin-bottom: 0.75rem;
+}
+
+.menu-stat-icon.bordeaux {
+    color: var(--bordeaux);
+}
+
+.menu-stat-icon.gold {
+    color: var(--gold);
+}
+
+.menu-stat-label {
+    font-size: var(--text-sm);
+    margin-bottom: 0.25rem;
+    color: var(--dark-text);
+}
+
+.menu-stat-value {
+    font-family: var(--font-secondary);
+    font-size: 1.5rem;
+    color: var(--bordeaux);
+    margin: 0;
+    font-weight: 400;
+}
+
+/* Modal d'authentification */
+.auth-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.auth-modal.show {
+    display: flex;
+}
+
+.auth-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.auth-modal-content {
+    position: relative;
+    background: white;
+    border-radius: var(--radius-lg);
+    max-width: 500px;
+    width: 100%;
+    box-shadow: var(--shadow-xl);
+}
+
+.auth-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--beige);
+}
+
+.auth-modal-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    font-family: var(--font-secondary);
+    font-weight: 700;
+}
+
+.auth-modal-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--dark-text);
+    padding: 0.5rem;
+}
+
+.auth-modal-body {
+    text-align: center;
+    padding: 2rem;
+}
+
+.auth-modal-icon {
+    display: block;
+    margin: 0 auto 1rem;
+    color: var(--bordeaux);
+}
+
+.auth-modal-text {
+    font-size: 1.125rem;
+    margin-bottom: 1rem;
+    color: var(--dark-text);
+}
+
+.auth-modal-subtext {
+    color: var(--dark-text);
+    opacity: 0.7;
+    margin: 0;
+}
+
+.auth-modal-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    padding: 0 2rem 2rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .menu-secondary-images {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .menu-stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .menu-detail-title {
+        font-size: 1.75rem;
+    }
+
+    .menu-price-value {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .filters-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .regime-filter-buttons {
+        flex-direction: column;
+    }
+
+    .regime-filter-btn {
+        width: 100%;
+    }
+}

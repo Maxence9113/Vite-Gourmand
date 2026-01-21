@@ -2,39 +2,44 @@
 
 {% block title %}Connexion{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/pages/auth.css') }}">
+{% endblock %}
+
 {% block body %}
 {# ========================================
    LOGIN SECTION - Figma Design
    ======================================== #}
-<section style="background-color: var(--beige); padding: 3rem 0; min-height: calc(100vh - 73px - 200px);">
-    <div style="max-width: 500px; margin: 0 auto; padding: 0 1rem;">
+<section class="auth-section">
+    <div class="auth-container">
 
         {# Card de connexion #}
-        <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 2.5rem;">
+        <div class="auth-card">
 
             {# En-tête avec logo #}
-            <div style="text-align: center; margin-bottom: 2rem;">
-                <div style="width: 4rem; height: 4rem; margin: 0 auto 1rem; border-radius: 50%; background: var(--bordeaux); display: flex; align-items: center; justify-content: center;">
-                    <span data-icon="user-check" data-icon-width="28" data-icon-height="28" style="color: white;"></span>
+            <div class="auth-header">
+                <div class="auth-icon-wrapper">
+                    <span data-icon="user-check" data-icon-width="28" data-icon-height="28"></span>
                 </div>
-                <h1 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.75rem; font-weight: 400; margin-bottom: 0.5rem;">Bienvenue</h1>
-                <p style="color: var(--dark-text); opacity: 0.8; margin: 0;">Connectez-vous à votre compte</p>
+                <h1 class="auth-title">Bienvenue</h1>
+                <p class="auth-subtitle">Connectez-vous à votre compte</p>
             </div>
 
             {# Affichage des erreurs #}
             {% if error %}
-                <div style="background: #f8d7da; border-left: 4px solid #dc3545; color: #721c24; padding: 1rem 1.5rem; border-radius: var(--radius-sm); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
-                    <span data-icon="alert-circle" data-icon-width="20" data-icon-height="20" style="color: #dc3545;"></span>
+                <div class="auth-error">
+                    <span data-icon="alert-circle" data-icon-width="20" data-icon-height="20"></span>
                     <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                 </div>
             {% endif %}
 
             {# Formulaire de connexion #}
-            <form action="{{ path('app_login') }}" method="post">
+            <form action="{{ path('app_login') }}" method="post" class="auth-form">
 
-                <div style="margin-bottom: 1.5rem;">
-                    <label for="username" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark-text); font-size: 0.875rem;">
-                        <span data-icon="mail" data-icon-width="16" data-icon-height="16" style="vertical-align: middle; margin-right: 0.25rem;"></span>
+                <div class="auth-form-group">
+                    <label for="username" class="auth-label">
+                        <span data-icon="mail" data-icon-width="16" data-icon-height="16"></span>
                         Adresse email
                     </label>
                     <input type="email"
@@ -44,14 +49,12 @@
                            placeholder="nom@exemple.com"
                            required
                            autofocus
-                           style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 1rem; transition: border-color var(--transition-base), box-shadow var(--transition-base);"
-                           onfocus="this.style.borderColor='var(--gold)'; this.style.boxShadow='0 0 0 3px rgba(212, 175, 55, 0.1)'"
-                           onblur="this.style.borderColor='var(--bordeaux)'; this.style.boxShadow='none'">
+                           class="auth-input">
                 </div>
 
-                <div style="margin-bottom: 1rem;">
-                    <label for="password" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark-text); font-size: 0.875rem;">
-                        <span data-icon="lock" data-icon-width="16" data-icon-height="16" style="vertical-align: middle; margin-right: 0.25rem;"></span>
+                <div class="auth-form-group">
+                    <label for="password" class="auth-label">
+                        <span data-icon="lock" data-icon-width="16" data-icon-height="16"></span>
                         Mot de passe
                     </label>
                     <input type="password"
@@ -59,45 +62,32 @@
                            name="_password"
                            placeholder="Mot de passe"
                            required
-                           style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 1rem; transition: border-color var(--transition-base), box-shadow var(--transition-base);"
-                           onfocus="this.style.borderColor='var(--gold)'; this.style.boxShadow='0 0 0 3px rgba(212, 175, 55, 0.1)'"
-                           onblur="this.style.borderColor='var(--bordeaux)'; this.style.boxShadow='none'">
+                           class="auth-input">
                 </div>
 
                 {# Mot de passe oublié #}
-                <div style="display: flex; justify-content: flex-end; margin-bottom: 1.5rem;">
-                    <a href="{{ path('app_password_reset_request') }}" style="color: var(--bordeaux); text-decoration: none; font-size: 0.875rem; transition: opacity var(--transition-base);"
-                       onmouseover="this.style.opacity='0.8'"
-                       onmouseout="this.style.opacity='1'">
-                        Mot de passe oublié ?
-                    </a>
+                <div class="auth-forgot-password">
+                    <a href="{{ path('app_password_reset_request') }}">Mot de passe oublié ?</a>
                 </div>
 
                 <input type="hidden" name="_target_path" value="{{ path('app_account') }}">
 
-                <button type="submit" style="width: 100%; padding: 0.875rem 1rem; background: var(--bordeaux); color: white; border: none; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; transition: background-color var(--transition-base); display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: var(--shadow-md);"
-                        onmouseover="this.style.backgroundColor='#8B0000'"
-                        onmouseout="this.style.backgroundColor='var(--bordeaux)'">
+                <button type="submit" class="auth-submit-btn">
                     <span data-icon="log-in" data-icon-width="18" data-icon-height="18"></span>
                     Se connecter
                 </button>
             </form>
 
             {# Divider #}
-            <div style="margin: 1.5rem 0; text-align: center; position: relative;">
-                <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--beige);"></div>
-                <span style="position: relative; background: white; padding: 0 1rem; color: var(--dark-text); opacity: 0.6; font-size: 0.875rem;">ou</span>
+            <div class="auth-divider">
+                <span>ou</span>
             </div>
 
             {# Lien inscription #}
-            <div style="text-align: center;">
-                <p style="margin-bottom: 0; color: var(--dark-text); opacity: 0.8;">
+            <div class="auth-footer">
+                <p>
                     Vous n'avez pas de compte ?
-                    <a href="{{ path('app_register') }}" style="color: var(--gold); text-decoration: none; font-weight: 600; margin-left: 0.25rem; transition: opacity var(--transition-base);"
-                       onmouseover="this.style.opacity='0.8'"
-                       onmouseout="this.style.opacity='1'">
-                        Créer un compte
-                    </a>
+                    <a href="{{ path('app_register') }}">Créer un compte</a>
                 </p>
             </div>
 

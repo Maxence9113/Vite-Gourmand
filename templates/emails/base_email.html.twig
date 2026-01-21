@@ -1,0 +1,35 @@
+{# Template de base pour tous les emails #}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Vite & Gourmand{% endblock %}</title>
+</head>
+<body style="font-family: 'Playfair Display', Georgia, serif; line-height: 1.6; color: #2c2c2c; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f5f5f5;">
+    <div style="background-color: #ffffff; border-radius: 8px; padding: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+
+        {# En-tête de l'email #}
+        <div style="border-bottom: 3px solid {% block header_color %}#d4183d{% endblock %}; padding-bottom: 20px; margin-bottom: 30px; text-align: center;">
+            {% block header %}
+                <h1 style="color: {% block header_text_color %}#d4183d{% endblock %}; margin: 0; font-size: 28px; font-family: 'Playfair Display', Georgia, serif;">
+                    {% block header_title %}Vite & Gourmand{% endblock %}
+                </h1>
+            {% endblock %}
+        </div>
+
+        {# Contenu principal #}
+        <div style="margin: 20px 0;">
+            {% block content %}{% endblock %}
+        </div>
+
+        {# Pied de page #}
+        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0; text-align: center; color: #6c757d; font-size: 12px;">
+            {% block footer %}
+                <p style="margin: 5px 0;">Vite & Gourmand - Traiteur à Bordeaux depuis 25 ans</p>
+                <p style="margin: 5px 0;">Pour toute question, contactez-nous à <a href="mailto:contact@maxencedupuis.com" style="color: #d4183d; text-decoration: none;">contact@maxencedupuis.com</a></p>
+            {% endblock %}
+        </div>
+    </div>
+</body>
+</html>

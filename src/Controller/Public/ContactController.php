@@ -50,6 +50,9 @@ class ContactController extends AbstractController
                 // En cas d'erreur d'envoi
                 $this->addFlash('danger', 'Une erreur est survenue lors de l\'envoi de votre message. Veuillez réessayer.');
             }
+        } elseif ($form->isSubmitted() && !$form->isValid()) {
+            // Formulaire soumis mais invalide
+            $this->addFlash('error', 'Le formulaire contient des erreurs. Veuillez vérifier les informations saisies ci-dessous.');
         }
 
         return $this->render('contact/index.html.twig', [

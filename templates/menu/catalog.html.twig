@@ -2,18 +2,23 @@
 
 {% block title %}Nos Menus - Vite & Gourmand{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/pages/menu.css') }}">
+{% endblock %}
+
 {% block body %}
 
 {# ========================================
    PAGE TITLE - Figma Design
    ======================================== #}
-<section style="background-color: var(--beige); padding: 2rem 0 3rem;">
+<section class="menu-catalog-title-section">
     <div class="container">
-        <div style="text-align: center; margin-bottom: 2rem;">
+        <div class="menu-catalog-title-wrapper">
             <h1 class="page-title">
                 Nos Menus Gastronomiques
             </h1>
-            <div style="width: 6rem; height: 0.25rem; background-color: var(--gold); margin: 0 auto 1rem; border-radius: var(--radius-sm);"></div>
+            <div class="menu-catalog-divider"></div>
             <p class="page-subtitle">
                 Découvrez notre sélection de menus conçus avec passion pour sublimer vos événements
             </p>
@@ -24,13 +29,13 @@
 {# ========================================
    CATALOG SECTION - Figma Design
    ======================================== #}
-<section style="background-color: var(--beige); padding: 0 0 3rem;">
-    <div style="max-width: 80rem; margin: 0 auto; padding: 0 1rem;">
+<section class="menu-catalog-section">
+    <div class="menu-catalog-container">
         {# ========== Filtres Horizontaux - Figma Design ========== #}
         <div class="menu-filters">
-            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
-                <span data-icon="sliders" data-icon-width="20" data-icon-height="20" style="color: var(--bordeaux);"></span>
-                <h2 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.25rem; margin: 0; font-weight: 400;">
+            <div class="menu-filters-header">
+                <span data-icon="sliders" data-icon-width="20" data-icon-height="20"></span>
+                <h2 class="menu-filters-title">
                     Filtrer les menus
                 </h2>
             </div>
@@ -38,8 +43,8 @@
             <form id="filterForm" method="get" action="{{ path('app_menu_catalog') }}" class="filters-grid">
                 {# Filtre Prix maximum #}
                 <div class="filter-item">
-                    <label style="display: block; margin-bottom: 0.75rem; font-size: 0.875rem; font-family: var(--font-body); color: var(--dark-text);">
-                        Prix maximum : <span style="color: var(--gold);" id="priceValue">{{ currentFilters.price_max ? (currentFilters.price_max / 100)|number_format(0, ',', ' ') : '3000' }}€</span>
+                    <label>
+                        Prix maximum : <span class="price-display" id="priceValue">{{ currentFilters.price_max ? (currentFilters.price_max / 100)|number_format(0, ',', ' ') : '3000' }}€</span>
                     </label>
                     <input
                         type="range"
@@ -51,7 +56,7 @@
                         value="{{ currentFilters.price_max ? (currentFilters.price_max / 100) : 3000 }}"
                         oninput="document.getElementById('priceValue').textContent = this.value + '€'"
                     >
-                    <div style="display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.75rem; color: var(--dark-text);">
+                    <div class="price-range-labels">
                         <span>100€</span>
                         <span>3000€</span>
                     </div>
@@ -59,7 +64,7 @@
 
                 {# Filtre Thème #}
                 <div class="filter-item">
-                    <label style="display: block; margin-bottom: 0.75rem; font-size: 0.875rem; font-family: var(--font-body); color: var(--dark-text);">
+                    <label>
                         Thème
                     </label>
                     <select name="theme" class="filter-select" id="themeFilter">
@@ -74,10 +79,10 @@
 
                 {# Filtre Régimes alimentaires #}
                 <div class="filter-item">
-                    <label style="display: block; margin-bottom: 0.75rem; font-size: 0.875rem; font-family: var(--font-body); color: var(--dark-text);">
+                    <label>
                         Régime alimentaire
                     </label>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                    <div class="regime-filter-buttons">
                         <button
                             type="button"
                             class="regime-filter-btn {% if currentFilters.dietetary is empty %}active{% endif %}"
@@ -107,7 +112,7 @@
 
                 {# Filtre Nombre de personnes #}
                 <div class="filter-item">
-                    <label style="display: block; margin-bottom: 0.75rem; font-size: 0.875rem; font-family: var(--font-body); color: var(--dark-text);">
+                    <label>
                         Nombre de personnes minimum
                     </label>
                     <input
@@ -125,10 +130,10 @@
         {# ========== Grille de menus ========== #}
         <div id="menuGrid" class="menu-grid">
             {% if menus is empty %}
-                <div style="grid-column: 1 / -1; text-align: center; padding: 3rem 1rem; background: white; border-radius: var(--radius-lg);">
-                    <span data-icon="info" data-icon-width="24" data-icon-height="24" style="display: block; margin: 0 auto 1rem; color: var(--gold);"></span>
-                    <h5 style="margin-bottom: 0.5rem; font-family: var(--font-heading); color: var(--bordeaux);">Aucun menu trouvé</h5>
-                    <p style="margin: 0; color: var(--dark-text);">Essayez de modifier vos critères de recherche</p>
+                <div class="no-menu-message">
+                    <span data-icon="info" data-icon-width="24" data-icon-height="24"></span>
+                    <h5>Aucun menu trouvé</h5>
+                    <p>Essayez de modifier vos critères de recherche</p>
                 </div>
             {% else %}
                 {% for menu in menus %}
@@ -185,8 +190,8 @@
         </div>
 
         {# Résultats count - Figma Design #}
-        <div style="text-align: center; margin-top: 2rem; padding-top: 2rem;">
-            <p style="font-family: var(--font-body); color: var(--dark-text); font-size: 0.875rem;">
+        <div class="menu-results-count">
+            <p>
                 {{ menus|length }} menu{{ menus|length > 1 ? 's' : '' }} disponible{{ menus|length > 1 ? 's' : '' }}
             </p>
         </div>

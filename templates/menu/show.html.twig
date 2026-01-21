@@ -2,255 +2,240 @@
 
 {% block title %}{{ menu.name }} - Vite & Gourmand{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/pages/menu.css') }}">
+{% endblock %}
+
 {% block body %}
 
 {# ========================================
    MENU DETAIL PAGE - Figma Design
    ======================================== #}
-<section style="background-color: var(--beige); padding: 3rem 0;">
-    <div style="max-width: 80rem; margin: 0 auto; padding: 0 1.5rem;">
+<section class="menu-detail-section">
+    <div class="menu-detail-container">
 
         {# Bouton retour #}
-        <a href="{{ path('app_menu_catalog') }}"
-           style="display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 2rem; color: var(--bordeaux); font-family: var(--font-body); text-decoration: none; transition: opacity 0.2s;"
-           onmouseover="this.style.opacity='0.7'"
-           onmouseout="this.style.opacity='1'">
+        <a href="{{ path('app_menu_catalog') }}" class="menu-back-link">
             <span data-icon="arrow-left" data-icon-width="20" data-icon-height="20"></span>
             Retour aux menus
         </a>
 
         {# Layout 2 colonnes #}
-        <div style="display: grid; grid-template-columns: 1fr; gap: 3rem;">
-            <div style="display: grid; grid-template-columns: 1fr; gap: 3rem;">
+        <div class="menu-detail-grid">
+            {# ========== COLONNE GAUCHE - Images et Composition ========== #}
+            <div>
+                {# Image principale avec badges #}
+                <div class="menu-main-image-wrapper">
+                    <img src="{{ menu.illustration ?? 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&h=600&fit=crop' }}"
+                         alt="{{ menu.textAlt ?? menu.name }}"
+                         class="menu-main-image">
 
-                {# ========== COLONNE GAUCHE - Images et Composition ========== #}
-                <div>
-                    {# Image principale avec badges #}
-                    <div style="position: relative; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-xl); margin-bottom: 1.5rem;">
-                        <img src="{{ menu.illustration ?? 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&h=600&fit=crop' }}"
-                             alt="{{ menu.textAlt ?? menu.name }}"
-                             style="width: 100%; height: 400px; object-fit: cover;">
-
-                        {# Badges en overlay #}
-                        <div style="position: absolute; top: 1.5rem; left: 1.5rem; display: flex; gap: 0.75rem;">
-                            <span style="padding: 0.5rem 1rem; border-radius: var(--radius-full); background-color: var(--gold); color: white; font-family: var(--font-body); font-size: var(--text-sm);">
-                                {{ menu.theme.name }}
-                            </span>
-                            {% if menu.dietetary|length > 0 %}
-                                {% for dietetary in menu.dietetary %}
-                                    <span style="padding: 0.5rem 1rem; border-radius: var(--radius-full); background-color: {% if dietetary.name in ['Végétarien', 'Vegan'] %}var(--green){% else %}var(--bordeaux){% endif %}; color: white; font-family: var(--font-body); font-size: var(--text-sm);">
-                                        {{ dietetary.name }}
-                                    </span>
-                                {% endfor %}
-                            {% else %}
-                                <span style="padding: 0.5rem 1rem; border-radius: var(--radius-full); background-color: var(--bordeaux); color: white; font-family: var(--font-body); font-size: var(--text-sm);">
-                                    Classique
+                    {# Badges en overlay #}
+                    <div class="menu-image-badges">
+                        <span class="menu-badge menu-badge-theme">
+                            {{ menu.theme.name }}
+                        </span>
+                        {% if menu.dietetary|length > 0 %}
+                            {% for dietetary in menu.dietetary %}
+                                <span class="menu-badge {% if dietetary.name in ['Végétarien', 'Vegan'] %}menu-badge-vegetarian{% else %}menu-badge-classic{% endif %}">
+                                    {{ dietetary.name }}
                                 </span>
-                            {% endif %}
-                        </div>
-                    </div>
-
-                    {# Images secondaires #}
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2rem;">
-                        {% set imageCount = 0 %}
-                        {% for recipe in menu.recipes %}
-                            {% if imageCount < 3 and recipe.recipeIllustrations|length > 0 %}
-                                {% set firstIllustration = recipe.recipeIllustrations|first %}
-                                <div style="border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md);">
-                                    <img src="{{ firstIllustration.url }}"
-                                         alt="{{ firstIllustration.altText ?? recipe.title }}"
-                                         style="width: 100%; height: 128px; object-fit: cover; transition: transform 0.3s;"
-                                         onmouseover="this.style.transform='scale(1.1)'"
-                                         onmouseout="this.style.transform='scale(1)'">
-                                </div>
-                                {% set imageCount = imageCount + 1 %}
-                            {% endif %}
-                        {% endfor %}
-
-                        {# Images par défaut si pas assez de recettes avec images #}
-                        {% for i in 1..(3 - imageCount) %}
-                            <div style="border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md);">
-                                <img src="https://images.unsplash.com/photo-{{ ['1767463467891-ac167dfd64fc', '1758384077164-c00b53cf718f', '1741965134280-9094486efd82'][loop.index0] }}?w=400&h=300&fit=crop"
-                                     alt="Plat gastronomique"
-                                     style="width: 100%; height: 128px; object-fit: cover; transition: transform 0.3s;"
-                                     onmouseover="this.style.transform='scale(1.1)'"
-                                     onmouseout="this.style.transform='scale(1)'">
-                            </div>
-                        {% endfor %}
-                    </div>
-
-                    {# Composition du menu #}
-                    <div style="background: white; border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: var(--shadow-md); margin-bottom: 2rem;">
-                        <h2 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.5rem; margin-bottom: 1.5rem; font-weight: 400;">
-                            Composition du menu
-                        </h2>
-
-                        {# Regrouper les recettes par catégorie #}
-                        {% set recipesByCategory = {} %}
-                        {% for recipe in menu.recipes %}
-                            {% set categoryName = recipe.category.name %}
-                            {% if categoryName not in recipesByCategory|keys %}
-                                {% set recipesByCategory = recipesByCategory|merge({(categoryName): []}) %}
-                            {% endif %}
-                            {% set recipesByCategory = recipesByCategory|merge({
-                                (categoryName): recipesByCategory[categoryName]|merge([recipe])
-                            }) %}
-                        {% endfor %}
-
-                        {# Afficher par catégorie #}
-                        {% set orderedCategories = ['Entrée', 'Plat', 'Fromage', 'Dessert'] %}
-                        {% for categoryName in orderedCategories %}
-                            {% if categoryName in recipesByCategory|keys %}
-                                {% set recipes = recipesByCategory[categoryName] %}
-                                <div style="margin-bottom: 1.5rem;">
-                                    <h3 style="font-family: var(--font-heading); color: var(--gold); font-size: 1.125rem; margin-bottom: 0.75rem; font-weight: 400;">
-                                        {{ categoryName }}
-                                    </h3>
-                                    <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem;">
-                                        {% for recipe in recipes %}
-                                            <li style="display: flex; align-items: flex-start; gap: 0.5rem; color: var(--dark-text);">
-                                                <span data-icon="check" data-icon-width="20" data-icon-height="20" style="color: var(--green); flex-shrink: 0; margin-top: 2px;"></span>
-                                                <div>
-                                                    <div style="font-weight: 500; margin-bottom: 0.25rem;">{{ recipe.title }}</div>
-                                                    {% if recipe.description %}
-                                                        <div style="font-size: 0.875rem; color: var(--dark-text); opacity: 0.8; line-height: 1.5;">{{ recipe.description }}</div>
-                                                    {% endif %}
-                                                </div>
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-                            {% endif %}
-                        {% endfor %}
+                            {% endfor %}
+                        {% else %}
+                            <span class="menu-badge menu-badge-classic">
+                                Classique
+                            </span>
+                        {% endif %}
                     </div>
                 </div>
 
-                {# ========== COLONNE DROITE - Détails et Commande ========== #}
-                <div>
-                    {# Titre #}
-                    <h1 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 2.25rem; margin-bottom: 1rem; font-weight: 400;">
-                        {{ menu.name }}
-                    </h1>
-
-                    {# Ligne dorée #}
-                    <div style="width: 5rem; height: 4px; background-color: var(--gold); border-radius: var(--radius-sm); margin-bottom: 1.5rem;"></div>
-
-                    {# Description #}
-                    <p style="font-size: 1.125rem; line-height: 1.75; color: var(--dark-text); margin-bottom: 2rem;">
-                        {{ menu.description }}
-                    </p>
-
-                    {# Box de commande - Call to Action #}
-                    <div style="background: white; border-radius: var(--radius-lg); padding: 2rem; box-shadow: var(--shadow-md); margin-bottom: 2rem; text-align: center;">
-                        <div style="margin-bottom: 1.5rem;">
-                            <div style="display: flex; justify-content: center; align-items: baseline; gap: 0.5rem; margin-bottom: 0.5rem;">
-                                <span style="font-size: var(--text-sm); color: var(--dark-text);">À partir de</span>
-                                <span style="font-family: var(--font-heading); font-size: 3rem; color: var(--bordeaux); font-weight: 400;">
-                                    {{ (menu.pricePerPerson / 100)|number_format(0, ',', ' ') }}€
-                                </span>
-                                <span style="font-size: var(--text-sm); color: var(--dark-text);">/personne</span>
+                {# Images secondaires #}
+                <div class="menu-secondary-images">
+                    {% set imageCount = 0 %}
+                    {% for recipe in menu.recipes %}
+                        {% if imageCount < 3 and recipe.recipeIllustrations|length > 0 %}
+                            {% set firstIllustration = recipe.recipeIllustrations|first %}
+                            <div class="menu-secondary-image-wrapper">
+                                <img src="{{ firstIllustration.url }}"
+                                     alt="{{ firstIllustration.altText ?? recipe.title }}"
+                                     class="menu-secondary-image">
                             </div>
-                            <p style="font-size: var(--text-sm); color: var(--dark-text); margin: 0;">
-                                Minimum {{ menu.nbPersonMin }} personnes
-                            </p>
-                        </div>
-
-                        {% if app.user %}
-                            {% if menu.isAvailable %}
-                                <a href="{{ path('app_order_new', {id: menu.id}) }}"
-                                   style="display: flex; align-items: center; justify-content: center; gap: 0.75rem; width: 100%; padding: 1rem 2rem; background-color: var(--bordeaux); color: white; border: none; border-radius: var(--radius-lg); font-family: var(--font-body); font-size: 1.25rem; text-decoration: none; cursor: pointer; transition: box-shadow 0.2s; margin-bottom: 1rem;"
-                                   onmouseover="this.style.boxShadow='var(--shadow-xl)'"
-                                   onmouseout="this.style.boxShadow='none'">
-                                    <span data-icon="shopping-cart" data-icon-width="24" data-icon-height="24"></span>
-                                    Commander ce menu
-                                </a>
-                            {% else %}
-                                <button disabled
-                                        style="display: flex; align-items: center; justify-content: center; gap: 0.75rem; width: 100%; padding: 1rem 2rem; background-color: #ccc; color: #666; border: none; border-radius: var(--radius-lg); font-family: var(--font-body); font-size: 1.25rem; cursor: not-allowed; margin-bottom: 1rem;">
-                                    <span data-icon="x-circle" data-icon-width="24" data-icon-height="24"></span>
-                                    Menu indisponible
-                                </button>
-                            {% endif %}
-                        {% else %}
-                            <button type="button"
-                                    onclick="document.getElementById('authRequiredModal').style.display='flex'"
-                                    style="display: flex; align-items: center; justify-content: center; gap: 0.75rem; width: 100%; padding: 1rem 2rem; background-color: var(--bordeaux); color: white; border: none; border-radius: var(--radius-lg); font-family: var(--font-body); font-size: 1.25rem; text-decoration: none; cursor: pointer; transition: box-shadow 0.2s; margin-bottom: 1rem;"
-                                    onmouseover="this.style.boxShadow='var(--shadow-xl)'"
-                                    onmouseout="this.style.boxShadow='none'">
-                                <span data-icon="shopping-cart" data-icon-width="24" data-icon-height="24"></span>
-                                Commander ce menu
-                            </button>
+                            {% set imageCount = imageCount + 1 %}
                         {% endif %}
+                    {% endfor %}
 
-                        <p style="font-size: var(--text-sm); color: var(--dark-text); margin: 0;">
-                            Livraison disponible • Réponse sous 24h
+                    {# Images par défaut si pas assez de recettes avec images #}
+                    {% for i in 1..(3 - imageCount) %}
+                        <div class="menu-secondary-image-wrapper">
+                            <img src="https://images.unsplash.com/photo-{{ ['1767463467891-ac167dfd64fc', '1758384077164-c00b53cf718f', '1741965134280-9094486efd82'][loop.index0] }}?w=400&h=300&fit=crop"
+                                 alt="Plat gastronomique"
+                                 class="menu-secondary-image">
+                        </div>
+                    {% endfor %}
+                </div>
+
+                {# Composition du menu #}
+                <div class="menu-composition-box">
+                    <h2 class="menu-composition-title">
+                        Composition du menu
+                    </h2>
+
+                    {# Regrouper les recettes par catégorie #}
+                    {% set recipesByCategory = {} %}
+                    {% for recipe in menu.recipes %}
+                        {% set categoryName = recipe.category.name %}
+                        {% if categoryName not in recipesByCategory|keys %}
+                            {% set recipesByCategory = recipesByCategory|merge({(categoryName): []}) %}
+                        {% endif %}
+                        {% set recipesByCategory = recipesByCategory|merge({
+                            (categoryName): recipesByCategory[categoryName]|merge([recipe])
+                        }) %}
+                    {% endfor %}
+
+                    {# Afficher par catégorie #}
+                    {% set orderedCategories = ['Entrée', 'Plat', 'Fromage', 'Dessert'] %}
+                    {% for categoryName in orderedCategories %}
+                        {% if categoryName in recipesByCategory|keys %}
+                            {% set recipes = recipesByCategory[categoryName] %}
+                            <div class="menu-category-section">
+                                <h3 class="menu-category-title">
+                                    {{ categoryName }}
+                                </h3>
+                                <ul class="menu-recipe-list">
+                                    {% for recipe in recipes %}
+                                        <li class="menu-recipe-item">
+                                            <span data-icon="check" data-icon-width="20" data-icon-height="20"></span>
+                                            <div>
+                                                <div class="menu-recipe-title">{{ recipe.title }}</div>
+                                                {% if recipe.description %}
+                                                    <div class="menu-recipe-description">{{ recipe.description }}</div>
+                                                {% endif %}
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            {# ========== COLONNE DROITE - Détails et Commande ========== #}
+            <div>
+                {# Titre #}
+                <h1 class="menu-detail-title">
+                    {{ menu.name }}
+                </h1>
+
+                {# Ligne dorée #}
+                <div class="menu-detail-divider"></div>
+
+                {# Description #}
+                <p class="menu-detail-description">
+                    {{ menu.description }}
+                </p>
+
+                {# Box de commande - Call to Action #}
+                <div class="menu-order-box">
+                    <div class="menu-price-wrapper">
+                        <div class="menu-price-display">
+                            <span class="menu-price-label">À partir de</span>
+                            <span class="menu-price-value">
+                                {{ (menu.pricePerPerson / 100)|number_format(0, ',', ' ') }}€
+                            </span>
+                            <span class="menu-price-unit">/personne</span>
+                        </div>
+                        <p class="menu-min-persons">
+                            Minimum {{ menu.nbPersonMin }} personnes
                         </p>
                     </div>
 
-                    {# Allergènes #}
-                    {% set menuAllergens = [] %}
-                    {% for recipe in menu.recipes %}
-                        {% for allergen in recipe.allergen %}
-                            {% if allergen.id not in menuAllergens|column('id') %}
-                                {% set menuAllergens = menuAllergens|merge([allergen]) %}
-                            {% endif %}
-                        {% endfor %}
-                    {% endfor %}
-
-                    {% if menuAllergens|length > 0 %}
-                        <div class="alert alert-warning" style="margin-bottom: 2rem;">
-                            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                                <span data-icon="alert-triangle" data-icon-width="20" data-icon-height="20" style="flex-shrink: 0; margin-top: 2px;"></span>
-                                <div>
-                                    <strong style="display: block; margin-bottom: 0.25rem;">Allergènes présents</strong>
-                                    <small>
-                                        {% for allergen in menuAllergens %}
-                                            {{ allergen.name }}{% if not loop.last %}, {% endif %}
-                                        {% endfor %}
-                                    </small>
-                                </div>
-                            </div>
-                        </div>
+                    {% if app.user %}
+                        {% if menu.isAvailable %}
+                            <a href="{{ path('app_order_new', {id: menu.id}) }}" class="menu-order-btn">
+                                <span data-icon="shopping-cart" data-icon-width="24" data-icon-height="24"></span>
+                                Commander ce menu
+                            </a>
+                        {% else %}
+                            <button disabled class="menu-order-btn menu-order-btn-disabled">
+                                <span data-icon="x-circle" data-icon-width="24" data-icon-height="24"></span>
+                                Menu indisponible
+                            </button>
+                        {% endif %}
+                    {% else %}
+                        <button type="button"
+                                onclick="document.getElementById('authRequiredModal').style.display='flex'"
+                                class="menu-order-btn">
+                            <span data-icon="shopping-cart" data-icon-width="24" data-icon-height="24"></span>
+                            Commander ce menu
+                        </button>
                     {% endif %}
 
-                    {# Services #}
-                    <div style="background: white; border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: var(--shadow-md);">
-                        <h2 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.5rem; margin-bottom: 1rem; font-weight: 400;">
-                            Informations pratiques
-                        </h2>
+                    <p class="menu-order-info">
+                        Livraison disponible • Réponse sous 24h
+                    </p>
+                </div>
 
-                        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                            <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; border-radius: var(--radius-sm); transition: background-color 0.2s;"
-                                 onmouseover="this.style.backgroundColor='#f9f9f9'"
-                                 onmouseout="this.style.backgroundColor='transparent'">
-                                <span data-icon="check" data-icon-width="20" data-icon-height="20" style="color: var(--green);"></span>
-                                <span style="color: var(--dark-text);">Vaisselle en prêt</span>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; border-radius: var(--radius-sm); transition: background-color 0.2s;"
-                                 onmouseover="this.style.backgroundColor='#f9f9f9'"
-                                 onmouseout="this.style.backgroundColor='transparent'">
-                                <span data-icon="check" data-icon-width="20" data-icon-height="20" style="color: var(--green);"></span>
-                                <span style="color: var(--dark-text);">Délai de commande : 48h avant prestation</span>
+                {# Allergènes #}
+                {% set menuAllergens = [] %}
+                {% for recipe in menu.recipes %}
+                    {% for allergen in recipe.allergen %}
+                        {% if allergen.id not in menuAllergens|column('id') %}
+                            {% set menuAllergens = menuAllergens|merge([allergen]) %}
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+
+                {% if menuAllergens|length > 0 %}
+                    <div class="menu-allergens-alert">
+                        <div class="menu-allergens-content">
+                            <span data-icon="alert-triangle" data-icon-width="20" data-icon-height="20"></span>
+                            <div>
+                                <strong class="menu-allergens-title">Allergènes présents</strong>
+                                <small>
+                                    {% for allergen in menuAllergens %}
+                                        {{ allergen.name }}{% if not loop.last %}, {% endif %}
+                                    {% endfor %}
+                                </small>
                             </div>
                         </div>
                     </div>
+                {% endif %}
 
-                    {# Cartes informatives #}
-                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: 1.5rem;">
-                        <div style="background: white; border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: var(--shadow-md);">
-                            <span data-icon="users" data-icon-width="32" data-icon-height="32" style="display: block; color: var(--bordeaux); margin-bottom: 0.75rem;"></span>
-                            <p style="font-size: var(--text-sm); margin-bottom: 0.25rem; color: var(--dark-text);">Nombre de convives</p>
-                            <p style="font-family: var(--font-heading); font-size: 1.5rem; color: var(--bordeaux); margin: 0; font-weight: 400;">
-                                À partir de {{ menu.nbPersonMin }}
-                            </p>
+                {# Services #}
+                <div class="menu-info-box">
+                    <h2 class="menu-info-title">
+                        Informations pratiques
+                    </h2>
+
+                    <div class="menu-info-list">
+                        <div class="menu-info-item">
+                            <span data-icon="check" data-icon-width="20" data-icon-height="20"></span>
+                            <span>Vaisselle en prêt</span>
                         </div>
-                        <div style="background: white; border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: var(--shadow-md);">
-                            <span data-icon="chef-hat" data-icon-width="32" data-icon-height="32" style="display: block; color: var(--gold); margin-bottom: 0.75rem;"></span>
-                            <p style="font-size: var(--text-sm); margin-bottom: 0.25rem; color: var(--dark-text);">Préparé par</p>
-                            <p style="font-family: var(--font-heading); font-size: 1.5rem; color: var(--bordeaux); margin: 0; font-weight: 400;">
-                                Julie & José
-                            </p>
+                        <div class="menu-info-item">
+                            <span data-icon="check" data-icon-width="20" data-icon-height="20"></span>
+                            <span>Délai de commande : 48h avant prestation</span>
                         </div>
+                    </div>
+                </div>
+
+                {# Cartes informatives #}
+                <div class="menu-stats-grid">
+                    <div class="menu-stat-card">
+                        <span data-icon="users" data-icon-width="32" data-icon-height="32" class="menu-stat-icon bordeaux"></span>
+                        <p class="menu-stat-label">Nombre de convives</p>
+                        <p class="menu-stat-value">
+                            À partir de {{ menu.nbPersonMin }}
+                        </p>
+                    </div>
+                    <div class="menu-stat-card">
+                        <span data-icon="chef-hat" data-icon-width="32" data-icon-height="32" class="menu-stat-icon gold"></span>
+                        <p class="menu-stat-label">Préparé par</p>
+                        <p class="menu-stat-value">
+                            Julie & José
+                        </p>
                     </div>
                 </div>
             </div>
@@ -262,30 +247,30 @@
    MODAL D'AUTHENTIFICATION
    ======================================== #}
 {% if not app.user %}
-<div style="display: none; position: fixed; inset: 0; z-index: 9999; align-items: center; justify-content: center; padding: 1rem;" id="authRequiredModal">
-    <div style="position: absolute; inset: 0; background-color: rgba(0, 0, 0, 0.5);" onclick="document.getElementById('authRequiredModal').style.display='none'"></div>
-    <div style="position: relative; background: white; border-radius: var(--radius-lg); max-width: 500px; width: 100%; box-shadow: var(--shadow-xl);">
-        <div style="display: flex; align-items: center; justify-content: space-between; padding: 1.5rem; border-bottom: 1px solid var(--beige);">
-            <h5 style="display: flex; align-items: center; gap: 0.5rem; margin: 0; font-family: var(--font-heading); font-weight: 700;">
+<div class="auth-modal" id="authRequiredModal">
+    <div class="auth-modal-backdrop" onclick="document.getElementById('authRequiredModal').style.display='none'"></div>
+    <div class="auth-modal-content">
+        <div class="auth-modal-header">
+            <h5 class="auth-modal-title">
                 <span data-icon="lock" data-icon-width="20" data-icon-height="20"></span>
                 Connexion requise
             </h5>
             <button type="button"
                     onclick="document.getElementById('authRequiredModal').style.display='none'"
-                    style="background: none; border: none; cursor: pointer; color: var(--dark-text); padding: 0.5rem;">
+                    class="auth-modal-close">
                 <span data-icon="x" data-icon-width="24" data-icon-height="24"></span>
             </button>
         </div>
-        <div style="text-align: center; padding: 2rem;">
-            <span data-icon="user" data-icon-width="64" data-icon-height="64" style="display: block; margin: 0 auto 1rem; color: var(--bordeaux);"></span>
-            <p style="font-size: 1.125rem; margin-bottom: 1rem; color: var(--dark-text);">
+        <div class="auth-modal-body">
+            <span data-icon="user" data-icon-width="64" data-icon-height="64" class="auth-modal-icon"></span>
+            <p class="auth-modal-text">
                 Pour commander ce menu, vous devez être connecté à votre compte.
             </p>
-            <p style="color: var(--dark-text); opacity: 0.7; margin: 0;">
+            <p class="auth-modal-subtext">
                 Vous n'avez pas encore de compte ? C'est rapide et gratuit !
             </p>
         </div>
-        <div style="display: flex; gap: 1rem; justify-content: center; padding: 0 2rem 2rem;">
+        <div class="auth-modal-actions">
             <a href="{{ path('app_login') }}?redirect={{ path('app_menu_show', {id: menu.id}) }}"
                class="btn btn-primary">
                 <span data-icon="log-in" data-icon-width="18" data-icon-height="18"></span>
@@ -300,25 +285,5 @@
     </div>
 </div>
 {% endif %}
-
-{# Media queries pour responsive #}
-<style>
-    @media (min-width: 1024px) {
-        .menu-detail-page-grid {
-            grid-template-columns: repeat(2, 1fr) !important;
-        }
-    }
-</style>
-
-<script>
-// Ajouter la classe responsive au grid principal
-document.addEventListener('DOMContentLoaded', function() {
-    const mainGrid = document.querySelector('[style*="grid-template-columns: 1fr;"]');
-    if (mainGrid && mainGrid.querySelector('[style*="grid-template-columns: 1fr;"]')) {
-        const innerGrid = mainGrid.querySelector('[style*="grid-template-columns: 1fr;"]');
-        innerGrid.classList.add('menu-detail-page-grid');
-    }
-});
-</script>
 
 {% endblock %}

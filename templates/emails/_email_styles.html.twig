@@ -1,0 +1,66 @@
+{#
+    Styles inline réutilisables pour les emails
+    Les styles doivent être inline pour la compatibilité email
+#}
+
+{# COULEURS DE LA CHARTE #}
+{# Bordeaux: #d4183d #}
+{# Gold: #f4a261 #}
+{# Beige: #f5ebe0 #}
+{# Texte foncé: #2c2c2c #}
+
+{# STYLES COMMUNS - Macros #}
+
+{# Paragraphe #}
+{% macro style_paragraph() %}margin-bottom: 15px; color: #2c2c2c; line-height: 1.6;{% endmacro %}
+
+{# Bouton CTA principal #}
+{% macro style_button() %}display: inline-block; background-color: #d4183d; color: #ffffff; text-decoration: none; padding: 12px 30px; border-radius: 5px; margin: 20px 0; font-weight: bold;{% endmacro %}
+
+{# Bouton CTA secondaire (gold) #}
+{% macro style_button_secondary() %}display: inline-block; background-color: #f4a261; color: #ffffff; text-decoration: none; padding: 12px 30px; border-radius: 5px; margin: 20px 0; font-weight: bold;{% endmacro %}
+
+{# Boîte de mise en évidence #}
+{% macro style_highlight_box() %}background-color: #f5ebe0; border-left: 4px solid #d4183d; padding: 15px; margin: 20px 0; border-radius: 4px;{% endmacro %}
+
+{# Boîte d'information (bleu clair) #}
+{% macro style_info_box() %}background-color: #e7f1ff; border-left: 4px solid #d4183d; padding: 15px; margin: 20px 0; border-radius: 4px;{% endmacro %}
+
+{# Boîte de succès #}
+{% macro style_success_box() %}background-color: #d4edda; border-left: 4px solid #27ae60; padding: 15px; margin: 20px 0; border-radius: 4px;{% endmacro %}
+
+{# Badge de succès #}
+{% macro style_success_badge() %}background-color: #d4edda; color: #0f5132; padding: 10px 20px; border-radius: 20px; display: inline-block; margin: 10px 0; font-weight: bold;{% endmacro %}
+
+{# Détails de commande #}
+{% macro style_order_details() %}background-color: #f8f9fa; border-radius: 8px; padding: 20px; margin: 20px 0;{% endmacro %}
+
+{# Ligne de détail #}
+{% macro style_detail_row() %}display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #e0e0e0;{% endmacro %}
+
+{# Label de détail #}
+{% macro style_detail_label() %}font-weight: bold; color: #495057;{% endmacro %}
+
+{# Valeur de détail #}
+{% macro style_detail_value() %}color: #2c2c2c;{% endmacro %}
+
+{# Ligne de total #}
+{% macro style_total_row() %}background-color: #f5ebe0; padding: 15px; margin-top: 15px; border-radius: 5px; font-size: 18px; font-weight: bold; display: flex; justify-content: space-between;{% endmacro %}
+
+{# Titre H2 #}
+{% macro style_h2() %}color: #d4183d; font-size: 22px; margin-top: 20px; margin-bottom: 10px; font-family: "Playfair Display", Georgia, serif;{% endmacro %}
+
+{# Titre H3 #}
+{% macro style_h3() %}color: #d4183d; font-size: 18px; margin-top: 20px; margin-bottom: 10px; font-family: "Playfair Display", Georgia, serif;{% endmacro %}
+
+{# Lien #}
+{% macro style_link() %}color: #d4183d; text-decoration: none;{% endmacro %}
+
+{# Boîte d'avertissement (warning) #}
+{% macro style_warning_box() %}background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0; border-radius: 4px; color: #664d03;{% endmacro %}
+
+{# Ligne d'information #}
+{% macro style_info_row() %}margin-bottom: 15px; padding: 10px; background-color: #f8f9fa; border-radius: 4px;{% endmacro %}
+
+{# Boîte de danger #}
+{% macro style_danger_box() %}background-color: #f8d7da; border-left: 4px solid #dc3545; padding: 20px; margin: 20px 0; border-radius: 4px; color: #842029;{% endmacro %}
