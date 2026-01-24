@@ -103,7 +103,7 @@
                                 name="dietetary[]"
                                 value="{{ dietetary.id }}"
                                 {% if dietetary.id in currentFilters.dietetary %}checked{% endif %}
-                                style="display: none;"
+                                class="d-none"
                                 id="dietetary_{{ dietetary.id }}"
                             >
                         {% endfor %}
@@ -166,7 +166,7 @@
                             {# Infos pratiques #}
                             <div class="menu-card-info">
                                 <span>
-                                    <span data-icon="users" data-icon-width="16" data-icon-height="16" style="color: var(--gold);"></span>
+                                    <span data-icon="users" data-icon-width="16" data-icon-height="16" class="icon-gold"></span>
                                     À partir de {{ menu.nbPersonMin }} pers.
                                 </span>
                             </div>

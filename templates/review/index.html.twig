@@ -2,35 +2,37 @@
 
 {% block title %}Avis clients{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/pages/review.css') }}">
+{% endblock %}
+
 {% block body %}
 {# ========================================
    REVIEWS PAGE - Figma Design
    ======================================== #}
-<section style="background-color: var(--beige); padding: 4rem 0; min-height: calc(100vh - 73px - 200px);">
-    <div style="max-width: 1200px; margin: 0 auto; padding: 0 1rem;">
+<section class="review-section">
+    <div class="review-container">
 
         {# En-tête #}
-        <div style="text-align: center; margin-bottom: 3rem;">
-            <h1 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 2.5rem; font-weight: 400; margin-bottom: 1rem;">
+        <div class="review-header">
+            <h1 class="review-header-title">
                 Avis de nos clients
             </h1>
-            <p style="color: var(--dark-text); opacity: 0.8; font-size: 1.1rem; margin-bottom: 2rem;">
+            <p class="review-header-subtitle">
                 Découvrez ce que nos clients pensent de nos services
             </p>
 
             {% if app.user %}
-                <a href="{{ path('app_review_new') }}"
-                   style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.875rem 2rem; background: var(--bordeaux); color: white; text-decoration: none; border-radius: var(--radius-sm); font-weight: 600; box-shadow: var(--shadow-md); transition: background-color var(--transition-base);"
-                   onmouseover="this.style.backgroundColor='#8B0000'"
-                   onmouseout="this.style.backgroundColor='var(--bordeaux)'">
+                <a href="{{ path('app_review_new') }}" class="review-btn-new">
                     <span data-icon="edit-3" data-icon-width="18" data-icon-height="18"></span>
                     Laisser un avis
                 </a>
             {% else %}
-                <div style="background: #e7f1ff; border-left: 4px solid #004085; color: #004085; padding: 1rem 1.5rem; border-radius: var(--radius-sm); display: inline-flex; align-items: center; gap: 0.75rem;">
+                <div class="review-login-notice">
                     <span data-icon="info" data-icon-width="18" data-icon-height="18"></span>
                     <span>
-                        <a href="{{ path('app_login') }}" style="color: var(--bordeaux); font-weight: 600; text-decoration: none;">Connectez-vous</a> pour laisser un avis
+                        <a href="{{ path('app_login') }}" class="review-login-link">Connectez-vous</a> pour laisser un avis
                     </span>
                 </div>
             {% endif %}
@@ -38,50 +40,48 @@
 
         {% if reviews is empty %}
             {# État vide #}
-            <div style="text-align: center; padding: 4rem 2rem; background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm);">
-                <div style="width: 4rem; height: 4rem; margin: 0 auto 1.5rem; border-radius: 50%; background: var(--beige); display: flex; align-items: center; justify-content: center;">
-                    <span data-icon="message-circle" data-icon-width="32" data-icon-height="32" style="color: var(--bordeaux);"></span>
+            <div class="review-empty-state">
+                <div class="review-empty-icon-circle">
+                    <span data-icon="message-circle" data-icon-width="32" data-icon-height="32" class="icon"></span>
                 </div>
-                <h3 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.5rem; font-weight: 400; margin-bottom: 0.5rem;">
+                <h3 class="review-empty-title">
                     Aucun avis pour le moment
                 </h3>
-                <p style="color: var(--dark-text); opacity: 0.8;">
+                <p class="review-empty-text">
                     Soyez le premier à partager votre expérience !
                 </p>
             </div>
         {% else %}
             {# Grille des avis #}
-            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.5rem;">
+            <div class="review-grid">
                 {% for review in reviews %}
-                    <div style="background: white; border-radius: var(--radius-lg); padding: 2rem; box-shadow: var(--shadow-md); transition: transform var(--transition-base), box-shadow var(--transition-base); display: flex; flex-direction: column; height: 100%;"
-                         onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='var(--shadow-lg)'"
-                         onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--shadow-md)'">
+                    <div class="review-item-card">
 
                         {# Étoiles #}
-                        <div style="display: flex; gap: 0.25rem; margin-bottom: 1.25rem;">
+                        <div class="review-item-stars">
                             {% for i in 1..5 %}
                                 <span data-icon="star" data-icon-width="20" data-icon-height="20"
-                                      style="color: {% if i <= review.rating %}#ffc107{% else %}#e9ecef{% endif %}; fill: {% if i <= review.rating %}#ffc107{% else %}#e9ecef{% endif %};"></span>
+                                      class="{% if i <= review.rating %}review-item-star-icon{% else %}review-item-star-icon-empty{% endif %}"></span>
                             {% endfor %}
                         </div>
 
                         {# Commentaire #}
                         {% if review.comment %}
-                            <p style="color: var(--dark-text); line-height: 1.6; font-style: italic; margin-bottom: 1.5rem; flex-grow: 1;">
+                            <p class="review-item-comment">
                                 "{{ review.comment }}"
                             </p>
                         {% endif %}
 
                         {# Informations client #}
-                        <div style="display: flex; align-items: center; gap: 1rem; margin-top: auto; padding-top: 1.5rem; border-top: 1px solid var(--beige);">
-                            <div style="width: 48px; height: 48px; border-radius: 50%; background: var(--bordeaux); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                                <span data-icon="user" data-icon-width="24" data-icon-height="24" style="color: white;"></span>
+                        <div class="review-item-author-section">
+                            <div class="review-item-avatar">
+                                <span data-icon="user" data-icon-width="24" data-icon-height="24" class="text-white"></span>
                             </div>
                             <div>
-                                <h6 style="font-weight: 600; color: var(--dark-text); margin: 0 0 0.25rem 0;">
+                                <h6 class="review-item-author-name">
                                     {{ review.customerName }}
                                 </h6>
-                                <small style="color: var(--dark-text); opacity: 0.6; font-size: 0.875rem;">
+                                <small class="review-item-date">
                                     {{ review.createdAt|date('d/m/Y') }}
                                 </small>
                             </div>

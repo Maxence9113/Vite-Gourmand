@@ -149,13 +149,25 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Gestion de l'accordéon
     document.querySelectorAll('.accordion-header').forEach(header => {
-        header.addEventListener('click', function() {
+        header.addEventListener('click', function(e) {
+            // Ne pas toggle l'accordéon si on clique sur un checkbox ou un label
+            if (e.target.closest('input') || e.target.closest('label')) {
+                return;
+            }
+
             const accordionId = this.dataset.accordion;
             const content = document.getElementById('accordion-' + accordionId);
 
             // Toggle l'accordéon actuel
             this.classList.toggle('active');
             content.classList.toggle('active');
+        });
+    });
+
+    // Empêcher la propagation des clics sur les checkboxes vers l'accordéon
+    document.querySelectorAll('.accordion-body').forEach(body => {
+        body.addEventListener('click', function(e) {
+            e.stopPropagation();
         });
     });
 

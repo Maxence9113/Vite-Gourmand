@@ -3,372 +3,18 @@
 {% block title %}Statistiques des commandes{% endblock %}
 {% block page_title %}Statistiques{% endblock %}
 
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/admin/order-stats.css') }}">
+{% endblock %}
+
 {% block content %}
-<style>
-    .stats-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 2rem;
-    }
-
-    .stats-header h1 {
-        font-family: var(--font-heading);
-        color: var(--bordeaux);
-        font-size: 2.5rem;
-        font-weight: 400;
-        margin: 0;
-    }
-
-    .stats-description {
-        font-size: 0.95rem;
-        color: #95a5a6;
-        margin-top: 0.5rem;
-    }
-
-    /* KPI Cards */
-    .kpi-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 1.5rem;
-        margin-bottom: 2rem;
-    }
-
-    .kpi-card {
-        background: white;
-        border-radius: var(--radius-lg);
-        box-shadow: var(--shadow-md);
-        padding: 1.5rem;
-        text-align: center;
-        border-top: 4px solid;
-        transition: all var(--transition-base);
-    }
-
-    .kpi-card:hover {
-        box-shadow: var(--shadow-lg);
-        transform: translateY(-2px);
-    }
-
-    .kpi-card.bordeaux { border-top-color: var(--bordeaux); }
-    .kpi-card.green { border-top-color: var(--green); }
-    .kpi-card.blue { border-top-color: #3498db; }
-    .kpi-card.gold { border-top-color: var(--gold); }
-
-    .kpi-label {
-        font-size: 0.875rem;
-        color: #95a5a6;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        margin-bottom: 0.75rem;
-        font-weight: 600;
-    }
-
-    .kpi-value {
-        font-family: var(--font-heading);
-        font-size: 2.25rem;
-        font-weight: 600;
-        margin: 0;
-    }
-
-    .kpi-card.bordeaux .kpi-value { color: var(--bordeaux); }
-    .kpi-card.green .kpi-value { color: var(--green); }
-    .kpi-card.blue .kpi-value { color: #3498db; }
-    .kpi-card.gold .kpi-value { color: var(--gold); }
-
-    .kpi-subtext {
-        font-size: 0.8rem;
-        color: #95a5a6;
-        margin-top: 0.5rem;
-    }
-
-    /* Filter Card */
-    .filter-card {
-        background: white;
-        border-radius: var(--radius-lg);
-        box-shadow: var(--shadow-md);
-        margin-bottom: 2rem;
-        overflow: hidden;
-    }
-
-    .filter-header {
-        background: var(--beige);
-        padding: 1rem 1.5rem;
-        border-bottom: 1px solid #e5e7eb;
-    }
-
-    .filter-header h3 {
-        font-family: var(--font-heading);
-        font-size: 1.25rem;
-        font-weight: 400;
-        color: var(--dark-text);
-        margin: 0;
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-    }
-
-    .filter-body {
-        padding: 1.5rem;
-    }
-
-    .filter-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1.5rem;
-        margin-bottom: 1.5rem;
-    }
-
-    .filter-group {
-        flex: 1;
-        min-width: 200px;
-    }
-
-    .filter-label {
-        font-weight: 600;
-        color: var(--dark-text);
-        margin-bottom: 0.5rem;
-        display: block;
-        font-size: 0.875rem;
-    }
-
-    .form-select, .form-control {
-        width: 100%;
-        border: 1px solid var(--bordeaux);
-        border-radius: var(--radius-sm);
-        padding: 0.75rem;
-        font-size: 0.95rem;
-        font-family: var(--font-body);
-        transition: all var(--transition-base);
-    }
-
-    .form-select:focus, .form-control:focus {
-        border-color: var(--bordeaux);
-        box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.1);
-        outline: none;
-    }
-
-    /* View Toggle */
-    .view-toggle {
-        display: flex;
-        gap: 0.75rem;
-        margin-bottom: 1.5rem;
-    }
-
-    .view-toggle label {
-        font-weight: 600;
-        color: var(--dark-text);
-        margin-bottom: 0.5rem;
-        display: block;
-        font-size: 0.875rem;
-    }
-
-    .btn-group {
-        display: inline-flex;
-        gap: 0;
-        border-radius: var(--radius-lg);
-        overflow: hidden;
-        border: 2px solid var(--bordeaux);
-        box-shadow: var(--shadow-sm);
-    }
-
-    .btn-radio {
-        display: none;
-    }
-
-    .btn-radio-label {
-        padding: 0.875rem 2rem;
-        background: white;
-        color: var(--bordeaux);
-        cursor: pointer;
-        transition: all var(--transition-base);
-        border-right: 2px solid var(--bordeaux);
-        font-weight: 600;
-        text-align: center;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        min-width: 150px;
-        justify-content: center;
-    }
-
-    .btn-radio-label:last-of-type {
-        border-right: none;
-    }
-
-    .btn-radio:checked + .btn-radio-label {
-        background: var(--bordeaux);
-        color: white;
-        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .btn-radio-label:hover:not(:has(+ input:checked)) {
-        background: linear-gradient(to bottom, #fff5f5, white);
-    }
-
-    .btn-radio:checked + .btn-radio-label:hover {
-        background: linear-gradient(to bottom, #7a0000, var(--bordeaux));
-    }
-
-    /* Buttons */
-    .btn-primary, .btn-secondary {
-        padding: 0.75rem 1.5rem;
-        border-radius: var(--radius-lg);
-        font-weight: 600;
-        cursor: pointer;
-        transition: all var(--transition-base);
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        text-decoration: none;
-        border: none;
-    }
-
-    .btn-primary {
-        background: var(--bordeaux);
-        color: white;
-    }
-
-    .btn-primary:hover {
-        opacity: 0.9;
-        box-shadow: var(--shadow-md);
-    }
-
-    .btn-secondary {
-        background: transparent;
-        color: #95a5a6;
-        border: 2px solid #95a5a6;
-    }
-
-    .btn-secondary:hover {
-        background: #95a5a6;
-        color: white;
-    }
-
-    /* Chart and Table Cards */
-    .content-card {
-        background: white;
-        border-radius: var(--radius-lg);
-        box-shadow: var(--shadow-md);
-        margin-bottom: 2rem;
-        overflow: hidden;
-    }
-
-    .content-header {
-        background: var(--beige);
-        padding: 1rem 1.5rem;
-        border-bottom: 1px solid #e5e7eb;
-    }
-
-    .content-header h3 {
-        font-family: var(--font-heading);
-        font-size: 1.25rem;
-        font-weight: 400;
-        color: var(--dark-text);
-        margin: 0;
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-    }
-
-    .content-body {
-        padding: 1.5rem;
-    }
-
-    .chart-container {
-        height: 400px;
-        position: relative;
-    }
-
-    /* Table Styles */
-    .stats-table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    .stats-table thead {
-        background: var(--beige);
-    }
-
-    .stats-table th {
-        padding: 1rem 1.5rem;
-        text-align: left;
-        color: var(--dark-text);
-        font-weight: 600;
-        font-size: 0.875rem;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-
-    .stats-table tbody tr {
-        border-bottom: 1px solid var(--beige);
-        transition: background var(--transition-base);
-    }
-
-    .stats-table tbody tr:hover {
-        background: #f8f9fa;
-    }
-
-    .stats-table td {
-        padding: 1rem 1.5rem;
-        color: var(--dark-text);
-    }
-
-    .stats-table tfoot {
-        background: #f8f9fa;
-        font-weight: 600;
-        border-top: 2px solid var(--bordeaux);
-    }
-
-    .stats-table tfoot td {
-        padding: 1rem 1.5rem;
-    }
-
-    .theme-badge {
-        display: inline-block;
-        padding: 0.35rem 0.85rem;
-        border-radius: var(--radius-lg);
-        font-size: 0.8rem;
-        font-weight: 600;
-        color: white;
-    }
-
-    .count-badge {
-        background: var(--bordeaux);
-        color: white;
-        padding: 0.35rem 0.85rem;
-        border-radius: 9999px;
-        font-size: 0.8rem;
-        font-weight: 600;
-    }
-
-    .alert-info-custom {
-        background: #e7f1ff;
-        border: 2px solid #004085;
-        border-radius: var(--radius-lg);
-        padding: 1.5rem;
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        color: #004085;
-    }
-
-    @media (max-width: 1024px) {
-        .kpi-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-    }
-
-    @media (max-width: 640px) {
-        .kpi-grid {
-            grid-template-columns: 1fr;
-        }
-    }
-</style>
 
 <div class="stats-header">
     <div>
         <h1>
-            <span data-icon="trending-up" data-icon-width="32" data-icon-height="32" style="display: inline-block; vertical-align: middle;"></span>
+            <span data-icon="trending-up" data-icon-width="32" data-icon-height="32" class="icon-inline"></span>
             Statistiques des commandes
         </h1>
         <p class="stats-description">Analyse des performances par thème et par menu</p>
@@ -394,10 +40,10 @@
             {% if viewType == 'theme' %}Top thème{% else %}Top menu{% endif %}
         </div>
         {% if viewType == 'theme' and topTheme %}
-            <h2 class="kpi-value" style="font-size: 1.5rem;">{{ topTheme.themeName }}</h2>
+            <h2 class="kpi-value kpi-value-large">{{ topTheme.themeName }}</h2>
             <p class="kpi-subtext">{{ topTheme.count }} commandes</p>
         {% elseif viewType == 'menu' and topMenu %}
-            <h2 class="kpi-value" style="font-size: 1.5rem;">{{ topMenu.menuName }}</h2>
+            <h2 class="kpi-value kpi-value-large">{{ topMenu.menuName }}</h2>
             <p class="kpi-subtext">{{ topMenu.count }} commandes</p>
         {% else %}
             <h2 class="kpi-value">-</h2>
@@ -417,20 +63,20 @@
         <form method="get" action="{{ path('app_admin_order_stats') }}" id="filterForm">
             {# View Toggle #}
             <div class="view-toggle">
-                <div style="width: 100%;">
+                <div>
                     <label class="filter-label">Vue</label>
                     <div class="btn-group">
                         <input type="radio" class="btn-radio" name="view" value="theme" id="viewTheme"
                                {{ viewType == 'theme' ? 'checked' : '' }} onchange="this.form.submit()">
                         <label class="btn-radio-label" for="viewTheme">
-                            <span data-icon="palette" data-icon-width="16" data-icon-height="16" style="vertical-align: middle;"></span>
+                            <span data-icon="palette" data-icon-width="16" data-icon-height="16" class="icon-vertical-middle"></span>
                             Par thème
                         </label>
 
                         <input type="radio" class="btn-radio" name="view" value="menu" id="viewMenu"
                                {{ viewType == 'menu' ? 'checked' : '' }} onchange="this.form.submit()">
                         <label class="btn-radio-label" for="viewMenu">
-                            <span data-icon="file-text" data-icon-width="16" data-icon-height="16" style="vertical-align: middle;"></span>
+                            <span data-icon="file-text" data-icon-width="16" data-icon-height="16" class="icon-vertical-middle"></span>
                             Par menu
                         </label>
                     </div>
@@ -477,7 +123,7 @@
             </div>
 
             {# Actions #}
-            <div style="display: flex; gap: 1rem;">
+            <div class="filter-actions">
                 <button type="submit" class="btn-primary">
                     <span data-icon="filter" data-icon-width="16" data-icon-height="16"></span>
                     Appliquer les filtres
@@ -510,7 +156,7 @@
             </div>
         {% else %}
             <div class="alert-info-custom">
-                <span data-icon="info" data-icon-width="20" data-icon-height="20" style="flex-shrink: 0;"></span>
+                <span data-icon="info" data-icon-width="20" data-icon-height="20"></span>
                 Aucune donnée à afficher pour les filtres sélectionnés.
             </div>
         {% endif %}
@@ -527,7 +173,7 @@
     </div>
     <div class="content-body">
         {% if revenueData is not empty %}
-            <div style="overflow-x: auto;">
+            <div class="table-overflow">
                 <table class="stats-table">
                     <thead>
                         <tr>
@@ -538,9 +184,9 @@
                             {% if viewType == 'menu' %}
                                 <th style="width: 20%;">Thème</th>
                             {% endif %}
-                            <th style="width: 15%; text-align: center;">Commandes</th>
-                            <th style="width: 15%; text-align: right;">Chiffre d'affaires</th>
-                            <th style="width: 15%; text-align: right;">CA moyen / cmd</th>
+                            <th style="width: 15%;" class="text-center">Commandes</th>
+                            <th style="width: 15%;" class="text-right">Chiffre d'affaires</th>
+                            <th style="width: 15%;" class="text-right">CA moyen / cmd</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -562,11 +208,11 @@
                                         </span>
                                     </td>
                                 {% endif %}
-                                <td style="text-align: center;">
+                                <td class="text-center">
                                     <span class="count-badge">{{ orderCount.count }}</span>
                                 </td>
-                                <td style="text-align: right;"><strong>{{ item.totalRevenue|number_format(2, ',', ' ') }} €</strong></td>
-                                <td style="text-align: right; color: #95a5a6;">
+                                <td class="text-right"><strong>{{ item.totalRevenue|number_format(2, ',', ' ') }} €</strong></td>
+                                <td class="text-right text-muted">
                                     {{ (item.totalRevenue / orderCount.count)|number_format(2, ',', ' ') }} €
                                 </td>
                             </tr>
@@ -575,16 +221,16 @@
                     <tfoot>
                         <tr>
                             <td colspan="{% if viewType == 'menu' %}3{% else %}2{% endif %}">TOTAL</td>
-                            <td style="text-align: center;"><span class="count-badge">{{ globalStats.totalOrders }}</span></td>
-                            <td style="text-align: right;"><strong>{{ globalStats.totalRevenue|number_format(2, ',', ' ') }} €</strong></td>
-                            <td style="text-align: right;">{{ (globalStats.totalRevenue / globalStats.totalOrders)|number_format(2, ',', ' ') }} €</td>
+                            <td class="text-center"><span class="count-badge">{{ globalStats.totalOrders }}</span></td>
+                            <td class="text-right"><strong>{{ globalStats.totalRevenue|number_format(2, ',', ' ') }} €</strong></td>
+                            <td class="text-right">{{ (globalStats.totalRevenue / globalStats.totalOrders)|number_format(2, ',', ' ') }} €</td>
                         </tr>
                     </tfoot>
                 </table>
             </div>
         {% else %}
             <div class="alert-info-custom">
-                <span data-icon="info" data-icon-width="20" data-icon-height="20" style="flex-shrink: 0;"></span>
+                <span data-icon="info" data-icon-width="20" data-icon-height="20"></span>
                 Aucune donnée à afficher pour les filtres sélectionnés.
             </div>
         {% endif %}

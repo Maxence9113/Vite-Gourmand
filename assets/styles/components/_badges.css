@@ -77,3 +77,48 @@
     align-items: center;
     gap: 0.25rem;
 }
+
+/* Badges de statut de commande - Complets */
+.badge-status {
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    color: white;
+    display: inline-block;
+}
+
+.badge-status-pending {
+    background-color: #FF8C00;
+}
+
+.badge-status-validated {
+    background-color: #FFD700;
+}
+
+.badge-status-preparing {
+    background-color: #8B0000;
+}
+
+.badge-status-ready {
+    background-color: #228B22;
+}
+
+.badge-status-delivering {
+    background-color: #4682B4;
+}
+
+.badge-status-delivered {
+    background-color: #32CD32;
+}
+
+.badge-status-waiting_material_return {
+    background-color: #FFA500;
+}
+
+.badge-status-completed {
+    background-color: #2E8B57;
+}
+
+.badge-status-cancelled {
+    background-color: #DC143C;
+}

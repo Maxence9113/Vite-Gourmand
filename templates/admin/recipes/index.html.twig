@@ -66,8 +66,8 @@
                     {% for recipe in recipes %}
                     <tr class="recipe-row">
                         <td><strong>{{ recipe.id }}</strong></td>
-                        <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="{{ recipe.title }}">{{ recipe.title }}</td>
-                        <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="{{ recipe.description }}">{{ recipe.description }}</td>
+                        <td class="text-ellipsis" title="{{ recipe.title }}">{{ recipe.title }}</td>
+                        <td class="text-ellipsis" title="{{ recipe.description }}">{{ recipe.description }}</td>
                         <td>
                             <div class="crud-actions">
                                 <a href="{{ path('app_admin_recipes_edit', {id: recipe.id}) }}" class="btn-crud btn-crud-edit">

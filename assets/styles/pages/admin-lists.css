@@ -500,6 +500,11 @@
     color: #f39c12;
 }
 
+/* Forms inline dans les actions */
+.crud-actions form {
+    display: inline;
+}
+
 /* ========================================
    ÉTOILES DE NOTATION
    ======================================== */
@@ -544,4 +549,24 @@
     border-radius: var(--radius-sm);
     margin-bottom: 1rem;
     border: 1px solid #ffeeba;
+}
+
+/* Utility pour texte tronqué */
+.text-ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.filters-grid-2col {
+    grid-template-columns: 1fr 1fr;
+}
+
+.icon-star-filled {
+    color: #ffc107;
+    fill: #ffc107;
+}
+
+.icon-star-empty {
+    color: #e5e7eb;
 }

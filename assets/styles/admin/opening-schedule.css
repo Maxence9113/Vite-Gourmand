@@ -22,35 +22,85 @@
 
 .days-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin-bottom: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.75rem;
+    padding: 1.25rem;
+    background: #f8f9fa;
+    border-radius: var(--radius-lg);
+    border: 2px solid var(--beige);
 }
 
 .day-checkbox {
-    padding: 12px 15px;
-    background-color: #fff;
-    border: 2px solid #ddd;
-    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.625rem 0.875rem;
+    background: white;
+    border-radius: var(--radius-sm);
+    border: 2px solid #e9ecef;
+    transition: all var(--transition-base);
     cursor: pointer;
-    transition: all 0.2s;
 }
 
 .day-checkbox:hover {
-    background-color: #e7f1ff;
-    border-color: #3498db;
+    border-color: var(--bordeaux);
+    box-shadow: var(--shadow-sm);
 }
 
-.day-checkbox:has(input:checked) {
-    background-color: #d4edda;
-    border-color: #27ae60;
+.day-checkbox input[type="checkbox"] {
+    appearance: none;
+    width: 1.375rem;
+    height: 1.375rem;
+    min-width: 1.375rem;
+    border: 2.5px solid #d1d5db;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    background: white;
+    margin: 0;
+}
+
+.day-checkbox input[type="checkbox"]:hover {
+    border-color: var(--bordeaux);
+}
+
+.day-checkbox input[type="checkbox"]:checked {
+    background: var(--bordeaux);
+    border-color: var(--bordeaux);
+}
+
+.day-checkbox input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 0px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2.5px 2.5px 0;
+    transform: rotate(45deg);
 }
 
 .day-checkbox label {
     cursor: pointer;
-    font-weight: 500;
     margin: 0;
-    width: 100%;
+    font-weight: 500;
+    color: var(--dark-text);
+    font-size: 0.9375rem;
+    flex: 1;
+}
+
+.day-checkbox.checked {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border-color: var(--green);
+    box-shadow: 0 2px 12px rgba(39, 174, 96, 0.15);
+}
+
+.day-checkbox.checked label {
+    color: var(--green);
+    font-weight: 600;
 }
 
 .time-inputs {
@@ -121,4 +171,208 @@
 .badge-secondary {
     background: #95a5a6;
     color: white;
+}
+
+.form-check-wrapper {
+    padding: 1rem 1.25rem;
+    background: #f0fdf4;
+    border: 2px solid var(--green);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+}
+
+.form-check-wrapper input[type="checkbox"] {
+    appearance: none;
+    width: 1.5rem;
+    height: 1.5rem;
+    min-width: 1.5rem;
+    border: 2.5px solid #d1d5db;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    background: white;
+    margin: 0;
+}
+
+.form-check-wrapper input[type="checkbox"]:hover {
+    border-color: var(--green);
+}
+
+.form-check-wrapper input[type="checkbox"]:checked {
+    background: var(--green);
+    border-color: var(--green);
+}
+
+.form-check-wrapper input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    left: 4.5px;
+    top: 1px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2.5px 2.5px 0;
+    transform: rotate(45deg);
+}
+
+.form-check-wrapper label {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--green);
+    flex: 1;
+    margin: 0;
+    font-size: 0.9375rem;
+}
+
+.alert-warning-custom {
+    background: #fff3cd;
+    border: 2px solid #ffc107;
+    border-radius: var(--radius-lg);
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.alert-warning-custom strong {
+    color: #856404;
+}
+
+.examples-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    max-width: 700px;
+    margin: 2rem auto 0;
+}
+
+.examples-body {
+    padding: 1.5rem;
+}
+
+.examples-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.examples-list li {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--beige);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.examples-list li:last-child {
+    border-bottom: none;
+}
+
+.examples-list strong {
+    color: var(--bordeaux);
+    min-width: 80px;
+}
+
+.section-description {
+    font-size: 0.875rem;
+    color: #95a5a6;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.schedule-day {
+    font-weight: 600;
+    color: var(--dark-text);
+    font-size: 0.95rem;
+}
+
+.schedule-time {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.badge-open {
+    background: var(--green);
+    color: white;
+}
+
+.badge-closed {
+    background: #95a5a6;
+    color: white;
+}
+
+.time-range {
+    color: var(--dark-text);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.form-card-centered {
+    max-width: 700px;
+    margin: 0 auto 1.5rem;
+}
+
+.form-card-centered-small {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.icon-green {
+    color: var(--green);
+}
+
+.icon-gold {
+    color: var(--gold);
+}
+
+.icon-warning {
+    color: #856404;
+    flex-shrink: 0;
+}
+
+.icon-inline {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.icon-inline-mr {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 0.5rem;
+}
+
+.alert-info-icon {
+    flex-shrink: 0;
+}
+
+.section-with-padding {
+    padding: 1.5rem;
+}
+
+.section-beige-bg {
+    background: var(--beige);
+}
+
+.section-with-padding-beige {
+    padding: 1.5rem;
+    background: var(--beige);
+}
+
+.list-container-mt {
+    margin-top: 2rem;
+}
+
+.hidden-field {
+    display: none;
+}
+
+.mb-md {
+    margin-bottom: 1.5rem;
 }

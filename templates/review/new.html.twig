@@ -2,25 +2,31 @@
 
 {% block title %}Laisser un avis{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/pages/auth.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/pages/review.css') }}">
+{% endblock %}
+
 {% block body %}
 {# ========================================
    NEW REVIEW PAGE - Figma Design
    ======================================== #}
-<section style="background-color: var(--beige); padding: 3rem 0; min-height: calc(100vh - 73px - 200px);">
-    <div style="max-width: 700px; margin: 0 auto; padding: 0 1rem;">
+<section class="auth-section">
+    <div class="review-new-container">
 
         {# Card principale #}
-        <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 2.5rem;">
+        <div class="auth-card">
 
             {# En-tête #}
-            <div style="text-align: center; margin-bottom: 2.5rem;">
-                <div style="width: 4rem; height: 4rem; margin: 0 auto 1rem; border-radius: 50%; background: var(--bordeaux); display: flex; align-items: center; justify-content: center;">
-                    <span data-icon="edit-3" data-icon-width="28" data-icon-height="28" style="color: white;"></span>
+            <div class="review-new-header">
+                <div class="auth-icon-circle">
+                    <span data-icon="edit-3" data-icon-width="28" data-icon-height="28" class="text-white"></span>
                 </div>
-                <h1 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.75rem; font-weight: 400; margin-bottom: 0.5rem;">
+                <h1 class="auth-title">
                     Partagez votre expérience
                 </h1>
-                <p style="color: var(--dark-text); opacity: 0.8; margin: 0;">
+                <p class="review-new-header-subtitle">
                     Votre avis nous aide à nous améliorer et aide les autres clients
                 </p>
             </div>
@@ -29,31 +35,30 @@
             {{ form_start(form) }}
 
                 {# Note - Rating #}
-                <div style="margin-bottom: 2rem;">
+                <div class="review-rating-field">
                     {{ form_label(form.rating, 'Votre note', {
                         'label_attr': {
-                            'style': 'display: block; margin-bottom: 1rem; font-weight: 600; color: var(--dark-text); font-size: 1.1rem;'
+                            'class': 'review-rating-label'
                         }
                     }) }}
 
-                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                    <div class="review-rating-options">
                         {% for choice in form.rating.vars.choices %}
                             <div>
                                 <input type="radio"
                                        id="rating_{{ choice.value }}"
                                        name="{{ form.rating.vars.full_name }}"
                                        value="{{ choice.value }}"
-                                       style="display: none;">
+                                       class="review-rating-input">
                                 <label for="rating_{{ choice.value }}"
-                                       style="display: flex; align-items: center; gap: 0.75rem; padding: 1rem 1.5rem; border: 2px solid var(--beige); border-radius: var(--radius-sm); cursor: pointer; transition: all var(--transition-base); font-size: 1rem;">
-                                    <div style="display: flex; gap: 0.25rem;">
+                                       class="review-rating-option-label">
+                                    <div class="review-rating-stars">
                                         {% for i in 1..5 %}
                                             <span data-icon="star" data-icon-width="20" data-icon-height="20"
-                                                  class="rating-star-{{ choice.value }}"
-                                                  style="color: {% if i <= choice.value %}#ffc107{% else %}#e9ecef{% endif %}; fill: {% if i <= choice.value %}#ffc107{% else %}#e9ecef{% endif %};"></span>
+                                                  class="rating-star-{{ choice.value }} {% if i <= choice.value %}review-item-star-icon{% else %}review-item-star-icon-empty{% endif %}"></span>
                                         {% endfor %}
                                     </div>
-                                    <span style="color: var(--dark-text);">{{ choice.label }}</span>
+                                    <span class="review-rating-option-text">{{ choice.label }}</span>
                                 </label>
                             </div>
                         {% endfor %}
@@ -62,45 +67,39 @@
                 </div>
 
                 {# Commentaire #}
-                <div style="margin-bottom: 2rem;">
+                <div class="review-comment-field">
                     {{ form_label(form.comment, 'Votre commentaire (optionnel)', {
                         'label_attr': {
-                            'style': 'display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark-text); font-size: 0.875rem;'
+                            'class': 'review-comment-label'
                         }
                     }) }}
                     {{ form_widget(form.comment, {
                         'attr': {
-                            'style': 'width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 1rem; resize: vertical; min-height: 120px;',
-                            'placeholder': 'Partagez votre expérience avec nous...',
-                            'onfocus': "this.style.borderColor='var(--gold)'; this.style.boxShadow='0 0 0 3px rgba(212, 175, 55, 0.1)'",
-                            'onblur': "this.style.borderColor='var(--bordeaux)'; this.style.boxShadow='none'"
+                            'class': 'review-comment-textarea',
+                            'placeholder': 'Partagez votre expérience avec nous...'
                         }
                     }) }}
                     {{ form_errors(form.comment) }}
                 </div>
 
                 {# Information modération #}
-                <div style="background: #e7f1ff; border-left: 4px solid #004085; padding: 1rem 1.5rem; border-radius: var(--radius-sm); margin-bottom: 2rem; display: flex; align-items: flex-start; gap: 0.75rem;">
-                    <span data-icon="info" data-icon-width="20" data-icon-height="20" style="color: #004085; flex-shrink: 0; margin-top: 2px;"></span>
-                    <div style="color: #004085; font-size: 0.875rem;">
-                        <strong style="display: block; margin-bottom: 0.25rem;">Modération des avis</strong>
+                <div class="review-moderation-notice">
+                    <span data-icon="info" data-icon-width="20" data-icon-height="20" class="review-moderation-notice-icon"></span>
+                    <div class="review-moderation-notice-content">
+                        <strong class="review-moderation-notice-title">Modération des avis</strong>
                         <span>Votre avis sera vérifié par notre équipe avant d'être publié. Cela nous permet de garantir l'authenticité et la qualité des témoignages.</span>
                     </div>
                 </div>
 
                 {# Boutons d'action #}
-                <div style="display: flex; gap: 1rem; justify-content: flex-end; flex-wrap: wrap;">
+                <div class="review-form-actions">
                     <a href="{{ path('app_order_show', {id: order.id}) }}"
-                       style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.875rem 1.5rem; background: white; color: var(--dark-text); text-decoration: none; border: 1px solid var(--bordeaux); border-radius: var(--radius-sm); font-weight: 600; transition: all var(--transition-base);"
-                       onmouseover="this.style.backgroundColor='var(--beige)'"
-                       onmouseout="this.style.backgroundColor='white'">
+                       class="review-btn-cancel">
                         <span data-icon="x" data-icon-width="18" data-icon-height="18"></span>
                         Annuler
                     </a>
                     <button type="submit"
-                            style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.875rem 1.5rem; background: var(--bordeaux); color: white; border: none; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; box-shadow: var(--shadow-md); transition: background-color var(--transition-base);"
-                            onmouseover="this.style.backgroundColor='#8B0000'"
-                            onmouseout="this.style.backgroundColor='var(--bordeaux)'">
+                            class="review-btn-submit">
                         <span data-icon="send" data-icon-width="18" data-icon-height="18"></span>
                         Envoyer mon avis
                     </button>

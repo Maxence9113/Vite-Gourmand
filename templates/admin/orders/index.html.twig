@@ -3,17 +3,22 @@
 {% block title %}Gestion des Commandes - Admin{% endblock %}
 {% block page_title %}Gestion des Commandes{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/admin/orders.css') }}">
+{% endblock %}
+
 {% block content %}
-<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
-    <h1 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 2.5rem; font-weight: 400;">
+<div class="flex-between mb-md">
+    <h1 class="order-show-title">
         🛒 Gestion des commandes
     </h1>
-    <div style="display: flex; gap: 0.75rem;">
-        <button style="padding: 0.5rem 1rem; border-radius: var(--radius-lg); border: 2px solid var(--bordeaux); background: transparent; color: var(--bordeaux); cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all var(--transition-base);" onmouseover="this.style.boxShadow='var(--shadow-md)'" onmouseout="this.style.boxShadow='none'">
+    <div class="flex-gap">
+        <button class="btn-filter">
             <span data-icon="filter" data-icon-width="16" data-icon-height="16"></span>
             Filtrer
         </button>
-        <button style="padding: 0.5rem 1rem; border-radius: var(--radius-lg); border: none; background: var(--gold); color: var(--dark-text); cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all var(--transition-base);" onmouseover="this.style.boxShadow='var(--shadow-md)'" onmouseout="this.style.boxShadow='none'">
+        <button class="btn-export">
             <span data-icon="download" data-icon-width="16" data-icon-height="16"></span>
             Exporter
         </button>
@@ -21,39 +26,39 @@
 </div>
 
 <!-- Stats Grid -->
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
-    <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 1.25rem; text-align: center;">
-        <h6 style="color: var(--dark-text); font-size: 0.875rem; margin-bottom: 0.5rem; font-weight: 400;">Total</h6>
-        <h3 style="font-family: var(--font-heading); font-size: 1.8rem; margin: 0; color: var(--dark-text);">{{ stats.total }}</h3>
+<div class="grid-stats mb-md">
+    <div class="stat-card text-center">
+        <h6 class="stat-card-title">Total</h6>
+        <h3 class="stat-card-value">{{ stats.total }}</h3>
     </div>
-    <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 1.25rem; text-align: center; border-left: 4px solid #FF8C00;">
-        <h6 style="color: var(--dark-text); font-size: 0.875rem; margin-bottom: 0.5rem; font-weight: 400;">En attente</h6>
-        <h3 style="font-family: var(--font-heading); font-size: 1.8rem; margin: 0; color: #FF8C00;">{{ stats.pending }}</h3>
+    <div class="stat-card text-center border-left-orange">
+        <h6 class="stat-card-title">En attente</h6>
+        <h3 class="orders-stat-number pending">{{ stats.pending }}</h3>
     </div>
-    <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 1.25rem; text-align: center; border-left: 4px solid #FFD700;">
-        <h6 style="color: var(--dark-text); font-size: 0.875rem; margin-bottom: 0.5rem; font-weight: 400;">Validées</h6>
-        <h3 style="font-family: var(--font-heading); font-size: 1.8rem; margin: 0; color: #FFD700;">{{ stats.validated }}</h3>
+    <div class="stat-card text-center border-left-gold">
+        <h6 class="stat-card-title">Validées</h6>
+        <h3 class="orders-stat-number validated">{{ stats.validated }}</h3>
     </div>
-    <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 1.25rem; text-align: center; border-left: 4px solid #8B0000;">
-        <h6 style="color: var(--dark-text); font-size: 0.875rem; margin-bottom: 0.5rem; font-weight: 400;">En préparation</h6>
-        <h3 style="font-family: var(--font-heading); font-size: 1.8rem; margin: 0; color: #8B0000;">{{ stats.preparing }}</h3>
+    <div class="orders-stat-card preparing">
+        <h6 class="stat-card-title">En préparation</h6>
+        <h3 class="orders-stat-number preparing">{{ stats.preparing }}</h3>
     </div>
-    <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 1.25rem; text-align: center; border-left: 4px solid #4682B4;">
-        <h6 style="color: var(--dark-text); font-size: 0.875rem; margin-bottom: 0.5rem; font-weight: 400;">En livraison</h6>
-        <h3 style="font-family: var(--font-heading); font-size: 1.8rem; margin: 0; color: #4682B4;">{{ stats.delivering }}</h3>
+    <div class="orders-stat-card delivering">
+        <h6 class="stat-card-title">En livraison</h6>
+        <h3 class="orders-stat-number delivering">{{ stats.delivering }}</h3>
     </div>
-    <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 1.25rem; text-align: center; border-left: 4px solid #FFA500;">
-        <h6 style="color: var(--dark-text); font-size: 0.875rem; margin-bottom: 0.5rem; font-weight: 400;">Attente matériel</h6>
-        <h3 style="font-family: var(--font-heading); font-size: 1.8rem; margin: 0; color: #FFA500;">{{ stats.waitingMaterial }}</h3>
+    <div class="orders-stat-card waiting-material">
+        <h6 class="stat-card-title">Attente matériel</h6>
+        <h3 class="orders-stat-number waiting-material">{{ stats.waitingMaterial }}</h3>
     </div>
 </div>
 
 <!-- Filtres -->
-<div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 1rem; margin-bottom: 1.5rem;">
-    <form method="get" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+<div class="orders-filter-card">
+    <form method="get" class="orders-filter-form">
         <div>
-            <label for="status" style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: var(--dark-text); font-weight: 600;">Statut</label>
-            <select name="status" id="status" style="width: 100%; padding: 0.5rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-sm); font-family: var(--font-body);">
+            <label for="status" class="orders-filter-label">Statut</label>
+            <select name="status" id="status" class="orders-filter-select">
                 <option value="all" {% if currentStatus == 'all' or not currentStatus %}selected{% endif %}>Tous les statuts</option>
                 <option value="pending" {% if currentStatus == 'pending' %}selected{% endif %}>En attente</option>
                 <option value="validated" {% if currentStatus == 'validated' %}selected{% endif %}>Validée</option>
@@ -67,8 +72,8 @@
             </select>
         </div>
         <div>
-            <label for="date" style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: var(--dark-text); font-weight: 600;">Période</label>
-            <select name="date" id="date" style="width: 100%; padding: 0.5rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-sm); font-family: var(--font-body);">
+            <label for="date" class="orders-filter-label">Période</label>
+            <select name="date" id="date" class="orders-filter-select">
                 <option value="" {% if not currentDate %}selected{% endif %}>Toutes les dates</option>
                 <option value="today" {% if currentDate == 'today' %}selected{% endif %}>Aujourd'hui</option>
                 <option value="week" {% if currentDate == 'week' %}selected{% endif %}>7 derniers jours</option>
@@ -76,15 +81,15 @@
             </select>
         </div>
         <div>
-            <label for="search" style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem; color: var(--dark-text); font-weight: 600;">Recherche</label>
-            <input type="text" name="search" id="search" placeholder="N° commande, nom, email..." value="{{ currentSearch }}" style="width: 100%; padding: 0.5rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-sm); font-family: var(--font-body);">
+            <label for="search" class="orders-filter-label">Recherche</label>
+            <input type="text" name="search" id="search" placeholder="N° commande, nom, email..." value="{{ currentSearch }}" class="orders-search-input">
         </div>
-        <div style="display: flex; align-items: flex-end; gap: 0.75rem;">
-            <button type="submit" style="padding: 0.5rem 1rem; background: var(--bordeaux); color: white; border: none; border-radius: var(--radius-sm); cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: background var(--transition-base);" onmouseover="this.style.backgroundColor='#8B0000'" onmouseout="this.style.backgroundColor='var(--bordeaux)'">
+        <div class="orders-filter-align-end">
+            <button type="submit" class="orders-filter-submit-button">
                 <span data-icon="filter" data-icon-width="16" data-icon-height="16"></span>
                 Filtrer
             </button>
-            <a href="{{ path('app_admin_orders') }}" style="padding: 0.5rem 1rem; border: 2px solid var(--bordeaux); color: var(--bordeaux); border-radius: var(--radius-sm); text-decoration: none; display: flex; align-items: center; justify-content: center;">
+            <a href="{{ path('app_admin_orders') }}" class="orders-filter-reset">
                 <span data-icon="x" data-icon-width="16" data-icon-height="16"></span>
             </a>
         </div>
@@ -92,89 +97,89 @@
 </div>
 
 <!-- Liste des commandes -->
-<div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); overflow: hidden;">
-    <div style="padding: 1rem 1.5rem; border-bottom: 1px solid var(--beige);">
-        <div style="position: relative;">
-            <span data-icon="search" data-icon-width="20" data-icon-height="20" style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--dark-text);"></span>
-            <input type="text" placeholder="Rechercher une commande..." style="width: 100%; padding: 0.5rem 1rem 0.5rem 2.5rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-lg); font-family: var(--font-body);">
+<div class="orders-list-card">
+    <div class="orders-search-header">
+        <div class="orders-search-wrapper">
+            <span data-icon="search" data-icon-width="20" data-icon-height="20" class="orders-search-icon"></span>
+            <input type="text" placeholder="Rechercher une commande..." class="orders-search-field">
         </div>
     </div>
 
     {% if orders is empty %}
-        <div style="text-align: center; padding: 3rem 1.25rem;">
-            <span data-icon="inbox" data-icon-width="48" data-icon-height="48" style="color: var(--dark-text); opacity: 0.3; margin-bottom: 1rem; display: inline-block;"></span>
-            <p style="color: var(--dark-text); opacity: 0.6; margin: 0;">Aucune commande trouvée avec ces filtres.</p>
+        <div class="orders-empty-state">
+            <span data-icon="inbox" data-icon-width="48" data-icon-height="48" class="orders-empty-icon"></span>
+            <p class="orders-empty-text">Aucune commande trouvée avec ces filtres.</p>
         </div>
     {% else %}
-        <div style="overflow-x: auto;">
-            <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+        <div class="orders-table-wrapper">
+            <table class="orders-table">
                 <colgroup>
-                    <col style="width: 10%;">
-                    <col style="width: 18%;">
-                    <col style="width: 15%;">
-                    <col style="width: 12%;">
-                    <col style="width: 12%;">
-                    <col style="width: 13%;">
-                    <col style="width: 8%;">
-                    <col style="width: 12%;">
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                    <col>
                 </colgroup>
-                <thead style="background: var(--beige);">
+                <thead>
                     <tr>
-                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">N° Commande</th>
-                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">Client</th>
-                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">Menu</th>
-                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">Livraison</th>
-                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">Montant</th>
-                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">Statut</th>
-                        <th style="padding: 1rem 1.5rem; text-align: center; color: var(--dark-text); font-weight: 600;">Mat.</th>
-                        <th style="padding: 1rem 1.5rem; text-align: left; color: var(--dark-text); font-weight: 600;">Actions</th>
+                        <th>N° Commande</th>
+                        <th>Client</th>
+                        <th>Menu</th>
+                        <th>Livraison</th>
+                        <th>Montant</th>
+                        <th>Statut</th>
+                        <th class="text-center">Mat.</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for order in orders %}
-                    <tr style="border-bottom: 1px solid var(--beige);" onmouseover="this.style.backgroundColor='#f8f9fa'" onmouseout="this.style.backgroundColor=''">
-                        <td style="padding: 1rem 1.5rem; color: var(--dark-text);">
-                            <strong>{{ order.orderNumber }}</strong><br>
-                            <small style="color: #95a5a6;">{{ order.createdAt|date('d/m/Y') }}</small>
+                    <tr>
+                        <td>
+                            <strong class="orders-table-order-number">{{ order.orderNumber }}</strong><br>
+                            <small class="orders-table-order-date">{{ order.createdAt|date('d/m/Y') }}</small>
                         </td>
-                        <td style="padding: 1rem 1.5rem; color: var(--dark-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="{{ order.customerFirstname }} {{ order.customerLastname }} - {{ order.customerEmail }}">
+                        <td class="orders-table-customer" title="{{ order.customerFirstname }} {{ order.customerLastname }} - {{ order.customerEmail }}">
                             {{ order.customerFirstname }} {{ order.customerLastname }}<br>
-                            <small style="color: #95a5a6; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;">{{ order.customerEmail }}</small>
+                            <small class="orders-table-customer-email">{{ order.customerEmail }}</small>
                         </td>
-                        <td style="padding: 1rem 1.5rem; color: var(--dark-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="{{ order.menuName }}">
+                        <td class="orders-table-menu" title="{{ order.menuName }}">
                             {{ order.menuName }}<br>
-                            <small style="color: #95a5a6;">{{ order.numberOfPersons }} pers.</small>
+                            <small class="orders-table-menu-persons">{{ order.numberOfPersons }} pers.</small>
                         </td>
-                        <td style="padding: 1rem 1.5rem; color: var(--dark-text);">
+                        <td>
                             {{ order.deliveryDateTime|date('d/m/Y') }}<br>
-                            <small style="color: #95a5a6;">{{ order.deliveryDateTime|date('H:i') }}</small>
+                            <small class="orders-table-order-date">{{ order.deliveryDateTime|date('H:i') }}</small>
                         </td>
-                        <td style="padding: 1rem 1.5rem;">
-                            <strong style="color: var(--bordeaux);">{{ (order.totalPrice / 100)|number_format(2, ',', ' ') }} €</strong>
+                        <td>
+                            <strong class="orders-table-price">{{ (order.totalPrice / 100)|number_format(2, ',', ' ') }} €</strong>
                         </td>
-                        <td style="padding: 1rem 1.5rem;">
+                        <td>
                             {% include 'admin/orders/_status_badge.html.twig' with {'status': order.status} %}
                         </td>
-                        <td style="padding: 1rem 1.5rem; text-align: center;">
+                        <td class="text-center">
                             {% if order.hasMaterialLoan %}
                                 {% if order.materialReturned %}
-                                    <span style="color: var(--green);" title="Matériel retourné">
+                                    <span class="orders-table-material-icon" title="Matériel retourné">
                                         <span data-icon="check-circle" data-icon-width="20" data-icon-height="20"></span>
                                     </span>
                                 {% elseif order.status.value == 'waiting_material_return' %}
-                                    <span style="color: #FFA500;" title="En attente de retour">
+                                    <span class="orders-table-material-waiting" title="En attente de retour">
                                         <span data-icon="alert-circle" data-icon-width="20" data-icon-height="20"></span>
                                     </span>
                                 {% else %}
-                                    <span style="color: #4682B4;" title="Avec matériel">
+                                    <span class="orders-table-material-with" title="Avec matériel">
                                         <span data-icon="package" data-icon-width="20" data-icon-height="20"></span>
                                     </span>
                                 {% endif %}
                             {% else %}
-                                <span style="color: #95a5a6;">-</span>
+                                <span class="orders-table-material-none">-</span>
                             {% endif %}
                         </td>
-                        <td style="padding: 1rem 1.5rem;">
+                        <td>
                             <a href="{{ path('app_admin_orders_show', {id: order.id}) }}" class="btn-crud btn-crud-view">
                                 <span data-icon="eye" data-icon-width="16" data-icon-height="16"></span>
                                 <span class="btn-crud-text">Voir</span>

@@ -51,7 +51,7 @@
 
 <!-- Filtres -->
 <div class="list-filters">
-    <div class="filters-grid" style="grid-template-columns: 1fr 1fr;">
+    <div class="filters-grid filters-grid-2col">
         <div class="filter-group">
             <label for="searchInput">Recherche</label>
             <input type="text" id="searchInput" placeholder="Rechercher par nom ou commentaire...">
@@ -106,9 +106,9 @@
                             <div class="rating-stars">
                                 {% for i in 1..5 %}
                                     {% if i <= review.rating %}
-                                        <span data-icon="star" data-icon-width="16" data-icon-height="16" style="color: #ffc107; fill: #ffc107;"></span>
+                                        <span data-icon="star" data-icon-width="16" data-icon-height="16" class="icon-star-filled"></span>
                                     {% else %}
-                                        <span data-icon="star" data-icon-width="16" data-icon-height="16" style="color: #e5e7eb;"></span>
+                                        <span data-icon="star" data-icon-width="16" data-icon-height="16" class="icon-star-empty"></span>
                                     {% endif %}
                                 {% endfor %}
                             </div>

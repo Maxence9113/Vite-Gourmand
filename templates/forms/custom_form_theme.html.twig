@@ -58,7 +58,6 @@
 {% block checkbox_row -%}
     <div class="form-check">
         {{- form_widget(form) -}}
-        <span class="form-check-input"></span>
         {{- form_label(form, null, {label_attr: {class: 'form-check-label'}}) -}}
         {{- form_help(form) -}}
         {{- form_errors(form) -}}
@@ -69,7 +68,6 @@
 {% block radio_row -%}
     <div class="form-check">
         {{- form_widget(form) -}}
-        <span class="form-check-input"></span>
         {{- form_label(form, null, {label_attr: {class: 'form-check-label'}}) -}}
         {{- form_help(form) -}}
         {{- form_errors(form) -}}
@@ -82,7 +80,6 @@
         {%- for child in form %}
             <div class="form-check">
                 {{- form_widget(child) -}}
-                <span class="form-check-input"></span>
                 {{- form_label(child, null, {
                     translation_domain: choice_translation_domain,
                     label_attr: {class: 'form-check-label'}

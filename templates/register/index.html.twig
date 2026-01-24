@@ -6,39 +6,37 @@
 {# ========================================
    REGISTER SECTION - Figma Design
    ======================================== #}
-<section style="background-color: var(--beige); padding: 3rem 0; min-height: calc(100vh - 73px - 200px);">
-    <div style="max-width: 650px; margin: 0 auto; padding: 0 1rem;">
+<section class="auth-section">
+    <div class="auth-container-wide">
 
         {# Card d'inscription #}
-        <div style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 2.5rem;">
+        <div class="auth-card">
 
             {# En-tête avec logo #}
-            <div style="text-align: center; margin-bottom: 2rem;">
-                <div style="width: 4rem; height: 4rem; margin: 0 auto 1rem; border-radius: 50%; background: var(--bordeaux); display: flex; align-items: center; justify-content: center;">
-                    <span data-icon="user-plus" data-icon-width="28" data-icon-height="28" style="color: white;"></span>
+            <div class="auth-header">
+                <div class="auth-icon-circle">
+                    <span data-icon="user-plus" data-icon-width="28" data-icon-height="28" class="text-white"></span>
                 </div>
-                <h1 style="font-family: var(--font-heading); color: var(--bordeaux); font-size: 1.75rem; font-weight: 400; margin-bottom: 0.5rem;">Créer un compte</h1>
-                <p style="color: var(--dark-text); opacity: 0.8; margin: 0;">Rejoignez-nous</p>
+                <h1 class="auth-title">Créer un compte</h1>
+                <p class="auth-header-subtitle">Rejoignez-nous</p>
             </div>
 
             {# Formulaire d'inscription #}
             {{ form_start(registerForm) }}
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                <div class="auth-form-grid-2col">
                     {# Prénom #}
                     <div>
                         {{ form_label(registerForm.firstname, 'Prénom', {
                             'label_attr': {
-                                'style': 'display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark-text); font-size: 0.875rem;'
+                                'class': 'contact-form-label'
                             }
                         }) }}
                         {{ form_widget(registerForm.firstname, {
                             'attr': {
-                                'style': 'width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 1rem;',
+                                'class': 'contact-form-input',
                                 'placeholder': 'Prénom',
-                                'onfocus': "this.style.borderColor='var(--gold)'; this.style.boxShadow='0 0 0 3px rgba(212, 175, 55, 0.1)'",
-                                'onblur': "this.style.borderColor='var(--bordeaux)'; this.style.boxShadow='none'"
-                            }
+                                }
                         }) }}
                         {{ form_errors(registerForm.firstname) }}
                     </div>
@@ -47,58 +45,50 @@
                     <div>
                         {{ form_label(registerForm.lastname, 'Nom', {
                             'label_attr': {
-                                'style': 'display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark-text); font-size: 0.875rem;'
+                                'class': 'contact-form-label'
                             }
                         }) }}
                         {{ form_widget(registerForm.lastname, {
                             'attr': {
-                                'style': 'width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 1rem;',
+                                'class': 'contact-form-input',
                                 'placeholder': 'Nom',
-                                'onfocus': "this.style.borderColor='var(--gold)'; this.style.boxShadow='0 0 0 3px rgba(212, 175, 55, 0.1)'",
-                                'onblur': "this.style.borderColor='var(--bordeaux)'; this.style.boxShadow='none'"
-                            }
+                                }
                         }) }}
                         {{ form_errors(registerForm.lastname) }}
                     </div>
                 </div>
 
                 {# Email #}
-                <div style="margin-bottom: 1.5rem;">
+                <div class="form-field">
                     {{ form_label(registerForm.email, 'Adresse email', {
                         'label_attr': {
-                            'style': 'display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark-text); font-size: 0.875rem;'
+                            'class': 'contact-form-label'
                         }
                     }) }}
                     {{ form_widget(registerForm.email, {
                         'attr': {
-                            'style': 'width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 1rem;',
-                            'placeholder': 'nom@exemple.com',
-                            'onfocus': "this.style.borderColor='var(--gold)'; this.style.boxShadow='0 0 0 3px rgba(212, 175, 55, 0.1)'",
-                            'onblur': "this.style.borderColor='var(--bordeaux)'; this.style.boxShadow='none'"
-                        }
+                            'class': 'contact-form-input',
+                                'placeholder': 'nom@exemple.com',
+                            }
                     }) }}
                     {{ form_errors(registerForm.email) }}
                 </div>
 
                 {# Mot de passe #}
-                <div style="margin-bottom: 1.5rem; position: relative;">
+                <div class="form-field-with-button">
                     {{ form_label(registerForm.plainPassword.first, 'Mot de passe', {
                         'label_attr': {
-                            'style': 'display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark-text); font-size: 0.875rem;'
+                            'class': 'contact-form-label'
                         }
                     }) }}
                     {{ form_widget(registerForm.plainPassword.first, {
                         'attr': {
-                            'style': 'width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 1rem;',
-                            'placeholder': 'Mot de passe',
-                            'onfocus': "this.style.borderColor='var(--gold)'; this.style.boxShadow='0 0 0 3px rgba(212, 175, 55, 0.1)'",
-                            'onblur': "this.style.borderColor='var(--bordeaux)'; this.style.boxShadow='none'"
-                        }
+                            'class': 'contact-form-input',
+                                'placeholder': 'Mot de passe',
+                            }
                     }) }}
                     <button type="button"
-                            style="border: none; background: none; z-index: 10; position: absolute; right: 0; top: 2.2rem; margin-right: 0.5rem; cursor: pointer; color: var(--dark-text); opacity: 0.5; padding: 0.5rem;"
-                            onmouseover="this.style.opacity='0.8'"
-                            onmouseout="this.style.opacity='0.5'"
+                            class="toggle-visibility-btn"
                             onclick="togglePasswordVisibility('{{ registerForm.plainPassword.first.vars.id }}', this)">
                         <span data-icon="eye" data-icon-width="20" data-icon-height="20"></span>
                     </button>
@@ -106,24 +96,20 @@
                 </div>
 
                 {# Confirmation mot de passe #}
-                <div style="margin-bottom: 1.5rem; position: relative;">
+                <div class="form-field-with-button">
                     {{ form_label(registerForm.plainPassword.second, 'Confirmer le mot de passe', {
                         'label_attr': {
-                            'style': 'display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark-text); font-size: 0.875rem;'
+                            'class': 'contact-form-label'
                         }
                     }) }}
                     {{ form_widget(registerForm.plainPassword.second, {
                         'attr': {
-                            'style': 'width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--bordeaux); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 1rem;',
-                            'placeholder': 'Confirmer le mot de passe',
-                            'onfocus': "this.style.borderColor='var(--gold)'; this.style.boxShadow='0 0 0 3px rgba(212, 175, 55, 0.1)'",
-                            'onblur': "this.style.borderColor='var(--bordeaux)'; this.style.boxShadow='none'"
-                        }
+                            'class': 'contact-form-input',
+                                'placeholder': 'Confirmer le mot de passe',
+                            }
                     }) }}
                     <button type="button"
-                            style="border: none; background: none; z-index: 10; position: absolute; right: 0; top: 2.2rem; margin-right: 0.5rem; cursor: pointer; color: var(--dark-text); opacity: 0.5; padding: 0.5rem;"
-                            onmouseover="this.style.opacity='0.8'"
-                            onmouseout="this.style.opacity='0.5'"
+                            class="toggle-visibility-btn"
                             onclick="togglePasswordVisibility('{{ registerForm.plainPassword.second.vars.id }}', this)">
                         <span data-icon="eye" data-icon-width="20" data-icon-height="20"></span>
                     </button>
@@ -131,20 +117,18 @@
                 </div>
 
                 {# Exigences mot de passe #}
-                <div style="background: #e7f1ff; border-left: 4px solid #004085; padding: 1rem 1.5rem; border-radius: var(--radius-sm); margin-bottom: 1.5rem; display: flex; align-items: flex-start; gap: 0.75rem;">
-                    <span data-icon="info" data-icon-width="20" data-icon-height="20" style="color: #004085; flex-shrink: 0; margin-top: 2px;"></span>
-                    <div style="color: #004085;">
-                        <p style="font-weight: 600; margin: 0 0 0.25rem; font-size: 0.875rem;">Exigences du mot de passe</p>
-                        <p style="font-size: 0.875rem; margin: 0;">
+                <div class="password-requirements">
+                    <span data-icon="info" data-icon-width="20" data-icon-height="20"></span>
+                    <div class="password-requirements-content">
+                        <p class="password-requirements-title">Exigences du mot de passe</p>
+                        <p class="password-requirements-text">
                             Minimum 10 caractères avec au moins 1 majuscule, 1 minuscule, 1 chiffre et 1 caractère spécial.
                         </p>
                     </div>
                 </div>
 
                 {# Bouton de soumission #}
-                <button type="submit" style="width: 100%; padding: 0.875rem 1rem; background: var(--bordeaux); color: white; border: none; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; transition: background-color var(--transition-base); display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: var(--shadow-md); margin-bottom: 1rem;"
-                        onmouseover="this.style.backgroundColor='#8B0000'"
-                        onmouseout="this.style.backgroundColor='var(--bordeaux)'">
+                <button type="submit" class="submit-btn">
                     <span data-icon="user-plus" data-icon-width="18" data-icon-height="18"></span>
                     Créer mon compte
                 </button>
@@ -152,18 +136,16 @@
             {{ form_end(registerForm, {'render_rest': false}) }}
 
             {# Divider #}
-            <div style="margin: 1.5rem 0; text-align: center; position: relative;">
-                <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--beige);"></div>
-                <span style="position: relative; background: white; padding: 0 1rem; color: var(--dark-text); opacity: 0.6; font-size: 0.875rem;">ou</span>
+            <div class="divider-with-text">
+                <div class="divider-line"></div>
+                <span class="divider-text">ou</span>
             </div>
 
             {# Lien connexion #}
-            <div style="text-align: center;">
-                <p style="margin-bottom: 0; color: var(--dark-text); opacity: 0.8;">
+            <div class="text-center">
+                <p class="auth-footer-text">
                     Vous avez déjà un compte ?
-                    <a href="{{ path('app_login') }}" style="color: var(--gold); text-decoration: none; font-weight: 600; margin-left: 0.25rem; transition: opacity var(--transition-base);"
-                       onmouseover="this.style.opacity='0.8'"
-                       onmouseout="this.style.opacity='1'">
+                    <a href="{{ path('app_login') }}" class="auth-footer-link">
                         Se connecter
                     </a>
                 </p>

@@ -5,176 +5,14 @@
 {% block stylesheets %}
     {{ parent() }}
     {{ encore_entry_link_tags('admin-lists') }}
+    <link rel="stylesheet" href="{{ asset('styles/admin/opening-schedule.css') }}">
 {% endblock %}
 
 {% block content %}
-<style>
-    /* Styles spécifiques pour les jours */
-    .days-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1rem;
-        margin-bottom: 1.5rem;
-    }
-
-    .day-checkbox {
-        padding: 1rem 1.25rem;
-        background: white;
-        border: 2px solid #e5e7eb;
-        border-radius: var(--radius-lg);
-        cursor: pointer;
-        transition: all 0.2s ease;
-        display: flex;
-        align-items: center;
-        gap: 0.875rem;
-    }
-
-    .day-checkbox:hover {
-        background: #fff8f0;
-        border-color: var(--gold);
-        transform: translateY(-1px);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    }
-
-    .day-checkbox.checked {
-        background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-        border-color: var(--green);
-        box-shadow: 0 2px 12px rgba(39, 174, 96, 0.15);
-    }
-
-    .day-checkbox input[type="checkbox"] {
-        appearance: none;
-        width: 1.375rem;
-        height: 1.375rem;
-        min-width: 1.375rem;
-        border: 2.5px solid #d1d5db;
-        border-radius: var(--radius-sm);
-        cursor: pointer;
-        position: relative;
-        transition: all 0.2s ease;
-        flex-shrink: 0;
-        background: white;
-        margin: 0;
-    }
-
-    .day-checkbox input[type="checkbox"]:hover {
-        border-color: var(--green);
-    }
-
-    .day-checkbox input[type="checkbox"]:checked {
-        background: var(--green);
-        border-color: var(--green);
-    }
-
-    .day-checkbox input[type="checkbox"]:checked::after {
-        content: '';
-        position: absolute;
-        left: 4px;
-        top: 0px;
-        width: 5px;
-        height: 10px;
-        border: solid white;
-        border-width: 0 2.5px 2.5px 0;
-        transform: rotate(45deg);
-    }
-
-    .day-checkbox label {
-        cursor: pointer;
-        font-weight: 500;
-        color: var(--dark-text);
-        flex: 1;
-        margin: 0;
-        font-size: 0.9375rem;
-    }
-
-    .day-checkbox.checked label {
-        color: var(--green);
-        font-weight: 600;
-    }
-
-    .time-inputs {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1.5rem;
-    }
-
-    .section-description {
-        font-size: 0.875rem;
-        color: #95a5a6;
-        margin-bottom: 1rem;
-        line-height: 1.5;
-    }
-
-    .btn-save {
-        width: 100%;
-        padding: 0.75rem 1.5rem;
-        border-radius: var(--radius-lg);
-        border: none;
-        background: var(--bordeaux);
-        color: white;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all var(--transition-base);
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-    }
-
-    .btn-save:hover {
-        opacity: 0.9;
-        box-shadow: var(--shadow-md);
-    }
-
-    .schedule-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1rem 1.5rem;
-        border-bottom: 1px solid var(--beige);
-        transition: background var(--transition-base);
-    }
-
-    .schedule-item:last-child {
-        border-bottom: none;
-    }
-
-    .schedule-item:hover {
-        background: #f8f9fa;
-    }
-
-    .schedule-day {
-        font-weight: 600;
-        color: var(--dark-text);
-        font-size: 0.95rem;
-    }
-
-    .schedule-time {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-    }
-
-    .badge-open {
-        background: var(--green);
-        color: white;
-    }
-
-    .badge-closed {
-        background: #95a5a6;
-        color: white;
-    }
-
-    .time-range {
-        color: var(--dark-text);
-        font-size: 0.9rem;
-        font-weight: 500;
-    }
-</style>
 
 <div class="list-header">
     <h1>
-        <span data-icon="clock" data-icon-width="32" data-icon-height="32" style="display: inline-block; vertical-align: middle;"></span>
+        <span data-icon="clock" data-icon-width="32" data-icon-height="32" class="icon-inline"></span>
         Horaires d'ouverture
     </h1>
 </div>
@@ -182,15 +20,15 @@
 <div class="list-container">
     {% for message in app.flashes('success') %}
         <div class="flash-success-list">
-            <span data-icon="check-circle" data-icon-width="20" data-icon-height="20" style="display: inline-block; vertical-align: middle; margin-right: 0.5rem;"></span>
+            <span data-icon="check-circle" data-icon-width="20" data-icon-height="20" class="icon-inline-mr"></span>
             {{ message }}
         </div>
     {% endfor %}
 
     {% if schedules|length == 0 %}
-        <div style="padding: 1.5rem;">
+        <div class="section-with-padding">
             <div class="alert-info-custom">
-                <span data-icon="info" data-icon-width="20" data-icon-height="20" style="flex-shrink: 0;"></span>
+                <span data-icon="info" data-icon-width="20" data-icon-height="20" class="alert-info-icon"></span>
                 <div>Aucun horaire configuré. Utilisez le formulaire ci-dessous pour définir vos horaires.</div>
             </div>
         </div>
@@ -205,8 +43,10 @@
             <div class="section-body">
                 <div class="days-grid" id="days-container">
                     {% for day in form.days %}
-                        {{ form_widget(day) }}
-                        {{ form_label(day) }}
+                        <div class="day-checkbox">
+                            {{ form_widget(day) }}
+                            {{ form_label(day) }}
+                        </div>
                     {% endfor %}
                 </div>
                 {{ form_errors(form.days) }}
@@ -215,7 +55,7 @@
 
         <div class="form-section">
             <div class="section-header">
-                <span data-icon="clock" data-icon-width="20" data-icon-height="20" style="color: var(--gold);"></span>
+                <span data-icon="clock" data-icon-width="20" data-icon-height="20" class="icon-gold"></span>
                 <h3 class="section-title">Définissez les horaires</h3>
             </div>
             <div class="section-body">
@@ -237,13 +77,13 @@
                     </div>
                 </div>
 
-                <div style="display: none;">
+                <div class="hidden-field">
                     {{ form_widget(form.isOpen) }}
                 </div>
             </div>
         </div>
 
-        <div style="padding: 1.5rem; background: var(--beige);">
+        <div class="section-with-padding-beige">
             <button type="submit" class="btn-save">
                 <span data-icon="save" data-icon-width="16" data-icon-height="16"></span>
                 Enregistrer les horaires
@@ -253,7 +93,7 @@
 </div>
 
 {% if schedules|length > 0 %}
-    <div class="list-container" style="margin-top: 2rem;">
+    <div class="list-container list-container-mt">
         <div class="section-header">
             <span data-icon="list" data-icon-width="20" data-icon-height="20" class="section-header-icon"></span>
             <h3 class="section-title">Horaires actuels</h3>
@@ -261,7 +101,7 @@
         <div>
             {% for schedule in schedules %}
                 <div class="schedule-item">
-                    <span class="schedule-day">{{ schedule.dayOfWeek.label }}</span>
+                    <span class="schedule-day">{{ schedule.label }}</span>
                     <div class="schedule-time">
                         {% if schedule.isOpen %}
                             <span class="badge badge-open">
@@ -269,7 +109,7 @@
                                 Ouvert
                             </span>
                             {% if schedule.openingTime and schedule.closingTime %}
-                                <span class="time-range">{{ schedule.openingTime|date('H:i') }} - {{ schedule.closingTime|date('H:i') }}</span>
+                                <span class="time-range">{{ schedule.openingTime }} - {{ schedule.closingTime }}</span>
                             {% endif %}
                         {% else %}
                             <span class="badge badge-closed">

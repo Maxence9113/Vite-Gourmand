@@ -85,7 +85,7 @@
                     </h2>
 
                     {# Menu ID (caché) #}
-                    <div style="display: none;">
+                    <div class="d-none">
                         {{ form_row(form.menu, {
                             'value': menu.id,
                             'attr': {'data-menu-id': menu.id, 'data-menu-price': menu.pricePerPerson, 'data-menu-min': menu.nbPersonMin}
@@ -145,7 +145,7 @@
                     </div>
 
                     {# Prêt de matériel #}
-                    <div style="margin-bottom: 0;">
+                    <div class="mb-0">
                         <div class="order-form-material-box">
                             <div class="order-form-material-checkbox">
                                 {{ form_widget(form.hasMaterialLoan) }}
@@ -330,7 +330,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 discountMessage.style.backgroundColor = 'rgba(34, 139, 34, 0.1)';
                 discountMessage.style.borderLeft = '3px solid var(--green)';
                 discountMessage.style.color = 'var(--dark-text)';
-                discountMessage.innerHTML = '<strong style="color: var(--green);">✓ Réduction de 10% appliquée !</strong>';
+                discountMessage.innerHTML = '<strong class="text-success">✓ Réduction de 10% appliquée !</strong>';
             } else {
                 const remaining = 5 - extraPersons;
                 if (remaining > 0 && persons >= menuMin) {

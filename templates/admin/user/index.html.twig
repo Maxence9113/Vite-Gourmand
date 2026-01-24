@@ -108,7 +108,7 @@
                     {% for user in users %}
                     <tr class="user-row">
                         <td><strong>{{ user.id }}</strong></td>
-                        <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="{{ user.email }}">{{ user.email }}</td>
+                        <td class="text-ellipsis" title="{{ user.email }}">{{ user.email }}</td>
                         <td>{{ user.lastname }}</td>
                         <td>{{ user.firstname }}</td>
                         <td data-sort="{% if 'ROLE_ADMIN' in user.roles %}Administrateur{% elseif 'ROLE_EMPLOYEE' in user.roles %}Employé{% else %}Utilisateur{% endif %}">
