@@ -37,33 +37,7 @@
     color: white;
 }
 
-/* Flash messages */
-.flash-message-success {
-    background: #d4edda;
-    color: #155724;
-    padding: 1rem;
-    border-radius: var(--radius-sm);
-    margin-bottom: 1.5rem;
-    border-left: 4px solid #28a745;
-}
-
-.flash-message-error {
-    background: #f8d7da;
-    color: #721c24;
-    padding: 1rem;
-    border-radius: var(--radius-sm);
-    margin-bottom: 1.5rem;
-    border-left: 4px solid #dc3545;
-}
-
-.flash-message-warning {
-    background: #fff3cd;
-    color: #856404;
-    padding: 1rem;
-    border-radius: var(--radius-sm);
-    margin-bottom: 1.5rem;
-    border-left: 4px solid #ffc107;
-}
+/* Les messages flash sont maintenant gérés par _flash-messages.css */
 
 /* Layout principal */
 .order-show-layout {
@@ -84,7 +58,7 @@
 .order-card-header {
     background: var(--beige);
     padding: 1rem 1.5rem;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid var(--gray-200);
 }
 
 .order-card-title {
@@ -106,7 +80,7 @@
     display: flex;
     justify-content: space-between;
     padding: 0.75rem 0;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid var(--gray-100);
 }
 
 .info-row:last-child {
@@ -115,7 +89,7 @@
 
 .info-label {
     font-weight: 500;
-    color: #666;
+    color: var(--gray-500);
 }
 
 .info-value {
@@ -132,7 +106,7 @@
 
 .order-item {
     padding: 1rem;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid var(--gray-100);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -148,7 +122,7 @@
 }
 
 .order-item-quantity {
-    color: #666;
+    color: var(--gray-500);
     font-size: 0.875rem;
 }
 
@@ -190,35 +164,7 @@
     gap: 0.5rem;
 }
 
-.btn-validate {
-    background: var(--gold);
-    color: var(--dark-text);
-}
-
-.btn-validate:hover {
-    opacity: 0.9;
-    box-shadow: var(--shadow-md);
-}
-
-.btn-cancel-order {
-    background: #dc3545;
-    color: white;
-}
-
-.btn-cancel-order:hover {
-    opacity: 0.9;
-    box-shadow: var(--shadow-md);
-}
-
-.btn-complete {
-    background: var(--green);
-    color: white;
-}
-
-.btn-complete:hover {
-    opacity: 0.9;
-    box-shadow: var(--shadow-md);
-}
+/* Les boutons sont maintenant gérés par _buttons.css */
 
 /* Statut visuel */
 .status-indicator {
@@ -230,11 +176,11 @@
 }
 
 .status-pending {
-    background: #FF8C00;
+    background: var(--status-pending);
 }
 
 .status-validated {
-    background: #FFD700;
+    background: var(--status-validated);
 }
 
 .status-completed {
@@ -242,17 +188,17 @@
 }
 
 .status-cancelled {
-    background: #dc3545;
+    background: var(--danger);
 }
 
 /* Notes et commentaires */
 .order-notes {
-    background: #fff8f0;
+    background: var(--warning-light);
     padding: 1rem;
     border-radius: var(--radius-sm);
     border-left: 4px solid var(--gold);
     font-style: italic;
-    color: #666;
+    color: var(--gray-500);
 }
 
 /* Responsive */
@@ -357,7 +303,7 @@
 }
 
 .border-left-orange {
-    border-left: 4px solid #FF8C00;
+    border-left: 4px solid var(--status-pending);
 }
 
 .border-left-gold {
@@ -369,7 +315,7 @@
 }
 
 .border-left-red {
-    border-left: 4px solid #dc3545;
+    border-left: 4px solid var(--danger);
 }
 
 /* Stats Cards at top of orders index */
@@ -389,23 +335,23 @@
 }
 
 .orders-stat-card.pending {
-    border-left: 4px solid #FF8C00;
+    border-left: 4px solid var(--status-pending);
 }
 
 .orders-stat-card.validated {
-    border-left: 4px solid #FFD700;
+    border-left: 4px solid var(--status-validated);
 }
 
 .orders-stat-card.preparing {
-    border-left: 4px solid #8B0000;
+    border-left: 4px solid var(--bordeaux);
 }
 
 .orders-stat-card.delivering {
-    border-left: 4px solid #4682B4;
+    border-left: 4px solid var(--status-delivering);
 }
 
 .orders-stat-card.waiting-material {
-    border-left: 4px solid #FFA500;
+    border-left: 4px solid var(--status-waiting);
 }
 
 .orders-stat-number {
@@ -415,23 +361,23 @@
 }
 
 .orders-stat-number.pending {
-    color: #FF8C00;
+    color: var(--status-pending);
 }
 
 .orders-stat-number.validated {
-    color: #FFD700;
+    color: var(--status-validated);
 }
 
 .orders-stat-number.preparing {
-    color: #8B0000;
+    color: var(--bordeaux);
 }
 
 .orders-stat-number.delivering {
-    color: #4682B4;
+    color: var(--status-delivering);
 }
 
 .orders-stat-number.waiting-material {
-    color: #FFA500;
+    color: var(--status-waiting);
 }
 
 /* Filter Section */
@@ -479,11 +425,11 @@
 
 /* Order Show Page - Additional Styles */
 .order-show-user-info-text {
-    color: #95a5a6;
+    color: var(--gray-400);
 }
 
 .order-show-user-info-empty {
-    color: #95a5a6;
+    color: var(--gray-400);
 }
 
 .order-delivery-datetime {
@@ -529,12 +475,12 @@
 }
 
 .order-discount-row {
-    background: #d4edda;
+    background: var(--success-light);
 }
 
 .order-discount-row td {
     padding: 0.5rem 0.5rem;
-    color: #155724;
+    color: var(--success-dark);
 }
 
 .order-total-row {
@@ -562,11 +508,11 @@
     box-shadow: var(--shadow-md);
     margin-bottom: 1.5rem;
     overflow: hidden;
-    border-left: 4px solid #3498db;
+    border-left: 4px solid var(--blue);
 }
 
 .material-loan-header {
-    background: #3498db;
+    background: var(--blue);
     padding: 1rem 1.5rem;
 }
 
@@ -584,7 +530,7 @@
 .material-loan-badge {
     padding: 0.25rem 0.75rem;
     border-radius: var(--radius-sm);
-    background: #3498db;
+    background: var(--blue);
     color: white;
     font-size: 0.875rem;
     display: inline-block;
@@ -592,13 +538,13 @@
 }
 
 .material-return-deadline-empty {
-    color: #95a5a6;
+    color: var(--gray-400);
 }
 
 .material-status-returned {
     padding: 0.25rem 0.75rem;
     border-radius: var(--radius-sm);
-    background: #27ae60;
+    background: var(--green);
     color: white;
     font-size: 0.875rem;
     display: inline-flex;
@@ -610,7 +556,7 @@
 .material-status-waiting {
     padding: 0.25rem 0.75rem;
     border-radius: var(--radius-sm);
-    background: #f39c12;
+    background: var(--status-waiting);
     color: white;
     font-size: 0.875rem;
     display: inline-flex;
@@ -623,7 +569,7 @@
     padding: 0.75rem 1.5rem;
     border-radius: var(--radius-lg);
     border: none;
-    background: #27ae60;
+    background: var(--green);
     color: white;
     cursor: pointer;
     display: inline-flex;
@@ -648,11 +594,11 @@
     box-shadow: var(--shadow-md);
     margin-bottom: 1.5rem;
     overflow: hidden;
-    border-left: 4px solid #e74c3c;
+    border-left: 4px solid var(--danger);
 }
 
 .cancellation-header {
-    background: #e74c3c;
+    background: var(--danger);
     padding: 1rem 1.5rem;
 }
 
@@ -726,9 +672,9 @@
     margin-top: 0.75rem;
     padding: 0.75rem 1rem;
     border-radius: var(--radius-lg);
-    border: 2px solid #e74c3c;
+    border: 2px solid var(--danger);
     background: transparent;
-    color: #e74c3c;
+    color: var(--danger);
     cursor: pointer;
     display: inline-flex;
     align-items: center;
@@ -738,7 +684,7 @@
 }
 
 .order-cancel-button:hover {
-    background: #e74c3c;
+    background: var(--danger);
     color: white;
 }
 
@@ -776,11 +722,11 @@
 }
 
 .status-history-date {
-    color: #95a5a6;
+    color: var(--gray-400);
 }
 
 .status-history-empty {
-    color: #95a5a6;
+    color: var(--gray-400);
     margin: 0;
     text-align: center;
 }
@@ -794,7 +740,7 @@
 }
 
 .dates-text-muted {
-    color: #95a5a6;
+    color: var(--gray-400);
 }
 
 /* Cancel Modal */
@@ -826,7 +772,7 @@
 }
 
 .cancel-modal-header {
-    background: #e74c3c;
+    background: var(--danger);
     padding: 1rem 1.5rem;
     display: flex;
     align-items: center;
@@ -858,8 +804,8 @@
 }
 
 .cancel-modal-warning {
-    background: #fff3cd;
-    border-left: 4px solid #ffc107;
+    background: var(--warning-light);
+    border-left: 4px solid var(--warning);
     padding: 1rem;
     margin-bottom: 1.5rem;
 }
@@ -868,7 +814,7 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    color: #856404;
+    color: var(--warning-dark);
 }
 
 .cancel-modal-field {
@@ -884,7 +830,7 @@
 }
 
 .cancel-modal-required {
-    color: #e74c3c;
+    color: var(--danger);
 }
 
 .cancel-modal-select,
@@ -901,13 +847,13 @@
 }
 
 .cancel-modal-help {
-    color: #95a5a6;
+    color: var(--gray-400);
     font-size: 0.75rem;
 }
 
 .cancel-modal-footer {
     padding: 1rem 1.5rem;
-    border-top: 1px solid #e0e0e0;
+    border-top: 1px solid var(--gray-200);
     display: flex;
     gap: 0.75rem;
     justify-content: flex-end;
@@ -916,15 +862,15 @@
 .cancel-modal-button-secondary {
     padding: 0.75rem 1.5rem;
     border-radius: var(--radius-lg);
-    border: 2px solid #95a5a6;
+    border: 2px solid var(--gray-400);
     background: transparent;
-    color: #95a5a6;
+    color: var(--gray-400);
     cursor: pointer;
     transition: all var(--transition-base);
 }
 
 .cancel-modal-button-secondary:hover {
-    background: #95a5a6;
+    background: var(--gray-400);
     color: white;
 }
 
@@ -932,7 +878,7 @@
     padding: 0.75rem 1.5rem;
     border-radius: var(--radius-lg);
     border: none;
-    background: #e74c3c;
+    background: var(--danger);
     color: white;
     cursor: pointer;
     transition: all var(--transition-base);
@@ -966,7 +912,7 @@
 }
 
 .orders-filter-submit-button:hover {
-    background: #8B0000;
+    background: var(--bordeaux);
 }
 
 .orders-filter-reset {
@@ -1050,24 +996,25 @@
     table-layout: fixed;
 }
 
-.orders-table colgroup col:nth-child(1) { width: 10%; }
-.orders-table colgroup col:nth-child(2) { width: 18%; }
-.orders-table colgroup col:nth-child(3) { width: 15%; }
-.orders-table colgroup col:nth-child(4) { width: 12%; }
-.orders-table colgroup col:nth-child(5) { width: 12%; }
-.orders-table colgroup col:nth-child(6) { width: 13%; }
-.orders-table colgroup col:nth-child(7) { width: 8%; }
-.orders-table colgroup col:nth-child(8) { width: 12%; }
+.orders-table colgroup col:nth-child(1) { width: 11%; }  /* N° Commande */
+.orders-table colgroup col:nth-child(2) { width: 15%; }  /* Client */
+.orders-table colgroup col:nth-child(3) { width: 12%; }  /* Menu */
+.orders-table colgroup col:nth-child(4) { width: 10%; }  /* Livraison */
+.orders-table colgroup col:nth-child(5) { width: 10%; }  /* Montant */
+.orders-table colgroup col:nth-child(6) { width: 16%; }  /* Statut */
+.orders-table colgroup col:nth-child(7) { width: 6%; }   /* Mat. */
+.orders-table colgroup col:nth-child(8) { width: 20%; }  /* Actions */
 
 .orders-table thead {
     background: var(--beige);
 }
 
 .orders-table th {
-    padding: 1rem 1.5rem;
+    padding: 1rem 0.75rem;
     text-align: left;
     color: var(--dark-text);
     font-weight: 600;
+    white-space: nowrap;
 }
 
 .orders-table th.text-center {
@@ -1079,34 +1026,38 @@
 }
 
 .orders-table tbody tr:hover {
-    background: #f8f9fa;
+    background: var(--gray-100);
 }
 
 .orders-table td {
-    padding: 1rem 1.5rem;
+    padding: 1rem 0.75rem;
     color: var(--dark-text);
 }
 
 .orders-table-order-number {
-    white-space: nowrap;
+    display: block;
+    font-weight: 600;
 }
 
 .orders-table-order-date {
-    color: #95a5a6;
+    color: var(--gray-400);
+    font-size: 0.8rem;
+    display: block;
+    margin-top: 0.25rem;
 }
 
 .orders-table-customer {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    max-width: 100%;
 }
 
 .orders-table-customer-email {
-    color: #95a5a6;
-    white-space: nowrap;
+    color: var(--gray-400);
+    font-size: 0.8rem;
+    display: block;
+    margin-top: 0.25rem;
+    max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
-    display: block;
 }
 
 .orders-table-menu {
@@ -1116,11 +1067,12 @@
 }
 
 .orders-table-menu-persons {
-    color: #95a5a6;
+    color: var(--gray-400);
 }
 
 .orders-table-price {
     color: var(--bordeaux);
+    white-space: nowrap;
 }
 
 .orders-table-material-icon {
@@ -1128,13 +1080,13 @@
 }
 
 .orders-table-material-waiting {
-    color: #FFA500;
+    color: var(--status-waiting);
 }
 
 .orders-table-material-with {
-    color: #4682B4;
+    color: var(--status-delivering);
 }
 
 .orders-table-material-none {
-    color: #95a5a6;
+    color: var(--gray-400);
 }

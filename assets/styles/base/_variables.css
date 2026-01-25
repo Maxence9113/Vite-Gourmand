@@ -21,11 +21,61 @@
     --white: #FFFFFF;
 
     /* ========================================
+       COULEURS GRISES
+       ======================================== */
+    --gray-50: #f9f9f9;
+    --gray-100: #f8f9fa;
+    --gray-200: #e9ecef;
+    --gray-300: #dee2e6;
+    --gray-400: #95a5a6;
+    --gray-500: #6c757d;
+    --gray-600: #495057;
+    --gray-700: #343a40;
+
+    /* ========================================
+       COULEURS SÉMANTIQUES
+       ======================================== */
+    --success: var(--green);
+    --success-light: #d4edda;
+    --success-dark: #155724;
+
+    --danger: #dc3545;
+    --danger-light: #f8d7da;
+    --danger-dark: #c82333;
+
+    --warning: #ffc107;
+    --warning-light: #fff3cd;
+    --warning-dark: #856404;
+
+    --info: #17a2b8;
+    --info-light: #d1ecf1;
+    --info-dark: #0c5460;
+
+    --blue: #3498db;
+    --blue-light: #cce5ff;
+    --blue-dark: #004085;
+
+    /* ========================================
+       COULEURS DE STATUTS (Commandes)
+       ======================================== */
+    --status-pending: #FF8C00;
+    --status-validated: #FFD700;
+    --status-preparing: var(--bordeaux);
+    --status-delivering: #4682B4;
+    --status-waiting: #FFA500;
+    --status-completed: #2E8B57;
+    --status-cancelled: #DC143C;
+    --status-ready: #32CD32;
+
+    /* ========================================
        VARIATIONS & OVERLAYS
        ======================================== */
     --bordeaux-light: rgba(139, 0, 0, 0.1);
     --bordeaux-overlay: rgba(139, 0, 0, 0.75);
+    --gold-dark: #C9A333;
+    --gold-light: #E8B563;
     --gold-overlay: rgba(212, 175, 55, 0.2);
+    --danger-muted: #D97076;
 
     /* ========================================
        TYPOGRAPHIE - POLICES
@@ -79,6 +129,7 @@
     --transition-fast: 0.2s ease;
     --transition-base: 0.3s ease;
     --transition-slow: 0.5s ease;
+    --transition-colors: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
 
     /* ========================================
        BREAKPOINTS (pour reference, pas utilisable en CSS)
@@ -91,8 +142,12 @@
     /* ========================================
        Z-INDEX
        ======================================== */
+    --z-dropdown: 1000;
     --z-header: 1000;
     --z-mobile-menu: 999;
+    --z-sticky: 1020;
+    --z-fixed: 1030;
+    --z-modal-backdrop: 1040;
     --z-modal-overlay: 9998;
     --z-modal: 9999;
 

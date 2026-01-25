@@ -140,7 +140,7 @@
 }
 
 .legal-table tbody tr:hover {
-    background-color: #f8f9fa;
+    background-color: var(--gray-100);
 }
 
 /* Footer de la page légale */

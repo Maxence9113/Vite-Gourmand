@@ -22,23 +22,7 @@
     font-weight: 400;
 }
 
-.btn-add {
-    padding: 0.75rem 1.5rem;
-    border-radius: var(--radius-lg);
-    border: none;
-    background: var(--gold);
-    color: var(--dark-text);
-    cursor: pointer;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: all var(--transition-base);
-}
-
-.btn-add:hover {
-    box-shadow: var(--shadow-md);
-}
+/* Les boutons sont maintenant gérés par _buttons.css */
 
 /* ========================================
    MESSAGES FLASH
@@ -141,7 +125,6 @@
 .list-table {
     width: 100%;
     border-collapse: collapse;
-    table-layout: fixed;
 }
 
 .list-table thead {
@@ -161,7 +144,7 @@
 }
 
 .list-table tbody tr:hover {
-    background-color: #f8f9fa;
+    background-color: var(--gray-100);
 }
 
 .list-table td {
@@ -197,12 +180,17 @@
 .list-table.small-list colgroup col:nth-child(2) { width: 70%; }
 .list-table.small-list colgroup col:nth-child(3) { width: 22%; }
 
-/* Liste moyenne (4-5 colonnes) */
-.list-table.medium-list colgroup col:nth-child(1) { width: 8%; }
-.list-table.medium-list colgroup col:nth-child(2) { width: 30%; }
-.list-table.medium-list colgroup col:nth-child(3) { width: 30%; }
-.list-table.medium-list colgroup col:nth-child(4) { width: 15%; }
-.list-table.medium-list colgroup col:nth-child(5) { width: 17%; }
+/* Liste moyenne (4 colonnes) */
+.list-table.medium-list colgroup col:nth-child(1) { width: 6%; }
+.list-table.medium-list colgroup col:nth-child(2) { width: 25%; }
+.list-table.medium-list colgroup col:nth-child(3) { width: 44%; }
+.list-table.medium-list colgroup col:nth-child(4) { width: 25%; }
+
+/* Cellules tronquées dans tableaux */
+.list-table td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
 /* ========================================
    FILTRES DE RECHERCHE
@@ -294,36 +282,21 @@
    BADGES DE STATUT
    ======================================== */
 
-.badge {
-    padding: 0.25rem 0.75rem;
-    border-radius: var(--radius-sm);
-    font-size: 0.875rem;
-    font-weight: 500;
-    display: inline-block;
-}
+/* Les badges sont maintenant gérés par _badges.css */
 
+/* Badges de rôles spécifiques */
 .badge-admin {
-    background: #d4183d;
+    background: var(--danger);
     color: white;
 }
 
 .badge-employee {
-    background: #f39c12;
+    background: var(--warning);
     color: white;
 }
 
 .badge-user {
-    background: #3498db;
-    color: white;
-}
-
-.badge-active {
-    background: #27ae60;
-    color: white;
-}
-
-.badge-inactive {
-    background: #95a5a6;
+    background: var(--blue);
     color: white;
 }
 
@@ -344,17 +317,17 @@
 }
 
 .btn-toggle-status.enable {
-    color: #27ae60;
-    border-color: #27ae60;
+    color: var(--green);
+    border-color: var(--green);
 }
 
 .btn-toggle-status.enable:hover {
-    background: #27ae60;
+    background: var(--green);
     color: white;
 }
 
 .text-protected {
-    color: #95a5a6;
+    color: var(--gray-400);
     font-size: 0.875rem;
 }
 
@@ -418,7 +391,7 @@
 }
 
 .stat-card.stat-success {
-    border-left: 4px solid #27ae60;
+    border-left: 4px solid var(--green);
 }
 
 .stat-card.stat-warning {
@@ -443,7 +416,7 @@
 }
 
 .stat-card.stat-success h3 {
-    color: #27ae60;
+    color: var(--green);
 }
 
 .stat-card.stat-warning h3 {
@@ -493,7 +466,7 @@
 }
 
 .btn-crud-validate {
-    color: #27ae60;
+    color: var(--green);
 }
 
 .btn-crud-reject {
@@ -519,7 +492,7 @@
    ======================================== */
 
 .text-muted {
-    color: #95a5a6;
+    color: var(--gray-400);
     font-style: italic;
 }
 
@@ -556,6 +529,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    max-width: 0;
 }
 
 .filters-grid-2col {

@@ -2,7 +2,7 @@
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     padding: 40px;
-    border-radius: 12px;
+    border-radius: var(--radius-md);
     margin-bottom: 30px;
     box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
 }
@@ -28,18 +28,18 @@
 .quick-stat {
     background: white;
     padding: 20px;
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
     box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-    border-left: 4px solid #3498db;
+    border-left: 4px solid var(--blue);
 }
 
 .quick-stat.warning {
-    border-left-color: #e74c3c;
+    border-left-color: var(--danger);
 }
 
 .quick-stat .label {
     font-size: 0.85rem;
-    color: #7f8c8d;
+    color: var(--gray-500);
     margin-bottom: 8px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -48,19 +48,19 @@
 .quick-stat .value {
     font-size: 2rem;
     font-weight: 700;
-    color: #2c3e50;
+    color: var(--dark-text);
 }
 
 .section-title {
     font-size: 1.3rem;
     margin-bottom: 20px;
-    color: #2c3e50;
+    color: var(--dark-text);
     font-weight: 600;
 }
 
 .table-container {
     background: white;
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
     padding: 20px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.08);
 }
@@ -73,8 +73,8 @@
 .table th {
     text-align: left;
     padding: 12px;
-    border-bottom: 2px solid #e9ecef;
-    color: #7f8c8d;
+    border-bottom: 2px solid var(--gray-200);
+    color: var(--gray-500);
     font-weight: 600;
     font-size: 0.85rem;
     text-transform: uppercase;
@@ -83,49 +83,49 @@
 
 .table td {
     padding: 12px;
-    border-bottom: 1px solid #e9ecef;
+    border-bottom: 1px solid var(--gray-200);
 }
 
 .table tbody tr:hover {
-    background: #f8f9fa;
+    background: var(--gray-100);
 }
 
 .btn {
     padding: 6px 12px;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     text-decoration: none;
     font-size: 0.85rem;
     display: inline-block;
     margin-right: 5px;
-    transition: all 0.2s;
+    transition: all var(--transition-fast);
 }
 
 .btn-info {
-    background: #3498db;
+    background: var(--blue);
     color: white;
 }
 
 .btn-info:hover {
-    background: #2980b9;
+    background: var(--blue-dark);
     color: white;
 }
 
 .btn-warning {
-    background: #f39c12;
+    background: var(--warning);
     color: white;
 }
 
 .btn-warning:hover {
-    background: #d68910;
+    background: var(--warning-dark);
     color: white;
 }
 
 .btn-danger {
-    background: #e74c3c;
+    background: var(--danger);
     color: white;
 }
 
 .btn-danger:hover {
-    background: #c0392b;
+    background: var(--danger-dark);
     color: white;
 }

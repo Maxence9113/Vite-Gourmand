@@ -18,7 +18,13 @@
 @import './base/_typography.css';
 
 /* ========================================
-   3. LAYOUT - Structure
+   3. UTILITIES - Classes utilitaires (chargé tôt pour override facile)
+   Marges, Padding, Display, Flexbox, etc.
+   ======================================== */
+@import './utilities/_utilities.css';
+
+/* ========================================
+   4. LAYOUT - Structure
    Container, Grid, Sections
    ======================================== */
 @import './layout/_container.css';
@@ -26,20 +32,21 @@
 @import './layout/_footer.css';
 
 /* ========================================
-   4. COMPONENTS - Composants réutilisables
+   5. COMPONENTS - Composants réutilisables
    Boutons, Cards, Forms, etc.
    ======================================== */
 @import './components/_navbar.css';
 @import './components/_buttons.css';
 @import './components/_badges.css';
 @import './components/_cards.css';
+@import './components/_modal.css';
 @import './components/_forms.css';
 @import './components/_breadcrumb.css';
 @import './components/_flash-messages.css';
 @import './components/_opening-hours.css';
 
 /* ========================================
-   5. PAGES - Styles spécifiques aux pages
+   6. PAGES - Styles spécifiques aux pages
    Account, Contact, Home, etc.
    ======================================== */
 @import './pages/account.css';
@@ -49,43 +56,10 @@
 @import './pages/contact.css';
 
 /* ========================================
-   6. UTILITIES - Classes utilitaires
-   Marges, Padding, Display, etc.
-   ======================================== */
-@import './utilities/_utilities.css';
-
-/* ========================================
-   6. LEGACY - Styles existants (temporaire)
-   À migrer progressivement vers les modules
+   7. STYLES ADDITIONNELS
    ======================================== */
 
-/* Alerts */
-.alert {
-    padding: var(--spacing-sm) var(--spacing-md);
-    border-radius: var(--radius-sm);
-    margin-bottom: var(--spacing-md);
-    font-family: var(--font-body);
-}
-
-.alert-success {
-    background-color: var(--green);
-    color: var(--white);
-}
-
-.alert-danger {
-    background-color: #D97076;
-    color: var(--white);
-}
-
-.alert-warning {
-    background-color: #E8B563;
-    color: var(--dark-text);
-}
-
-.alert-info {
-    background-color: #6BA5B8;
-    color: var(--white);
-}
+/* Alerts - Styles définis dans components/_flash-messages.css */
 
 /* Footer - Styles définis dans layout/_footer.css */
 

@@ -1,17 +1,8 @@
 /* ========================================
    PAGE - ADMIN BASE
    Layout et structure de l'administration
+   Les variables sont définies dans base/_variables.css
    ======================================== */
-
-/* ========================================
-   RESET & BASE
-   ======================================== */
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
 
 body {
     font-family: var(--font-body);
@@ -79,7 +70,7 @@ body {
 }
 
 .menu-item:hover {
-    background: #f8f9fa;
+    background: var(--gray-100);
     color: var(--dark-text);
 }
 
@@ -155,43 +146,7 @@ body {
     padding: 2rem;
 }
 
-/* ========================================
-   FLASH MESSAGES - Figma Style
-   ======================================== */
-
-.alert {
-    padding: 1rem 1.5rem;
-    margin-bottom: 1.5rem;
-    border-radius: var(--radius-sm);
-    border-left: 4px solid;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.alert-success {
-    background: #d4edda;
-    border-left-color: var(--green);
-    color: #155724;
-}
-
-.alert-danger {
-    background: #f8d7da;
-    border-left-color: #dc3545;
-    color: #721c24;
-}
-
-.alert-warning {
-    background: #fff3cd;
-    border-left-color: #ffc107;
-    color: #856404;
-}
-
-.alert-info {
-    background: #e7f1ff;
-    border-left-color: #004085;
-    color: #004085;
-}
+/* Alerts - Styles définis dans components/_flash-messages.css */
 
 /* ========================================
    RESPONSIVE

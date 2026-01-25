@@ -111,7 +111,7 @@
 }
 
 .account-edit-required {
-    color: #dc3545;
+    color: var(--danger);
 }
 
 .account-edit-input {
@@ -214,7 +214,7 @@
 }
 
 .account-edit-btn-submit:hover {
-    background-color: #8B0000;
+    background-color: var(--bordeaux);
 }
 
 /* ========================================

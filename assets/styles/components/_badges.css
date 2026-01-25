@@ -9,7 +9,7 @@
     padding: 0.25rem 0.5rem;
     border-radius: var(--radius-full);
     font-family: var(--font-body);
-    font-size: 0.625rem;
+    font-size: var(--text-2xs);
     font-weight: 400;
     color: var(--white);
 }
@@ -41,17 +41,17 @@
 
 /* Badge warning (Orange) */
 .badge-warning {
-    background-color: #F59E0B;
+    background-color: var(--warning);
 }
 
 /* Badge danger (Rouge) */
 .badge-danger {
-    background-color: #EF4444;
+    background-color: var(--danger);
 }
 
 /* Badge info (Bleu) */
 .badge-info {
-    background-color: #6BA5B8;
+    background-color: var(--info);
 }
 
 /* Badges de statut de commande */
@@ -64,11 +64,11 @@
 }
 
 .badge-pending {
-    background-color: #F59E0B;
+    background-color: var(--warning);
 }
 
 .badge-cancelled {
-    background-color: #EF4444;
+    background-color: var(--danger);
 }
 
 /* Badge avec icône */
@@ -81,44 +81,67 @@
 /* Badges de statut de commande - Complets */
 .badge-status {
     padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.875rem;
-    color: white;
+    border-radius: var(--radius-full);
+    font-size: var(--text-sm);
+    color: var(--white);
     display: inline-block;
 }
 
 .badge-status-pending {
-    background-color: #FF8C00;
+    background-color: var(--status-pending);
 }
 
 .badge-status-validated {
-    background-color: #FFD700;
+    background-color: var(--status-validated);
 }
 
 .badge-status-preparing {
-    background-color: #8B0000;
+    background-color: var(--status-preparing);
 }
 
 .badge-status-ready {
-    background-color: #228B22;
+    background-color: var(--status-ready);
 }
 
 .badge-status-delivering {
-    background-color: #4682B4;
+    background-color: var(--status-delivering);
 }
 
 .badge-status-delivered {
-    background-color: #32CD32;
+    background-color: var(--status-ready);
 }
 
 .badge-status-waiting_material_return {
-    background-color: #FFA500;
+    background-color: var(--status-waiting);
 }
 
 .badge-status-completed {
-    background-color: #2E8B57;
+    background-color: var(--status-completed);
 }
 
 .badge-status-cancelled {
-    background-color: #DC143C;
+    background-color: var(--status-cancelled);
+}
+
+/* Badges actif/inactif */
+.badge-active {
+    background-color: var(--green);
+    color: white;
+}
+
+.badge-inactive {
+    background-color: var(--gray-400);
+    color: white;
+}
+
+/* Badge fermé */
+.badge-closed {
+    background-color: var(--danger);
+    color: white;
+}
+
+/* Badge ouvert */
+.badge-open {
+    background-color: var(--green);
+    color: white;
 }

@@ -220,7 +220,7 @@
     padding: 0.625rem 1rem;
     border-radius: var(--radius-sm);
     border: none;
-    background-color: #dc3545;
+    background-color: var(--danger);
     color: white;
     cursor: pointer;
     font-weight: 600;
@@ -296,7 +296,7 @@
 }
 
 .address-form-required {
-    color: #dc3545;
+    color: var(--danger);
 }
 
 .address-form-input {
@@ -442,7 +442,7 @@
 }
 
 .address-btn-submit:hover {
-    background-color: #8B0000;
+    background-color: var(--bordeaux);
 }
 
 .address-form-footer {

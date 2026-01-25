@@ -21,7 +21,7 @@
 
     .stats-description {
         font-size: 0.95rem;
-        color: #95a5a6;
+        color: var(--gray-400);
         margin-top: 0.5rem;
     }
 
@@ -50,12 +50,12 @@
 
     .kpi-card.bordeaux { border-top-color: var(--bordeaux); }
     .kpi-card.green { border-top-color: var(--green); }
-    .kpi-card.blue { border-top-color: #3498db; }
+    .kpi-card.blue { border-top-color: var(--blue); }
     .kpi-card.gold { border-top-color: var(--gold); }
 
     .kpi-label {
         font-size: 0.875rem;
-        color: #95a5a6;
+        color: var(--gray-400);
         text-transform: uppercase;
         letter-spacing: 0.5px;
         margin-bottom: 0.75rem;
@@ -71,12 +71,12 @@
 
     .kpi-card.bordeaux .kpi-value { color: var(--bordeaux); }
     .kpi-card.green .kpi-value { color: var(--green); }
-    .kpi-card.blue .kpi-value { color: #3498db; }
+    .kpi-card.blue .kpi-value { color: var(--blue); }
     .kpi-card.gold .kpi-value { color: var(--gold); }
 
     .kpi-subtext {
         font-size: 0.8rem;
-        color: #95a5a6;
+        color: var(--gray-400);
         margin-top: 0.5rem;
     }
 
@@ -92,7 +92,7 @@
     .filter-header {
         background: var(--beige);
         padding: 1rem 1.5rem;
-        border-bottom: 1px solid #e5e7eb;
+        border-bottom: 1px solid var(--gray-200);
     }
 
     .filter-header h3 {
@@ -201,11 +201,11 @@
     }
 
     .btn-radio-label:hover:not(:has(+ input:checked)) {
-        background: linear-gradient(to bottom, #fff5f5, white);
+        background: linear-gradient(to bottom, var(--danger-light), white);
     }
 
     .btn-radio:checked + .btn-radio-label:hover {
-        background: linear-gradient(to bottom, #7a0000, var(--bordeaux));
+        background: linear-gradient(to bottom, var(--bordeaux), var(--bordeaux));
     }
 
     /* Buttons */
@@ -234,12 +234,12 @@
 
     .btn-secondary {
         background: transparent;
-        color: #95a5a6;
-        border: 2px solid #95a5a6;
+        color: var(--gray-400);
+        border: 2px solid var(--gray-400);
     }
 
     .btn-secondary:hover {
-        background: #95a5a6;
+        background: var(--gray-400);
         color: white;
     }
 
@@ -255,7 +255,7 @@
     .content-header {
         background: var(--beige);
         padding: 1rem 1.5rem;
-        border-bottom: 1px solid #e5e7eb;
+        border-bottom: 1px solid var(--gray-200);
     }
 
     .content-header h3 {
@@ -304,7 +304,7 @@
     }
 
     .stats-table tbody tr:hover {
-        background: #f8f9fa;
+        background: var(--gray-100);
     }
 
     .stats-table td {
@@ -313,7 +313,7 @@
     }
 
     .stats-table tfoot {
-        background: #f8f9fa;
+        background: var(--gray-100);
         font-weight: 600;
         border-top: 2px solid var(--bordeaux);
     }
@@ -335,20 +335,20 @@
         background: var(--bordeaux);
         color: white;
         padding: 0.35rem 0.85rem;
-        border-radius: 9999px;
+        border-radius: var(--radius-full);
         font-size: 0.8rem;
         font-weight: 600;
     }
 
     .alert-info-custom {
-        background: #e7f1ff;
-        border: 2px solid #004085;
+        background: var(--blue-light);
+        border: 2px solid var(--blue-dark);
         border-radius: var(--radius-lg);
         padding: 1.5rem;
         display: flex;
         align-items: center;
         gap: 0.75rem;
-        color: #004085;
+        color: var(--blue-dark);
     }
 
     .alert-info-custom span[data-icon] {
@@ -387,7 +387,7 @@
 
     /* Color Classes */
     .text-muted {
-        color: #95a5a6;
+        color: var(--gray-400);
     }
 
     @media (max-width: 1024px) {

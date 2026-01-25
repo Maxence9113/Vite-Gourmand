@@ -68,38 +68,7 @@
     border-radius: var(--radius-sm);
 }
 
-/* Flash messages */
-.order-flash-success {
-    background: #d4edda;
-    border-left: 4px solid #28a745;
-    color: #155724;
-    padding: 1rem 1.5rem;
-    border-radius: var(--radius-sm);
-    margin-bottom: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.order-flash-success span[data-icon] {
-    color: #28a745;
-}
-
-.order-flash-error {
-    background: #f8d7da;
-    border-left: 4px solid #dc3545;
-    color: #721c24;
-    padding: 1rem 1.5rem;
-    border-radius: var(--radius-sm);
-    margin-bottom: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.order-flash-error span[data-icon] {
-    color: #dc3545;
-}
+/* Les messages flash sont maintenant gérés par _flash-messages.css */
 
 /* ========================================
    INDEX PAGE - Liste des commandes
@@ -149,7 +118,7 @@
 }
 
 .order-empty-cta:hover {
-    background-color: #8B0000;
+    background-color: var(--bordeaux);
 }
 
 /* Grille de commandes */
@@ -201,28 +170,28 @@
 }
 
 .order-card-status.status-success {
-    background: #d4edda;
-    color: #155724;
+    background: var(--success-light);
+    color: var(--success-dark);
 }
 
 .order-card-status.status-warning {
-    background: #fff3cd;
-    color: #856404;
+    background: var(--warning-light);
+    color: var(--warning-dark);
 }
 
 .order-card-status.status-danger {
-    background: #f8d7da;
-    color: #721c24;
+    background: var(--danger-light);
+    color: var(--danger-dark);
 }
 
 .order-card-status.status-info {
-    background: #e7f1ff;
-    color: #004085;
+    background: var(--blue-light);
+    color: var(--blue-dark);
 }
 
 .order-card-status.status-secondary {
-    background: #f8f9fa;
-    color: #495057;
+    background: var(--gray-100);
+    color: var(--gray-600);
 }
 
 .order-card-body {
@@ -301,7 +270,7 @@
 
 .order-card-footer {
     padding: 1rem 1.5rem;
-    background: #f9f9f9;
+    background: var(--gray-50);
     border-top: 1px solid var(--beige);
 }
 
@@ -322,7 +291,7 @@
 }
 
 .order-card-view-btn:hover {
-    background-color: #8B0000;
+    background-color: var(--bordeaux);
 }
 
 /* ========================================
@@ -393,29 +362,29 @@
 }
 
 .order-status-badge.status-success {
-    background: #d4edda;
-    color: #155724;
+    background: var(--success-light);
+    color: var(--success-dark);
 }
 
 .order-status-badge.status-warning {
-    background: #fff3cd;
-    color: #856404;
+    background: var(--warning-light);
+    color: var(--warning-dark);
 }
 
 .order-status-badge.status-danger {
-    background: #f8d7da;
-    color: #721c24;
+    background: var(--danger-light);
+    color: var(--danger-dark);
 }
 
 .order-status-badge.status-info {
-    background: #e7f1ff;
-    color: #004085;
+    background: var(--blue-light);
+    color: var(--blue-dark);
 }
 
 /* Alerte annulation */
 .order-cancellation-alert {
-    background: #fff3cd;
-    border-left: 4px solid #ffc107;
+    background: var(--warning-light);
+    border-left: 4px solid var(--warning);
     padding: 1rem;
     border-radius: var(--radius-sm);
     margin-bottom: 1rem;
@@ -424,12 +393,12 @@
 .order-cancellation-reason-title {
     font-weight: 600;
     margin-bottom: 0.5rem;
-    color: #856404;
+    color: var(--warning-dark);
 }
 
 .order-cancellation-reason-text {
     margin: 0;
-    color: #856404;
+    color: var(--warning-dark);
 }
 
 /* Bouton annuler */
@@ -437,7 +406,7 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    background: #dc3545;
+    background: var(--danger);
     color: white;
     border: none;
     padding: 0.75rem 1.5rem;
@@ -448,7 +417,7 @@
 }
 
 .order-cancel-btn:hover {
-    background-color: #c82333;
+    background-color: var(--danger-dark);
 }
 
 /* Grille de détails menu */
@@ -463,7 +432,7 @@
     align-items: center;
     gap: 0.75rem;
     padding: 1rem;
-    background: #f9f9f9;
+    background: var(--gray-50);
     border-radius: var(--radius-sm);
 }
 
@@ -515,7 +484,7 @@
 .order-material-box {
     margin-top: 1.5rem;
     padding: 1rem;
-    background: #f9f9f9;
+    background: var(--gray-50);
     border-radius: var(--radius-sm);
     border-left: 3px solid var(--gold);
 }
@@ -555,18 +524,18 @@
 }
 
 .order-material-status-badge.returned {
-    background: #d4edda;
-    color: #155724;
+    background: var(--success-light);
+    color: var(--success-dark);
 }
 
 .order-material-status-badge.pending {
-    background: #fff3cd;
-    color: #856404;
+    background: var(--warning-light);
+    color: var(--warning-dark);
 }
 
 /* Section avis */
 .order-review-box {
-    background: linear-gradient(135deg, var(--bordeaux) 0%, #8B0000 100%);
+    background: linear-gradient(135deg, var(--bordeaux) 0%, var(--bordeaux) 100%);
     border-radius: var(--radius-lg);
     padding: 2rem;
     box-shadow: var(--shadow-md);
@@ -649,7 +618,7 @@
     display: flex;
     justify-content: space-between;
     margin-bottom: 1rem;
-    color: #27ae60;
+    color: var(--green);
 }
 
 .order-summary-delivery-note {
@@ -837,7 +806,7 @@
 .order-cancel-modal-textarea {
     width: 100%;
     padding: 0.75rem;
-    border: 1px solid #ddd;
+    border: 1px solid var(--gray-300);
     border-radius: var(--radius-sm);
     font-family: var(--font-body);
     resize: vertical;
@@ -845,16 +814,16 @@
 
 .order-cancel-modal-footer {
     padding: 1rem 1.5rem;
-    background: #f9f9f9;
+    background: var(--gray-50);
     display: flex;
     justify-content: flex-end;
     gap: 1rem;
-    border-top: 1px solid #e5e5e5;
+    border-top: 1px solid var(--gray-200);
 }
 
 .order-cancel-modal-btn-secondary {
     padding: 0.75rem 1.5rem;
-    border: 1px solid #ddd;
+    border: 1px solid var(--gray-300);
     background: white;
     color: var(--dark-text);
     border-radius: var(--radius-sm);
@@ -864,13 +833,13 @@
 }
 
 .order-cancel-modal-btn-secondary:hover {
-    background-color: #f9f9f9;
+    background-color: var(--gray-50);
 }
 
 .order-cancel-modal-btn-danger {
     padding: 0.75rem 1.5rem;
     border: none;
-    background: #dc3545;
+    background: var(--danger);
     color: white;
     border-radius: var(--radius-sm);
     font-weight: 600;
@@ -879,7 +848,7 @@
 }
 
 .order-cancel-modal-btn-danger:hover {
-    background-color: #c82333;
+    background-color: var(--danger-dark);
 }
 
 /* ========================================
@@ -973,7 +942,7 @@
 }
 
 .order-badge-stock-limited {
-    background-color: #E8B563;
+    background-color: var(--gold-light);
     color: var(--dark-text);
 }
 
@@ -983,7 +952,7 @@
 }
 
 .order-badge-stock-unlimited {
-    background-color: #f0f0f0;
+    background-color: var(--gray-100);
     color: var(--dark-text);
 }
 
@@ -1017,7 +986,7 @@
 }
 
 .order-form-info-box {
-    background: #f9f9f9;
+    background: var(--gray-50);
     padding: 1rem;
     border-radius: var(--radius-sm);
     margin-top: 1rem;
@@ -1052,7 +1021,7 @@
 }
 
 .order-form-schedule-closed {
-    color: #D97076;
+    color: var(--danger-muted);
     font-weight: 600;
 }
 
@@ -1067,7 +1036,7 @@
 .order-form-address-input {
     width: 100%;
     padding: 0.75rem;
-    border: 1px solid #ddd;
+    border: 1px solid var(--gray-300);
     border-radius: var(--radius-sm);
     font-family: var(--font-body);
 }
@@ -1075,7 +1044,7 @@
 .order-form-address-help {
     margin-top: 0.75rem;
     padding: 0.75rem;
-    background: #f9f9f9;
+    background: var(--gray-50);
     border-radius: var(--radius-sm);
     border-left: 3px solid var(--gold);
 }
@@ -1098,10 +1067,10 @@
 
 /* Checkbox matériel */
 .order-form-material-box {
-    background: #f9f9f9;
+    background: var(--gray-50);
     padding: 1.5rem;
     border-radius: var(--radius-sm);
-    border: 1px solid #e5e5e5;
+    border: 1px solid var(--gray-200);
     display: flex;
     align-items: flex-start;
     gap: 1rem;
@@ -1243,7 +1212,7 @@
 }
 
 .order-summary-delivery-info {
-    background: #f9f9f9;
+    background: var(--gray-50);
     padding: 1rem;
     border-radius: var(--radius-sm);
     margin-top: 1rem;
@@ -1284,7 +1253,7 @@
 }
 
 .order-review-btn:hover {
-    background-color: #C9A333;
+    background-color: var(--gold-dark);
 }
 
 /* Message avis soumis */
@@ -1292,10 +1261,10 @@
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    background: #d4edda;
-    color: #155724;
+    background: var(--success-light);
+    color: var(--success-dark);
     padding: 1rem 1.5rem;
     border-radius: var(--radius-sm);
-    border-left: 4px solid #28a745;
+    border-left: 4px solid var(--success);
     margin-top: 1rem;
 }

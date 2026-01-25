@@ -47,51 +47,7 @@
     padding: 0 1rem;
 }
 
-/* Flash Messages */
-.flash-success {
-    background: #d4edda;
-    border-left: 4px solid #28a745;
-    color: #155724;
-    padding: 1rem 1.5rem;
-    border-radius: var(--radius-sm);
-    margin-bottom: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.flash-success .icon {
-    color: #28a745;
-}
-
-.flash-success p {
-    font-weight: 600;
-    margin: 0;
-}
-
-.flash-danger,
-.flash-error {
-    background: #f8d7da;
-    border-left: 4px solid #dc3545;
-    color: #721c24;
-    padding: 1rem 1.5rem;
-    border-radius: var(--radius-sm);
-    margin-bottom: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.flash-danger .icon,
-.flash-error .icon {
-    color: #dc3545;
-}
-
-.flash-danger p,
-.flash-error p {
-    font-weight: 600;
-    margin: 0;
-}
+/* Les messages flash sont maintenant gérés par _flash-messages.css */
 
 /* Grid Layout */
 .contact-grid {

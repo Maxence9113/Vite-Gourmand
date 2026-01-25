@@ -5,23 +5,23 @@
 }
 
 .btn-back {
-    background: #95a5a6;
+    background: var(--gray-400);
     color: white;
     padding: 10px 20px;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     text-decoration: none;
     font-weight: 500;
-    transition: background 0.2s;
+    transition: background var(--transition-fast);
 }
 
 .btn-back:hover {
-    background: #7f8c8d;
+    background: var(--gray-500);
     color: white;
 }
 
 .form-card {
     background: white;
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
     padding: 30px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.08);
     max-width: 1000px;
@@ -29,9 +29,9 @@
 }
 
 .form-section {
-    background: #f8f9fa;
-    border: 1px solid #e9ecef;
-    border-radius: 8px;
+    background: var(--gray-100);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
     padding: 20px;
     margin-bottom: 25px;
 }
@@ -39,15 +39,15 @@
 .section-title {
     font-size: 1.1rem;
     font-weight: 600;
-    color: #2c3e50;
+    color: var(--dark-text);
     margin-bottom: 15px;
     padding-bottom: 10px;
-    border-bottom: 2px solid #3498db;
+    border-bottom: 2px solid var(--blue);
 }
 
 .section-description {
     font-size: 0.9rem;
-    color: #7f8c8d;
+    color: var(--gray-500);
     margin-bottom: 15px;
 }
 
@@ -58,61 +58,61 @@
 }
 
 .form-control, .form-select {
-    border: 1px solid #ddd;
-    border-radius: 6px;
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-sm);
     padding: 10px 15px;
     font-size: 0.95rem;
-    transition: all 0.2s;
+    transition: all var(--transition-fast);
 }
 
 .form-control:focus, .form-select:focus {
-    border-color: #3498db;
+    border-color: var(--blue);
     box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
     outline: none;
 }
 
 .form-label {
     font-weight: 500;
-    color: #2c3e50;
+    color: var(--dark-text);
     margin-bottom: 8px;
 }
 
 .recipe-accordion .accordion-item {
-    border: 1px solid #e9ecef;
+    border: 1px solid var(--gray-200);
     margin-bottom: 10px;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     overflow: hidden;
 }
 
 .recipe-accordion .accordion-button {
     font-weight: 600;
-    background-color: #fff;
-    color: #2c3e50;
+    background-color: var(--white);
+    color: var(--dark-text);
     padding: 12px 20px;
 }
 
 .recipe-accordion .accordion-button:not(.collapsed) {
-    background-color: #3498db;
+    background-color: var(--blue);
     color: white;
 }
 
 .recipe-accordion .accordion-button:focus {
     box-shadow: none;
-    border-color: #3498db;
+    border-color: var(--blue);
 }
 
 .accordion-badge {
-    background-color: #27ae60;
+    background-color: var(--green);
     color: white;
     padding: 3px 10px;
-    border-radius: 12px;
+    border-radius: var(--radius-md);
     font-size: 0.8rem;
     margin-left: 10px;
     font-weight: 600;
 }
 
 .recipe-accordion .accordion-button.collapsed .accordion-badge {
-    background-color: #95a5a6;
+    background-color: var(--gray-400);
 }
 
 .recipe-checkboxes {
@@ -124,21 +124,21 @@
 .recipe-checkboxes .form-check {
     padding: 10px 15px;
     margin-bottom: 8px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    transition: all 0.2s;
+    background-color: var(--white);
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
     cursor: pointer;
 }
 
 .recipe-checkboxes .form-check:hover {
-    background-color: #e7f1ff;
-    border-color: #3498db;
+    background-color: var(--blue-light);
+    border-color: var(--blue);
 }
 
 .recipe-checkboxes .form-check:has(input:checked) {
-    background-color: #d4edda;
-    border-color: #27ae60;
+    background-color: var(--success-light);
+    border-color: var(--green);
 }
 
 .recipe-checkboxes .form-check-label {
@@ -150,21 +150,21 @@
 .dietary-choices .form-check {
     padding: 10px 15px;
     margin-bottom: 8px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 6px;
+    background-color: var(--white);
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-sm);
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all var(--transition-fast);
 }
 
 .dietary-choices .form-check:hover {
-    background-color: #e7f1ff;
-    border-color: #3498db;
+    background-color: var(--blue-light);
+    border-color: var(--blue);
 }
 
 .dietary-choices .form-check:has(input:checked) {
-    background-color: #d4edda;
-    border-color: #27ae60;
+    background-color: var(--success-light);
+    border-color: var(--green);
 }
 
 .dietary-choices .form-check-label {
@@ -174,8 +174,8 @@
 
 .current-image {
     max-width: 300px;
-    border-radius: 8px;
-    border: 2px solid #e9ecef;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--gray-200);
     padding: 5px;
     margin-bottom: 15px;
 }
@@ -184,48 +184,48 @@
     display: flex;
     justify-content: space-between;
     padding-top: 25px;
-    border-top: 2px solid #e9ecef;
+    border-top: 2px solid var(--gray-200);
 }
 
 .btn-cancel {
-    background: #95a5a6;
+    background: var(--gray-400);
     color: white;
     padding: 10px 25px;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     text-decoration: none;
     font-weight: 500;
-    transition: background 0.2s;
+    transition: background var(--transition-fast);
     border: none;
 }
 
 .btn-cancel:hover {
-    background: #7f8c8d;
+    background: var(--gray-500);
     color: white;
 }
 
 .btn-submit {
-    background: #3498db;
+    background: var(--blue);
     color: white;
     padding: 10px 25px;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     font-weight: 500;
-    transition: background 0.2s;
+    transition: background var(--transition-fast);
     border: none;
     cursor: pointer;
 }
 
 .btn-submit:hover {
-    background: #2980b9;
+    background: var(--blue-dark);
 }
 
 .info-box {
-    background: #e7f3ff;
-    border-left: 4px solid #3498db;
+    background: var(--blue-light);
+    border-left: 4px solid var(--blue);
     padding: 15px;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     margin-bottom: 20px;
 }
 
 .info-box strong {
-    color: #2c3e50;
+    color: var(--dark-text);
 }

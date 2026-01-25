@@ -52,13 +52,13 @@
 }
 
 .review-btn-new:hover {
-    background-color: #8B0000;
+    background-color: var(--bordeaux);
 }
 
 .review-login-notice {
-    background: #e7f1ff;
-    border-left: 4px solid #004085;
-    color: #004085;
+    background: var(--blue-light);
+    border-left: 4px solid var(--blue-dark);
+    color: var(--blue-dark);
     padding: 1rem 1.5rem;
     border-radius: var(--radius-sm);
     display: inline-flex;
@@ -214,8 +214,8 @@
 }
 
 .review-item-star-icon {
-    color: #ffc107;
-    fill: #ffc107;
+    color: var(--warning);
+    fill: var(--warning);
 }
 
 .review-item-star-icon-empty {
@@ -368,8 +368,8 @@
 
 /* Moderation Notice */
 .review-moderation-notice {
-    background: #e7f1ff;
-    border-left: 4px solid #004085;
+    background: var(--blue-light);
+    border-left: 4px solid var(--blue-dark);
     padding: 1rem 1.5rem;
     border-radius: var(--radius-sm);
     margin-bottom: 2rem;
@@ -379,13 +379,13 @@
 }
 
 .review-moderation-notice-icon {
-    color: #004085;
+    color: var(--blue-dark);
     flex-shrink: 0;
     margin-top: 2px;
 }
 
 .review-moderation-notice-content {
-    color: #004085;
+    color: var(--blue-dark);
     font-size: 0.875rem;
 }
 
@@ -437,5 +437,5 @@
 }
 
 .review-btn-submit:hover {
-    background-color: #8B0000;
+    background-color: var(--bordeaux);
 }

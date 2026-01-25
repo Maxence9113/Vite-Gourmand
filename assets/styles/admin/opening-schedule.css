@@ -1,6 +1,6 @@
 .schedule-form {
     background: white;
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
     padding: 30px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.08);
     max-width: 800px;
@@ -14,10 +14,10 @@
 .section-title {
     font-size: 1.1rem;
     font-weight: 600;
-    color: #2c3e50;
+    color: var(--dark-text);
     margin-bottom: 15px;
     padding-bottom: 10px;
-    border-bottom: 2px solid #3498db;
+    border-bottom: 2px solid var(--blue);
 }
 
 .days-grid {
@@ -25,7 +25,7 @@
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     gap: 0.75rem;
     padding: 1.25rem;
-    background: #f8f9fa;
+    background: var(--gray-100);
     border-radius: var(--radius-lg);
     border: 2px solid var(--beige);
 }
@@ -37,7 +37,7 @@
     padding: 0.625rem 0.875rem;
     background: white;
     border-radius: var(--radius-sm);
-    border: 2px solid #e9ecef;
+    border: 2px solid var(--gray-200);
     transition: all var(--transition-base);
     cursor: pointer;
 }
@@ -52,11 +52,11 @@
     width: 1.375rem;
     height: 1.375rem;
     min-width: 1.375rem;
-    border: 2.5px solid #d1d5db;
+    border: 2.5px solid var(--gray-300);
     border-radius: var(--radius-sm);
     cursor: pointer;
     position: relative;
-    transition: all 0.2s ease;
+    transition: all var(--transition-fast);
     flex-shrink: 0;
     background: white;
     margin: 0;
@@ -93,7 +93,7 @@
 }
 
 .day-checkbox.checked {
-    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    background: linear-gradient(135deg, var(--success-light) 0%, var(--success-light) 100%);
     border-color: var(--green);
     box-shadow: 0 2px 12px rgba(39, 174, 96, 0.15);
 }
@@ -111,37 +111,37 @@
 }
 
 .form-control {
-    border: 1px solid #ddd;
-    border-radius: 6px;
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-sm);
     padding: 10px 15px;
 }
 
 .form-control:focus {
-    border-color: #3498db;
+    border-color: var(--blue);
     box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
     outline: none;
 }
 
 .btn-save {
-    background: #27ae60;
+    background: var(--green);
     color: white;
     padding: 12px 30px;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     font-weight: 500;
     border: none;
     cursor: pointer;
     width: 100%;
-    transition: background 0.2s;
+    transition: background var(--transition-fast);
 }
 
 .btn-save:hover {
-    background: #229954;
+    background: var(--green);
 }
 
 .current-schedule {
-    background: #f8f9fa;
-    border: 1px solid #e9ecef;
-    border-radius: 8px;
+    background: var(--gray-100);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
     padding: 20px;
     margin-top: 30px;
 }
@@ -150,32 +150,23 @@
     display: flex;
     justify-content: space-between;
     padding: 8px 0;
-    border-bottom: 1px solid #e9ecef;
+    border-bottom: 1px solid var(--gray-200);
 }
 
 .schedule-item:last-child {
     border-bottom: none;
 }
 
-.badge {
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-size: 0.85rem;
-}
-
-.badge-success {
-    background: #27ae60;
-    color: white;
-}
+/* Les badges sont maintenant gérés par _badges.css */
 
 .badge-secondary {
-    background: #95a5a6;
+    background: var(--gray-400);
     color: white;
 }
 
 .form-check-wrapper {
     padding: 1rem 1.25rem;
-    background: #f0fdf4;
+    background: var(--success-light);
     border: 2px solid var(--green);
     border-radius: var(--radius-lg);
     display: flex;
@@ -188,11 +179,11 @@
     width: 1.5rem;
     height: 1.5rem;
     min-width: 1.5rem;
-    border: 2.5px solid #d1d5db;
+    border: 2.5px solid var(--gray-300);
     border-radius: 50%;
     cursor: pointer;
     position: relative;
-    transition: all 0.2s ease;
+    transition: all var(--transition-fast);
     flex-shrink: 0;
     background: white;
     margin: 0;
@@ -229,8 +220,8 @@
 }
 
 .alert-warning-custom {
-    background: #fff3cd;
-    border: 2px solid #ffc107;
+    background: var(--warning-light);
+    border: 2px solid var(--warning);
     border-radius: var(--radius-lg);
     padding: 1rem 1.5rem;
     display: flex;
@@ -240,7 +231,7 @@
 }
 
 .alert-warning-custom strong {
-    color: #856404;
+    color: var(--warning-dark);
 }
 
 .examples-card {
@@ -281,7 +272,7 @@
 
 .section-description {
     font-size: 0.875rem;
-    color: #95a5a6;
+    color: var(--gray-400);
     margin-bottom: 1rem;
     line-height: 1.5;
 }
@@ -298,15 +289,7 @@
     gap: 0.75rem;
 }
 
-.badge-open {
-    background: var(--green);
-    color: white;
-}
-
-.badge-closed {
-    background: #95a5a6;
-    color: white;
-}
+/* Les badges open/closed sont maintenant gérés par _badges.css */
 
 .time-range {
     color: var(--dark-text);
@@ -333,7 +316,7 @@
 }
 
 .icon-warning {
-    color: #856404;
+    color: var(--warning-dark);
     flex-shrink: 0;
 }
 

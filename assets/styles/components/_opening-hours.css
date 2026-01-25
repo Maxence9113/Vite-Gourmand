@@ -38,14 +38,14 @@
 }
 
 .opening-hours-time-open {
-    color: #27ae60;
+    color: var(--green);
 }
 
 .opening-hours-time-closed {
-    color: #95a5a6;
+    color: var(--gray-400);
 }
 
 .opening-hours-empty {
-    color: #95a5a6;
+    color: var(--gray-400);
     font-style: italic;
 }
