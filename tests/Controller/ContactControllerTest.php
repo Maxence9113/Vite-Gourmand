@@ -51,7 +51,7 @@ class ContactControllerTest extends WebTestCase
         $client->followRedirect();
 
         // Vérifier le message de succès
-        $this->assertSelectorExists('.alert-success');
+        $this->assertSelectorExists('.flash-success');
     }
 
     public function testSubmitContactFormWithInvalidEmail(): void
@@ -70,7 +70,7 @@ class ContactControllerTest extends WebTestCase
 
         // Le formulaire doit être réaffiché avec le code 422
         $this->assertResponseStatusCodeSame(422);
-        $this->assertSelectorExists('.is-invalid, .invalid-feedback');
+        $this->assertSelectorExists('.form-error');
     }
 
     public function testSubmitContactFormWithShortMessage(): void
@@ -89,7 +89,7 @@ class ContactControllerTest extends WebTestCase
 
         // Le formulaire doit être réaffiché avec le code 422
         $this->assertResponseStatusCodeSame(422);
-        $this->assertSelectorExists('.is-invalid, .invalid-feedback');
+        $this->assertSelectorExists('.form-error');
     }
 
     public function testSubmitContactFormWithEmptyFields(): void
@@ -108,7 +108,7 @@ class ContactControllerTest extends WebTestCase
 
         // Le formulaire doit être réaffiché avec le code 422
         $this->assertResponseStatusCodeSame(422);
-        $this->assertSelectorExists('.is-invalid, .invalid-feedback');
+        $this->assertSelectorExists('.form-error');
     }
 
     public function testContactPageContainsContactInfo(): void

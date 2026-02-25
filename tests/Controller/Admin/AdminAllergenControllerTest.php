@@ -99,7 +99,7 @@ class AdminAllergenControllerTest extends WebTestCase
         $crawler = $this->client->request('GET', '/admin/allergens/' . $allergenId . '/edit');
         $this->assertResponseIsSuccessful();
 
-        $form = $crawler->selectButton('Modifier l\'allergène')->form();
+        $form = $crawler->selectButton('Enregistrer les modifications')->form();
         $this->assertEquals('Allergène à modifier', $form['allergen[name]']->getValue());
 
         $form['allergen[name]'] = 'Allergène modifié';

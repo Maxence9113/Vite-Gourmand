@@ -152,7 +152,7 @@ class RegisterControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
         // Vérifier que le message d'erreur est affiché
-        $this->assertSelectorTextContains('.invalid-feedback',
+        $this->assertSelectorTextContains('.form-error',
             'Le mot de passe doit contenir au moins 10 caractères');
     }
 
@@ -175,7 +175,7 @@ class RegisterControllerTest extends WebTestCase
         $client->submit($form);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-        $this->assertSelectorTextContains('.invalid-feedback',
+        $this->assertSelectorTextContains('.form-error',
             'Le mot de passe doit contenir au moins 1 majuscule, 1 minuscule, 1 chiffre et 1 caractère spécial');
     }
 
@@ -198,7 +198,7 @@ class RegisterControllerTest extends WebTestCase
         $client->submit($form);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-        $this->assertSelectorTextContains('.invalid-feedback',
+        $this->assertSelectorTextContains('.form-error',
             'Le mot de passe doit contenir au moins 1 majuscule, 1 minuscule, 1 chiffre et 1 caractère spécial');
     }
 
@@ -221,7 +221,7 @@ class RegisterControllerTest extends WebTestCase
         $client->submit($form);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-        $this->assertSelectorTextContains('.invalid-feedback',
+        $this->assertSelectorTextContains('.form-error',
             'Le mot de passe doit contenir au moins 1 majuscule, 1 minuscule, 1 chiffre et 1 caractère spécial');
     }
 
@@ -244,7 +244,7 @@ class RegisterControllerTest extends WebTestCase
         $client->submit($form);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-        $this->assertSelectorExists('.invalid-feedback');
+        $this->assertSelectorExists('.form-error');
     }
 
     /**
@@ -266,7 +266,7 @@ class RegisterControllerTest extends WebTestCase
         $client->submit($form);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-        $this->assertSelectorExists('.invalid-feedback');
+        $this->assertSelectorExists('.form-error');
     }
 
     /**
@@ -311,7 +311,7 @@ class RegisterControllerTest extends WebTestCase
 
         // L'inscription doit être rejetée
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-        $this->assertSelectorExists('.invalid-feedback');
+        $this->assertSelectorExists('.form-error');
     }
 
     /**

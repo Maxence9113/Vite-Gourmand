@@ -135,7 +135,7 @@ class PasswordResetControllerTest extends WebTestCase
 
         // Mais le message flash doit être identique pour des raisons de sécurité
         $client->followRedirect();
-        $this->assertSelectorTextContains('.alert-success', 'Si un compte existe avec cet email');
+        $this->assertSelectorTextContains('.flash-success', 'Si un compte existe avec cet email');
     }
 
     /**
@@ -175,7 +175,7 @@ class PasswordResetControllerTest extends WebTestCase
 
         // Le message doit être identique (sécurité)
         $client->followRedirect();
-        $this->assertSelectorTextContains('.alert-success', 'Si un compte existe avec cet email');
+        $this->assertSelectorTextContains('.flash-success', 'Si un compte existe avec cet email');
 
         // Nettoyer
         $user = $entityManager->find(User::class, $user->getId());

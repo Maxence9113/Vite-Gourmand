@@ -68,7 +68,7 @@ class AccountPasswordControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/compte/modifier-mot-de-passe');
 
         // Remplir le formulaire avec des données valides
-        $form = $crawler->selectButton('Mettre à jour')->form([
+        $form = $crawler->selectButton('Modifier mon mot de passe')->form([
             'password_user[actualPassword]' => 'OldPassword123!@',
             'password_user[plainPassword][first]' => 'NewPassword456!@',
             'password_user[plainPassword][second]' => 'NewPassword456!@',
@@ -84,7 +84,7 @@ class AccountPasswordControllerTest extends WebTestCase
         $client->followRedirect();
 
         // Vérifier que le message de succès est affiché
-        $this->assertSelectorExists('.alert-success');
+        $this->assertSelectorExists('.flash-message.flash-success');
 
         // Vérifier que le mot de passe a bien été changé en base de données
         $entityManager = $client->getContainer()->get('doctrine')->getManager();
@@ -133,7 +133,7 @@ class AccountPasswordControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/compte/modifier-mot-de-passe');
 
         // Remplir le formulaire avec un mauvais mot de passe actuel
-        $form = $crawler->selectButton('Mettre à jour')->form([
+        $form = $crawler->selectButton('Modifier mon mot de passe')->form([
             'password_user[actualPassword]' => 'WrongPassword999!@', // Mauvais mot de passe
             'password_user[plainPassword][first]' => 'NewPassword456!@',
             'password_user[plainPassword][second]' => 'NewPassword456!@',
@@ -146,7 +146,7 @@ class AccountPasswordControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
         // Vérifier que le message d'erreur est affiché
-        $this->assertSelectorTextContains('.invalid-feedback',
+        $this->assertSelectorTextContains('.form-error',
             'Votre mot de passe actuel n\'est pas conforme');
     }
 
@@ -164,7 +164,7 @@ class AccountPasswordControllerTest extends WebTestCase
 
         $crawler = $client->request('GET', '/compte/modifier-mot-de-passe');
 
-        $form = $crawler->selectButton('Mettre à jour')->form([
+        $form = $crawler->selectButton('Modifier mon mot de passe')->form([
             'password_user[actualPassword]' => 'CurrentPass123!@',
             'password_user[plainPassword][first]' => 'Short1!', // Seulement 7 caractères (< 10)
             'password_user[plainPassword][second]' => 'Short1!',
@@ -173,7 +173,7 @@ class AccountPasswordControllerTest extends WebTestCase
         $client->submit($form);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-        $this->assertSelectorTextContains('.invalid-feedback',
+        $this->assertSelectorTextContains('.form-error',
             'Le mot de passe doit contenir au moins 10 caractères');
     }
 
@@ -189,7 +189,7 @@ class AccountPasswordControllerTest extends WebTestCase
 
         $crawler = $client->request('GET', '/compte/modifier-mot-de-passe');
 
-        $form = $crawler->selectButton('Mettre à jour')->form([
+        $form = $crawler->selectButton('Modifier mon mot de passe')->form([
             'password_user[actualPassword]' => 'CurrentPass123!@',
             'password_user[plainPassword][first]' => 'NewPassword123', // Pas de caractère spécial
             'password_user[plainPassword][second]' => 'NewPassword123',
@@ -198,7 +198,7 @@ class AccountPasswordControllerTest extends WebTestCase
         $client->submit($form);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-        $this->assertSelectorTextContains('.invalid-feedback',
+        $this->assertSelectorTextContains('.form-error',
             'Le mot de passe doit contenir au moins 1 majuscule, 1 minuscule, 1 chiffre et 1 caractère spécial');
     }
 
@@ -214,7 +214,7 @@ class AccountPasswordControllerTest extends WebTestCase
 
         $crawler = $client->request('GET', '/compte/modifier-mot-de-passe');
 
-        $form = $crawler->selectButton('Mettre à jour')->form([
+        $form = $crawler->selectButton('Modifier mon mot de passe')->form([
             'password_user[actualPassword]' => 'CurrentPass123!@',
             'password_user[plainPassword][first]' => 'newpassword123!@', // Pas de majuscule
             'password_user[plainPassword][second]' => 'newpassword123!@',
@@ -223,7 +223,7 @@ class AccountPasswordControllerTest extends WebTestCase
         $client->submit($form);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-        $this->assertSelectorTextContains('.invalid-feedback',
+        $this->assertSelectorTextContains('.form-error',
             'Le mot de passe doit contenir au moins 1 majuscule, 1 minuscule, 1 chiffre et 1 caractère spécial');
     }
 
@@ -239,7 +239,7 @@ class AccountPasswordControllerTest extends WebTestCase
 
         $crawler = $client->request('GET', '/compte/modifier-mot-de-passe');
 
-        $form = $crawler->selectButton('Mettre à jour')->form([
+        $form = $crawler->selectButton('Modifier mon mot de passe')->form([
             'password_user[actualPassword]' => 'CurrentPass123!@',
             'password_user[plainPassword][first]' => 'NewPassword!@#$', // Pas de chiffre
             'password_user[plainPassword][second]' => 'NewPassword!@#$',
@@ -248,7 +248,7 @@ class AccountPasswordControllerTest extends WebTestCase
         $client->submit($form);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-        $this->assertSelectorTextContains('.invalid-feedback',
+        $this->assertSelectorTextContains('.form-error',
             'Le mot de passe doit contenir au moins 1 majuscule, 1 minuscule, 1 chiffre et 1 caractère spécial');
     }
 
@@ -264,7 +264,7 @@ class AccountPasswordControllerTest extends WebTestCase
 
         $crawler = $client->request('GET', '/compte/modifier-mot-de-passe');
 
-        $form = $crawler->selectButton('Mettre à jour')->form([
+        $form = $crawler->selectButton('Modifier mon mot de passe')->form([
             'password_user[actualPassword]' => 'CurrentPass123!@',
             'password_user[plainPassword][first]' => 'NewPassword123!@',
             'password_user[plainPassword][second]' => 'DifferentPass456!@', // Différent !
@@ -273,7 +273,7 @@ class AccountPasswordControllerTest extends WebTestCase
         $client->submit($form);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-        $this->assertSelectorExists('.invalid-feedback');
+        $this->assertSelectorExists('.form-error');
     }
 
     /**
@@ -288,7 +288,7 @@ class AccountPasswordControllerTest extends WebTestCase
 
         $crawler = $client->request('GET', '/compte/modifier-mot-de-passe');
 
-        $form = $crawler->selectButton('Mettre à jour')->form([
+        $form = $crawler->selectButton('Modifier mon mot de passe')->form([
             'password_user[actualPassword]' => '', // Vide
             'password_user[plainPassword][first]' => 'NewPassword123!@',
             'password_user[plainPassword][second]' => 'NewPassword123!@',
@@ -297,7 +297,7 @@ class AccountPasswordControllerTest extends WebTestCase
         $client->submit($form);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-        $this->assertSelectorExists('.invalid-feedback');
+        $this->assertSelectorExists('.form-error');
     }
 
     /**

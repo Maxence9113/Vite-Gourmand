@@ -69,7 +69,7 @@ class AdminDietetaryControllerTest extends WebTestCase
     public function testCreateDietetary(): void
     {
         $crawler = $this->client->request('GET', '/admin/dietetaries/new');
-        $form = $crawler->selectButton('Créer le régime alimentaire')->form();
+        $form = $crawler->selectButton('Créer le régime')->form();
 
         $form['dietetary[name]'] = 'Nouveau Régime Test';
 
@@ -99,7 +99,7 @@ class AdminDietetaryControllerTest extends WebTestCase
         $crawler = $this->client->request('GET', '/admin/dietetaries/' . $dietetaryId . '/edit');
         $this->assertResponseIsSuccessful();
 
-        $form = $crawler->selectButton('Modifier le régime alimentaire')->form();
+        $form = $crawler->selectButton('Enregistrer les modifications')->form();
         $this->assertEquals('Régime à modifier', $form['dietetary[name]']->getValue());
 
         $form['dietetary[name]'] = 'Régime modifié';

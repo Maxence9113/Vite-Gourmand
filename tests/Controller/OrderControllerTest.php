@@ -203,8 +203,8 @@ class OrderControllerTest extends WebTestCase
         $this->client->followRedirect();
 
         // Vérifier le flash message de succès
-        $this->assertSelectorExists('.alert-success');
-        $this->assertSelectorTextContains('.alert-success', 'créée avec succès');
+        $this->assertSelectorExists('.order-flash-success');
+        $this->assertSelectorTextContains('.order-flash-success', 'créée avec succès');
     }
 
     public function testCreateOrderFailsWithLessThanMinimumPersons(): void
@@ -372,8 +372,8 @@ class OrderControllerTest extends WebTestCase
         $this->client->followRedirect();
 
         // Vérifier le flash message de succès dans le HTML rendu
-        $this->assertSelectorExists('.alert-success');
-        $this->assertSelectorTextContains('.alert-success', 'annulée avec succès');
+        $this->assertSelectorExists('.order-flash-success');
+        $this->assertSelectorTextContains('.order-flash-success', 'annulée avec succès');
 
         // Récupérer à nouveau l'ordre depuis la base de données
         $updatedOrder = $this->entityManager->getRepository(Order::class)->find($orderId);
@@ -424,8 +424,8 @@ class OrderControllerTest extends WebTestCase
 
         // Le contrôleur envoie le flash message avec le type 'error'
         // Le template affiche les flash messages avec la classe .alert-{{ label }}
-        // Donc nous devons vérifier .alert-error et non .alert-danger
-        $this->assertSelectorExists('.alert-error');
+        // Donc nous devons vérifier .order-flash-error et non .alert-danger
+        $this->assertSelectorExists('.order-flash-error');
     }
 
     public function testCancelOrderDeniesAccessToOtherUsers(): void

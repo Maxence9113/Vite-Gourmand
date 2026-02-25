@@ -99,7 +99,7 @@ class AdminCategoryControllerTest extends WebTestCase
         $crawler = $this->client->request('GET', '/admin/categories/' . $categoryId . '/edit');
         $this->assertResponseIsSuccessful();
 
-        $form = $crawler->selectButton('Modifier la catégorie')->form();
+        $form = $crawler->selectButton('Enregistrer les modifications')->form();
         $this->assertEquals('Catégorie à modifier', $form['category[name]']->getValue());
 
         $form['category[name]'] = 'Catégorie modifiée';

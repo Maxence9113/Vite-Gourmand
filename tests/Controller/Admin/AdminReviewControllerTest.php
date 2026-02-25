@@ -82,7 +82,7 @@ class AdminReviewControllerTest extends WebTestCase
         $this->client->request('GET', '/admin/avis');
 
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h1', 'Gestion des Avis Clients');
+        $this->assertSelectorTextContains('h1', 'Gestion des avis clients');
     }
 
     public function testAdminReviewsPageRequiresAdminRole(): void
@@ -209,9 +209,9 @@ class AdminReviewControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
         // Vérifier que les statistiques sont affichées
-        $this->assertSelectorTextContains('body', 'Avis validés');
-        $this->assertSelectorTextContains('body', 'En attente de validation');
-        $this->assertSelectorTextContains('body', 'Total des avis');
+        $this->assertSelectorTextContains('body', 'Validés');
+        $this->assertSelectorTextContains('body', 'En attente');
+        $this->assertSelectorTextContains('body', 'Total');
     }
 
     public function testAdminReviewsPageDisplaysRatingStars(): void

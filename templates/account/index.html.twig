@@ -33,6 +33,25 @@
             <div class="account-page-title-divider"></div>
         </div>
 
+        {# Flash messages #}
+        {% for message in app.flashes('success') %}
+            <div class="flash-message flash-success">
+                <span data-icon="check-circle" data-icon-width="24" data-icon-height="24" class="flash-message-icon"></span>
+                <div class="flash-message-content">
+                    <p>{{ message }}</p>
+                </div>
+            </div>
+        {% endfor %}
+
+        {% for message in app.flashes('error') %}
+            <div class="flash-message flash-error">
+                <span data-icon="alert-circle" data-icon-width="24" data-icon-height="24" class="flash-message-icon"></span>
+                <div class="flash-message-content">
+                    <p>{{ message }}</p>
+                </div>
+            </div>
+        {% endfor %}
+
         {# Header utilisateur #}
         <div class="account-user-header">
             <div class="account-header-layout">

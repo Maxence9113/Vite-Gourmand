@@ -133,7 +133,7 @@ class AddressControllerTest extends WebTestCase
         $crawler = $this->client->request('GET', '/compte/adresses');
 
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('.card-body', 'Aucune adresse enregistrée');
+        $this->assertSelectorTextContains('.addresses-empty-state', 'Aucune adresse enregistrée');
     }
 
     /**
@@ -202,7 +202,7 @@ class AddressControllerTest extends WebTestCase
         $this->client->submit($form);
         $crawler = $this->client->followRedirect();
 
-        $this->assertSelectorTextContains('.alert-success', 'Votre adresse a été ajoutée avec succès');
+        $this->assertSelectorTextContains('.flash-success', 'Votre adresse a été ajoutée avec succès');
     }
 
     /**
@@ -225,7 +225,7 @@ class AddressControllerTest extends WebTestCase
 
         // Symfony retourne 422 (Unprocessable Content) en cas d'erreur de validation
         $this->assertResponseStatusCodeSame(422);
-        $this->assertSelectorTextContains('.form-error-message, .invalid-feedback', 'code postal');
+        $this->assertSelectorTextContains('.form-error', 'code postal');
     }
 
     /**
@@ -248,7 +248,7 @@ class AddressControllerTest extends WebTestCase
 
         // Symfony retourne 422 (Unprocessable Content) en cas d'erreur de validation
         $this->assertResponseStatusCodeSame(422);
-        $this->assertSelectorTextContains('.form-error-message, .invalid-feedback', 'téléphone');
+        $this->assertSelectorTextContains('.form-error', 'téléphone');
     }
 
     /**
@@ -435,7 +435,7 @@ class AddressControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
 
         // Vérifier que l'adresse par défaut est affichée avec un badge
-        $this->assertSelectorTextContains('.badge.bg-primary', 'Adresse par défaut');
+        $this->assertSelectorExists('.address-default-badge');
     }
 
     /**
@@ -455,7 +455,9 @@ class AddressControllerTest extends WebTestCase
         $crawler = $this->client->request('GET', '/compte');
 
         $this->assertResponseIsSuccessful();
-        $this->assertStringContainsString('Vous avez 2 adresse(s) enregistrée(s)', $this->client->getResponse()->getContent());
+        $content = $this->client->getResponse()->getContent();
+        $this->assertStringContainsString('10 Rue Test', $content);
+        $this->assertStringContainsString('20 Rue Test 2', $content);
     }
 
     /**
@@ -503,7 +505,7 @@ class AddressControllerTest extends WebTestCase
 
         // Symfony retourne 422 (Unprocessable Content) en cas d'erreur de validation
         $this->assertResponseStatusCodeSame(422);
-        $this->assertSelectorExists('.form-error-message, .invalid-feedback');
+        $this->assertSelectorExists('.form-error');
     }
 
     /**
@@ -526,7 +528,7 @@ class AddressControllerTest extends WebTestCase
 
         // Symfony retourne 422 (Unprocessable Content) en cas d'erreur de validation
         $this->assertResponseStatusCodeSame(422);
-        $this->assertSelectorExists('.form-error-message, .invalid-feedback');
+        $this->assertSelectorExists('.form-error');
     }
 
     /**
@@ -546,7 +548,7 @@ class AddressControllerTest extends WebTestCase
         $this->assertResponseRedirects('/compte/adresses');
 
         $crawler = $this->client->followRedirect();
-        $this->assertSelectorTextContains('.alert-danger, .alert-error', 'Token de sécurité invalide');
+        $this->assertSelectorTextContains('.flash-error', 'Token de sécurité invalide');
 
         // Vérifier que l'adresse existe toujours
         $stillExists = $this->entityManager->getRepository(Address::class)->find($address->getId());

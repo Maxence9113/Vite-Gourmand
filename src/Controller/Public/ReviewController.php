@@ -43,12 +43,12 @@ final class ReviewController extends AbstractController
         // Vérifications de sécurité
         if (!$order) {
             $this->addFlash('error', 'Commande introuvable.');
-            return $this->redirectToRoute('app_order_index');
+            return $this->redirectToRoute('app_account_orders');
         }
 
         if ($order->getUser() !== $user) {
             $this->addFlash('error', 'Vous n\'êtes pas autorisé à laisser un avis sur cette commande.');
-            return $this->redirectToRoute('app_order_index');
+            return $this->redirectToRoute('app_account_orders');
         }
 
         if (!$order->getStatus()->canReceiveReview()) {

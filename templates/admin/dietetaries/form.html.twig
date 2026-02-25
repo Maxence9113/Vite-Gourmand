@@ -32,10 +32,10 @@
             <h3 class="section-title">Informations du régime</h3>
         </div>
         <div class="section-body">
-            {% if isEdit and dietetary.recipes|length > 0 %}
+            {% if isEdit and dietetary.menus|length > 0 %}
                 <div class="alert-info-custom">
                     <span data-icon="info" data-icon-width="20" data-icon-height="20" class="alert-info-custom-icon"></span>
-                    <div><strong>Information :</strong> Ce régime est utilisé par {{ dietetary.recipes|length }} recette(s).</div>
+                    <div><strong>Information :</strong> Ce régime est utilisé par {{ dietetary.menus|length }} menu(s).</div>
                 </div>
             {% endif %}
             <div>{{ form_row(form.name) }}</div>

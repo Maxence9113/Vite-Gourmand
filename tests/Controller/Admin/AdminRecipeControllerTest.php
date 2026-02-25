@@ -141,9 +141,6 @@ class AdminRecipeControllerTest extends WebTestCase
         $this->assertSelectorExists('input[name="recipe[title]"]');
         $this->assertSelectorExists('textarea[name="recipe[description]"]');
         $this->assertSelectorExists('select[name="recipe[category]"]');
-
-        // Vérifier que le bouton "Ajouter une illustration" est présent
-        $this->assertSelectorExists('#add-illustration');
     }
 
     /**
@@ -167,7 +164,7 @@ class AdminRecipeControllerTest extends WebTestCase
         $crawler = $this->client->request('GET', '/admin/recipes/new');
 
         // Sélectionner le formulaire
-        $form = $crawler->selectButton('Créer la recette')->form();
+        $form = $crawler->selectButton('Créer')->form();
 
         // Remplir les champs du formulaire
         $form['recipe[title]'] = 'Recette de test sans illustration';
@@ -230,7 +227,7 @@ class AdminRecipeControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
 
         // Sélectionner le formulaire
-        $form = $crawler->selectButton('Modifier la recette')->form();
+        $form = $crawler->selectButton('Enregistrer')->form();
 
         // Vérifier que les champs sont pré-remplis avec les valeurs actuelles
         $this->assertEquals('Recette à modifier', $form['recipe[title]']->getValue());

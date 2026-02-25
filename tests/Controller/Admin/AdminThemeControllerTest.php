@@ -81,7 +81,7 @@ class AdminThemeControllerTest extends WebTestCase
         $crawler = $this->client->request('GET', '/admin/themes/' . $themeId . '/edit');
         $this->assertResponseIsSuccessful();
 
-        $form = $crawler->selectButton('Modifier le thème')->form();
+        $form = $crawler->selectButton('Enregistrer les modifications')->form();
         $this->assertEquals('Thème à modifier', $form['theme[name]']->getValue());
 
         $form['theme[name]'] = 'Thème modifié';

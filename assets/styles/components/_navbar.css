@@ -56,12 +56,13 @@
     color: var(--white);
 }
 
-.logo-text h1 {
+.logo-text .logo-title {
     font-family: var(--font-heading);
     font-size: var(--text-lg);
     font-weight: 700;
     margin: 0;
     color: var(--bordeaux);
+    display: block;
 }
 
 .logo-subtitle {
@@ -74,7 +75,7 @@
 }
 
 @media (min-width: 768px) {
-    .logo-text h1 {
+    .logo-text .logo-title {
         font-size: var(--text-xl);
     }
 

@@ -34,8 +34,8 @@ class SecurityControllerTest extends WebTestCase
         // Vérifier que la réponse est un succès (code 200)
         $this->assertResponseIsSuccessful();
 
-        // Vérifier que le titre "Bienvenue" ou "Connexion" est présent
-        $this->assertSelectorTextContains('h1', 'Bienvenue');
+        // Vérifier que le titre "Bienvenue" est présent
+        $this->assertSelectorTextContains('.auth-title', 'Bienvenue');
 
         // Vérifier que le formulaire contient bien les champs attendus
         $this->assertSelectorExists('input[name="_username"]');
@@ -118,7 +118,7 @@ class SecurityControllerTest extends WebTestCase
         $crawler = $client->followRedirect();
 
         // Vérifier qu'un message d'erreur est affiché
-        $this->assertSelectorExists('.alert-danger');
+        $this->assertSelectorExists('.auth-error');
     }
 
     /**
@@ -152,7 +152,7 @@ class SecurityControllerTest extends WebTestCase
         $crawler = $client->followRedirect();
 
         // Vérifier qu'un message d'erreur est affiché
-        $this->assertSelectorExists('.alert-danger');
+        $this->assertSelectorExists('.auth-error');
     }
 
     /**
@@ -184,7 +184,7 @@ class SecurityControllerTest extends WebTestCase
         $crawler = $client->followRedirect();
 
         // Vérifier qu'un message d'erreur est affiché
-        $this->assertSelectorExists('.alert-danger');
+        $this->assertSelectorExists('.auth-error');
     }
 
     /**

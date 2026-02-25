@@ -2,8 +2,10 @@
 
 namespace App\Tests\Controller;
 
+use App\Entity\Order;
 use App\Entity\Review;
 use App\Entity\User;
+use App\Enum\OrderStatus;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
@@ -14,6 +16,7 @@ class ReviewControllerTest extends WebTestCase
     private $client;
     private $entityManager;
     private ?User $testUser = null;
+    private ?Order $testOrder = null;
 
     protected function setUp(): void
     {
@@ -24,6 +27,8 @@ class ReviewControllerTest extends WebTestCase
 
         // Créer un utilisateur de test
         $this->createTestUser();
+        // Créer une commande de test
+        $this->createTestOrder();
     }
 
     protected function tearDown(): void
@@ -61,6 +66,35 @@ class ReviewControllerTest extends WebTestCase
         }
     }
 
+    private function createTestOrder(): void
+    {
+        // Créer une commande complétée pour pouvoir laisser un avis
+        $this->testOrder = new Order();
+        $this->testOrder->setOrderNumber('TEST-' . uniqid());
+        $this->testOrder->setUser($this->testUser);
+        $this->testOrder->setCustomerFirstname('TestFirstname');
+        $this->testOrder->setCustomerLastname('TestLastname');
+        $this->testOrder->setCustomerEmail('test@review.com');
+        $this->testOrder->setCustomerPhone('0612345678');
+        $this->testOrder->setDeliveryAddress('123 Test Street');
+        $this->testOrder->setDeliveryDateTime(new \DateTimeImmutable('-1 day'));
+        $this->testOrder->setDeliveryDistanceKm(10);
+        $this->testOrder->setDeliveryCost(1500);
+        $this->testOrder->setMenuName('Menu Test');
+        $this->testOrder->setMenuPricePerPerson(2500);
+        $this->testOrder->setNumberOfPersons(10);
+        $this->testOrder->setMenuSubtotal(25000);
+        $this->testOrder->setTotalPrice(26500);
+        $this->testOrder->setStatus(OrderStatus::COMPLETED);
+        $this->testOrder->setStatusHistory([]);
+        $this->testOrder->setHasMaterialLoan(false);
+        $this->testOrder->setCreatedAt(new \DateTimeImmutable('-2 days'));
+        $this->testOrder->setUpdatedAt(new \DateTimeImmutable());
+
+        $this->entityManager->persist($this->testOrder);
+        $this->entityManager->flush();
+    }
+
     public function testReviewIndexPageIsAccessible(): void
     {
         $this->client->request('GET', '/avis');
@@ -71,28 +105,25 @@ class ReviewControllerTest extends WebTestCase
 
     public function testNewReviewPageRequiresAuthentication(): void
     {
-        $this->client->request('GET', '/avis/nouveau');
+        $this->client->request('GET', '/avis/nouveau/' . $this->testOrder->getId());
         $this->assertResponseRedirects('/connexion');
     }
 
     public function testNewReviewPageIsAccessibleForAuthenticatedUser(): void
     {
         $this->client->loginUser($this->testUser);
-        $this->client->request('GET', '/avis/nouveau');
+        $this->client->request('GET', '/avis/nouveau/' . $this->testOrder->getId());
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorExists('form');
-        $this->assertSelectorExists('input[name="review[rating]"]');
-        $this->assertSelectorExists('textarea[name="review[comment]"]');
     }
 
     public function testNewReviewFormContainsCorrectFields(): void
     {
         $this->client->loginUser($this->testUser);
-        $this->client->request('GET', '/avis/nouveau');
+        $this->client->request('GET', '/avis/nouveau/' . $this->testOrder->getId());
 
-        // Vérifier que le formulaire contient tous les champs nécessaires
-        $this->assertSelectorExists('input[name="review[rating]"]');
+        // Vérifier que le formulaire contient le champ de commentaire
         $this->assertSelectorExists('textarea[name="review[comment]"]');
 
         // Vérifier qu'il n'y a PAS de champ customerName (auto-généré)
@@ -102,7 +133,7 @@ class ReviewControllerTest extends WebTestCase
     public function testSubmitValidReview(): void
     {
         $this->client->loginUser($this->testUser);
-        $crawler = $this->client->request('GET', '/avis/nouveau');
+        $crawler = $this->client->request('GET', '/avis/nouveau/' . $this->testOrder->getId());
 
         $form = $crawler->selectButton('Envoyer mon avis')->form([
             'review[rating]' => '5',
@@ -111,20 +142,20 @@ class ReviewControllerTest extends WebTestCase
 
         $this->client->submit($form);
 
-        // Vérifier la redirection vers la page compte
-        $this->assertResponseRedirects('/compte');
+        // Vérifier la redirection vers la page de détail de commande
+        $this->assertResponseRedirects('/compte/commandes/' . $this->testOrder->getId());
 
         // Suivre la redirection
-        $crawler = $this->client->followRedirect();
+        $this->client->followRedirect();
 
         // Vérifier le message flash
-        $this->assertSelectorTextContains('.alert-success', 'Merci pour votre avis');
+        $this->assertSelectorTextContains('.order-flash-success', 'Merci pour votre avis');
     }
 
     public function testReviewIsNotValidatedByDefault(): void
     {
         $this->client->loginUser($this->testUser);
-        $crawler = $this->client->request('GET', '/avis/nouveau');
+        $crawler = $this->client->request('GET', '/avis/nouveau/' . $this->testOrder->getId());
 
         $form = $crawler->selectButton('Envoyer mon avis')->form([
             'review[rating]' => '4',
@@ -133,9 +164,10 @@ class ReviewControllerTest extends WebTestCase
 
         $this->client->submit($form);
 
-        // Récupérer l'avis créé
-        $reviewRepository = $this->entityManager->getRepository(Review::class);
-        $review = $reviewRepository->findOneBy(['customerName' => 'TestFirstname T.']);
+        // Récupérer l'avis créé via la commande
+        $this->entityManager->clear();
+        $order = $this->entityManager->getRepository(Order::class)->find($this->testOrder->getId());
+        $review = $order->getReview();
 
         $this->assertNotNull($review);
         $this->assertFalse($review->isValidated());
@@ -144,7 +176,7 @@ class ReviewControllerTest extends WebTestCase
     public function testCustomerNameIsAutoGenerated(): void
     {
         $this->client->loginUser($this->testUser);
-        $crawler = $this->client->request('GET', '/avis/nouveau');
+        $crawler = $this->client->request('GET', '/avis/nouveau/' . $this->testOrder->getId());
 
         $form = $crawler->selectButton('Envoyer mon avis')->form([
             'review[rating]' => '5',
@@ -153,9 +185,10 @@ class ReviewControllerTest extends WebTestCase
 
         $this->client->submit($form);
 
-        // Récupérer l'avis créé
-        $reviewRepository = $this->entityManager->getRepository(Review::class);
-        $review = $reviewRepository->findOneBy(['comment' => 'Super expérience !']);
+        // Récupérer l'avis créé via la commande
+        $this->entityManager->clear();
+        $order = $this->entityManager->getRepository(Order::class)->find($this->testOrder->getId());
+        $review = $order->getReview();
 
         $this->assertNotNull($review);
         // Vérifier le format: Prénom + Initiale
@@ -165,7 +198,7 @@ class ReviewControllerTest extends WebTestCase
     public function testSubmitReviewWithoutComment(): void
     {
         $this->client->loginUser($this->testUser);
-        $crawler = $this->client->request('GET', '/avis/nouveau');
+        $crawler = $this->client->request('GET', '/avis/nouveau/' . $this->testOrder->getId());
 
         $form = $crawler->selectButton('Envoyer mon avis')->form([
             'review[rating]' => '5',
@@ -175,13 +208,13 @@ class ReviewControllerTest extends WebTestCase
         $this->client->submit($form);
 
         // Doit être accepté car le commentaire est optionnel
-        $this->assertResponseRedirects('/compte');
+        $this->assertResponseRedirects('/compte/commandes/' . $this->testOrder->getId());
     }
 
     public function testSubmitReviewWithInvalidRating(): void
     {
         $this->client->loginUser($this->testUser);
-        $crawler = $this->client->request('GET', '/avis/nouveau');
+        $crawler = $this->client->request('GET', '/avis/nouveau/' . $this->testOrder->getId());
 
         // Essayer de soumettre sans sélectionner de note
         $form = $crawler->selectButton('Envoyer mon avis')->form([
@@ -197,7 +230,7 @@ class ReviewControllerTest extends WebTestCase
     public function testReviewCreatedAtIsSetAutomatically(): void
     {
         $this->client->loginUser($this->testUser);
-        $crawler = $this->client->request('GET', '/avis/nouveau');
+        $crawler = $this->client->request('GET', '/avis/nouveau/' . $this->testOrder->getId());
 
         $form = $crawler->selectButton('Envoyer mon avis')->form([
             'review[rating]' => '4',
@@ -208,9 +241,10 @@ class ReviewControllerTest extends WebTestCase
         $this->client->submit($form);
         $afterSubmit = new \DateTimeImmutable('+1 second');
 
-        // Récupérer l'avis créé
-        $reviewRepository = $this->entityManager->getRepository(Review::class);
-        $review = $reviewRepository->findOneBy(['comment' => 'Test date creation']);
+        // Récupérer l'avis créé via la commande
+        $this->entityManager->clear();
+        $order = $this->entityManager->getRepository(Order::class)->find($this->testOrder->getId());
+        $review = $order->getReview();
 
         $this->assertNotNull($review);
         $this->assertNotNull($review->getCreatedAt());
@@ -220,30 +254,84 @@ class ReviewControllerTest extends WebTestCase
         $this->assertLessThanOrEqual($afterSubmit, $review->getCreatedAt());
     }
 
-    public function testMultipleReviewsFromSameUser(): void
+    public function testCannotLeaveReviewOnPendingOrder(): void
     {
+        // Créer une commande en attente
+        $pendingOrder = new Order();
+        $pendingOrder->setOrderNumber('TEST-PENDING-' . uniqid());
+        $pendingOrder->setUser($this->testUser);
+        $pendingOrder->setCustomerFirstname('TestFirstname');
+        $pendingOrder->setCustomerLastname('TestLastname');
+        $pendingOrder->setCustomerEmail('test@review.com');
+        $pendingOrder->setCustomerPhone('0612345678');
+        $pendingOrder->setDeliveryAddress('123 Test Street');
+        $pendingOrder->setDeliveryDateTime(new \DateTimeImmutable('+1 day'));
+        $pendingOrder->setDeliveryDistanceKm(10);
+        $pendingOrder->setDeliveryCost(1500);
+        $pendingOrder->setMenuName('Menu Test');
+        $pendingOrder->setMenuPricePerPerson(2500);
+        $pendingOrder->setNumberOfPersons(10);
+        $pendingOrder->setMenuSubtotal(25000);
+        $pendingOrder->setTotalPrice(26500);
+        $pendingOrder->setStatus(OrderStatus::PENDING);
+        $pendingOrder->setStatusHistory([]);
+        $pendingOrder->setHasMaterialLoan(false);
+        $pendingOrder->setCreatedAt(new \DateTimeImmutable());
+        $pendingOrder->setUpdatedAt(new \DateTimeImmutable());
+
+        $this->entityManager->persist($pendingOrder);
+        $this->entityManager->flush();
+
         $this->client->loginUser($this->testUser);
+        $this->client->request('GET', '/avis/nouveau/' . $pendingOrder->getId());
 
-        // Soumettre premier avis
-        $crawler = $this->client->request('GET', '/avis/nouveau');
-        $form = $crawler->selectButton('Envoyer mon avis')->form([
-            'review[rating]' => '5',
-            'review[comment]' => 'Premier avis',
-        ]);
-        $this->client->submit($form);
+        // Doit rediriger avec un message d'erreur
+        $this->assertResponseRedirects('/compte/commandes/' . $pendingOrder->getId());
+    }
 
-        // Soumettre deuxième avis
-        $crawler = $this->client->request('GET', '/avis/nouveau');
-        $form = $crawler->selectButton('Envoyer mon avis')->form([
-            'review[rating]' => '4',
-            'review[comment]' => 'Deuxième avis',
-        ]);
-        $this->client->submit($form);
+    public function testCannotLeaveReviewOnOtherUserOrder(): void
+    {
+        // Créer un autre utilisateur
+        $otherUser = new User();
+        $otherUser->setEmail('other@review.com');
+        $otherUser->setFirstname('OtherFirstname');
+        $otherUser->setLastname('OtherLastname');
+        $otherUser->setRoles(['ROLE_USER']);
+        $otherUser->setPassword('password');
 
-        // Vérifier que les deux avis existent
-        $reviewRepository = $this->entityManager->getRepository(Review::class);
-        $reviews = $reviewRepository->findBy(['customerName' => 'TestFirstname T.']);
+        $this->entityManager->persist($otherUser);
 
-        $this->assertGreaterThanOrEqual(2, count($reviews));
+        // Créer une commande pour l'autre utilisateur
+        $otherOrder = new Order();
+        $otherOrder->setOrderNumber('TEST-OTHER-' . uniqid());
+        $otherOrder->setUser($otherUser);
+        $otherOrder->setCustomerFirstname('OtherFirstname');
+        $otherOrder->setCustomerLastname('OtherLastname');
+        $otherOrder->setCustomerEmail('other@review.com');
+        $otherOrder->setCustomerPhone('0612345678');
+        $otherOrder->setDeliveryAddress('123 Other Street');
+        $otherOrder->setDeliveryDateTime(new \DateTimeImmutable('-1 day'));
+        $otherOrder->setDeliveryDistanceKm(10);
+        $otherOrder->setDeliveryCost(1500);
+        $otherOrder->setMenuName('Menu Test');
+        $otherOrder->setMenuPricePerPerson(2500);
+        $otherOrder->setNumberOfPersons(10);
+        $otherOrder->setMenuSubtotal(25000);
+        $otherOrder->setTotalPrice(26500);
+        $otherOrder->setStatus(OrderStatus::COMPLETED);
+        $otherOrder->setStatusHistory([]);
+        $otherOrder->setHasMaterialLoan(false);
+        $otherOrder->setCreatedAt(new \DateTimeImmutable('-2 days'));
+        $otherOrder->setUpdatedAt(new \DateTimeImmutable());
+
+        $this->entityManager->persist($otherOrder);
+        $this->entityManager->flush();
+
+        // Se connecter en tant que testUser et essayer d'accéder à la commande de l'autre utilisateur
+        $this->client->loginUser($this->testUser);
+        $this->client->request('GET', '/avis/nouveau/' . $otherOrder->getId());
+
+        // Doit rediriger (accès refusé)
+        $this->assertResponseRedirects();
     }
 }

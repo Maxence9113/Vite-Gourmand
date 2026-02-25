@@ -166,7 +166,7 @@ class AdminUserAddressDisplayTest extends WebTestCase
 
         // Vérifier qu'il y a un indicateur pour l'adresse par défaut
         $content = $this->client->getResponse()->getContent();
-        $this->assertStringContainsString('Oui', $content); // L'adresse par défaut affiche "Oui"
+        $this->assertStringContainsString('Par défaut', $content); // L'adresse par défaut affiche "Par défaut"
     }
 
     /**
@@ -183,7 +183,7 @@ class AdminUserAddressDisplayTest extends WebTestCase
         $this->client->request('GET', '/admin/users/' . $user->getId() . '/edit');
 
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('.alert-info', 'Cet utilisateur n\'a pas encore enregistré d\'adresse');
+        $this->assertSelectorTextContains('.empty-state', 'Cet utilisateur n\'a pas encore enregistré d\'adresse');
     }
 
     /**

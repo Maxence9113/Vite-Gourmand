@@ -147,7 +147,7 @@ class OrderAdminControllerTest extends WebTestCase
         $this->client->request('GET', '/admin/orders');
 
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h1', 'Gestion des Commandes');
+        $this->assertSelectorTextContains('h1', 'Gestion des commandes');
     }
 
     public function testOrderAdminIndexDisplaysStatistics(): void
@@ -159,7 +159,7 @@ class OrderAdminControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
         // Vérifier que les statistiques sont affichées dans les cartes
-        $this->assertSelectorExists('.card');
+        $this->assertSelectorExists('.stat-card');
         $this->assertSelectorTextContains('body', 'Total');
         $this->assertSelectorTextContains('body', 'En attente');
     }
