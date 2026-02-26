@@ -180,8 +180,15 @@ function updatePriceSlider(slider) {
 
 /**
  * GESTION DES FILTRES DU CATALOGUE - Figma Style
+ * Note: Cette fonction est désactivée si le module AJAX est chargé (menu-filter-ajax.js)
  */
 function initMenuFilters() {
+    // Si le module AJAX est présent, ne pas initialiser cette fonction
+    if (window.MenuFilterAjaxLoaded) {
+        console.log('[app.js] Skipping initMenuFilters() - AJAX module is loaded');
+        return;
+    }
+
     const filterForm = document.getElementById('filterForm');
     const resetButton = document.getElementById('resetFilters');
 

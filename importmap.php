@@ -36,6 +36,10 @@ return [
         'path' => './assets/confirmation-dialog.js',
         'entrypoint' => true,
     ],
+    'menu-filter-ajax' => [
+        'path' => './assets/menu-filter-ajax.js',
+        'entrypoint' => true,
+    ],
     'admin-dashboard-styles' => [
         'path' => './assets/styles/admin/dashboard.css',
         'type' => 'css',

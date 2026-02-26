@@ -2,9 +2,43 @@
 
 {% block title %}Nos Menus - Vite & Gourmand{% endblock %}
 
+{# Désactiver Turbo pour cette page car on utilise notre propre AJAX #}
+{% block body_attributes %}data-turbo="false"{% endblock %}
+
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('styles/pages/menu.css') }}">
+    <style>
+        /* Loader pour le filtrage AJAX */
+        .menu-loader {
+            grid-column: 1 / -1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 2rem;
+            gap: 1rem;
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid var(--beige, #f5f5dc);
+            border-top-color: var(--bordeaux, #8b1538);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .menu-loader p {
+            font-size: 1.125rem;
+            color: var(--bordeaux, #8b1538);
+            font-weight: 500;
+        }
+    </style>
 {% endblock %}
 
 {% block body %}
@@ -40,7 +74,7 @@
                 </h2>
             </div>
 
-            <form id="filterForm" method="get" action="{{ path('app_menu_catalog') }}" class="filters-grid">
+            <div id="filterForm" class="filters-grid">{# Utiliser une div au lieu de form pour éviter la soumission #}
                 {# Filtre Prix maximum #}
                 <div class="filter-item">
                     <label>
@@ -124,7 +158,7 @@
                         value="{{ currentFilters.nb_person_min }}"
                     >
                 </div>
-            </form>
+            </div>{# Fin du div filterForm (au lieu de form) #}
         </div>
 
         {# ========== Grille de menus ========== #}
@@ -198,4 +232,10 @@
     </div>
 </section>
 
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {# JavaScript pour le filtrage AJAX des menus #}
+    {{ importmap('menu-filter-ajax') }}
 {% endblock %}
