@@ -53,3 +53,6 @@ Charte-Graphique.md
 /public/assets/**
 !/public/assets/.gitkeep
 ###< symfony/asset-mapper ###
+
+grille de validation.pdf
+grille_validation_remplie.md
