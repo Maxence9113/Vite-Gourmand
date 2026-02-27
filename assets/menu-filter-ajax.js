@@ -108,6 +108,13 @@ document.addEventListener('DOMContentLoaded', function() {
      * @returns {string} HTML de la carte
      */
     function generateMenuCard(menu) {
+        // Vérifier la disponibilité du menu
+        const isAvailable = menu.stock === null || menu.stock >= menu.nbPersonMin;
+        const unavailableClass = isAvailable ? '' : ' menu-card-unavailable';
+
+        // Badge indisponible si nécessaire
+        const unavailableBadge = isAvailable ? '' : '<span class="badge badge-unavailable">Indisponible</span>';
+
         // Générer les badges de régimes alimentaires
         let dietetaryBadges = '';
         if (menu.dietetaries && menu.dietetaries.length > 0) {
@@ -132,16 +139,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Retourner le HTML complet de la carte
         return `
-            <div class="menu-card">
-                <!-- Image avec gradient overlay -->
-                <div class="menu-card-image">
+            <div class="menu-card${unavailableClass}">
+                <!-- Image avec gradient overlay - cliquable -->
+                <a href="${detailUrl}" class="menu-card-image">
                     <img src="${menu.illustration}"
                          alt="${menu.textAlt || menu.name}">
                     <div class="menu-card-badges">
                         <span class="badge badge-theme">${menu.theme.name}</span>
+                        ${unavailableBadge}
                         ${dietetaryBadges}
                     </div>
-                </div>
+                </a>
 
                 <!-- Contenu -->
                 <div class="menu-card-content">

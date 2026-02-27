@@ -392,6 +392,7 @@ VALUES (
 
 -- MENU 4: Menu Mariage Élégance
 -- Thème Mariage (id=4), Prix 85€/personne, Min 30 personnes
+-- Stock limité : 20 portions (INSUFFISANT pour commander - minimum 30 requis)
 INSERT INTO menu (name, nb_person_min, price_per_person, description, illustration, text_alt, stock, theme_id)
 VALUES (
     'Menu Mariage Élégance',
@@ -400,7 +401,7 @@ VALUES (
     'Un menu raffiné et gastronomique pour célébrer votre union. Chaque plat est préparé avec soin pour rendre ce jour unique et mémorable.',
     'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=1200',
     'Table de mariage élégante avec décoration florale',
-    NULL,
+    20,
     4
 );
 
@@ -448,6 +449,7 @@ VALUES (
 
 -- MENU 8: Menu Fruits de Mer
 -- Thème Réveillon (id=2), Prix 78€/personne, Min 12 personnes
+-- Stock limité : 8 portions (INSUFFISANT pour commander - minimum 12 requis)
 INSERT INTO menu (name, nb_person_min, price_per_person, description, illustration, text_alt, stock, theme_id)
 VALUES (
     'Menu Fruits de Mer',
@@ -456,7 +458,7 @@ VALUES (
     'Un menu dédié aux amateurs de produits de la mer. Fraîcheur et qualité sont au rendez-vous pour ce festin marin d''exception.',
     'https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=1200',
     'Plateau de fruits de mer frais',
-    NULL,
+    8,
     2
 );
 

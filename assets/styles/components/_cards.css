@@ -32,6 +32,15 @@
     box-shadow: var(--shadow-xl);
 }
 
+/* Card menu indisponible - Légèrement grisée */
+.menu-card-unavailable {
+    opacity: 0.75;
+}
+
+.menu-card-unavailable:hover {
+    opacity: 0.85;
+}
+
 .menu-card-image {
     position: relative;
     width: 100%;

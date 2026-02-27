@@ -171,13 +171,16 @@
                 </div>
             {% else %}
                 {% for menu in menus %}
-                    <div class="menu-card">
-                        {# Image avec gradient overlay #}
-                        <div class="menu-card-image">
+                    <div class="menu-card{% if not menu.isAvailable %} menu-card-unavailable{% endif %}">
+                        {# Image avec gradient overlay - cliquable #}
+                        <a href="{{ path('app_menu_show', {id: menu.id}) }}" class="menu-card-image">
                             <img src="{{ menu.illustration }}"
                                  alt="{{ menu.textAlt ?: menu.name }}">
                             <div class="menu-card-badges">
                                 <span class="badge badge-theme">{{ menu.theme.name }}</span>
+                                {% if not menu.isAvailable %}
+                                    <span class="badge badge-unavailable">Indisponible</span>
+                                {% endif %}
                                 {% if menu.dietetary|length > 0 %}
                                     {% for dietetary in menu.dietetary %}
                                         <span class="badge {% if dietetary.name in ['Végétarien', 'Vegan'] %}badge-vegetarian{% else %}badge-classic{% endif %}">
@@ -188,7 +191,7 @@
                                     <span class="badge badge-classic">Classique</span>
                                 {% endif %}
                             </div>
-                        </div>
+                        </a>
 
                         {# Contenu #}
                         <div class="menu-card-content">
