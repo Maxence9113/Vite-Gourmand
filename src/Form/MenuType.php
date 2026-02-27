@@ -85,6 +85,7 @@ class MenuType extends AbstractType
             ->add('price_per_person', MoneyType::class, [
                 'label' => 'Prix par personne (€)',
                 'currency' => 'EUR',
+                'divisor' => 100, // Convertit automatiquement euros → centimes
                 'attr' => [
                     'placeholder' => 'Ex: 45.00',
                     'class' => 'form-control',
