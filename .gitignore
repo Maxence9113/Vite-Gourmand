@@ -43,6 +43,10 @@ GUIDE_INTEGRATION_EMAILS.md
 fix-permissions.sh
 fix-mongodb.sh
 Charte-Graphique.md
+grille de validation.pdf
+grille_validation_remplie.md
+Consignes Dossier Projet - 1er dépôt - Titre Complet.pdf
+HOMEPAGE_REFACTORING.md
 
 ###> heroku ###
 # Ne pas ignorer le composer.lock pour Heroku
@@ -54,6 +58,4 @@ Charte-Graphique.md
 !/public/assets/.gitkeep
 ###< symfony/asset-mapper ###
 
-grille de validation.pdf
-grille_validation_remplie.md
-Consignes Dossier Projet - 1er dépôt - Titre Complet.pdf
+
