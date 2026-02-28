@@ -185,7 +185,6 @@ function updatePriceSlider(slider) {
 function initMenuFilters() {
     // Si le module AJAX est présent, ne pas initialiser cette fonction
     if (window.MenuFilterAjaxLoaded) {
-        console.log('[app.js] Skipping initMenuFilters() - AJAX module is loaded');
         return;
     }
 
@@ -304,8 +303,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initSmoothScroll();
     initMenuFilters();
     initScrollAnimations();
-
-    console.log('✅ Vite & Gourmand - Application chargée');
 });
 
 /**

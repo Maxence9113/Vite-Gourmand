@@ -23,14 +23,12 @@ let initialized = false;
 document.addEventListener('DOMContentLoaded', function() {
     // Si déjà initialisé, ne rien faire
     if (initialized) {
-        console.warn('[MenuFilterAjax] Already initialized, skipping...');
         return;
     }
     initialized = true;
 
     // Désactiver Turbo Drive pour éviter qu'il interfère avec notre AJAX
     if (window.Turbo) {
-        console.log('[MenuFilterAjax] Disabling Turbo Drive for this page');
         Turbo.session.drive = false;
     }
 
@@ -44,11 +42,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Vérifier que les éléments existent
     if (!filterForm || !menuGrid) {
-        console.warn('[MenuFilterAjax] Elements required for filtering not found');
         return;
     }
-
-    console.log('[MenuFilterAjax] Initialization complete');
 
     /**
      * Empêcher la soumission normale du formulaire
@@ -56,7 +51,6 @@ document.addEventListener('DOMContentLoaded', function() {
      */
     filterForm.addEventListener('submit', function(event) {
         event.preventDefault(); // Annule la soumission normale
-        console.log('[MenuFilterAjax] Form submission prevented - using AJAX instead');
     });
 
     /**
@@ -215,14 +209,11 @@ document.addEventListener('DOMContentLoaded', function() {
      * C'est la fonction principale qui orchestre tout le processus
      */
     async function filterMenus() {
-        console.log('[MenuFilterAjax] Starting filter request...');
-
         // 1. Afficher le loader
         showLoader();
 
         // 2. Collecter les paramètres de filtrage
         const params = collectFilters();
-        console.log('[MenuFilterAjax] Filters:', params.toString());
 
         // 3. Construire l'URL de l'API avec les paramètres
         const apiUrl = `/api/menus/filter?${params.toString()}`;
@@ -244,7 +235,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // 6. Parser la réponse JSON
             const data = await response.json();
-            console.log('[MenuFilterAjax] Received data:', data);
 
             // 7. Vérifier que la réponse est un succès
             if (!data.success) {
@@ -274,11 +264,8 @@ document.addEventListener('DOMContentLoaded', function() {
             // 12. Mettre à jour le compteur de résultats
             updateResultsCount(data.count);
 
-            console.log('[MenuFilterAjax] Filter complete. Displayed:', data.count, 'menus');
-
         } catch (error) {
             // En cas d'erreur, afficher un message d'erreur
-            console.error('[MenuFilterAjax] Error:', error);
             menuGrid.innerHTML = `
                 <div class="no-menu-message">
                     <span data-icon="alert-circle" data-icon-width="24" data-icon-height="24"></span>
@@ -392,6 +379,4 @@ document.addEventListener('DOMContentLoaded', function() {
         // Filtrer
         filterMenus();
     };
-
-    console.log('[MenuFilterAjax] Event listeners attached');
 });

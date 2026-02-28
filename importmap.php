@@ -18,27 +18,23 @@ return [
     ],
     'admin-recipe-illustrations' => [
         'path' => './assets/admin-recipe-illustrations.js',
-        'entrypoint' => true,
+        'entrypoint' => false,
     ],
     'table-search' => [
         'path' => './assets/table-search.js',
-        'entrypoint' => true,
+        'entrypoint' => false,
     ],
     'password-validator' => [
         'path' => './assets/password-validator.js',
-        'entrypoint' => true,
+        'entrypoint' => false,
     ],
     'password-toggle' => [
         'path' => './assets/password-toggle.js',
-        'entrypoint' => true,
+        'entrypoint' => false,
     ],
     'confirmation-dialog' => [
         'path' => './assets/confirmation-dialog.js',
-        'entrypoint' => true,
-    ],
-    'menu-filter-ajax' => [
-        'path' => './assets/menu-filter-ajax.js',
-        'entrypoint' => true,
+        'entrypoint' => false,
     ],
     'admin-dashboard-styles' => [
         'path' => './assets/styles/admin/dashboard.css',

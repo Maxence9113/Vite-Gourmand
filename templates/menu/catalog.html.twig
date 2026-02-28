@@ -239,6 +239,6 @@
 
 {% block javascripts %}
     {{ parent() }}
-    {# JavaScript pour le filtrage AJAX des menus #}
-    {{ importmap('menu-filter-ajax') }}
+    {# JavaScript pour le filtrage AJAX des menus - chargé comme module simple #}
+    <script type="module" src="{{ asset('menu-filter-ajax.js') }}"></script>
 {% endblock %}
