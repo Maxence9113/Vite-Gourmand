@@ -48,6 +48,9 @@ grille_validation_remplie.md
 Consignes Dossier Projet - 1er dépôt - Titre Complet.pdf
 HOMEPAGE_REFACTORING.md
 
+# Livrables scolaires (dossier projet, non applicatif)
+/Dossier Projet/
+
 ###> heroku ###
 # Ne pas ignorer le composer.lock pour Heroku
 ###< heroku ###/public/assets/*.json

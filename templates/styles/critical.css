@@ -138,24 +138,9 @@ img {
     gap: 0.75rem;
 }
 
-.logo-icon, .navbar-logo {
-    width: 48px;
-    height: 48px;
-    background-color: var(--bordeaux);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.logo-text h1, .navbar-brand {
-    font-family: var(--font-heading);
-    font-size: 1.5rem;
-    color: var(--bordeaux);
-    font-weight: 700;
-    line-height: 1;
-    margin: 0;
+.logo-img {
+    height: 45px;
+    width: auto;
 }
 
 /* FOOTER - Layout de base */

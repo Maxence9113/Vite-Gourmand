@@ -153,6 +153,7 @@ docs/
 ├── ASSETS.md                   # CSS et JavaScript
 ├── EMAILS.md                   # Systeme d'emails
 ├── DATABASE.md                 # BDD et fixtures
+├── TESTS.md                    # Suite de tests
 ├── GESTION_DES_ROLES.md        # Roles (existant)
 └── AJAX_FILTERING.md           # Filtrage AJAX (existant)
 ```
@@ -197,6 +198,14 @@ php bin/console app:create-admin
 ```
 
 ### Tests
+
+- **[TESTS.md](TESTS.md)** - Suite de tests complète
+  - Configuration PHPUnit et DAMA Doctrine Test Bundle
+  - Tests Entity (unitaires et intégration)
+  - Tests Service (mocks, logique métier)
+  - Tests Repository (MySQL et MongoDB)
+  - Tests Form, Security et Controller (fonctionnels)
+  - Techniques utilisées (mocking, WebTestCase, transactions)
 
 ```bash
 # Lancer les tests
